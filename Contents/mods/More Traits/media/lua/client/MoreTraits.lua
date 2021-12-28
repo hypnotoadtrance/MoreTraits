@@ -1,15 +1,35 @@
 require('NPCs/MainCreationMethods');
 require("Items/Distributions");
 require("Items/ProceduralDistributions");
-
+--[[
+TODO Update scrounger, incomprehensive, and graveRobber
+We need a method of Tagging containers, rolling for loot, and then inserting said rolled loot into container mod data.
+Then we need a method to iterate through nearby containers for each player and compare their traits to the moddata in
+the container. Then insert/remove loot on a per-player,per-container basis.
+At present, I'm stuck on iterating through nearby containers. I don't know how to do it.
+TODO Figure out what is causing stat synchronization issues
+When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subrtracting stats doesn't
+seem to work properly. This also effects Hardy, Alcoholic (removing stress when drinking alcohol doesn't work in MP)
+TODO Add a Mod settings menu
+where ideally players and server administrators can configure the mod to their needs, with the option to disable/tweak
+as many traits as possible. (eg; the percentage of xp loss for Specialization traits, or the ability to disable them)
+TODO Language Translations
+Make the mod more translation friendly by moving all text within the code into UI_EN.
+TODO Better Server Compatibility
+Right now, servers say "Unknown Trait: x" whenever using a trait from this mod. We need to find a way of letting the
+server know which traits exist. This also currently causes traits to disappear off players when editing.
+TODO Code optimization
+This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
+--]]
 --[[
 Changelog Notes:
 Action Hero wasn't halving damage.
+Action Hero has increased multiplier so fighting hordes is more rewarding.
 Hardy wasn't accounting for Sprinting.
 Typo in Martial Artist
 General code optimization pass.
+Added a to-do list to keep track of ongoing issues that need addressing.
 --]]
-
 --Global Variables
 skipxpadd = false;
 suspendevasive = false;
