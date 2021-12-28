@@ -1,0 +1,25 @@
+VERSION = 1,
+
+option MoreTraits.PreparedMedicalBandageAmount
+{
+	type = integer, min = 1, max = 999, default = 4,
+	page = MoreTraits, translation = MoreTraits_PreparedMedicalBandageAmount,
+}
+
+
+option MoreTraits.PreparedCarToggle
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_PreparedCarToggle,
+}
+
+option MoreTraits.PreparedCarGasToggle
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_PreparedCarGasToggle,
+}
+
+
+
+
+
