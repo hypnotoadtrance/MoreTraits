@@ -14,3 +14,9 @@ Migrated text from code to UI_EN for translation.
 Added Translation: Simplified Chinese. Credit to: EndsM for work!
 Fix issue with player weight being higher than default.
 Adjusted values of Packmule and Packmouse.
+Increased Cost of Gordanite from 5 to 6, as the new improved function makes it much more powerful.
+Increased Cost of Martial Artist from 4 to 5 to balance its strength versus its cost.
+Made Blissful and Smoker mutually exclusive, as it was negating the effects of Smoker.
+Butterfingers chance to drop was too low and almost never procced. It's still rare, but now has a higher chance.
+Adjusted Butterfingers drop chance roll to run every minute instead of every ten minutes. (only procs if you're moving, so it wasn't consistent every ten minutes)
+Tweaked randomized damage and healing values for Broke Leg and Injured traits, as the wounds were healing within one day, and should require a little more nursing to be worth the cost.

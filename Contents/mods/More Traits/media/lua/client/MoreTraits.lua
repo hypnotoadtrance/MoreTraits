@@ -163,7 +163,7 @@ local function initToadTraits()
     local bouncer = TraitFactory.addTrait("bouncer", getText("UI_trait_bouncer"), 5, getText("UI_trait_bouncerdesc"), false, false);
     bouncer:addXPBoost(Perks.Strength, 1);
     bouncer:addXPBoost(Perks.SmallBlunt, 1);
-    local martial = TraitFactory.addTrait("martial", getText("UI_trait_martial"), 4, getText("UI_trait_martialdesc"), false, false);
+    local martial = TraitFactory.addTrait("martial", getText("UI_trait_martial"), 5, getText("UI_trait_martialdesc"), false, false);
     martial:addXPBoost(Perks.Fitness, 1);
     martial:addXPBoost(Perks.SmallBlunt, 1);
     local flexible = TraitFactory.addTrait("flexible", getText("UI_trait_flexible"), 2, getText("UI_trait_flexibledesc"), false, false);
@@ -247,7 +247,7 @@ local function initToadTraits()
     specaid:getFreeRecipes():add("Improvise Betablockers");
     specaid:getFreeRecipes():add("Improvise Sleeping Pills");
     specaid:getFreeRecipes():add("Improvise Zombification Cure");
-    local gordanite = TraitFactory.addTrait("gordanite", getText("UI_trait_gordanite"), 5, getText("UI_trait_gordanitedesc"), false, false);
+    local gordanite = TraitFactory.addTrait("gordanite", getText("UI_trait_gordanite"), 6, getText("UI_trait_gordanitedesc"), false, false);
     gordanite:addXPBoost(Perks.Blunt, 1);
     local indefatigable = TraitFactory.addTrait("indefatigable", getText("UI_trait_indefatigable"), 10, getText("UI_trait_indefatigabledesc"), false, false);
     local hardy = TraitFactory.addTrait("hardy", getText("UI_trait_hardy"), 6, getText("UI_trait_hardydesc"), false, false);
@@ -365,6 +365,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("gourmand", "ascetic");
     TraitFactory.setMutualExclusive("fearful", "Desensitized");
     TraitFactory.setMutualExclusive("fearful", "Brave");
+    TraitFactory.setMutualExclusive("blissful", "Smoker");
     --  TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
 end
@@ -453,12 +454,12 @@ end
 
 local function initToadTraitsPerks(_player)
     local player = _player;
-    local damage = 20;
+    local damage = 25;
     local bandagestrength = 5;
     local splintstrength = 0.9;
-    local fracturetime = 20;
-    local scratchtimemod = 15;
-    local bleedtimemod = 5;
+    local fracturetime = 50;
+    local scratchtimemod = 20;
+    local bleedtimemod = 10;
     player:getModData().bToadTraitDepressed = false;
     player:getModData().indefatigablecooldown = 0;
     player:getModData().bindefatigable = false;
@@ -467,15 +468,15 @@ local function initToadTraitsPerks(_player)
     player:getModData().iTimesCannibal = 0;
 
     if player:HasTrait("Lucky") then
-        damage = damage - 10;
-        bandagestrength = bandagestrength + 3;
-        fracturetime = fracturetime - 10;
+        damage = damage - 5;
+        bandagestrength = bandagestrength + 2;
+        fracturetime = fracturetime - 5;
         splintstrength = splintstrength + 0.1;
         scratchtimemod = scratchtimemod - 5;
         bleedtimemod = bleedtimemod - 2;
     end
     if player:HasTrait("Unlucky") then
-        damage = damage + 10;
+        damage = damage + 5;
         bandagestrength = bandagestrength - 2;
         fracturetime = fracturetime + 5;
         splintstrength = splintstrength - 0.1;
@@ -619,7 +620,7 @@ end
 local function ToadTraitButter()
     local player = getPlayer();
     if player:HasTrait("butterfingers") and player:isPlayerMoving() then
-        local basechance = 5;
+        local basechance = 15;
         if player:HasTrait("AllThumbs") then
             basechance = basechance + 5;
         end
@@ -2134,7 +2135,7 @@ Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.OnDawn.Add(indefatigablecounter);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
-Events.EveryTenMinutes.Add(ToadTraitButter);
+Events.EveryOneMinute.Add(ToadTraitButter);
 Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(ToadTraitDepressive);
 Events.OnNewGame.Add(initToadTraitsPerks);
