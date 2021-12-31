@@ -33,6 +33,7 @@ mod may place their name. I'll include the authors on the Steam Workshop page.
 Removed the lump of textual options for players to say when performing cannibalism. It was just too corny and would be
 a pain to move over to UI_EN.
 Migrated text from code to UI_EN for translation.
+Added Translation: Simplified Chinese. Credit to: EndsM for work!
 --]]
 --Global Variables
 skipxpadd = false;
