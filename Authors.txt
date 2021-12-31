@@ -1,0 +1,10 @@
+This is the authors text file.
+If you perform any kind of work within the project, please add yourself to this list and I will credit you
+in the mod description on Steam Workshop.
+
+Authors:
+Creator: HypnoToadTrance
+
+Additional Coding:
+
+Translations:

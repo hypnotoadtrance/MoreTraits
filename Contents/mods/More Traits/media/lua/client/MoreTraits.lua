@@ -13,8 +13,6 @@ seem to work properly. This also effects Hardy, Alcoholic (removing stress when 
 TODO Add a Mod settings menu
 where ideally players and server administrators can configure the mod to their needs, with the option to disable/tweak
 as many traits as possible. (eg; the percentage of xp loss for Specialization traits, or the ability to disable them)
-TODO Language Translations
-Make the mod more translation friendly by moving all text within the code into UI_EN.
 TODO Better Server Compatibility
 Right now, servers say "Unknown Trait: x" whenever using a trait from this mod. We need to find a way of letting the
 server know which traits exist. This also currently causes traits to disappear off players when editing.
@@ -30,6 +28,11 @@ Typo in Martial Artist
 General code optimization pass.
 Added a to-do list to keep track of ongoing issues that need addressing.
 Fixed Bouncer not giving Short Blunt.
+Added an Authors text file to the directory. This will be where anyone wishing to receive credit for working on the
+mod may place their name. I'll include the authors on the Steam Workshop page.
+Removed the lump of textual options for players to say when performing cannibalism. It was just too corny and would be
+a pain to move over to UI_EN.
+Migrated text from code to UI_EN for translation.
 --]]
 --Global Variables
 skipxpadd = false;
@@ -91,29 +94,16 @@ function ZombPatty_OnCreate(items, result, player)
     local times = player:getModData().iTimesCannibal;
     if times <= 25 then
         stats:setStress(stats:getStress() + 0.2);
-        result:setTooltip("Butchered human flesh.<br>You aren't seriously considering eating this, are you?");
+        result:setTooltip(getText("UI_cannibal_early"));
     elseif times <= 50 then
         stats:setStress(stats:getStress() + 0.1);
         result:setUnhappyChange(10);
-        result:setTooltip("Butchered human flesh.");
+        result:setTooltip(getText("UI_cannibal_familiar"));
     else
         stats:setStress(stats:getStress() - 0.1);
-        result:setTooltip("Butchered human flesh.<br>So scrumptious!");
+        result:setTooltip(getText("UI_cannibal_comfortable"));
         result:setUnhappyChange(-10);
         player:getInventory():AddItem("MoreTraits.BloodBox");
-    end
-    if ZombRand(0, 100) >= 90 then
-        if times <= 25 then
-            tbl = { "Oh god, how can I do this?", "*Sobs Uncontrollably*", "Am I really this desperate?", "Please, no. I can't do this.", "*Winces in Disgust*", "*Tries hard not to vomit*",
-                    "I don't know if I can go through with this.", "*Trembles*", "*Stares in disbelief at what they've done*", "*Frowns*", "*Heaves*" };
-            player:Say(tbl[ZombRand(0, tablelength(tbl))]);
-        elseif times <= 50 then
-            tbl = { "Well if I'm hungry enough to eat a horse...", "*Vaguely recalls playing Rimworld*", "If it's good enough for tribespeople, it's good enough for me.", "You've got to do what you need to survive.", "Well, it IS food...", "At least I waited for the Apocalypse to start practicing." };
-            player:Say(tbl[ZombRand(0, tablelength(tbl))]);
-        else
-            tbl = { "*Cackles Madly*", "*Licks lips with delight*", "Oh...you look like a tasty one.", "Well slap my back and call me Hannibal.", "Mmm.", "*Laugh Meniacally*", "I think you'll make a nice Stew!", "And maybe some blood will spice it up..." };
-            player:Say(tbl[ZombRand(0, tablelength(tbl))]);
-        end
     end
     result:setRotten(false);
     result:setAge(0);
@@ -615,7 +605,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                 i:RestoreToFullHealth();
                                 i:setScratched(false);
                                 i:SetInfected(false);
-                                player:Say("*Dodged*");
+                                player:Say(getText("UI_trait_dodgesay"));
                             else
                                 bMarkForUpdate = true;
                             end
@@ -627,7 +617,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                 i:RestoreToFullHealth();
                                 i:SetBitten(false, false);
                                 i:SetInfected(false);
-                                player:Say("*Dodged*");
+                                player:Say(getText("UI_trait_dodgesay"));
                             else
                                 bMarkForUpdate = true;
                             end
@@ -993,15 +983,15 @@ local function Gordanite(_player)
                 crowbar:setBaseSpeed(1.5);
                 crowbar:setWeaponLength(0.6);
                 crowbar:setMinimumSwingTime(1);
-                crowbar:setName("Crowbar+");
-                crowbar:setTooltip("This item's stats are being boosted by one of your traits.");
+                crowbar:setName(getText("Tooltip_MoreTraits_GordaniteBoost"));
+                crowbar:setTooltip(getText("Tooltip_MoreTraits_ItemBoost"));
             end
         end
     end
     if player:HasItem("Crowbar") == true then
         local skip = false;
         if player:getPrimaryHandItem() ~= null then
-            if player:getPrimaryHandItem():getName() == "Crowbar+" or player:getPrimaryHandItem():getDisplayName() == "Crowbar" then
+            if player:getPrimaryHandItem():getName() == getText("Tooltip_MoreTraits_GordaniteBoost") or player:getPrimaryHandItem():getType() == "Crowbar" then
                 skip = true;
             end
         end
@@ -1009,7 +999,7 @@ local function Gordanite(_player)
             local inv = player:getInventory();
             for i = 0, inv:getItems():size() - 1 do
                 local item = player:getInventory():getItems():get(i);
-                if item:getName() == "Crowbar+" then
+                if item:getName() == getText("Tooltip_MoreTraits_GordaniteBoost") then
                     local crowbar = item;
                     crowbar:setMinDamage(0.6);
                     crowbar:setMaxDamage(1.15);
@@ -1017,7 +1007,7 @@ local function Gordanite(_player)
                     crowbar:setDoorDamage(8);
                     crowbar:setCriticalChance(35);
                     crowbar:setSwingTime(3);
-                    crowbar:setName("Crowbar");
+                    crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
                     crowbar:setWeaponLength(0.4);
                     crowbar:setMinimumSwingTime(3);
                     crowbar:setTreeDamage(0);
@@ -1054,7 +1044,7 @@ local function indefatigable(_player, _playerdata)
                         end
                     end
                 end
-                player:Say("*Indefatigable*");
+                player:Say(getText("UI_trait_indefatigable"));
             end
         end
     end
@@ -1068,7 +1058,7 @@ local function indefatigablecounter()
             if playerdata.indefatigablecooldown >= 7 then
                 playerdata.indefatigablecooldown = 0;
                 playerdata.bindefatigable = false;
-                player:Say("*Indefatigable Is No Longer In Cooldown*");
+                player:Say(getText("UI_trait_indefatigablecooldown"));
             else
                 playerdata.indefatigablecooldown = playerdata.indefatigablecooldown + 1;
             end
@@ -1091,7 +1081,7 @@ local function hardytrait(_player)
     if player:HasTrait("hardy") then
         local endurance = stats:getEndurance();
         if endurance < 1 and player:IsRunning() == false and player:isForceRun() == false then
-            stats:setEndurance(endurance + 0.0001);
+            stats:setEndurance(endurance + 0.00001);
         end
     end
 end
@@ -1140,7 +1130,7 @@ local function drinkertick()
                 if ZombRand(100) <= hoursthreshold / 4 then
                     playerdata.bSatedDrink = false;
                     print("Player needs alcohol.");
-                    player:Say("I need alcohol.");
+                    player:Say(getText("UI_trait_alcoholicneed"));
                 end
             end
         end
@@ -1152,7 +1142,7 @@ local function drinkerpoison()
     local playerdata = player:getModData();
     if playerdata.iHoursSinceDrink > 72 and playerdata.bSatedDrink == false then
         print("Player is suffering from alcohol withdrawal.");
-        player:Say("*Alcohol Withdrawal*");
+        player:Say(getText("UI_trait_alcoholicwithdrawal"));
         player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / 5));
     end
 end
@@ -2085,16 +2075,16 @@ local function FearfulUpdate(_player)
             end
             if ZombRand(0, 1000) <= chance then
                 if panic <= 25 then
-                    player:Say("*Whimper*");
+                    player:Say(getText("UI_fearful_slightpanic"));
                     addSound(player, player:getX(), player:getY(), player:getZ(), 5, 10);
                 elseif panic <= 50 then
-                    player:Say("*Muffled Shriek*");
+                    player:Say(getText("UI_fearful_panic"));
                     addSound(player, player:getX(), player:getY(), player:getZ(), 10, 15);
                 elseif panic <= 75 then
-                    player:Say("*Panicked Screech*");
+                    player:Say(getText("UI_fearful_strongpanic"));
                     addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
                 elseif panic > 75 then
-                    player:Say("*Desperate Screaming*");
+                    player:Say(getText("UI_fearful_extremepanic"));
                     addSound(player, player:getX(), player:getY(), player:getZ(), 25, 50);
                 end
             end
@@ -2113,11 +2103,7 @@ local function GymGoer(_player, _perk, _amount)
 
     end
 end
-local function test(_container)
-    local container = _container;
-    local inv = container:getInventory();
-    inv:AddItem("Base.Screwdriver");
-end
+
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -2166,7 +2152,6 @@ Events.AddXP.Add(GymGoer);
 Events.OnDawn.Add(indefatigablecounter);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryTenMinutes.Add(ToadTraitButter);
---Events.EveryTenMinutes.Add(GourmandUpdate);
 Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(ToadTraitDepressive);
 Events.OnNewGame.Add(initToadTraitsPerks);
