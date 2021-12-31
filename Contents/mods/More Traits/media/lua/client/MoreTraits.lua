@@ -34,6 +34,8 @@ Removed the lump of textual options for players to say when performing cannibali
 a pain to move over to UI_EN.
 Migrated text from code to UI_EN for translation.
 Added Translation: Simplified Chinese. Credit to: EndsM for work!
+Fix issue with player weight being higher than default.
+Adjusted values of Packmule and Packmouse.
 --]]
 --Global Variables
 skipxpadd = false;
@@ -552,15 +554,7 @@ local function initToadTraitsPerks(_player)
     end
     player:getModData().ToadTraitBodyDamage = nil;
     suspendevasive = false;
-    if player:HasTrait("packmule") then
-        player:setMaxWeight(30);
-        player:setMaxWeightBase(12);
-
-    end
-    if player:HasTrait("packmouse") then
-        player:setMaxWeight(25);
-        player:setMaxWeightBase(8);
-    end
+    checkWeight();
 end
 
 local function ToadTraitEvasive(_player, _playerdata)
@@ -1673,18 +1667,24 @@ local function Immunocompromised(_player, _playerdata)
     end
 end
 
-local function checkWeight()
+function checkWeight()
     local player = getPlayer();
     local strength = player:getPerkLevel(Perks.Strength);
     if player:HasTrait("packmule") then
-        player:setMaxWeight(30);
-        player:setMaxWeightBase(12 + strength / 5);
+        if player:getMaxWeightBase() ~= 10 + strength / 5 then
+            player:setMaxWeight(10 + strength);
+            player:setMaxWeightBase(10 + strength / 5);
+        end
     elseif player:HasTrait("packmouse") then
-        player:setMaxWeight(20);
-        player:setMaxWeightBase(8);
+        if player:getMaxWeightBase() ~= 6 then
+            player:setMaxWeight(6);
+            player:setMaxWeightBase(6);
+        end
     else
-        player:setMaxWeight(25);
-        player:setMaxWeightBase(10);
+        if player:getMaxWeightBase() ~= 8 then
+            player:setMaxWeight(8);
+            player:setMaxWeightBase(8);
+        end
     end
 end
 
