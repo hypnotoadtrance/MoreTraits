@@ -10,4 +10,7 @@ Tooltip_CN = {
     Tooltip_MoreTraits_AntiqueMag2 = "A limited edition magazine.<br>This edition delves into home crafting recipes with Papier-Mache.",
     Tooltip_MoreTraits_AntiqueMag3 = "A limited edition magazine.<br>This edition offers commentary on the cannibalistic recipes of certain Papua New Guniea tribes.",
     Tooltip_MoreTraits_PapierMacheSword = "Fun for the whole family!<br>Not for children under the age of four.",
+    Tooltip_MoreTraits_ItemBoost = "This item's stats are being boosted by one of your traits.",
+    Tooltip_MoreTraits_GordaniteBoost = "Crowbar+",
+    Tooltip_MoreTraits_GordaniteDefault = "Crowbar",
 }
