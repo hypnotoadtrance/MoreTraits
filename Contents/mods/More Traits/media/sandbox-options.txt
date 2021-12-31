@@ -6,13 +6,6 @@ option MoreTraits.PreparedMedicalBandageAmount
 	page = MoreTraits, translation = MoreTraits_PreparedMedicalBandageAmount,
 }
 
-
-option MoreTraits.PreparedCarToggle
-{
-	type = boolean, default = true,
-	page = MoreTraits, translation = MoreTraits_PreparedCarToggle,
-}
-
 option MoreTraits.PreparedCarGasToggle
 {
 	type = boolean, default = true,
