@@ -29,6 +29,7 @@ Hardy wasn't accounting for Sprinting.
 Typo in Martial Artist
 General code optimization pass.
 Added a to-do list to keep track of ongoing issues that need addressing.
+Fixed Bouncer not giving Short Blunt.
 --]]
 --Global Variables
 skipxpadd = false;
@@ -186,6 +187,7 @@ local function initToadTraits()
     olympian:addXPBoost(Perks.Fitness, 1);
     local bouncer = TraitFactory.addTrait("bouncer", getText("UI_trait_bouncer"), 5, getText("UI_trait_bouncerdesc"), false, false);
     bouncer:addXPBoost(Perks.Strength, 1);
+    bouncer:addXPBoost(Perks.SmallBlunt, 1);
     local martial = TraitFactory.addTrait("martial", getText("UI_trait_martial"), 4, getText("UI_trait_martialdesc"), false, false);
     martial:addXPBoost(Perks.Fitness, 1);
     martial:addXPBoost(Perks.SmallBlunt, 1);
