@@ -19,24 +19,6 @@ server know which traits exist. This also currently causes traits to disappear o
 TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
 --]]
---[[
-Changelog Notes:
-Action Hero wasn't halving damage.
-Action Hero has increased multiplier so fighting hordes is more rewarding.
-Hardy wasn't accounting for Sprinting.
-Typo in Martial Artist
-General code optimization pass.
-Added a to-do list to keep track of ongoing issues that need addressing.
-Fixed Bouncer not giving Short Blunt.
-Added an Authors text file to the directory. This will be where anyone wishing to receive credit for working on the
-mod may place their name. I'll include the authors on the Steam Workshop page.
-Removed the lump of textual options for players to say when performing cannibalism. It was just too corny and would be
-a pain to move over to UI_EN.
-Migrated text from code to UI_EN for translation.
-Added Translation: Simplified Chinese. Credit to: EndsM for work!
-Fix issue with player weight being higher than default.
-Adjusted values of Packmule and Packmouse.
---]]
 --Global Variables
 skipxpadd = false;
 suspendevasive = false;
