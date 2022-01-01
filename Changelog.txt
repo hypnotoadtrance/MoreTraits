@@ -20,3 +20,8 @@ Made Blissful and Smoker mutually exclusive, as it was negating the effects of S
 Butterfingers chance to drop was too low and almost never procced. It's still rare, but now has a higher chance.
 Adjusted Butterfingers drop chance roll to run every minute instead of every ten minutes. (only procs if you're moving, so it wasn't consistent every ten minutes)
 Tweaked randomized damage and healing values for Broke Leg and Injured traits, as the wounds were healing within one day, and should require a little more nursing to be worth the cost.
+Added Sandbox Options. Credit to: SteadySpring
+Migrated Trait Initialization to Shared folder so Servers can "see" traits.
+Added better server compatibility.
+No more "Unknown Trait" messages.
+Administrators should be able to add/remove traits without them disappearing altogether.

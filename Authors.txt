@@ -6,6 +6,7 @@ Authors:
 Creator: HypnoToadTrance
 
 Additional Coding:
+SteadySpring
 
 Translations:
-Simplified Chinese:EndsM
+Simplified Chinese, by EndsM

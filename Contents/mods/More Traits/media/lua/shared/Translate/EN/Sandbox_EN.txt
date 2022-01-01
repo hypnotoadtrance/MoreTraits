@@ -1,11 +1,17 @@
 Sandbox_EN = {
 	Sandbox_MoreTraits = "More Traits",
-
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Bandage amount",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "The amount of bandages given by the Prepare Medical trait.",
-
-
-    Sandbox_MoreTraits_PreparedCarGasToggle = "Prepared Cars gas can",
-    Sandbox_MoreTraits_PreparedCarGasToggle_tooltip = "Toggles off or on the Prepared Cars trait starting with a gas can.",
-
+    Sandbox_MoreTraits_PreparedCarGasToggle = "Prepared: Cars Gas Can",
+    Sandbox_MoreTraits_PreparedCarGasToggle_tooltip = "Players who choose the Prepared: Cars trait start with a gas can.",
+    Sandbox_MoreTraits_SpecializationXPPercent = "Specialization XP Reduction",
+    Sandbox_MoreTraits_SpecializationXPPercent_tooltip = "The percent value that XP is reduced to for those who take a Specialization trait.<br>Set to 100% to disable XP reduction.",
+    Sandbox_MoreTraits_LuckImpact = "Luck Impact",
+    Sandbox_MoreTraits_LuckImpact_tooltip = "The percent degree to which Lucky and Unlucky traits affect traits from this mod.<br>0% means lucky and unlucky have no effect on traits.",
+    Sandbox_MoreTraits_AlcoholicFreeDrink = "Alcoholics Start With Drink",
+    Sandbox_MoreTraits_AlcoholicFreeDrink_tooltip = "Players who take the Alcoholic trait start with a free bottle of alcohol.",
+    Sandbox_MoreTraits_BouncerEffectiveness = "Bouncer Effectiveness",
+    Sandbox_MoreTraits_BouncerEffectiveness_tooltip = "The percent chance that a player who has the Bouncer trait will trigger its effect.<br>This is rolled every tick, so 60 times/second for as long as the player has at least two or more zombies near them.<br>Increasing this value by even a small amount can dramatically overpower Bouncer.",
+    Sandbox_MoreTraits_BouncerCooldown = "Bouncer Cooldown",
+    Sandbox_MoreTraits_BouncerCooldown_tooltip = "How many ticks between Bouncer shoves.<br>60 ticks = 1 second<br>Reducing this value can dramatically overpower Bouncer.",
 }
