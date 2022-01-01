@@ -1,0 +1,11 @@
+Sandbox_EN = {
+	Sandbox_MoreTraits = "More Traits",
+
+	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "绷带数量",
+	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "充分准备：药物特质开局提供的绷带数量。",
+
+
+    Sandbox_MoreTraits_PreparedCarGasToggle = "充分准备：车汽油罐",
+    Sandbox_MoreTraits_PreparedCarGasToggle_tooltip = "切换充分准备：车特质是否开局携带汽油罐",
+
+}
