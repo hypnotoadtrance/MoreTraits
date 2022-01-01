@@ -406,7 +406,12 @@ local function initToadTraitsItems(_player)
         inv:AddItem("Base.AlcoholWipes");
         inv:AddItem("Base.PillsBeta");
         inv:AddItem("Base.Pills");
-        inv:AddItems("Base.Bandage", 4);
+        if SandboxVars.MoreTraits.PreparedMedicalBandageAmount then
+            inv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
+        else
+            inv:AddItems("Base.Bandage", 4);
+
+        end
         inv:AddItem("Base.SutureNeedle");
         inv:AddItem("Base.Tissue");
         inv:AddItem("Base.Tweezers");
@@ -438,8 +443,11 @@ local function initToadTraitsItems(_player)
     if player:HasTrait("preparedpack") then
         inv:AddItem("Base.Bag_BigHikingBag");
     end
+
     if player:HasTrait("preparedcar") then
-        inv:AddItem("Base.PetrolCan");
+        if SandboxVars.MoreTraits.PreparedCarGasToggle then
+            inv:AddItem("Base.PetrolCan");
+        end
         inv:AddItem("Base.CarBatteryCharger");
         inv:AddItem("Base.Screwdriver");
         inv:AddItem("Base.Wrench");

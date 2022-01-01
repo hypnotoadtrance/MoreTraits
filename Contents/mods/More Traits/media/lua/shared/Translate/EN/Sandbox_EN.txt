@@ -1,0 +1,11 @@
+Sandbox_EN = {
+	Sandbox_MoreTraits = "More Traits",
+
+	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Bandage amount",
+	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "The amount of bandages given by the Prepare Medical trait.",
+
+
+    Sandbox_MoreTraits_PreparedCarGasToggle = "Prepared Cars gas can",
+    Sandbox_MoreTraits_PreparedCarGasToggle_tooltip = "Toggles off or on the Prepared Cars trait starting with a gas can.",
+
+}
