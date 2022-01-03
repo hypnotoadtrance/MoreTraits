@@ -6,3 +6,9 @@ Added Sandbox Options for:
 -Pack Mouse Weight Change
 -Default Weight Change
 -Global Weight Modifier.
+Gordanite now scales off Long Blunt and is now less OP at lower levels.
+Added Sandbox Options for:
+-Gymgoer
+-Superimmune
+-Grave Robber
+-Indefatigable

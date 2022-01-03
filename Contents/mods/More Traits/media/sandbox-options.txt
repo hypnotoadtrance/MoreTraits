@@ -60,6 +60,31 @@ option MoreTraits.WeightGlobalMod
 	type = integer, min = -100, max = 100, default = 0,
 	page = MoreTraits, translation = MoreTraits_WeightGlobalMod,
 }
+option MoreTraits.GymGoerPercent
+{
+	type = integer, min = 100, max = 1000, default = 200,
+	page = MoreTraits, translation = MoreTraits_GymGoerPercent,
+}
+option MoreTraits.SuperImmunePercent
+{
+	type = integer, min = 5, max = 100, default = 15,
+	page = MoreTraits, translation = MoreTraits_SuperImmunePercent,
+}
+option MoreTraits.GraveRobberChance
+{
+	type = integer, min = 1, max = 100, default = 3,
+	page = MoreTraits, translation = MoreTraits_GraveRobberChance,
+}
+option MoreTraits.GraveRobberGuaranteedLoot
+{
+	type = integer, min = 0, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_GraveRobberGuaranteedLoot,
+}
+option MoreTraits.IndefatigableRecharge
+{
+	type = integer, min = 1, max = 30, default = 7,
+	page = MoreTraits, translation = MoreTraits_IndefatigableRecharge,
+}
 
 
 

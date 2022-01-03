@@ -690,19 +690,22 @@ end
 local function Gordanite(_player)
     local player = _player;
     if player:HasTrait("gordanite") then
+        local longBluntLvl = player:getPerkLevel(Perks.LongBlunt);
+        local strengthlvl = player:getPerkLevel(Perks.Strength);
+        local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1;
         if player:getPrimaryHandItem() ~= nil then
             if player:getPrimaryHandItem():getDisplayName() == "Crowbar" then
                 local crowbar = player:getPrimaryHandItem();
-                crowbar:setMinDamage(1.2);
-                crowbar:setMaxDamage(1.8);
-                crowbar:setPushBackMod(0.8);
-                crowbar:setDoorDamage(35);
-                crowbar:setTreeDamage(20);
-                crowbar:setCriticalChance(50);
-                crowbar:setSwingTime(2);
-                crowbar:setBaseSpeed(1.5);
-                crowbar:setWeaponLength(0.6);
-                crowbar:setMinimumSwingTime(1);
+                crowbar:setMinDamage(0.7 + floatmod / 2);
+                crowbar:setMaxDamage(1.25 + floatmod / 2);
+                crowbar:setPushBackMod(0.6 + floatmod);
+                crowbar:setDoorDamage(15 + strengthlvl + longBluntLvl);
+                crowbar:setTreeDamage(15 + strengthlvl + longBluntLvl * 2);
+                crowbar:setCriticalChance(35 + (strengthlvl + longBluntLvl) / 2);
+                crowbar:setSwingTime(2.8 - floatmod);
+                crowbar:setBaseSpeed(1.1 + floatmod);
+                crowbar:setWeaponLength(0.4 + floatmod / 2);
+                crowbar:setMinimumSwingTime(1.7 - floatmod);
                 crowbar:setName(getText("Tooltip_MoreTraits_GordaniteBoost"));
                 crowbar:setTooltip(getText("Tooltip_MoreTraits_ItemBoost"));
             end
@@ -773,9 +776,13 @@ end
 local function indefatigablecounter()
     local player = getPlayer();
     local playerdata = player:getModData();
+    local recharge = 7;
     if player:HasTrait("indefatigable") then
+        if SandboxVars.MoreTraits.IndefatigableRecharge then
+            recharge = SandboxVars.MoreTraits.IndefatigableRecharge;
+        end
         if playerdata.bindefatigable == true then
-            if playerdata.indefatigablecooldown >= 7 then
+            if playerdata.indefatigablecooldown >= recharge then
                 playerdata.indefatigablecooldown = 0;
                 playerdata.bindefatigable = false;
                 player:Say(getText("UI_trait_indefatigablecooldown"));
@@ -1255,7 +1262,6 @@ local function fast()
             playerdata.fToadTraitsPlayerY = player:getY();
         end
     end
-
 end
 local function anemic(_player)
     local player = _player;
@@ -1339,6 +1345,9 @@ local function SuperImmune(_player, _playerdata)
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
     local chance = 15;
+    if SandboxVars.MoreTraits.SuperImmunePercent then
+        chance = SandboxVars.MoreTraits.SuperImmunePercent;
+    end
     if player:HasTrait("superimmune") then
         if playerdata.bSuperImmune ~= nil then
             if player:HasTrait("Lucky") then
@@ -1362,7 +1371,6 @@ local function SuperImmune(_player, _playerdata)
                         playerdata.bSuperImmune = false;
                     end
                 end
-
             end
         else
             playerdata.bSuperImmune = true;
@@ -1370,7 +1378,6 @@ local function SuperImmune(_player, _playerdata)
         if bodydamage:isInfected() == false and playerdata.bSuperImmune == false then
             playerdata.bSuperImmune = true;
         end
-
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
             if b:HasInjury() then
@@ -1378,9 +1385,7 @@ local function SuperImmune(_player, _playerdata)
                     b:setInfectedWound(false);
                 end
             end
-
         end
-
     end
 end
 
@@ -1397,9 +1402,7 @@ local function Immunocompromised(_player, _playerdata)
                     b:setWoundInfectionLevel(b:getWoundInfectionLevel() + 0.001);
                 end
             end
-
         end
-
     end
 end
 
@@ -1444,7 +1447,13 @@ local function graveRobber(_zombie)
     local player = getPlayer();
     local zombie = _zombie;
     local chance = 3;
-
+    local extraloot = 1;
+    if SandboxVars.MoreTraits.GraveRobberChance then
+        chance = SandboxVars.MoreTraits.GraveRobberChance;
+    end
+    if SandboxVars.MoreTraits.GraveRobberGuaranteedLoot then
+        extraloot = SandboxVars.MoreTraits.GraveRobberGuaranteedLoot;
+    end
     if player:HasTrait("graverobber") then
         if player:HasTrait("Lucky") then
             chance = chance + 1 * luckimpact;
@@ -1463,7 +1472,8 @@ local function graveRobber(_zombie)
         end
         if ZombRand(0, 100) <= chance then
             local inv = zombie:getInventory();
-            local itterations = ZombRand(1, chance + 1);
+            local itterations = ZombRand(1, 3);
+            itterations = itterations + extraloot;
             for i = 0, itterations do
                 i = i + 1;
                 local roll = ZombRand(0, 100);
@@ -1848,12 +1858,17 @@ local function GymGoer(_player, _perk, _amount)
     local player = _player;
     local perk = _perk;
     local amount = _amount;
+    local modifier = 200;
+    if SandboxVars.MoreTraits.GymGoerPercent then
+        modifier = SandboxVars.MoreTraits.GymGoerPercent;
+    end
+    --Shift decimal over two places.
+    modifier = modifier * 0.01;
     if player:HasTrait("gymgoer") then
         if perk == Perks.Fitness or perk == Perks.Strength then
-            amount = amount * 2;
+            amount = amount * modifier;
             player:getXp():AddXP(perk, amount, false, false);
         end
-
     end
 end
 
