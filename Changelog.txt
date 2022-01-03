@@ -1,27 +1,8 @@
 Changelog Notes:
-Action Hero wasn't halving damage.
-Action Hero has increased multiplier so fighting hordes is more rewarding.
-Hardy wasn't accounting for Sprinting.
-Typo in Martial Artist
-General code optimization pass.
-Added a to-do list to keep track of ongoing issues that need addressing.
-Fixed Bouncer not giving Short Blunt.
-Added an Authors text file to the directory. This will be where anyone wishing to receive credit for working on the
-mod may place their name. I'll include the authors on the Steam Workshop page.
-Removed the lump of textual options for players to say when performing cannibalism. It was just too corny and would be
-a pain to move over to UI_EN.
-Migrated text from code to UI_EN for translation.
-Added Translation: Simplified Chinese. Credit to: EndsM for work!
-Fix issue with player weight being higher than default.
-Adjusted values of Packmule and Packmouse.
-Increased Cost of Gordanite from 5 to 6, as the new improved function makes it much more powerful.
-Increased Cost of Martial Artist from 4 to 5 to balance its strength versus its cost.
-Made Blissful and Smoker mutually exclusive, as it was negating the effects of Smoker.
-Butterfingers chance to drop was too low and almost never procced. It's still rare, but now has a higher chance.
-Adjusted Butterfingers drop chance roll to run every minute instead of every ten minutes. (only procs if you're moving, so it wasn't consistent every ten minutes)
-Tweaked randomized damage and healing values for Broke Leg and Injured traits, as the wounds were healing within one day, and should require a little more nursing to be worth the cost.
-Added Sandbox Options. Credit to: SteadySpring
-Migrated Trait Initialization to Shared folder so Servers can "see" traits.
-Added better server compatibility.
-No more "Unknown Trait" messages.
-Administrators should be able to add/remove traits without them disappearing altogether.
+Adjusted Hardy regeneration rate.
+Added Sandbox Options for:
+-Hardy Regeneration Rate
+-Pack Mule Weight Change
+-Pack Mouse Weight Change
+-Default Weight Change
+-Global Weight Modifier.

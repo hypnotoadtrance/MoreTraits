@@ -800,8 +800,12 @@ local function hardytrait(_player)
     local stats = player:getStats();
     if player:HasTrait("hardy") then
         local endurance = stats:getEndurance();
+        local regenerationrate = 0.000001;
+        if SandboxVars.MoreTraits.HardyRegeneration then
+            regenerationrate = regenerationrate * (SandboxVars.MoreTraits.HardyRegeneration * 0.01);
+        end
         if endurance < 1 and player:IsRunning() == false and player:isForceRun() == false then
-            stats:setEndurance(endurance + 0.00001);
+            stats:setEndurance(endurance + regenerationrate);
         end
     end
 end
@@ -1402,20 +1406,36 @@ end
 function checkWeight()
     local player = getPlayer();
     local strength = player:getPerkLevel(Perks.Strength);
+    local mule = 10;
+    local mouse = 6;
+    local default = 8;
+    local globalmod = 0;
+    if SandboxVars.MoreTraits.WeightPackMule then
+        mule = SandboxVars.MoreTraits.WeightPackMule;
+    end
+    if SandboxVars.MoreTraits.WeightPackMouse then
+        mouse = SandboxVars.MoreTraits.WeightPackMouse;
+    end
+    if SandboxVars.MoreTraits.WeightDefault then
+        default = SandboxVars.MoreTraits.WeightDefault;
+    end
+    if SandboxVars.MoreTraits.WeightGlobalMod then
+        globalmod = SandboxVars.MoreTraits.WeightGlobalMod;
+    end
     if player:HasTrait("packmule") then
-        if player:getMaxWeightBase() ~= 10 + strength / 5 then
-            player:setMaxWeight(10 + strength);
-            player:setMaxWeightBase(10 + strength / 5);
+        if player:getMaxWeightBase() ~= mule + strength / 5 + globalmod then
+            player:setMaxWeight(mule + strength + globalmod);
+            player:setMaxWeightBase(mule + strength / 5 + globalmod);
         end
     elseif player:HasTrait("packmouse") then
-        if player:getMaxWeightBase() ~= 6 then
-            player:setMaxWeight(6);
-            player:setMaxWeightBase(6);
+        if player:getMaxWeightBase() ~= mouse + globalmod then
+            player:setMaxWeight(mouse + globalmod);
+            player:setMaxWeightBase(mouse + globalmod);
         end
     else
-        if player:getMaxWeightBase() ~= 8 then
-            player:setMaxWeight(8);
-            player:setMaxWeightBase(8);
+        if player:getMaxWeightBase() ~= default + globalmod then
+            player:setMaxWeight(default + globalmod);
+            player:setMaxWeightBase(default + globalmod);
         end
     end
 end
