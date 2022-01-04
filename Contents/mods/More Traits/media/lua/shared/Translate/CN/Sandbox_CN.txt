@@ -1,4 +1,4 @@
-Sandbox_EN = {
+Sandbox_CN = {
     Sandbox_MoreTraits = "More Traits",
     Sandbox_MoreTraits_PreparedMedicalBandageAmount = "绷带数量",
     Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "充分准备：药物特质开局提供的绷带数量。",
@@ -34,4 +34,8 @@ Sandbox_EN = {
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot_tooltip = "决定盗墓贼可以找到多少确定的额外战利品。<br>默认情况下，一个随机数值会被确定，增加这个数值会在计算时决定额外战利品。",
     Sandbox_MoreTraits_IndefatigableRecharge = "不死鸟冷却",
     Sandbox_MoreTraits_IndefatigableRecharge_tooltip = "不死鸟特质的能力冷却需要的天数。",
+    Sandbox_MoreTraits_GordaniteEffectiveness = "戈登效果",
+    Sandbox_MoreTraits_GordaniteEffectiveness_tooltip = "代表拥有戈登特质的玩家使用撬棍的效果的百分比。<br>设置为200%会使戈登特质效果翻倍。",
+    Sandbox_MoreTraits_EvasiveChance = "闪避特质几率",
+    Sandbox_MoreTraits_EvasiveChance_tooltip = "拥有闪避特质的玩家躲过攻击的几率。<br>设置为100%会使拥有闪避特质的玩家无视僵尸的攻击。",
 }
