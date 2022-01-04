@@ -694,7 +694,7 @@ local function Gordanite(_player)
         local strengthlvl = player:getPerkLevel(Perks.Strength);
         local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1;
         if player:getPrimaryHandItem() ~= nil then
-            if player:getPrimaryHandItem():getDisplayName() == "Crowbar" then
+            if player:getPrimaryHandItem():getType() == "Crowbar" then
                 local crowbar = player:getPrimaryHandItem();
                 crowbar:setMinDamage(0.7 + floatmod / 2);
                 crowbar:setMaxDamage(1.25 + floatmod / 2);
