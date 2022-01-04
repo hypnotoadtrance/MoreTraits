@@ -22,7 +22,7 @@ option MoreTraits.LuckImpact
 }
 option MoreTraits.SpecializationXPPercent
 {
-	type = integer, min = 10, max = 100, default = 25,
+	type = integer, min = 0, max = 90, default = 75,
 	page = MoreTraits, translation = MoreTraits_SpecializationXPPercent,
 }
 option MoreTraits.BouncerEffectiveness

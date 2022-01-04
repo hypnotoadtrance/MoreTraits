@@ -659,7 +659,7 @@ local function Specialization(_player, _perk, _amount)
     local amount = _amount;
     local newamount = 0;
     local skip = false;
-    local modifier = 25;
+    local modifier = 75;
     if SandboxVars.MoreTraits.SpecializationXPPercent then
         modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
     end
