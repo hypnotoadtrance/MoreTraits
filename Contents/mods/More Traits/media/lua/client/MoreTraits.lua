@@ -690,11 +690,17 @@ end
 local function Gordanite(_player)
     local player = _player;
     if player:HasTrait("gordanite") then
-        local longBluntLvl = player:getPerkLevel(Perks.LongBlunt);
+        local longBluntLvl = player:getPerkLevel(Perks.Blunt);
         local strengthlvl = player:getPerkLevel(Perks.Strength);
         local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1;
         if player:getPrimaryHandItem() ~= nil then
-            if player:getPrimaryHandItem():getDisplayName() == "Crowbar" then
+            if player:getPrimaryHandItem():getType() == "Crowbar" then
+                if SandboxVars.MoreTraits.GordaniteEffectiveness then
+                    local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01;
+                    floatmod = floatmod * modifier;
+                    longBluntLvl = longBluntLvl * modifier;
+                    strengthlvl = strengthlvl * modifier;
+                end
                 local crowbar = player:getPrimaryHandItem();
                 crowbar:setMinDamage(0.7 + floatmod / 2);
                 crowbar:setMaxDamage(1.25 + floatmod / 2);
@@ -1878,12 +1884,12 @@ local function MainPlayerUpdate(_player)
     if internalTick >= 30 then
         amputee(player);
         vehicleCheck(player);
-        FearfulUpdate(player);
         FoodUpdate(player);
+        Gordanite(player);
         --Reset internalTick every 30 ticks
         internalTick = 0;
     elseif internalTick == 20 then
-        Gordanite(player);
+        FearfulUpdate(player);
     elseif internalTick == 10 then
         SuperImmune(player, playerdata);
         Immunocompromised(player, playerdata);

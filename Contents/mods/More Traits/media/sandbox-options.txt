@@ -85,6 +85,11 @@ option MoreTraits.IndefatigableRecharge
 	type = integer, min = 1, max = 30, default = 7,
 	page = MoreTraits, translation = MoreTraits_IndefatigableRecharge,
 }
+option MoreTraits.GordaniteEffectiveness
+{
+	type = integer, min = 0, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_GordaniteEffectiveness,
+}
 
 
 
