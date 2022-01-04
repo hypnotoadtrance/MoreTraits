@@ -8,7 +8,7 @@ Then we need a method to iterate through nearby containers for each player and c
 the container. Then insert/remove loot on a per-player,per-container basis.
 At present, I'm stuck on iterating through nearby containers. I don't know how to do it.
 TODO Figure out what is causing stat synchronization issues
-When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subrtracting stats doesn't
+When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subtracting stats doesn't
 seem to work properly. This also effects Hardy, Alcoholic (removing stress when drinking alcohol doesn't work in MP)
 TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
@@ -291,9 +291,17 @@ local function ToadTraitEvasive(_player, _playerdata)
         local bMarkForUpdate = false;
         local bodydamage = player:getBodyDamage();
         local modbodydamage = playerdata.ToadTraitBodyDamage;
+        local lastinfected = playerdata.bisInfected;
         if bodydamage:getNumPartsScratched() == nil then
-            return
+            return ;
         end ;
+        if lastinfected == null then
+            playerdata.bisInfected = bodydamage:IsInfected();
+            lastinfected = playerdata.bisInfected;
+        end
+        if SandboxVars.MoreTraits.EvasiveChance then
+            basechance = SandboxVars.MoreTraits.EvasiveChance;
+        end
         if player:HasTrait("Lucky") then
             basechance = basechance + 5 * luckimpact;
         end
@@ -306,7 +314,7 @@ local function ToadTraitEvasive(_player, _playerdata)
             print("Initializing Body Damage");
             for i = 0, bodydamage:getBodyParts():size() - 1 do
                 local b = bodydamage:getBodyParts():get(i);
-                local temptable = { b:getType(), b:scratched(), b:bitten() };
+                local temptable = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
                 table.insert(modbodydamage, temptable);
             end
             playerdata.ToadTraitBodyDamage = modbodydamage;
@@ -316,28 +324,47 @@ local function ToadTraitEvasive(_player, _playerdata)
                 local i = bodydamage:getBodyParts():get(n);
                 for _, b in pairs(modbodydamage) do
                     if i:getType() == b[1] then
-                        if i:scratched() == false and b[2] == true or i:bitten() == false and b[3] == true then
+                        if i:scratched() == false and b[2] == true or i:bitten() == false and b[3] == true or i:isCut() == false and b[4] == true then
                             bMarkForUpdate = true;
                         end
                         if i:scratched() == true and b[2] == false then
                             print("Scratch Detected On: " .. tostring(i:getType()));
                             if ZombRand(100) <= basechance then
-                                print("Attack Dodged!");
                                 i:RestoreToFullHealth();
-                                i:setScratched(false);
+                                i:setScratched(false, false);
                                 i:SetInfected(false);
+                                if lastinfected == false and bodydamage:IsInfected() == true then
+                                    bodydamage:setInfected(false);
+                                    print("Infection from Dodged Attack Removed");
+                                end
                                 player:Say(getText("UI_trait_dodgesay"));
                             else
                                 bMarkForUpdate = true;
                             end
-
                         elseif i:bitten() == true and b[3] == false then
                             print("Bite Detected On: " .. tostring(i:getType()));
                             if ZombRand(100) <= basechance then
-                                print("Attack Dodged!");
                                 i:RestoreToFullHealth();
                                 i:SetBitten(false, false);
                                 i:SetInfected(false);
+                                if lastinfected == false and bodydamage:IsInfected() == true then
+                                    bodydamage:setInfected(false);
+                                    print("Infection from Dodged Attack Removed");
+                                end
+                                player:Say(getText("UI_trait_dodgesay"));
+                            else
+                                bMarkForUpdate = true;
+                            end
+                        elseif i:isCut() == true and b[4] == false then
+                            print("Laceration Detected On: " .. tostring(i:getType()));
+                            if ZombRand(100) <= basechance then
+                                i:RestoreToFullHealth();
+                                i:setCut(false, false);
+                                i:SetInfected(false);
+                                if lastinfected == false and bodydamage:IsInfected() == true then
+                                    bodydamage:setInfected(false);
+                                    print("Infection from Dodged Attack Removed");
+                                end
                                 player:Say(getText("UI_trait_dodgesay"));
                             else
                                 bMarkForUpdate = true;
@@ -352,10 +379,11 @@ local function ToadTraitEvasive(_player, _playerdata)
             --Initialize the Body Part Reference Table
             for i = 0, bodydamage:getBodyParts():size() - 1 do
                 local b = bodydamage:getBodyParts():get(i);
-                local temptable = { b:getType(), b:scratched(), b:bitten() };
+                local temptable = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
                 table.insert(modbodydamage, temptable);
             end
             playerdata.ToadTraitBodyDamage = modbodydamage;
+            playerdata.bisInfected = bodydamage:IsInfected();
         end
     end
 end
@@ -1363,7 +1391,7 @@ local function SuperImmune(_player, _playerdata)
                 chance = chance - 1 * luckimpact;
             end
             if playerdata.bSuperImmune == true then
-                if bodydamage:isInfected() then
+                if bodydamage:IsInfected() then
                     if ZombRand(0, 101) <= chance then
                         print("Player's Immune system fought-off zombification.");
                         bodydamage:setInfected(false);
@@ -1381,7 +1409,7 @@ local function SuperImmune(_player, _playerdata)
         else
             playerdata.bSuperImmune = true;
         end
-        if bodydamage:isInfected() == false and playerdata.bSuperImmune == false then
+        if bodydamage:IsInfected() == false and playerdata.bSuperImmune == false then
             playerdata.bSuperImmune = true;
         end
         for i = 0, bodydamage:getBodyParts():size() - 1 do

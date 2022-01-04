@@ -36,4 +36,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_IndefatigableRecharge_tooltip = "After how many in-game days should the indefatigable ability recharge?",
     Sandbox_MoreTraits_GordaniteEffectiveness = "Gordanite Effectiveness",
     Sandbox_MoreTraits_GordaniteEffectiveness_tooltip = "A percent value representing how effective the Gordanite trait makes players with Crowbars.<br>Setting this to 200% will make Gordanite twice as powerful.",
+    Sandbox_MoreTraits_EvasiveChance = "Evasive Dodge Chance",
+    Sandbox_MoreTraits_EvasiveChance_tooltip = "The percent chance that a player with the Evasive trait will dodge an attack.<br>Setting this to 100% will make players with Evasive immune to zombies.",
 }

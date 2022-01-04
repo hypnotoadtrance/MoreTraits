@@ -90,6 +90,11 @@ option MoreTraits.GordaniteEffectiveness
 	type = integer, min = 0, max = 1000, default = 100,
 	page = MoreTraits, translation = MoreTraits_GordaniteEffectiveness,
 }
+option MoreTraits.EvasiveChance
+{
+	type = integer, min = 0, max = 100, default = 33,
+	page = MoreTraits, translation = MoreTraits_EvasiveChance,
+}
 
 
 
