@@ -140,6 +140,7 @@ UI_EN = {
     UI_trait_indefatigablecooldown = "*Indefatigable Is No Longer In Cooldown*",
     UI_trait_alcoholicneed = "I need alcohol.",
     UI_trait_alcoholicwithdrawal = "*Alcohol Withdrawal*",
+    UI_trait_alcoholicsatisfied = "*Alcohol Need Satisfied*",
     UI_fearful_slightpanic = "*Whimper*",
     UI_fearful_panic = "*Muffled Shriek*",
     UI_fearful_strongpanic = "*Panicked Screech*",

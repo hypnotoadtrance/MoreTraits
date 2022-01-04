@@ -15,6 +15,16 @@ option MoreTraits.AlcoholicFreeDrink
 	type = boolean, default = true,
 	page = MoreTraits, translation = MoreTraits_AlcoholicFreeDrink,
 }
+option MoreTraits.AlcoholicFrequency
+{
+	type = integer, min = 1, max = 720, default = 24,
+	page = MoreTraits, translation = MoreTraits_AlcoholicFrequency,
+}
+option MoreTraits.AlcoholicWithdrawal
+{
+	type = integer, min = 1, max = 720, default = 72,
+	page = MoreTraits, translation = MoreTraits_AlcoholicWithdrawal,
+}
 option MoreTraits.LuckImpact
 {
 	type = integer, min = 0, max = 200, default = 100,

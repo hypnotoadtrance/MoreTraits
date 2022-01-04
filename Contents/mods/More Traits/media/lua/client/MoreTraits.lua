@@ -859,18 +859,25 @@ local function drinkerupdate(_player, _playerdata)
         local drunkness = stats:getDrunkenness();
         local anger = stats:getAnger();
         local stress = stats:getStress();
+        local hoursthreshold = 36;
+        if SandboxVars.MoreTraits.AlcoholicFrequency then
+            hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency * 1.5;
+        end
         if drunkness >= 10 then
-            playerdata.bSatedDrink = true;
+            if playerdata.bSatedDrink == false then
+                playerdata.bSatedDrink = true;
+                player:Say(getText("UI_trait_alcoholicsatisfied"));
+            end
             playerdata.iHoursSinceDrink = 0;
             stats:setAnger(anger - 0.01);
             stats:setStress(stress - 0.01);
         end
         if playerdata.bSatedDrink == false then
-            if playerdata.iHoursSinceDrink > 48 then
+            if playerdata.iHoursSinceDrink > hoursthreshold then
                 stats:setPain(playerdata.iHoursSinceDrink / 5);
             end
-            stats:setAnger(anger + 0.001);
-            stats:setStress(stress + 0.001);
+            stats:setAnger(anger + 0.00001);
+            stats:setStress(stress + 0.00001);
         end
     end
 end
@@ -880,6 +887,19 @@ local function drinkertick()
     local playerdata = player:getModData();
     if player:HasTrait("drinker") then
         local hoursthreshold = 24;
+        local divider = 4;
+        if SandboxVars.MoreTraits.AlcoholicFrequency then
+            hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency;
+        end
+        if hoursthreshold <= 2 then
+            divider = 0.1;
+        elseif hoursthreshold <= 5 then
+            divider = 0.2;
+        elseif hoursthreshold <= 10 then
+            divider = 0.5;
+        elseif hoursthreshold <= 20 then
+            divider = 1;
+        end
         if player:HasTrait("Lucky") then
             hoursthreshold = hoursthreshold + 4 * luckimpact;
         end
@@ -892,7 +912,7 @@ local function drinkertick()
         playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
         if playerdata.bSatedDrink == true then
             if playerdata.iHoursSinceDrink >= hoursthreshold then
-                if ZombRand(100) <= hoursthreshold / 4 then
+                if ZombRand(100) <= hoursthreshold / divider then
                     playerdata.bSatedDrink = false;
                     print("Player needs alcohol.");
                     player:Say(getText("UI_trait_alcoholicneed"));
@@ -905,10 +925,30 @@ end
 local function drinkerpoison()
     local player = getPlayer();
     local playerdata = player:getModData();
-    if playerdata.iHoursSinceDrink > 72 and playerdata.bSatedDrink == false then
-        print("Player is suffering from alcohol withdrawal.");
-        player:Say(getText("UI_trait_alcoholicwithdrawal"));
-        player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / 5));
+    local hoursthreshold = 72;
+    local divider = 5;
+    if player:HasTrait("drinker") then
+        if SandboxVars.MoreTraits.AlcoholicWithdrawal then
+            hoursthreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal;
+        end
+        if hoursthreshold <= 2 then
+            divider = 0.1;
+        elseif hoursthreshold <= 5 then
+            divider = 0.2;
+        elseif hoursthreshold <= 10 then
+            divider = 0.5;
+        elseif hoursthreshold <= 20 then
+            divider = 1;
+        elseif hoursthreshold <= 24 then
+            divider = 2;
+        elseif hoursthreshold <= 48 then
+            divider = 4;
+        end
+        if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false then
+            print("Player is suffering from alcohol withdrawal.");
+            player:Say(getText("UI_trait_alcoholicwithdrawal"));
+            player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+        end
     end
 end
 

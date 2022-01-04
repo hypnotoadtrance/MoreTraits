@@ -147,7 +147,7 @@ recipe Improvise Zombification Cure
 {
     keep Base.MortarPestle,
     Base.WhiskeyFull/Base.BeerCan/Base.Wine/Base.Wine2,Base.PetrolCan,Base.CorpseMale/Base.CorpseFemale,Base.Pills;10,Base.Antibiotics=5,
-    Water=100,Base.Flour,Base.Sugar,
+    Water=10,Base.Flour,Base.Sugar,
 
     Result: MoreTraits.ZombificationCure,
     SkillRequired: Doctor=10,

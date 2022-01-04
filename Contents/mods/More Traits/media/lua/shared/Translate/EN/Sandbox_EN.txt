@@ -38,4 +38,8 @@ Sandbox_EN = {
     Sandbox_MoreTraits_GordaniteEffectiveness_tooltip = "A percent value representing how effective the Gordanite trait makes players with Crowbars.<br>Setting this to 200% will make Gordanite twice as powerful.",
     Sandbox_MoreTraits_EvasiveChance = "Evasive Dodge Chance",
     Sandbox_MoreTraits_EvasiveChance_tooltip = "The percent chance that a player with the Evasive trait will dodge an attack.<br>Setting this to 100% will make players with Evasive immune to zombies.",
+    Sandbox_MoreTraits_AlcoholicFrequency = "Alcoholic Drink Frequency",
+    Sandbox_MoreTraits_AlcoholicFrequency_tooltip = "How many hours (on average) should an alcoholic need to drink to sate their need?<br>Lower values mean Alcoholics need to drink frequently to avoid withdrawal.",
+    Sandbox_MoreTraits_AlcoholicWithdrawal = "Alcoholic Withdrawal",
+    Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "After how many hours without alcohol should an alcoholic start suffering withdrawal symptoms?<br>This value should be higher than Alcoholic Drink Frequency.",
 }
