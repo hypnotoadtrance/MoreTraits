@@ -11,3 +11,4 @@ SteadySpring
 
 Translations:
 Simplified Chinese, by EndsM
+Russian, by Xenu47
