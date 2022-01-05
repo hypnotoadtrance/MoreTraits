@@ -140,6 +140,7 @@ UI_CN = {
     UI_trait_indefatigablecooldown = "*不死鸟不再处于冷却中*",
     UI_trait_alcoholicneed = "我需要酒.",
     UI_trait_alcoholicwithdrawal = "*酒精戒断*",
+    UI_trait_alcoholicsatisfied = "*酒精需求已满足*",
     UI_fearful_slightpanic = "*呜咽*",
     UI_fearful_panic = "*低沉的嘶吼*",
     UI_fearful_strongpanic = "*惊慌尖叫*",
