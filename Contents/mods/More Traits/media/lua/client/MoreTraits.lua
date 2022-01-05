@@ -232,6 +232,10 @@ local function initToadTraitsPerks(_player)
         --print("Beginning Injury.");
         local bodydamage = player:getBodyDamage();
         local itterations = ZombRand(1, 4) + 1;
+        local doburns = true;
+        if SandboxVars.MoreTraits.InjuredBurns == false then
+            doburns = false;
+        end
         for i = 0, itterations do
             local randompart = ZombRand(0, 16);
             local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
@@ -248,9 +252,13 @@ local function initToadTraitsPerks(_player)
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
                 end
                 if injury == 2 then
-                    b:AddDamage(damage);
-                    b:setBurned();
-                    b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    if doburns == true then
+                        b:AddDamage(damage);
+                        b:setBurned();
+                        b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    else
+                        itterations = itterations - 1;
+                    end
                 end
                 if injury == 3 then
                     b:AddDamage(damage);
@@ -795,8 +803,8 @@ local function indefatigable(_player, _playerdata)
                 if enemies:size() > 2 then
                     for i = 0, enemies:size() - 1 do
                         if enemies:get(i):isZombie() then
-                            if enemies:get(i):DistTo(player) <= 1.5 then
-                                enemies:get(i):Hit(player:getUseHandWeapon(), player, ZombRand(1, 12), false, 1);
+                            if enemies:get(i):DistTo(player) <= 2.5 then
+                                enemies:get(i):setStaggerBack(true);
                             end
                         end
                     end
@@ -810,10 +818,10 @@ end
 local function indefatigablecounter()
     local player = getPlayer();
     local playerdata = player:getModData();
-    local recharge = 7;
+    local recharge = 7 * 24;
     if player:HasTrait("indefatigable") then
         if SandboxVars.MoreTraits.IndefatigableRecharge then
-            recharge = SandboxVars.MoreTraits.IndefatigableRecharge;
+            recharge = SandboxVars.MoreTraits.IndefatigableRecharge * 24;
         end
         if playerdata.bindefatigable == true then
             if playerdata.indefatigablecooldown >= recharge then
@@ -860,8 +868,18 @@ local function drinkerupdate(_player, _playerdata)
         local anger = stats:getAnger();
         local stress = stats:getStress();
         local hoursthreshold = 36;
+        local divider = 5;
         if SandboxVars.MoreTraits.AlcoholicFrequency then
             hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency * 1.5;
+        end
+        if hoursthreshold <= 2 then
+            divider = 0.1;
+        elseif hoursthreshold <= 5 then
+            divider = 0.2;
+        elseif hoursthreshold <= 10 then
+            divider = 0.5;
+        elseif hoursthreshold <= 20 then
+            divider = 1;
         end
         if drunkness >= 10 then
             if playerdata.bSatedDrink == false then
@@ -869,15 +887,15 @@ local function drinkerupdate(_player, _playerdata)
                 player:Say(getText("UI_trait_alcoholicsatisfied"));
             end
             playerdata.iHoursSinceDrink = 0;
-            stats:setAnger(anger - 0.01);
-            stats:setStress(stress - 0.01);
+            stats:setAnger(0);
+            stats:setStress(0);
         end
         if playerdata.bSatedDrink == false then
             if playerdata.iHoursSinceDrink > hoursthreshold then
-                stats:setPain(playerdata.iHoursSinceDrink / 5);
+                stats:setPain(playerdata.iHoursSinceDrink / divider);
             end
-            stats:setAnger(anger + 0.00001);
-            stats:setStress(stress + 0.00001);
+            stats:setAnger(anger + 0.0001);
+            stats:setStress(stress + 0.0001);
         end
     end
 end
@@ -927,28 +945,36 @@ local function drinkerpoison()
     local playerdata = player:getModData();
     local hoursthreshold = 72;
     local divider = 5;
+    local cooldown = 0;
+
     if player:HasTrait("drinker") then
+        if playerdata.iWithdrawalCooldown == null then
+            playerdata.iWithdrawalCooldown = 24;
+        end
+        cooldown = playerdata.iWithdrawalCooldown;
         if SandboxVars.MoreTraits.AlcoholicWithdrawal then
             hoursthreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal;
         end
         if hoursthreshold <= 2 then
-            divider = 0.1;
-        elseif hoursthreshold <= 5 then
-            divider = 0.2;
-        elseif hoursthreshold <= 10 then
             divider = 0.5;
-        elseif hoursthreshold <= 20 then
+        elseif hoursthreshold <= 5 then
+            divider = 0.75;
+        elseif hoursthreshold <= 10 then
             divider = 1;
-        elseif hoursthreshold <= 24 then
+        elseif hoursthreshold <= 20 then
             divider = 2;
-        elseif hoursthreshold <= 48 then
+        elseif hoursthreshold <= 24 then
             divider = 4;
+        elseif hoursthreshold <= 48 then
+            divider = 5;
         end
-        if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false then
+        if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false and cooldown <= 0 then
             print("Player is suffering from alcohol withdrawal.");
             player:Say(getText("UI_trait_alcoholicwithdrawal"));
             player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+            playerdata.iWithdrawalCooldown = ZombRand(12, 24);
         end
+        playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown - 1;
     end
 end
 
@@ -1987,11 +2013,11 @@ Events.OnWeaponHitCharacter.Add(prospear);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
-Events.OnDawn.Add(drinkerpoison);
+Events.EveryHours.Add(drinkerpoison);
 Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
-Events.OnDawn.Add(indefatigablecounter);
+Events.EveryHours.Add(indefatigablecounter);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(ToadTraitButter);
 Events.EveryTenMinutes.Add(checkWeight);

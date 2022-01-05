@@ -13,6 +13,7 @@ Added Sandbox Options for:
 -Gordanite
 -Evasive
 -Alcoholic
+-Injured
 Gordanite now scales off Long Blunt and is now less OP at lower levels.
 Fixed Localization Bug in Gordanite.
 Evasive now properly removes Zombification on attacks that were dodged.
@@ -20,3 +21,8 @@ Evasive now checks for Lacerations.
 Fixed multiplication issue in Specialization that was removing the wrong XP amount.
 Alcoholic now notifies the player when they have satisfied their need.
 Fix Script error in Recipe for Cure.
+For some reason, the game no longer calls the OnDawn event, which prevented parts of Alcoholic and Indefatigable traits from working properly. Moved these calls into EveryHours instead.
+Adjusted sickness strength of alcohol withdrawal to account for very small drinking frequency values.
+Added sandbox option to disable burns as a random chance with Injured trait.
+Adjust indefatigable knockback effect.
+Clarify indefatigable effect in description.
