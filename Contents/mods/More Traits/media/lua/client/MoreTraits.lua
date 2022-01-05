@@ -399,24 +399,24 @@ end
 local function ToadTraitButter()
     local player = getPlayer();
     if player:HasTrait("butterfingers") and player:isPlayerMoving() then
-        local basechance = 15;
+        local basechance = 5;
         if player:HasTrait("AllThumbs") then
-            basechance = basechance + 5;
+            basechance = basechance + 1;
         end
         if player:HasTrait("Dextrous") then
-            basechance = basechance - 5;
+            basechance = basechance - 1;
         end
         if player:HasTrait("Lucky") then
-            basechance = basechance - 5 * luckimpact;
+            basechance = basechance - 1 * luckimpact;
         end
         if player:HasTrait("packmule") then
-            basechance = basechance - 5;
+            basechance = basechance - 1;
         end
         if player:HasTrait("packmouse") then
-            basechance = basechance + 5;
+            basechance = basechance + 1;
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance + 5 * luckimpact;
+            basechance = basechance + 1 * luckimpact;
         end
         local weight = player:getInventoryWeight();
         local chancemod = 0;

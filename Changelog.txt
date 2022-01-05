@@ -26,3 +26,4 @@ Adjusted sickness strength of alcohol withdrawal to account for very small drink
 Added sandbox option to disable burns as a random chance with Injured trait.
 Adjust indefatigable knockback effect.
 Clarify indefatigable effect in description.
+Butterfingers default chance was too high. Reduced base chance and tuned variable chance effects to be smaller.
