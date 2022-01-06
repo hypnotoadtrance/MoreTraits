@@ -1995,7 +1995,7 @@ local function GymGoer(_player, _perk, _amount)
     modifier = modifier * 0.01;
     if player:HasTrait("gymgoer") then
         if perk == Perks.Fitness or perk == Perks.Strength then
-            amount = amount * modifier;
+            amount = amount * (1 - modifier);
             player:getXp():AddXP(perk, amount, false, false);
         end
     end
