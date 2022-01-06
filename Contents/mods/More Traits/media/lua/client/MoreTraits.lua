@@ -547,10 +547,13 @@ local function ToadTraitAntique(_target, _name, _container)
     table.insert(items, "MoreTraits.ObsidianBlade");
     table.insert(items, "MoreTraits.PackerBag");
     table.insert(items, "MoreTraits.BloodyCrowbar");
+    table.insert(items, "MoreTraits.Slugger");
+    table.insert(items, "MoreTraits.AntiqueJacket");
+    table.insert(items, "MoreTraits.AntiqueVest");
+    table.insert(items, "MoreTraits.AntiqueBoots");
     table.insert(items, "MoreTraits.AntiqueMag1");
     table.insert(items, "MoreTraits.AntiqueMag2");
     table.insert(items, "MoreTraits.AntiqueMag3");
-    table.insert(items, "MoreTraits.Slugger");
 
     local length = 0
     for k, v in pairs(items) do
@@ -1601,7 +1604,7 @@ local function graveRobber(_zombie)
         end
         if ZombRand(0, 100) <= chance then
             local inv = zombie:getInventory();
-            local itterations = ZombRand(1, 3);
+            local itterations = ZombRand(0, 3);
             itterations = itterations + extraloot;
             for i = 0, itterations do
                 i = i + 1;
