@@ -28,3 +28,6 @@ Adjust indefatigable knockback effect.
 Clarify indefatigable effect in description.
 Butterfingers default chance was too high. Reduced base chance and tuned variable chance effects to be smaller.
 Add checks to prevent Specialization from de-leveling a player (and thus remove their xp multiplier bonuses)
+Add Cooking level to Gourmand trait.
+Sewer Trait now gives sewing supplies.
+Disable Scrounger, Incomprehensive, and Antique Collector in multiplayer until they can be fixed.

@@ -98,8 +98,8 @@ local function initToadTraits()
     local blunttwirl = TraitFactory.addTrait("blunttwirl", getText("UI_trait_blunttwirl"), 5, getText("UI_trait_blunttwirldesc"), false, false);
     blunttwirl:addXPBoost(Perks.SmallBlunt, 1);
     blunttwirl:addXPBoost(Perks.Blunt, 1);
-    local scrounger = TraitFactory.addTrait("scrounger", getText("UI_trait_scrounger"), 5, getText("UI_trait_scroungerdesc"), false, false);
-    local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 4, getText("UI_trait_antiquedesc"), false, false);
+    local scrounger = TraitFactory.addTrait("scrounger", getText("UI_trait_scrounger"), 5, getText("UI_trait_scroungerdesc"), false, true);
+    local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 4, getText("UI_trait_antiquedesc"), false, true);
     local evasive = TraitFactory.addTrait("evasive", getText("UI_trait_evasive"), 8, getText("UI_trait_evasivedesc"), false, false);
     evasive:addXPBoost(Perks.Nimble, 1);
     local blissful = TraitFactory.addTrait("blissful", getText("UI_trait_blissful"), 2, getText("UI_trait_blissfuldesc"), false, false);
@@ -169,6 +169,7 @@ local function initToadTraits()
     local packmule = TraitFactory.addTrait("packmule", getText("UI_trait_packmule"), 7, getText("UI_trait_packmuledesc"), false, false);
     local graverobber = TraitFactory.addTrait("graverobber", getText("UI_trait_graverobber"), 7, getText("UI_trait_graverobberdesc"), false, false);
     local gourmand = TraitFactory.addTrait("gourmand", getText("UI_trait_gourmand"), 4, getText("UI_trait_gourmanddesc"), false, false);
+    gourmand:addXPBoost(Perks.Cooking, 1);
     local gymgoer = TraitFactory.addTrait("gymgoer", getText("UI_trait_gymgoer"), 5, getText("UI_trait_gymgoerdesc"), false, false);
     gymgoer:addXPBoost(Perks.Strength, 1);
     gymgoer:addXPBoost(Perks.Fitness, 1);
@@ -180,7 +181,7 @@ local function initToadTraits()
     local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -12, getText("UI_trait_drinkerdesc"), false, false);
     local broke = TraitFactory.addTrait("broke", getText("UI_trait_broke"), -8, getText("UI_trait_brokedesc"), false, false);
     local butterfingers = TraitFactory.addTrait("butterfingers", getText("UI_trait_butterfingers"), -10, getText("UI_trait_butterfingersdesc"), false, false);
-    local incomprehensive = TraitFactory.addTrait("incomprehensive", getText("UI_trait_incomprehensive"), -10, getText("UI_trait_incomprehensivedesc"), false, false);
+    local incomprehensive = TraitFactory.addTrait("incomprehensive", getText("UI_trait_incomprehensive"), -10, getText("UI_trait_incomprehensivedesc"), false, true);
     local depressive = TraitFactory.addTrait("depressive", getText("UI_trait_depressive"), -4, getText("UI_trait_depressivedesc"), false, false);
     local selfdestructive = TraitFactory.addTrait("selfdestructive", getText("UI_trait_selfdestructive"), -4, getText("UI_trait_selfdestructivedesc"), false, false);
     local badteeth = TraitFactory.addTrait("badteeth", getText("UI_trait_badteeth"), -2, getText("UI_trait_badteethdesc"), false, false);

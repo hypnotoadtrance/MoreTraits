@@ -104,7 +104,6 @@ end
 local function initToadTraitsItems(_player)
     local player = _player;
     local inv = player:getInventory();
-    local traits = player:getTraits();
     if player:HasTrait("preparedfood") then
         inv:AddItem("Base.TinnedBeans");
         inv:AddItem("Base.CannedMushroomSoup");
@@ -190,6 +189,12 @@ local function initToadTraitsItems(_player)
             inv:AddItem("Base.WhiskeyFull");
         end
     end
+    if player:HasTrait("Tailor") then
+        inv:AddItem("Base.Scissors");
+        inv:AddItem("Base.Needle");
+        inv:AddItem("Base.SewingKit");
+        inv:AddItems("Base.Thread", 4);
+    end
 end
 
 local function initToadTraitsPerks(_player)
@@ -250,8 +255,7 @@ local function initToadTraitsPerks(_player)
                     b:AddDamage(damage);
                     b:setScratched(true, true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-                end
-                if injury == 2 then
+                elseif injury == 2 then
                     if doburns == true then
                         b:AddDamage(damage);
                         b:setBurned();
@@ -259,13 +263,11 @@ local function initToadTraitsPerks(_player)
                     else
                         itterations = itterations - 1;
                     end
-                end
-                if injury == 3 then
+                elseif injury == 3 then
                     b:AddDamage(damage);
                     b:setCut(true, true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-                end
-                if injury >= 4 then
+                elseif injury >= 4 then
                     b:AddDamage(damage);
                     b:setDeepWounded(true);
                     b:setStitched(true);
@@ -716,7 +718,7 @@ local function Specialization(_player, _perk, _amount)
             --Check if the newxp amount would give the player a negative level.
             --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
             if skip == false then
-                if perklvl == 1 and testxp <= 0 then
+                if perklvl == 1 and testxp <= 75 then
                     skip = true;
                 elseif perklvl == 2 and testxp <= 150 then
                     skip = true;
