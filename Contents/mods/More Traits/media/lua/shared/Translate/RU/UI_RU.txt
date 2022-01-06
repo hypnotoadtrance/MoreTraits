@@ -143,6 +143,7 @@ UI_RU = {
     UI_trait_indefatigablecooldown = "*'Ранняя пташка' вновь доступна*",
     UI_trait_alcoholicneed = "Мне нужно выпить.",
     UI_trait_alcoholicwithdrawal = "*Замечена попытка бросить пить!*",
+    UI_trait_alcoholicsatisfied = "*Потребность в алкоголе удовлетворена*",
     UI_fearful_slightpanic = "*Хныканье*",
     UI_fearful_panic = "*Приглушенный крик*",
     UI_fearful_strongpanic = "*Панический визг*",
