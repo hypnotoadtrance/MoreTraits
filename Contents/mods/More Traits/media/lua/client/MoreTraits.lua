@@ -1996,7 +1996,7 @@ local function GymGoer(_player, _perk, _amount)
     end
     --Shift decimal over two places.
     modifier = modifier * 0.01;
-    if player:HasTrait("gymgoer") then
+    if player:HasTrait("gymgoer") and player:getCurrentState() == FitnessState.instance() then
         if perk == Perks.Fitness or perk == Perks.Strength then
             amount = amount * (modifier - 1);
             player:getXp():AddXP(perk, amount, false, false);
