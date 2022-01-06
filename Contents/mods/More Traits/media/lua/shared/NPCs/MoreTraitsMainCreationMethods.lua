@@ -264,7 +264,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("fearful", "Desensitized");
     TraitFactory.setMutualExclusive("fearful", "Brave");
     TraitFactory.setMutualExclusive("blissful", "Smoker");
-    --  TraitFactory.setMutualExclusive("gimp", "fast");
+    --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
 end
 
