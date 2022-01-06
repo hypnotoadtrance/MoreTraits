@@ -668,6 +668,7 @@ local function Specialization(_player, _perk, _amount)
     local newamount = 0;
     local skip = false;
     local modifier = 75;
+    local perklvl = player:getPerkLevel(_perk);
     if SandboxVars.MoreTraits.SpecializationXPPercent then
         modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
     end
@@ -708,10 +709,36 @@ local function Specialization(_player, _perk, _amount)
                     skip = true;
                 end
             end
+            newamount = amount * modifier;
+            local currentxp = player:getXp():getXP(perk);
+            local correctamount = currentxp - newamount
+            local testxp = currentxp - amount;
+            --Check if the newxp amount would give the player a negative level.
+            --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
             if skip == false then
-                newamount = amount * modifier;
-                local currentxp = player:getXp():getXP(perk);
-                local correctamount = currentxp - newamount
+                if perklvl == 1 and testxp <= 0 then
+                    skip = true;
+                elseif perklvl == 2 and testxp <= 150 then
+                    skip = true;
+                elseif perklvl == 3 and testxp <= 300 then
+                    skip = true;
+                elseif perklvl == 4 and testxp <= 750 then
+                    skip = true;
+                elseif perklvl == 5 and testxp <= 1500 then
+                    skip = true;
+                elseif perklvl == 6 and testxp <= 3000 then
+                    skip = true;
+                elseif perklvl == 7 and testxp <= 4500 then
+                    skip = true;
+                elseif perklvl == 8 and testxp <= 6000 then
+                    skip = true;
+                elseif perklvl == 9 and testxp <= 7500 then
+                    skip = true;
+                elseif perklvl == 10 and testxp <= 9000 then
+                    skip = true;
+                end
+            end
+            if skip == false then
                 player:getXp():AddXP(perk, -1 * amount, false, false);
                 while player:getXp():getXP(perk) < correctamount do
                     player:getXp():AddXP(perk, 0.01, false, false);

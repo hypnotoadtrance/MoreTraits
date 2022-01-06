@@ -27,3 +27,4 @@ Added sandbox option to disable burns as a random chance with Injured trait.
 Adjust indefatigable knockback effect.
 Clarify indefatigable effect in description.
 Butterfingers default chance was too high. Reduced base chance and tuned variable chance effects to be smaller.
+Add checks to prevent Specialization from de-leveling a player (and thus remove their xp multiplier bonuses)
