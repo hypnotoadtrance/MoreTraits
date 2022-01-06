@@ -33,3 +33,4 @@ Sewer Trait now gives sewing supplies.
 Disable Scrounger, Incomprehensive, and Antique Collector in multiplayer until they can be fixed.
 Adjust Grave Robber rolling algorithm.
 Added some Antique clothing items.
+Fixed hardy regeneration allowing for infinite sprinting. (Thank you Xenu)

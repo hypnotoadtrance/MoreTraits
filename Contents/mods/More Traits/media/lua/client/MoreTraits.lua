@@ -881,11 +881,11 @@ local function hardytrait(_player)
     local stats = player:getStats();
     if player:HasTrait("hardy") then
         local endurance = stats:getEndurance();
-        local regenerationrate = 0.000001;
+        local regenerationrate = 0.00001;
         if SandboxVars.MoreTraits.HardyRegeneration then
             regenerationrate = regenerationrate * (SandboxVars.MoreTraits.HardyRegeneration * 0.01);
         end
-        if endurance < 1 and player:IsRunning() == false and player:isForceRun() == false then
+        if endurance < 1 and player:IsRunning() == false and player:isSprinting() == false then
             stats:setEndurance(endurance + regenerationrate);
         end
     end
