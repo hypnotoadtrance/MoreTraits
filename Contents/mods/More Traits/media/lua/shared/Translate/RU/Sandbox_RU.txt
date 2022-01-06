@@ -4,6 +4,8 @@ Sandbox_RU = {
     Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "Количество бинтов найденных в Припасах: Медикаменты.",
     Sandbox_MoreTraits_PreparedCarGasToggle = "Припасы: Машины Канистра с бензином",
     Sandbox_MoreTraits_PreparedCarGasToggle_tooltip = "Игроки, выбравшие Припасы: Машины, начинают игру с Канистрой с бензином.",
+    Sandbox_MoreTraits_InjuredBurns = "Ожоги у Пострадавших",
+    Sandbox_MoreTraits_InjuredBurns_tooltip = "Могут ли Пострадавшие игроки получать ожоги как случайные травмы на старте.<br>Ожоги могут быть очень изнурительными, особенно на ногах: игрок будет хромать пока не вылечится.",
     Sandbox_MoreTraits_SpecializationXPPercent = "Снижение опыта не по специализации",
     Sandbox_MoreTraits_SpecializationXPPercent_tooltip = "Процентное значение уменьшения опыта для тех, кто выбрал любую Специализацию.<br>Установите 0%, чтобы отключить снижение опыта.",
     Sandbox_MoreTraits_LuckImpact = "Влияние удачи",
@@ -38,4 +40,8 @@ Sandbox_RU = {
     Sandbox_MoreTraits_GordaniteEffectiveness_tooltip = "Процентное значение усиления ломов у игроков-Гордонитов.<br>200% означает, что перк Гордонит усиляет ломы в 2 раза больше, а не все базовые характеристики лома улучшаются ровно в 2 раза!<br>Установив 0%, характеристики лома перестанут улучшаться данным перком.",
     Sandbox_MoreTraits_EvasiveChance = "Шанс уворота Уворотливого 0_0",
     Sandbox_MoreTraits_EvasiveChance_tooltip = "Процентная вероятность того, что Уворотливые игроки уклонятся от атаки.<br> Установка этого значения на 100% сделает Уворотливых игроков невосприимчивыми к зомби 0_0.",
+    Sandbox_MoreTraits_AlcoholicFrequency = "Частота питья Алкоголика",
+    Sandbox_MoreTraits_AlcoholicFrequency_tooltip = "Раз в сколько часов Алкоголикам необходимо пить, чтобы удовлетворить их потребности?<br>Более низкие значения означают, что Алкоголикам нужно пить чаще,<br>чтобы избежать побочных эффектов воздержания от алкоголя.",
+    Sandbox_MoreTraits_AlcoholicWithdrawal = "Воздержание Алкоголиков",
+    Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "После скольки часов без алкоголя Алкоголики начнут страдать от побочных эффектов воздержания?<br>Это значение должно быть выше, чем 'Частота питья Алкоголика'.",
 }
