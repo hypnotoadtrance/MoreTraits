@@ -61,6 +61,10 @@ local function deepcopy(orig)
     end
     return copy
 end
+local function round(number, decimals)
+    local power = 10 ^ decimals
+    return math.floor(number * power) / power
+end
 function ZombificationCure_OnCreate(items, result, player)
     local bodyDamage = player:getBodyDamage();
     local stats = player:getStats();
@@ -627,7 +631,7 @@ local function CheckDepress(_player, _playerdata)
             if player:getBodyDamage():getUnhappynessLevel() < 25 then
                 playerdata.bToadTraitDepressed = false;
             else
-                player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.0005);
+                player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.001);
             end
         end
     end
@@ -644,7 +648,7 @@ local function CheckSelfHarm(_player)
             if player:getBodyDamage():getOverallBodyHealth() >= (100 - player:getBodyDamage():getUnhappynessLevel() / modifier) then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
-                    b:AddDamage(0.0005);
+                    b:AddDamage(0.001);
                 end
             end
         end
@@ -881,7 +885,7 @@ local function hardytrait(_player)
     local stats = player:getStats();
     if player:HasTrait("hardy") then
         local endurance = stats:getEndurance();
-        local regenerationrate = 0.00001;
+        local regenerationrate = 0.001;
         if SandboxVars.MoreTraits.HardyRegeneration then
             regenerationrate = regenerationrate * (SandboxVars.MoreTraits.HardyRegeneration * 0.01);
         end
@@ -926,8 +930,8 @@ local function drinkerupdate(_player, _playerdata)
             if playerdata.iHoursSinceDrink > hoursthreshold then
                 stats:setPain(playerdata.iHoursSinceDrink / divider);
             end
-            stats:setAnger(anger + 0.0001);
-            stats:setStress(stress + 0.0001);
+            stats:setAnger(anger + 0.001);
+            stats:setStress(stress + 0.001);
         end
     end
 end
@@ -1404,7 +1408,11 @@ local function anemic(_player)
             for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                 local b = player:getBodyDamage():getBodyParts():get(i);
                 if b:bleeding() and b:IsBleedingStemmed() == false then
-                    b:ReduceHealth(0.03);
+                    local adjust = 0.002;
+                    if b:getType() == BodyPartType.Neck then
+                        adjust = adjust * 5;
+                    end
+                    b:ReduceHealth(adjust);
                 end
             end
         end
@@ -1420,7 +1428,11 @@ local function thickblood(_player)
             for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                 local b = player:getBodyDamage():getBodyParts():get(i);
                 if b:bleeding() and b:IsBleedingStemmed() == false then
-                    b:AddHealth(0.03);
+                    local adjust = 0.002;
+                    if b:getType() == BodyPartType.Neck then
+                        adjust = adjust * 5;
+                    end
+                    b:AddHealth(adjust);
                 end
             end
         end
