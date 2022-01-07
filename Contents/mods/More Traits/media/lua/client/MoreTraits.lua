@@ -1276,6 +1276,7 @@ local function amputee(_player)
             UpperArm_L:setBleeding(false);
             UpperArm_L:setHaveGlass(false);
             UpperArm_L:SetInfected(false);
+            UpperArm_L:setBurnTime(0);
         end
         if ForeArm_L:HasInjury() then
             ForeArm_L:SetBitten(false);
@@ -1284,6 +1285,7 @@ local function amputee(_player)
             ForeArm_L:setBleeding(false);
             ForeArm_L:setHaveGlass(false);
             ForeArm_L:SetInfected(false);
+            ForeArm_L:setBurnTime(0);
         end
         if Hand_L:HasInjury() then
             Hand_L:SetBitten(false);
@@ -1292,6 +1294,7 @@ local function amputee(_player)
             Hand_L:setBleeding(false);
             Hand_L:setHaveGlass(false);
             Hand_L:SetInfected(false);
+            Hand_L:setBurnTime(0);
         end
     end
 end
