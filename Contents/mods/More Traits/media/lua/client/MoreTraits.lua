@@ -218,6 +218,7 @@ local function initToadTraitsPerks(_player)
     player:getModData().bSatedDrink = true;
     player:getModData().iHoursSinceDrink = 0;
     player:getModData().iTimesCannibal = 0;
+    player:getModData().fPreviousHealthFromFoodTimer = 0;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -871,11 +872,21 @@ local function indefatigablecounter()
     end
 end
 
-local function badteethtrait(_player)
+local function badteethtrait(_player, _playerdata)
     local player = _player;
+    local playerdata = _playerdata;
+    local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
     if player:HasTrait("badteeth") then
-        if player:getBodyDamage():getHealthFromFoodTimer() > 1000 then
-            player:getStats():setPain(player:getBodyDamage():getHealthFromFoodTimer() / 90);
+        if healthtimer > 1000 then
+            if healthtimer > playerdata.fPreviousHealthFromFoodTimer then
+                local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
+                local pain = player:getBodyDamage():getHealthFromFoodTimer() * 0.01;
+                Head:setAdditionalPain(Head:getAdditionalPain() + pain);
+                print("pain: " .. pain)
+                print("healthtimer: " .. healthtimer);
+                print("previous ht: " .. playerdata.fPreviousHealthFromFoodTimer);
+            end
+            playerdata.fPreviousHealthFromFoodTimer = healthtimer
         end
     end
 end
@@ -1276,7 +1287,6 @@ local function amputee(_player)
             UpperArm_L:setBleeding(false);
             UpperArm_L:setHaveGlass(false);
             UpperArm_L:SetInfected(false);
-            UpperArm_L:setBurnTime(0);
         end
         if ForeArm_L:HasInjury() then
             ForeArm_L:SetBitten(false);
@@ -1285,7 +1295,6 @@ local function amputee(_player)
             ForeArm_L:setBleeding(false);
             ForeArm_L:setHaveGlass(false);
             ForeArm_L:SetInfected(false);
-            ForeArm_L:setBurnTime(0);
         end
         if Hand_L:HasInjury() then
             Hand_L:SetBitten(false);
@@ -1294,7 +1303,6 @@ local function amputee(_player)
             Hand_L:setBleeding(false);
             Hand_L:setHaveGlass(false);
             Hand_L:SetInfected(false);
-            Hand_L:setBurnTime(0);
         end
     end
 end
@@ -2044,7 +2052,7 @@ local function MainPlayerUpdate(_player)
     hardytrait(player);
     drinkerupdate(player, playerdata);
     bouncerupdate(player, playerdata);
-    badteethtrait(player);
+    badteethtrait(player, playerdata);
     albino(player);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
