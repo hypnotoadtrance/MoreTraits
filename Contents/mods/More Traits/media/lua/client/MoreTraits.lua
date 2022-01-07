@@ -219,6 +219,7 @@ local function initToadTraitsPerks(_player)
     player:getModData().iHoursSinceDrink = 0;
     player:getModData().iTimesCannibal = 0;
     player:getModData().fPreviousHealthFromFoodTimer = 0;
+    player:getModData().bWasInfected = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -1267,7 +1268,7 @@ local function albino(_player)
     end
 end
 
-local function amputee(_player)
+local function amputee(_player, justGotInfected)
     local player = _player;
     if player:HasTrait("amputee") then
         local handitem = player:getSecondaryHandItem();
@@ -1282,18 +1283,27 @@ local function amputee(_player)
         local Hand_L = bodydamage:getBodyPart(BodyPartType.FromString("Hand_L"));
         if UpperArm_L:HasInjury() then
             UpperArm_L:RestoreToFullHealth();
+            if justGotInfected then
+                player:getBodyDamage():setInfected(false);
+            end
             player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(UpperArm_L:getType())), 0);
             player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(UpperArm_L:getType())), 0);
             player:resetModelNextFrame();
         end
         if ForeArm_L:HasInjury() then
             ForeArm_L:RestoreToFullHealth();
+            if justGotInfected then
+                player:getBodyDamage():setInfected(false);
+            end
             player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(ForeArm_L:getType())), 0);
             player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(ForeArm_L:getType())), 0);
             player:resetModelNextFrame();
         end
         if Hand_L:HasInjury() then
             Hand_L:RestoreToFullHealth();
+            if justGotInfected then
+                player:getBodyDamage():setInfected(false);
+            end
             player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(Hand_L:getType())), 0);
             player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(Hand_L:getType())), 0);
             player:resetModelNextFrame();
@@ -2025,7 +2035,9 @@ local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
     if internalTick >= 30 then
-        amputee(player);
+        amputee(player, (playerdata.bWasInfected ~= player:getBodyDamage():isInfected() 
+            and player:getBodyDamage():isInfected()));
+        playerdata.bWasInfected = player:getBodyDamage():isInfected();
         vehicleCheck(player);
         FoodUpdate(player);
         Gordanite(player);
