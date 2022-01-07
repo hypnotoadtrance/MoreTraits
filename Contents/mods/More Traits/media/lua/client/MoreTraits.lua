@@ -1281,28 +1281,22 @@ local function amputee(_player)
         local ForeArm_L = bodydamage:getBodyPart(BodyPartType.FromString("ForeArm_L"));
         local Hand_L = bodydamage:getBodyPart(BodyPartType.FromString("Hand_L"));
         if UpperArm_L:HasInjury() then
-            UpperArm_L:SetBitten(false);
-            UpperArm_L:setScratched(false);
-            UpperArm_L:setDeepWounded(false);
-            UpperArm_L:setBleeding(false);
-            UpperArm_L:setHaveGlass(false);
-            UpperArm_L:SetInfected(false);
+            UpperArm_L:RestoreToFullHealth();
+            player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(UpperArm_L:getType())), 0);
+            player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(UpperArm_L:getType())), 0);
+            player:resetModelNextFrame();
         end
         if ForeArm_L:HasInjury() then
-            ForeArm_L:SetBitten(false);
-            ForeArm_L:setScratched(false);
-            ForeArm_L:setDeepWounded(false);
-            ForeArm_L:setBleeding(false);
-            ForeArm_L:setHaveGlass(false);
-            ForeArm_L:SetInfected(false);
+            ForeArm_L:RestoreToFullHealth();
+            player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(ForeArm_L:getType())), 0);
+            player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(ForeArm_L:getType())), 0);
+            player:resetModelNextFrame();
         end
         if Hand_L:HasInjury() then
-            Hand_L:SetBitten(false);
-            Hand_L:setScratched(false);
-            Hand_L:setDeepWounded(false);
-            Hand_L:setBleeding(false);
-            Hand_L:setHaveGlass(false);
-            Hand_L:SetInfected(false);
+            Hand_L:RestoreToFullHealth();
+            player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(Hand_L:getType())), 0);
+            player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(Hand_L:getType())), 0);
+            player:resetModelNextFrame();
         end
     end
 end
