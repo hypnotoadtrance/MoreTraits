@@ -44,4 +44,5 @@ Sandbox_EN = {
     Sandbox_MoreTraits_AlcoholicFrequency_tooltip = "How many hours (on average) should an alcoholic need to drink to sate their need?<br>Lower values mean Alcoholics need to drink frequently to avoid withdrawal.",
     Sandbox_MoreTraits_AlcoholicWithdrawal = "Alcoholic Withdrawal",
     Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "After how many hours without alcohol should an alcoholic start suffering withdrawal symptoms?<br>This value should be higher than Alcoholic Drink Frequency.",
+	Sandbox_MoreTraits_SmokerStart = "Smokers start with smokes.",
 }
