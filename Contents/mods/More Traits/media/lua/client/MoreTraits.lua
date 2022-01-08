@@ -445,6 +445,27 @@ local function ToadTraitButter()
     end
 end
 
+local function ToadTraitParanoia()
+    local player = getPlayer();
+    if player:HasTrait("paranoia") then
+        local basechance = 1;
+		local randNum = ZombRand(100)+1
+		randNum = randNum - (randNum*player:getStats():getStress())
+		if randNum <= basechance then
+			getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0);
+			local panic = player:getStats():getPanic() + 25
+			local stress = player:getStats():getStress() + 0.1
+			player:getStats():setPanic(panic)
+			player:getStats():setStress(stress)
+			if player:isFemale() then
+				getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.05);
+			else
+				getSoundManager():PlaySound("male_heavybreathpanic", false, 5):setVolume(0.05);
+			end
+		end
+    end
+end
+
 local function ToadTraitScrounger(_target, _name, _container)
     local player = getPlayer();
     if player:HasTrait("scrounger") then
@@ -2130,6 +2151,7 @@ Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.EveryHours.Add(indefatigablecounter);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
+Events.EveryOneMinute.Add(ToadTraitParanoia);
 Events.EveryOneMinute.Add(ToadTraitButter);
 Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(ToadTraitDepressive);
@@ -2139,5 +2161,4 @@ Events.OnFillContainer.Add(Gourmand);
 Events.OnFillContainer.Add(ToadTraitScrounger);
 Events.OnFillContainer.Add(ToadTraitIncomprehensive);
 Events.OnFillContainer.Add(ToadTraitAntique);
-Events.OnFillContainer.Add(ToadTraitVagabond);
 Events.OnFillContainer.Add(ToadTraitVagabond);

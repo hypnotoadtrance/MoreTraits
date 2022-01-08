@@ -174,6 +174,7 @@ local function initToadTraits()
     gymgoer:addXPBoost(Perks.Strength, 1);
     gymgoer:addXPBoost(Perks.Fitness, 1);
 	local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 2, getText("UI_trait_vagabonddesc"), false, false);
+	local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     --===========--
     --Bad Traits--
     --===========--
