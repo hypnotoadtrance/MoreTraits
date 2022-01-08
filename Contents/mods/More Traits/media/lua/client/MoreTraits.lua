@@ -1125,8 +1125,7 @@ local function martial(_actor, _target, _weapon, _damage)
         local minimumdmg = 0.1 * average + SmallBluntLvl * 0.1;
         local maximumdmg = 0.5 * average + SmallBluntLvl * 0.1;
         critchance = critchance + SmallBluntLvl;
-
-        if _weapon:getName() == "Bare Hands" then
+        if weapon:getType() == "BareHands" then
             weapon:setDoorDamage(9 + maximumdmg);
             weapon:setTreeDamage(1 + maximumdmg);
             weapon:getCategories():set(0, "SmallBlunt");

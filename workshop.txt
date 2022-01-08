@@ -48,6 +48,7 @@ description=
 description=Additional Coding:
 description=SteadySpring
 description=Xenu47
+description=Aristrofl
 description=
 description=Translations:
 description=Simplified Chinese, by EndsM

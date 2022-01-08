@@ -1,13 +1,2 @@
 Changelog Notes:
-Amputee Infection Fix
-Bad Teeth Fix
-Superimmune Rework
-Smoker Trait gives Ciggarettes
-Fix Antique Leather Jacket being in Zombie pool.
-Fix Hardy Regeneration
-Hardy now has intervals that count down depending on the action(s) being performed.
-Hardy regenerates slower depending on player state.
-Faster while Sitting
-Slow while Running
-Slower While Exercising
-Slowest While Sprinting
+Fix Martial artist not working in different game localizations.
