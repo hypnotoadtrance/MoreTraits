@@ -1,2 +1,5 @@
 Changelog Notes:
 Fix Martial artist not working in different game localizations.
+Added New Trait: Vagabond, Credit: Udo
+Added New Trait: Paranoia, Credit: Udo
+Fix Specialization: Weapons not working with Spears.
