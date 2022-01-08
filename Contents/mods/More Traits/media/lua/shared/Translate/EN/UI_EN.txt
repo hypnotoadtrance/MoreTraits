@@ -145,3 +145,5 @@ UI_EN = {
     UI_fearful_panic = "*Muffled Shriek*",
     UI_fearful_strongpanic = "*Panicked Screech*",
     UI_fearful_extremepanic = "*Desperate Screaming*",
+	UI_trait_vagabond = "Vagabond",
+    UI_trait_vagabonddesc = "You know how to survive on the streets.<br>You know that there is always something to eat where people would never look, namely the trash.<br>Chance affected by luck.",

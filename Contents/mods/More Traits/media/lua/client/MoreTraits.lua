@@ -606,6 +606,42 @@ local function ToadTraitAntique(_target, _name, _container)
     end
 end
 
+local function ToadTraitVagabond(_target, _name, _container)
+    local items = {};
+	table.insert(items, "Base.BreadSlices");
+	table.insert(items, "Base.Pizza");
+	table.insert(items, "Base.Hotdog");
+	table.insert(items, "Base.Corndog");
+	table.insert(items, "Base.OpenBeans");
+	table.insert(items, "Base.OpenBeans");
+	table.insert(items, "Base.CannedChiliOpen");
+	table.insert(items, "Base.WatermelonSmashed");
+
+    local length = 0
+    for k, v in pairs(items) do
+        length = length + 1;
+    end
+    local player = getPlayer();
+    if player:HasTrait("vagabond") then
+        local basechance = 30;
+		if player:HasTrait("Lucky") then
+            basechance = basechance + 2 * luckimpact;
+        end
+        if player:HasTrait("Unlucky") then
+            basechance = basechance - 1 * luckimpact;
+        end
+        if ZombRand(100) <= basechance then
+            local i = ZombRand(length);
+				if i == 0 then
+					i = 1;
+				end
+			if _container:getType() == ("bin") then
+				_container:AddItem(items[i]);
+			end
+        end
+    end
+end
+
 local function ToadTraitDepressive()
     local player = getPlayer();
     if player:HasTrait("depressive") then
@@ -2103,3 +2139,5 @@ Events.OnFillContainer.Add(Gourmand);
 Events.OnFillContainer.Add(ToadTraitScrounger);
 Events.OnFillContainer.Add(ToadTraitIncomprehensive);
 Events.OnFillContainer.Add(ToadTraitAntique);
+Events.OnFillContainer.Add(ToadTraitVagabond);
+Events.OnFillContainer.Add(ToadTraitVagabond);
