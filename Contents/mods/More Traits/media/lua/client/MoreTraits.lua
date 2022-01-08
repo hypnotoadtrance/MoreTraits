@@ -1541,6 +1541,7 @@ local function SuperImmune(_player, _playerdata)
             local b = bodydamage:getBodyParts():get(i);
             if b:HasInjury() then
                 if b:isInfectedWound() then
+                    b:SetInfected(false);
                     b:setInfectedWound(false);
                 end
             end
