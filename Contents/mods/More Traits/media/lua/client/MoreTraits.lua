@@ -883,9 +883,6 @@ local function badteethtrait(_player, _playerdata)
                 local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
                 local pain = player:getBodyDamage():getHealthFromFoodTimer() * 0.01;
                 Head:setAdditionalPain(Head:getAdditionalPain() + pain);
-                print("pain: " .. pain)
-                print("healthtimer: " .. healthtimer);
-                print("previous ht: " .. playerdata.fPreviousHealthFromFoodTimer);
             end
             playerdata.fPreviousHealthFromFoodTimer = healthtimer
         end
