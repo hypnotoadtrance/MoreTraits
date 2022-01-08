@@ -289,6 +289,7 @@ local function initToadTraitsPerks(_player)
             end
         end
         bodydamage:setInfected(false);
+        bodydamage:setInfectionLevel(0);
     end
     if player:HasTrait("broke") then
         --print("Broke Leg.");
@@ -300,6 +301,7 @@ local function initToadTraitsPerks(_player)
         bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setSplintItem("Base.Splint");
         bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
         bodydamage:setInfected(false);
+        bodydamage:setInfectionLevel(0);
     end
     player:getModData().ToadTraitBodyDamage = nil;
     suspendevasive = false;
@@ -358,6 +360,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                 i:SetInfected(false);
                                 if lastinfected == false and bodydamage:IsInfected() == true then
                                     bodydamage:setInfected(false);
+                                    bodydamage:setInfectionLevel(0);
                                     print("Infection from Dodged Attack Removed");
                                 end
                                 player:Say(getText("UI_trait_dodgesay"));
@@ -372,6 +375,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                 i:SetInfected(false);
                                 if lastinfected == false and bodydamage:IsInfected() == true then
                                     bodydamage:setInfected(false);
+                                    bodydamage:setInfectionLevel(0);
                                     print("Infection from Dodged Attack Removed");
                                 end
                                 player:Say(getText("UI_trait_dodgesay"));
@@ -386,6 +390,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                 i:SetInfected(false);
                                 if lastinfected == false and bodydamage:IsInfected() == true then
                                     bodydamage:setInfected(false);
+                                    bodydamage:setInfectionLevel(0);
                                     print("Infection from Dodged Attack Removed");
                                 end
                                 player:Say(getText("UI_trait_dodgesay"));
@@ -1532,6 +1537,7 @@ local function SuperImmune(_player, _playerdata)
                     if ZombRand(0, 101) <= chance then
                         print("Player's Immune system fought-off zombification.");
                         bodydamage:setInfected(false);
+                        bodydamage:setInfectionLevel(0);
                         if ZombRand(0, 101) > chance then
                             print("Do fake infection");
                             bodydamage:setIsFakeInfected(true);
