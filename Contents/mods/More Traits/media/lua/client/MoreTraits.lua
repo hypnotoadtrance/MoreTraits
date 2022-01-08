@@ -224,6 +224,8 @@ local function initToadTraitsPerks(_player)
     player:getModData().bSatedDrink = true;
     player:getModData().iHoursSinceDrink = 0;
     player:getModData().iTimesCannibal = 0;
+    player:getModData().fPreviousHealthFromFoodTimer = 0;
+    player:getModData().bWasInfected = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -877,11 +879,18 @@ local function indefatigablecounter()
     end
 end
 
-local function badteethtrait(_player)
+local function badteethtrait(_player, _playerdata)
     local player = _player;
+    local playerdata = _playerdata;
+    local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
     if player:HasTrait("badteeth") then
-        if player:getBodyDamage():getHealthFromFoodTimer() > 1000 then
-            player:getStats():setPain(player:getBodyDamage():getHealthFromFoodTimer() / 90);
+        if healthtimer > 1000 then
+            if healthtimer > playerdata.fPreviousHealthFromFoodTimer then
+                local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
+                local pain = player:getBodyDamage():getHealthFromFoodTimer() * 0.01;
+                Head:setAdditionalPain(Head:getAdditionalPain() + pain);
+            end
+            playerdata.fPreviousHealthFromFoodTimer = healthtimer
         end
     end
 end
@@ -1262,7 +1271,7 @@ local function albino(_player)
     end
 end
 
-local function amputee(_player)
+local function amputee(_player, justGotInfected)
     local player = _player;
     if player:HasTrait("amputee") then
         local handitem = player:getSecondaryHandItem();
@@ -1276,28 +1285,22 @@ local function amputee(_player)
         local ForeArm_L = bodydamage:getBodyPart(BodyPartType.FromString("ForeArm_L"));
         local Hand_L = bodydamage:getBodyPart(BodyPartType.FromString("Hand_L"));
         if UpperArm_L:HasInjury() then
-            UpperArm_L:SetBitten(false);
-            UpperArm_L:setScratched(false);
-            UpperArm_L:setDeepWounded(false);
-            UpperArm_L:setBleeding(false);
-            UpperArm_L:setHaveGlass(false);
-            UpperArm_L:SetInfected(false);
+            UpperArm_L:RestoreToFullHealth();
+            if justGotInfected then
+                player:getBodyDamage():setInfected(false);
+            end
         end
         if ForeArm_L:HasInjury() then
-            ForeArm_L:SetBitten(false);
-            ForeArm_L:setScratched(false);
-            ForeArm_L:setDeepWounded(false);
-            ForeArm_L:setBleeding(false);
-            ForeArm_L:setHaveGlass(false);
-            ForeArm_L:SetInfected(false);
+            ForeArm_L:RestoreToFullHealth();
+            if justGotInfected then
+                player:getBodyDamage():setInfected(false);
+            end
         end
         if Hand_L:HasInjury() then
-            Hand_L:SetBitten(false);
-            Hand_L:setScratched(false);
-            Hand_L:setDeepWounded(false);
-            Hand_L:setBleeding(false);
-            Hand_L:setHaveGlass(false);
-            Hand_L:SetInfected(false);
+            Hand_L:RestoreToFullHealth();
+            if justGotInfected then
+                player:getBodyDamage():setInfected(false);
+            end
         end
     end
 end
@@ -1532,6 +1535,7 @@ local function SuperImmune(_player, _playerdata)
             local b = bodydamage:getBodyParts():get(i);
             if b:HasInjury() then
                 if b:isInfectedWound() then
+                    b:SetInfected(false);
                     b:setInfectedWound(false);
                 end
             end
@@ -2026,7 +2030,9 @@ local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
     if internalTick >= 30 then
-        amputee(player);
+        amputee(player, (playerdata.bWasInfected ~= player:getBodyDamage():isInfected() 
+            and player:getBodyDamage():isInfected()));
+        playerdata.bWasInfected = player:getBodyDamage():isInfected();
         vehicleCheck(player);
         FoodUpdate(player);
         Gordanite(player);
@@ -2047,7 +2053,7 @@ local function MainPlayerUpdate(_player)
     hardytrait(player);
     drinkerupdate(player, playerdata);
     bouncerupdate(player, playerdata);
-    badteethtrait(player);
+    badteethtrait(player, playerdata);
     albino(player);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
