@@ -199,11 +199,11 @@ local function initToadTraitsItems(_player)
         inv:AddItem("Base.SewingKit");
         inv:AddItems("Base.Thread", 4);
     end
-	if player:HasTrait("Smoker") then
+    if player:HasTrait("Smoker") then
         if SandboxVars.MoreTraits.SmokerStart == true then
-			inv:AddItem("Base.Cigarettes");
-			inv:AddItem("Base.Lighter");
-		end
+            inv:AddItem("Base.Cigarettes");
+            inv:AddItem("Base.Lighter");
+        end
     end
 end
 
@@ -226,6 +226,7 @@ local function initToadTraitsPerks(_player)
     player:getModData().iTimesCannibal = 0;
     player:getModData().fPreviousHealthFromFoodTimer = 0;
     player:getModData().bWasInfected = false;
+    player:getModData().iHardyInterval = 10;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -895,17 +896,35 @@ local function badteethtrait(_player, _playerdata)
     end
 end
 
-local function hardytrait(_player)
+local function hardytrait(_player, _playerdata)
     local player = _player;
+    local playerdata = _playerdata;
     local stats = player:getStats();
     if player:HasTrait("hardy") then
         local endurance = stats:getEndurance();
         local regenerationrate = 0.001;
+        if playerdata.iHardyInterval == nil then
+            playerdata.iHardyInterval = 0;
+        end
+        local interval = playerdata.iHardyInterval;
         if SandboxVars.MoreTraits.HardyRegeneration then
             regenerationrate = regenerationrate * (SandboxVars.MoreTraits.HardyRegeneration * 0.01);
         end
-        if endurance < 1 and player:IsRunning() == false and player:isSprinting() == false then
+        if interval <= 0 then
             stats:setEndurance(endurance + regenerationrate);
+            playerdata.iHardyInterval = 1000;
+        else
+            if player:isSprinting() == true then
+                playerdata.iHardyInterval = interval - 2;
+            elseif player:IsRunning() == true then
+                playerdata.iHardyInterval = interval - 5;
+            elseif player:getCurrentState() == FitnessState.instance() then
+                playerdata.iHardyInterval = interval - 10;
+            elseif player:isSitOnGround() == true then
+                playerdata.iHardyInterval = interval - 50;
+            else
+                playerdata.iHardyInterval = interval - 20;
+            end
         end
     end
 end
@@ -2030,8 +2049,8 @@ local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
     if internalTick >= 30 then
-        amputee(player, (playerdata.bWasInfected ~= player:getBodyDamage():isInfected() 
-            and player:getBodyDamage():isInfected()));
+        amputee(player, (playerdata.bWasInfected ~= player:getBodyDamage():isInfected()
+                and player:getBodyDamage():isInfected()));
         playerdata.bWasInfected = player:getBodyDamage():isInfected();
         vehicleCheck(player);
         FoodUpdate(player);
@@ -2050,7 +2069,7 @@ local function MainPlayerUpdate(_player)
     CheckDepress(player, playerdata);
     CheckSelfHarm(player);
     Blissful(player);
-    hardytrait(player);
+    hardytrait(player, playerdata);
     drinkerupdate(player, playerdata);
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);

@@ -1,39 +1,13 @@
 Changelog Notes:
-Adjusted Hardy regeneration rate.
-Added Sandbox Options for:
--Hardy Regeneration Rate
--Pack Mule Weight Change
--Pack Mouse Weight Change
--Default Weight Change
--Global Weight Modifier.
--Gymgoer
--Superimmune
--Grave Robber
--Indefatigable
--Gordanite
--Evasive
--Alcoholic
--Injured
-Gordanite now scales off Long Blunt and is now less OP at lower levels.
-Fixed Localization Bug in Gordanite.
-Evasive now properly removes Zombification on attacks that were dodged.
-Evasive now checks for Lacerations.
-Fixed multiplication issue in Specialization that was removing the wrong XP amount.
-Alcoholic now notifies the player when they have satisfied their need.
-Fix Script error in Recipe for Cure.
-For some reason, the game no longer calls the OnDawn event, which prevented parts of Alcoholic and Indefatigable traits from working properly. Moved these calls into EveryHours instead.
-Adjusted sickness strength of alcohol withdrawal to account for very small drinking frequency values.
-Added sandbox option to disable burns as a random chance with Injured trait.
-Adjust indefatigable knockback effect.
-Clarify indefatigable effect in description.
-Butterfingers default chance was too high. Reduced base chance and tuned variable chance effects to be smaller.
-Add checks to prevent Specialization from de-leveling a player (and thus remove their xp multiplier bonuses)
-Add Cooking level to Gourmand trait.
-Sewer Trait now gives sewing supplies.
-Disable Scrounger, Incomprehensive, and Antique Collector in multiplayer until they can be fixed.
-Adjust Grave Robber rolling algorithm.
-Added some Antique clothing items.
-Fixed hardy regeneration allowing for infinite sprinting. (Thank you Xenu)
-Fixed GymGoer applying to all Fitness XP and not exclusively Exercise.
-Fix Thick Blooded giving too much HP restoration.
-Fix Floating Point values through code where decimals greater than four places (LuaJava returns Doubles to Java if more than four decimals, which breaks code in PZ where expected type is float)
+Amputee Infection Fix
+Bad Teeth Fix
+Superimmune Rework
+Smoker Trait gives Ciggarettes
+Fix Antique Leather Jacket being in Zombie pool.
+Fix Hardy Regeneration
+Hardy now has intervals that count down depending on the action(s) being performed.
+Hardy regenerates slower depending on player state.
+Faster while Sitting
+Slow while Running
+Slower While Exercising
+Slowest While Sprinting
