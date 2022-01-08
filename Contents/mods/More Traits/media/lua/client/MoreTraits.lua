@@ -1283,27 +1283,18 @@ local function amputee(_player, justGotInfected)
             if justGotInfected then
                 player:getBodyDamage():setInfected(false);
             end
-            player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(UpperArm_L:getType())), 0);
-            player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(UpperArm_L:getType())), 0);
-            player:resetModelNextFrame();
         end
         if ForeArm_L:HasInjury() then
             ForeArm_L:RestoreToFullHealth();
             if justGotInfected then
                 player:getBodyDamage():setInfected(false);
             end
-            player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(ForeArm_L:getType())), 0);
-            player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(ForeArm_L:getType())), 0);
-            player:resetModelNextFrame();
         end
         if Hand_L:HasInjury() then
             Hand_L:RestoreToFullHealth();
             if justGotInfected then
                 player:getBodyDamage():setInfected(false);
             end
-            player:getVisual():setBlood(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(Hand_L:getType())), 0);
-            player:getVisual():setDirt(BloodBodyPartType.FromIndex(BodyPartType.ToIndex(Hand_L:getType())), 0);
-            player:resetModelNextFrame();
         end
     end
 end
