@@ -199,6 +199,12 @@ local function initToadTraitsItems(_player)
         inv:AddItem("Base.SewingKit");
         inv:AddItems("Base.Thread", 4);
     end
+	if player:HasTrait("Smoker") then
+        if SandboxVars.MoreTraits.SmokerStart == true then
+			inv:AddItem("Base.Cigarettes");
+			inv:AddItem("Base.Lighter");
+		end
+    end
 end
 
 local function initToadTraitsPerks(_player)
