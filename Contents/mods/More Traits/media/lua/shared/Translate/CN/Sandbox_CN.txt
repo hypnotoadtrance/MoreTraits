@@ -17,7 +17,7 @@ Sandbox_CN = {
     Sandbox_MoreTraits_BouncerCooldown = "保镖冷却",
     Sandbox_MoreTraits_BouncerCooldown_tooltip = "保镖每次推开僵尸的间隔时间刻。<br>60时间刻=1秒<br>减少该数值会导致保镖特质的过度强化。",
     Sandbox_MoreTraits_HardyRegeneration = "硬汉回复率",
-    Sandbox_MoreTraits_HardyRegeneration_tooltip = "表示硬汉特质的玩家每时间刻回复体力的速度。<br>设置该值到200%会使得玩家每时间刻回复其大部分体力，使其几乎不可能耗光体力。",
+    Sandbox_MoreTraits_HardyRegeneration_tooltip = "表示硬汉特质的玩家每时间刻回复体力的速度。<br>设置该值过高（>300%）会使得玩家恢复体力的速度高于其消耗体力的速度。",
     Sandbox_MoreTraits_WeightPackMule = "重量：背包骡子",
     Sandbox_MoreTraits_WeightPackMule_tooltip = "定义选取背包骡子的玩家的携带重量。<br>该值为应用力量加成前的基础数值。",
     Sandbox_MoreTraits_WeightPackMouse = "重量：背包鼠",
@@ -44,4 +44,5 @@ Sandbox_CN = {
     Sandbox_MoreTraits_AlcoholicFrequency_tooltip = "拥有酗酒特质的玩家需要饮酒以满足需求的平均时间。<br>降低数值则酗酒特质需要更加频繁的饮酒以避免戒断反应。",
     Sandbox_MoreTraits_AlcoholicWithdrawal = "酗酒戒断",
     Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "拥有酗酒特质的玩家多久不喝酒会导致戒断反应。<br>该数值应高于酗酒饮酒频率的值。",
+    Sandbox_MoreTraits_SmokerStart = "嗜烟如命开局携带烟",
 }
