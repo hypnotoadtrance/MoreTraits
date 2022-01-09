@@ -459,6 +459,27 @@ local function ToadTraitButter()
     end
 end
 
+local function ToadTraitParanoia()
+    local player = getPlayer();
+    if player:HasTrait("paranoia") then
+        local basechance = 1;
+		local randNum = ZombRand(100)+1
+		randNum = randNum - (randNum*player:getStats():getStress())
+		if randNum <= basechance then
+			getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0);
+			local panic = player:getStats():getPanic() + 25
+			local stress = player:getStats():getStress() + 0.1
+			player:getStats():setPanic(panic)
+			player:getStats():setStress(stress)
+			if player:isFemale() then
+				getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.05);
+			else
+				getSoundManager():PlaySound("male_heavybreathpanic", false, 5):setVolume(0.05);
+			end
+		end
+    end
+end
+
 local function ToadTraitScrounger(_target, _name, _container)
     local player = getPlayer();
     if player:HasTrait("scrounger") then
@@ -616,6 +637,42 @@ local function ToadTraitAntique(_target, _name, _container)
                 i = 1;
             end
             _container:AddItem(items[i]);
+        end
+    end
+end
+
+local function ToadTraitVagabond(_target, _name, _container)
+    local items = {};
+	table.insert(items, "Base.BreadSlices");
+	table.insert(items, "Base.Pizza");
+	table.insert(items, "Base.Hotdog");
+	table.insert(items, "Base.Corndog");
+	table.insert(items, "Base.OpenBeans");
+	table.insert(items, "Base.OpenBeans");
+	table.insert(items, "Base.CannedChiliOpen");
+	table.insert(items, "Base.WatermelonSmashed");
+
+    local length = 0
+    for k, v in pairs(items) do
+        length = length + 1;
+    end
+    local player = getPlayer();
+    if player:HasTrait("vagabond") then
+        local basechance = 30;
+		if player:HasTrait("Lucky") then
+            basechance = basechance + 2 * luckimpact;
+        end
+        if player:HasTrait("Unlucky") then
+            basechance = basechance - 1 * luckimpact;
+        end
+        if ZombRand(100) <= basechance then
+            local i = ZombRand(length);
+				if i == 0 then
+					i = 1;
+				end
+			if _container:getType() == ("bin") then
+				_container:AddItem(items[i]);
+			end
         end
     end
 end
@@ -2123,6 +2180,7 @@ Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.EveryHours.Add(indefatigablecounter);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
+Events.EveryOneMinute.Add(ToadTraitParanoia);
 Events.EveryOneMinute.Add(ToadTraitButter);
 Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(ToadTraitDepressive);
@@ -2132,3 +2190,4 @@ Events.OnFillContainer.Add(Gourmand);
 Events.OnFillContainer.Add(ToadTraitScrounger);
 Events.OnFillContainer.Add(ToadTraitIncomprehensive);
 Events.OnFillContainer.Add(ToadTraitAntique);
+Events.OnFillContainer.Add(ToadTraitVagabond);
