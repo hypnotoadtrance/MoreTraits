@@ -145,4 +145,8 @@ UI_CN = {
     UI_fearful_panic = "*低沉的嘶吼*",
     UI_fearful_strongpanic = "*惊慌尖叫*",
     UI_fearful_extremepanic = "*绝望尖叫*",
+    UI_trait_vagabond = "流浪汉",
+    UI_trait_vagabonddesc = "你懂得在大街上生存之道。<br>你知道总会有些无人问津的地方可以找到食物，说直白点是垃圾桶。<br>几率受到幸运的影响。",
+	UI_trait_paranoia = "偏执症",
+    UI_trait_paranoiadesc = "周期性的，你会得到假恐惧和惊慌。<br>你需要更经常地寻找方法减轻你的压力，每次偏执症发作都会使其恶化。",
 }
