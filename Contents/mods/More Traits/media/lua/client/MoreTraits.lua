@@ -233,7 +233,7 @@ local function initToadTraitsPerks(_player)
     player:getModData().bSatedDrink = true;
     player:getModData().iHoursSinceDrink = 0;
     player:getModData().iTimesCannibal = 0;
-    player:getModData().fPreviousHealthFromFoodTimer = 0;
+    player:getModData().fPreviousHealthFromFoodTimer = 1000;
     player:getModData().bWasInfected = false;
     player:getModData().iHardyInterval = 10;
 
@@ -958,12 +958,15 @@ local function badteethtrait(_player, _playerdata)
     if player:HasTrait("badteeth") then
         if healthtimer > 1000 then
             if playerdata.fPreviousHealthFromFoodTimer == nil then
-                playerdata.fPreviousHealthFromFoodTimer = 0;
+                playerdata.fPreviousHealthFromFoodTimer = 1000;
             end
             if healthtimer > playerdata.fPreviousHealthFromFoodTimer then
                 local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
-                local pain = player:getBodyDamage():getHealthFromFoodTimer() * 0.01;
+                local pain = (healthtimer - playerdata.fPreviousHealthFromFoodTimer) * 0.01;
                 Head:setAdditionalPain(Head:getAdditionalPain() + pain);
+                if Head:getAdditionalPain() >= 100 then
+                    Head:setAdditionalPain(100);
+                end
             end
             playerdata.fPreviousHealthFromFoodTimer = healthtimer;
         end
