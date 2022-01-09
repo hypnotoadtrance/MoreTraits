@@ -900,12 +900,15 @@ local function badteethtrait(_player, _playerdata)
     local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
     if player:HasTrait("badteeth") then
         if healthtimer > 1000 then
+            if playerdata.fPreviousHealthFromFoodTimer == nil then
+                playerdata.fPreviousHealthFromFoodTimer = 0;
+            end
             if healthtimer > playerdata.fPreviousHealthFromFoodTimer then
                 local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
                 local pain = player:getBodyDamage():getHealthFromFoodTimer() * 0.01;
                 Head:setAdditionalPain(Head:getAdditionalPain() + pain);
             end
-            playerdata.fPreviousHealthFromFoodTimer = healthtimer
+            playerdata.fPreviousHealthFromFoodTimer = healthtimer;
         end
     end
 end
