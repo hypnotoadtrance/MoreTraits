@@ -68,8 +68,17 @@ end
 function ZombificationCure_OnCreate(items, result, player)
     local bodyDamage = player:getBodyDamage();
     local stats = player:getStats();
+    local bodyParts = bodyDamage:getBodyParts();
+    for i=bodyParts:size()-1, 0, -1  do
+        local bodyPart = bodyParts:get(i);
+        if bodyPart.IsInfected() then
+            bodyPart:RestoreToFullHealth();
+        end
+    end
+    bodyDamage:setInfected(false);
+    bodyDamage:setInfectionMortalityDuration(-1);
+    bodyDamage:setInfectionTime(-1);
     bodyDamage:setInfectionLevel(0);
-    bodyDamage:setInf(false);
     bodyDamage:setInfectionGrowthRate(0);
     bodyDamage:setUnhappynessLevel(0);
     stats:setEndurance(0);
@@ -891,12 +900,15 @@ local function badteethtrait(_player, _playerdata)
     local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
     if player:HasTrait("badteeth") then
         if healthtimer > 1000 then
+            if playerdata.fPreviousHealthFromFoodTimer == nil then
+                playerdata.fPreviousHealthFromFoodTimer = 0;
+            end
             if healthtimer > playerdata.fPreviousHealthFromFoodTimer then
                 local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
                 local pain = player:getBodyDamage():getHealthFromFoodTimer() * 0.01;
                 Head:setAdditionalPain(Head:getAdditionalPain() + pain);
             end
-            playerdata.fPreviousHealthFromFoodTimer = healthtimer
+            playerdata.fPreviousHealthFromFoodTimer = healthtimer;
         end
     end
 end
@@ -1296,6 +1308,7 @@ end
 
 local function amputee(_player, justGotInfected)
     local player = _player;
+    local bodydamage = player:getBodyDamage();
     if player:HasTrait("amputee") then
         local handitem = player:getSecondaryHandItem();
         local bodydamage = player:getBodyDamage();
@@ -1310,19 +1323,28 @@ local function amputee(_player, justGotInfected)
         if UpperArm_L:HasInjury() then
             UpperArm_L:RestoreToFullHealth();
             if justGotInfected then
-                player:getBodyDamage():setInfected(false);
+                bodydamage:setInfected(false);
+                bodydamage:setInfectionMortalityDuration(-1);
+                bodydamage:setInfectionTime(-1);
+                bodydamage:setInfectionLevel(0);
             end
         end
         if ForeArm_L:HasInjury() then
             ForeArm_L:RestoreToFullHealth();
             if justGotInfected then
-                player:getBodyDamage():setInfected(false);
+                bodydamage:setInfected(false);
+                bodydamage:setInfectionMortalityDuration(-1);
+                bodydamage:setInfectionTime(-1);
+                bodydamage:setInfectionLevel(0);
             end
         end
         if Hand_L:HasInjury() then
             Hand_L:RestoreToFullHealth();
             if justGotInfected then
-                player:getBodyDamage():setInfected(false);
+                bodydamage:setInfected(false);
+                bodydamage:setInfectionMortalityDuration(-1);
+                bodydamage:setInfectionTime(-1);
+                bodydamage:setInfectionLevel(0);
             end
         end
     end
@@ -1537,6 +1559,8 @@ local function SuperImmune(_player, _playerdata)
                     if ZombRand(0, 101) <= chance then
                         print("Player's Immune system fought-off zombification.");
                         bodydamage:setInfected(false);
+                        bodydamage:setInfectionMortalityDuration(-1);
+                        bodydamage:setInfectionTime(-1);
                         bodydamage:setInfectionLevel(0);
                         if ZombRand(0, 101) > chance then
                             print("Do fake infection");
