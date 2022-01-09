@@ -252,7 +252,6 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("prospear", "progun");
     TraitFactory.setMutualExclusive("prospear", "problunt");
     TraitFactory.setMutualExclusive("prospear", "problade");
-    TraitFactory.setMutualExclusive("actionhero", "bouncer");
     TraitFactory.setMutualExclusive("thickblood", "anemic");
     TraitFactory.setMutualExclusive("generator", "ingenuitive");
     TraitFactory.setMutualExclusive("expertdriver", "poordriver");

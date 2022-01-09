@@ -4,3 +4,6 @@ Added New Trait: Vagabond, Credit: Udo
 Added New Trait: Paranoia, Credit: Udo
 Fix Specialization: Weapons not working with Spears.
 Set Infection Level to Zero when removing Infection.
+Fix Bad Teeth Null Pointer Exception.
+Fix getName() to getType() calls for localizations.
+Remove Exclusivity from Bouncer and Action Hero

@@ -1373,7 +1373,7 @@ local function amputee(_player, justGotInfected)
         local handitem = player:getSecondaryHandItem();
         local bodydamage = player:getBodyDamage();
         if handitem ~= nil then
-            if handitem:getName() ~= "Bare Hands" then
+            if handitem:getType() ~= "BareHands" then
                 player:dropHandItems();
             end
         end
@@ -1418,7 +1418,7 @@ local function actionhero(_actor, _target, _weapon, _damage)
     local enemies = player:getSpottedList();
     local multiplier = 1;
     if _actor == player and player:HasTrait("actionhero") then
-        if player:HasTrait("martial") == false and weapon:getName() == "Bare Hands" then
+        if player:HasTrait("martial") == false and weapon:getType() == "BareHands" then
             return
         end ;
 
