@@ -121,6 +121,11 @@ option MoreTraits.MartialScaling
 	type = integer, min = 25, max = 1000, default = 100,
 	page = MoreTraits, translation = MoreTraits_MartialScaling,
 }
+option MoreTraits.ButterfingersChance
+{
+	type = integer, min = 100, max = 10000, default = 2000,
+	page = MoreTraits, translation = MoreTraits_ButterfingersChance,
+}
 
 
 

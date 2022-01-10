@@ -9,3 +9,6 @@ Fix Bad Teeth Null Pointer Exception.
 Fix getName() to getType() calls for localizations.
 Remove Exclusivity from Bouncer and Action Hero
 Add Scaling factor for martial artist to sandbox settings
+Decrease how frequently Butterfingers triggers.
+Add Sandbox option for Butterfingers trigger rate.
+Notify player when Butterfingers triggers.

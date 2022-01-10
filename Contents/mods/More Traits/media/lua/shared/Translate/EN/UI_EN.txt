@@ -149,3 +149,4 @@ UI_EN = {
     UI_trait_vagabonddesc = "You know how to survive on the streets.<br>You know that there is always something to eat where people would never look, namely the trash.<br>Chance affected by luck.",
 	UI_trait_paranoia = "Paranoia",
     UI_trait_paranoiadesc = "Periodically, you will get a false scare and panic.<br>You will need to actively find ways to reduce your stess, it only gets worse after a paranoia attack.",
+    UI_butterfingers_triggered = "*Butterfingers*",
