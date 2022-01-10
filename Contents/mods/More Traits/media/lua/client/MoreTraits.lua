@@ -69,7 +69,7 @@ function ZombificationCure_OnCreate(items, result, player)
     local bodyDamage = player:getBodyDamage();
     local stats = player:getStats();
     local bodyParts = bodyDamage:getBodyParts();
-    for i=bodyParts:size()-1, 0, -1  do
+    for i = bodyParts:size() - 1, 0, -1 do
         local bodyPart = bodyParts:get(i);
         if bodyPart.IsInfected() then
             bodyPart:RestoreToFullHealth();
@@ -463,20 +463,20 @@ local function ToadTraitParanoia()
     local player = getPlayer();
     if player:HasTrait("paranoia") then
         local basechance = 1;
-		local randNum = ZombRand(100)+1
-		randNum = randNum - (randNum*player:getStats():getStress())
-		if randNum <= basechance then
-			getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0);
-			local panic = player:getStats():getPanic() + 25
-			local stress = player:getStats():getStress() + 0.1
-			player:getStats():setPanic(panic)
-			player:getStats():setStress(stress)
-			if player:isFemale() then
-				getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.05);
-			else
-				getSoundManager():PlaySound("male_heavybreathpanic", false, 5):setVolume(0.05);
-			end
-		end
+        local randNum = ZombRand(100) + 1
+        randNum = randNum - (randNum * player:getStats():getStress())
+        if randNum <= basechance then
+            getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0);
+            local panic = player:getStats():getPanic() + 25
+            local stress = player:getStats():getStress() + 0.1
+            player:getStats():setPanic(panic)
+            player:getStats():setStress(stress)
+            if player:isFemale() then
+                getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.05);
+            else
+                getSoundManager():PlaySound("male_heavybreathpanic", false, 5):setVolume(0.05);
+            end
+        end
     end
 end
 
@@ -550,6 +550,10 @@ local function ToadTraitIncomprehensive(_target, _name, _container)
                 if item ~= nil then
                     if tableContains(tempcontainer, item) == false then
                         local count = _container:getNumberOfItem(item:getFullType());
+                        --Add a Special Case for Cigarettes since they inherently create 20 when added.
+                        if item:getFullType() == "Base.Cigarettes" then
+                            count = math.floor(count / 20);
+                        end
                         if count == 1 then
                             local bchance = 5;
                             if player:HasTrait("Lucky") then
@@ -559,7 +563,7 @@ local function ToadTraitIncomprehensive(_target, _name, _container)
                                 bchance = bchance + 2 * luckimpact;
                             end
                             if item:IsFood() then
-                                bchance = bchance + 20;
+                                bchance = bchance + 10;
                             end
                             if item:IsDrainable() then
                                 bchance = bchance + 10;
@@ -643,14 +647,14 @@ end
 
 local function ToadTraitVagabond(_target, _name, _container)
     local items = {};
-	table.insert(items, "Base.BreadSlices");
-	table.insert(items, "Base.Pizza");
-	table.insert(items, "Base.Hotdog");
-	table.insert(items, "Base.Corndog");
-	table.insert(items, "Base.OpenBeans");
-	table.insert(items, "Base.OpenBeans");
-	table.insert(items, "Base.CannedChiliOpen");
-	table.insert(items, "Base.WatermelonSmashed");
+    table.insert(items, "Base.BreadSlices");
+    table.insert(items, "Base.Pizza");
+    table.insert(items, "Base.Hotdog");
+    table.insert(items, "Base.Corndog");
+    table.insert(items, "Base.OpenBeans");
+    table.insert(items, "Base.OpenBeans");
+    table.insert(items, "Base.CannedChiliOpen");
+    table.insert(items, "Base.WatermelonSmashed");
 
     local length = 0
     for k, v in pairs(items) do
@@ -659,7 +663,7 @@ local function ToadTraitVagabond(_target, _name, _container)
     local player = getPlayer();
     if player:HasTrait("vagabond") then
         local basechance = 30;
-		if player:HasTrait("Lucky") then
+        if player:HasTrait("Lucky") then
             basechance = basechance + 2 * luckimpact;
         end
         if player:HasTrait("Unlucky") then
@@ -667,12 +671,12 @@ local function ToadTraitVagabond(_target, _name, _container)
         end
         if ZombRand(100) <= basechance then
             local i = ZombRand(length);
-				if i == 0 then
-					i = 1;
-				end
-			if _container:getType() == ("bin") then
-				_container:AddItem(items[i]);
-			end
+            if i == 0 then
+                i = 1;
+            end
+            if _container:getType() == ("bin") then
+                _container:AddItem(items[i]);
+            end
         end
     end
 end
@@ -1195,13 +1199,17 @@ local function martial(_actor, _target, _weapon, _damage)
         if player:HasTrait("Unlucky") then
             critchance = critchance - 1 * luckimpact;
         end
+        local scaling = 1.0;
+        if SandboxVars.MoreTraits.MartialScaling then
+            scaling = SandboxVars.MoreTraits.MartialScaling * 0.01;
+        end
         local SmallBluntLvl = player:getPerkLevel(Perks.SmallBlunt);
         local StrengthLvl = player:getPerkLevel(Perks.Strength);
         local Fitnesslvl = player:getPerkLevel(Perks.Fitness);
-        local average = (StrengthLvl + Fitnesslvl) / 2;
-        local minimumdmg = 0.1 * average + SmallBluntLvl * 0.1;
-        local maximumdmg = 0.5 * average + SmallBluntLvl * 0.1;
-        critchance = critchance + SmallBluntLvl;
+        local average = ((StrengthLvl + Fitnesslvl) / 2) * scaling;
+        local minimumdmg = (0.1 * average + SmallBluntLvl * 0.1) * scaling;
+        local maximumdmg = (0.5 * average + SmallBluntLvl * 0.1) * scaling;
+        critchance = (critchance + SmallBluntLvl) * scaling;
         if weapon:getType() == "BareHands" then
             weapon:setDoorDamage(9 + maximumdmg);
             weapon:setTreeDamage(1 + maximumdmg);
@@ -2190,11 +2198,10 @@ Events.EveryHours.Add(ToadTraitDepressive);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnFillContainer.Add(Gourmand);
--- Events.OnFillContainer.Add(ToadTraitScrounger);
+Events.OnFillContainer.Add(ToadTraitScrounger);
 Events.OnFillContainer.Add(ToadTraitIncomprehensive);
 Events.OnFillContainer.Add(ToadTraitAntique);
 Events.OnFillContainer.Add(ToadTraitVagabond);
-
 
 local function c(_iSInventoryPage, _state)
     local state = _state;
@@ -2216,7 +2223,7 @@ local function c(_iSInventoryPage, _state)
             end
             if ZombRand(100) <= basechance then
                 local tempcontainer = {};
-                for i,v in ipairs(_iSInventoryPage.backpacks) do
+                for i, v in ipairs(_iSInventoryPage.backpacks) do
                     if v.inventory:getParent() then
                         containerObj = v.inventory:getParent();
                         if containerObj ~= nil then
@@ -2286,4 +2293,4 @@ local function c(_iSInventoryPage, _state)
         end
     end
 end
-Events.OnRefreshInventoryWindowContainers.Add(c);
+--Events.OnRefreshInventoryWindowContainers.Add(c);

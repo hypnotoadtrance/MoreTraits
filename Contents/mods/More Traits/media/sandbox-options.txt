@@ -116,7 +116,11 @@ option MoreTraits.SmokerStart
 	type = boolean, default = true,
 	page = MoreTraits, translation = MoreTraits_SmokerStart,
 }
-
+option MoreTraits.MartialScaling
+{
+	type = integer, min = 25, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_MartialScaling,
+}
 
 
 
