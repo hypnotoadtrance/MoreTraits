@@ -482,55 +482,55 @@ end
 
 local function ToadTraitScrounger(_target, _name, _container)
     local player = getPlayer();
-    if player:HasTrait("scrounger") then
-        local basechance = 30;
-        local modifier = 1.2;
-        if player:HasTrait("Lucky") then
-            basechance = basechance + 10 * luckimpact;
-            modifier = modifier + 0.1 * luckimpact;
-        end
-        if player:HasTrait("Unlucky") then
-            basechance = basechance - 5 * luckimpact;
-            modifier = modifier - 0.1 * luckimpact;
-        end
-        if ZombRand(100) <= basechance then
-            local tempcontainer = {};
-            for i = 0, _container:getItems():size() - 1 do
-                local item = _container:getItems():get(i);
-                if item ~= nil then
-                    if tableContains(tempcontainer, item:getFullType()) == false then
-                        table.insert(tempcontainer, item:getFullType());
-                        local count = _container:getNumberOfItem(item:getFullType());
-                        if count == 1 then
-                            local bchance = 5;
-                            if player:HasTrait("Lucky") then
-                                bchance = bchance + 2 * luckimpact;
-                            end
-                            if player:HasTrait("Unlucky") then
-                                bchance = bchance - 2 * luckimpact;
-                            end
-                            if item:getCategory() == "Food" then
-                                bchance = bchance + 20;
-                            end
-                            if item:IsDrainable() then
-                                bchance = bchance + 10;
-                            end
-                            if item:IsWeapon() then
-                                bchance = bchance + 5;
-                            end
-                            if ZombRand(100) <= bchance then
-                                _container:AddItems(item, 1);
-                            end
-                        elseif count > 1 and count < 5 then
-                            _container:AddItems(item, math.floor(count * modifier));
-                        elseif count >= 5 then
-                            _container:AddItems(item, math.floor((count * modifier) * 2));
-                        end
-                    end
-                end
-            end
-        end
-    end
+    -- if player:HasTrait("scrounger") then
+    --     local basechance = 30;
+    --     local modifier = 1.2;
+    --     if player:HasTrait("Lucky") then
+    --         basechance = basechance + 10 * luckimpact;
+    --         modifier = modifier + 0.1 * luckimpact;
+    --     end
+    --     if player:HasTrait("Unlucky") then
+    --         basechance = basechance - 5 * luckimpact;
+    --         modifier = modifier - 0.1 * luckimpact;
+    --     end
+    --     if ZombRand(100) <= basechance then
+    --         local tempcontainer = {};
+    --         for i = 0, _container:getItems():size() - 1 do
+    --             local item = _container:getItems():get(i);
+    --             if item ~= nil then
+    --                 if tableContains(tempcontainer, item:getFullType()) == false then
+    --                     table.insert(tempcontainer, item:getFullType());
+    --                     local count = _container:getNumberOfItem(item:getFullType());
+    --                     if count == 1 then
+    --                         local bchance = 5;
+    --                         if player:HasTrait("Lucky") then
+    --                             bchance = bchance + 2 * luckimpact;
+    --                         end
+    --                         if player:HasTrait("Unlucky") then
+    --                             bchance = bchance - 2 * luckimpact;
+    --                         end
+    --                         if item:getCategory() == "Food" then
+    --                             bchance = bchance + 20;
+    --                         end
+    --                         if item:IsDrainable() then
+    --                             bchance = bchance + 10;
+    --                         end
+    --                         if item:IsWeapon() then
+    --                             bchance = bchance + 5;
+    --                         end
+    --                         if ZombRand(100) <= bchance then
+    --                             _container:AddItems(item, 1);
+    --                         end
+    --                     elseif count > 1 and count < 5 then
+    --                         _container:AddItems(item, math.floor(count * modifier));
+    --                     elseif count >= 5 then
+    --                         _container:AddItems(item, math.floor((count * modifier) * 2));
+    --                     end
+    --                 end
+    --             end
+    --         end
+    --     end
+    -- end
 end
 
 local function ToadTraitIncomprehensive(_target, _name, _container)
@@ -2190,7 +2190,100 @@ Events.EveryHours.Add(ToadTraitDepressive);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnFillContainer.Add(Gourmand);
-Events.OnFillContainer.Add(ToadTraitScrounger);
+-- Events.OnFillContainer.Add(ToadTraitScrounger);
 Events.OnFillContainer.Add(ToadTraitIncomprehensive);
 Events.OnFillContainer.Add(ToadTraitAntique);
 Events.OnFillContainer.Add(ToadTraitVagabond);
+
+
+local function c(_iSInventoryPage, _state)
+    local state = _state;
+    -- getPlayer():getTraits():add("scrounger") - adding trait in MP
+    if state == "buttonsAdded" then
+        local player = getPlayer();
+        local containerObj;
+        local container;
+        if player:HasTrait("scrounger") then
+            local basechance = 30;
+            local modifier = 1.2;
+            if player:HasTrait("Lucky") then
+                basechance = basechance + 10 * luckimpact;
+                modifier = modifier + 0.1 * luckimpact;
+            end
+            if player:HasTrait("Unlucky") then
+                basechance = basechance - 5 * luckimpact;
+                modifier = modifier - 0.1 * luckimpact;
+            end
+            if ZombRand(100) <= basechance then
+                local tempcontainer = {};
+                for i,v in ipairs(_iSInventoryPage.backpacks) do
+                    if v.inventory:getParent() then
+                        containerObj = v.inventory:getParent();
+                        if containerObj ~= nil then
+                            if not containerObj:getModData().bScroungerRolled then
+                                containerObj:getModData().bScroungerRolled = true;
+                                if containerObj:getContainer() then
+                                    container = containerObj:getContainer();
+                                    if container:getItems() then
+                                        for i = 0, container:getItems():size() - 1 do
+                                            local item = container:getItems():get(i);
+                                            if item ~= nil then
+                                                if tableContains(tempcontainer, item:getFullType()) == false then
+                                                    table.insert(tempcontainer, item:getFullType());
+                                                    local count = container:getNumberOfItem(item:getFullType());
+                                                    local n = 1;
+                                                    if count == 1 then
+                                                        local bchance = 5;
+                                                        if player:HasTrait("Lucky") then
+                                                            bchance = bchance + 2 * luckimpact;
+                                                        end
+                                                        if player:HasTrait("Unlucky") then
+                                                            bchance = bchance - 2 * luckimpact;
+                                                        end
+                                                        if item:getCategory() == "Food" then
+                                                            bchance = bchance + 20;
+                                                        end
+                                                        if item:IsDrainable() then
+                                                            bchance = bchance + 10;
+                                                        end
+                                                        if item:IsWeapon() then
+                                                            bchance = bchance + 5;
+                                                        end
+                                                        if ZombRand(100) <= bchance then
+                                                            container:AddItems(item, n);
+                                                            print("==\naltered container 1")
+                                                            print(string.format("count was, added = (%d, %d)", count, n));
+                                                            print(string.format("item = %s", item:getFullType()));
+                                                        end
+                                                    elseif count > 1 and count < 5 then
+                                                        n = math.floor(count * modifier);
+                                                        container:AddItems(item, n);
+                                                        print("==\naltered container 1-5")
+                                                        print(string.format("count was, added = (%d, %d)", count, n));
+                                                        print(string.format("item = %s", item:getFullType()));
+                                                    elseif count >= 5 then
+                                                        --Add a Special Case for Cigarettes since they inherently create 20 when added.
+                                                        if item:getFullType() == "Base.Cigarettes" then
+                                                            count = math.floor(count / 20);
+                                                            print("Cigarettes detected");
+                                                        end
+                                                        n = math.floor((count * modifier) * 2)
+                                                        container:AddItems(item, n);
+                                                        print("==\naltered container 5+")
+                                                        print(string.format("count was, added = (%d, %d)", count, n));
+                                                        print(string.format("item = %s", item:getFullType()));
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+Events.OnRefreshInventoryWindowContainers.Add(c);
