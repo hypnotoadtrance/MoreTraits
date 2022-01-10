@@ -2198,6 +2198,7 @@ Events.OnFillContainer.Add(ToadTraitVagabond);
 
 local function c(_iSInventoryPage, _state)
     local state = _state;
+    -- getPlayer():getTraits():add("scrounger") - adding trait in MP
     if state == "buttonsAdded" then
         local player = getPlayer();
         local containerObj;
@@ -2221,56 +2222,57 @@ local function c(_iSInventoryPage, _state)
                         if containerObj ~= nil then
                             if not containerObj:getModData().bScroungerRolled then
                                 containerObj:getModData().bScroungerRolled = true;
-                                container = containerObj:getContainer();
-                                if containerObj:getContainer():getItems() then
+                                if containerObj:getContainer() then
                                     container = containerObj:getContainer();
-                                    for i = 0, container:getItems():size() - 1 do
-                                        local item = container:getItems():get(i);
-                                        if item ~= nil then
-                                            if tableContains(tempcontainer, item:getFullType()) == false then
-                                                table.insert(tempcontainer, item:getFullType());
-                                                local count = container:getNumberOfItem(item:getFullType());
-                                                local n = 1;
-                                                if count == 1 then
-                                                    local bchance = 5;
-                                                    if player:HasTrait("Lucky") then
-                                                        bchance = bchance + 2 * luckimpact;
-                                                    end
-                                                    if player:HasTrait("Unlucky") then
-                                                        bchance = bchance - 2 * luckimpact;
-                                                    end
-                                                    if item:getCategory() == "Food" then
-                                                        bchance = bchance + 20;
-                                                    end
-                                                    if item:IsDrainable() then
-                                                        bchance = bchance + 10;
-                                                    end
-                                                    if item:IsWeapon() then
-                                                        bchance = bchance + 5;
-                                                    end
-                                                    if ZombRand(100) <= bchance then
+                                    if container:getItems() then
+                                        for i = 0, container:getItems():size() - 1 do
+                                            local item = container:getItems():get(i);
+                                            if item ~= nil then
+                                                if tableContains(tempcontainer, item:getFullType()) == false then
+                                                    table.insert(tempcontainer, item:getFullType());
+                                                    local count = container:getNumberOfItem(item:getFullType());
+                                                    local n = 1;
+                                                    if count == 1 then
+                                                        local bchance = 5;
+                                                        if player:HasTrait("Lucky") then
+                                                            bchance = bchance + 2 * luckimpact;
+                                                        end
+                                                        if player:HasTrait("Unlucky") then
+                                                            bchance = bchance - 2 * luckimpact;
+                                                        end
+                                                        if item:getCategory() == "Food" then
+                                                            bchance = bchance + 20;
+                                                        end
+                                                        if item:IsDrainable() then
+                                                            bchance = bchance + 10;
+                                                        end
+                                                        if item:IsWeapon() then
+                                                            bchance = bchance + 5;
+                                                        end
+                                                        if ZombRand(100) <= bchance then
+                                                            container:AddItems(item, n);
+                                                            print("==\naltered container 1")
+                                                            print(string.format("count was, added = (%d, %d)", count, n));
+                                                            print(string.format("item = %s", item:getFullType()));
+                                                        end
+                                                    elseif count > 1 and count < 5 then
+                                                        n = math.floor(count * modifier);
                                                         container:AddItems(item, n);
-                                                        print("==\naltered container 1")
+                                                        print("==\naltered container 1-5")
+                                                        print(string.format("count was, added = (%d, %d)", count, n));
+                                                        print(string.format("item = %s", item:getFullType()));
+                                                    elseif count >= 5 then
+                                                        --Add a Special Case for Cigarettes since they inherently create 20 when added.
+                                                        if item:getFullType() == "Base.Cigarettes" then
+                                                            count = math.floor(count / 20);
+                                                            print("Cigarettes detected");
+                                                        end
+                                                        n = math.floor((count * modifier) * 2)
+                                                        container:AddItems(item, n);
+                                                        print("==\naltered container 5+")
                                                         print(string.format("count was, added = (%d, %d)", count, n));
                                                         print(string.format("item = %s", item:getFullType()));
                                                     end
-                                                elseif count > 1 and count < 5 then
-                                                    n = math.floor(count * modifier);
-                                                    container:AddItems(item, n);
-                                                    print("==\naltered container 1-5")
-                                                    print(string.format("count was, added = (%d, %d)", count, n));
-                                                    print(string.format("item = %s", item:getFullType()));
-                                                elseif count >= 5 then
-                                                    --Add a Special Case for Cigarettes since they inherently create 20 when added.
-                                                    if item:getFullType() == "Base.Cigarettes" then
-                                                        count = math.floor(count / 20);
-                                                        print("Cigarettes detected");
-                                                    end
-                                                    n = math.floor((count * modifier) * 2)
-                                                    container:AddItems(item, n);
-                                                    print("==\naltered container 5+")
-                                                    print(string.format("count was, added = (%d, %d)", count, n));
-                                                    print(string.format("item = %s", item:getFullType()));
                                                 end
                                             end
                                         end
