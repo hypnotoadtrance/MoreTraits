@@ -14,3 +14,4 @@ Aristrofl
 Translations:
 Simplified Chinese, by EndsM
 Russian, by Xenu47
+German, by Marcv0dka
