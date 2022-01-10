@@ -133,7 +133,7 @@ local function initToadTraitsItems(_player)
         inv:AddItem("Base.Plasticbag");
     end
     if player:HasTrait("preparedammo") then
-        inv:AddItems("Base.BulletsBox", 3);
+        inv:AddItems("Base.Bullets9mmBox", 3);
         inv:AddItems("Base.ShotgunShellsBox", 2);
     end
     if player:HasTrait("preparedweapon") then
