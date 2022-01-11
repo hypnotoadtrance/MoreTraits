@@ -45,4 +45,8 @@ Sandbox_CN = {
     Sandbox_MoreTraits_AlcoholicWithdrawal = "酗酒戒断",
     Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "拥有酗酒特质的玩家多久不喝酒会导致戒断反应。<br>该数值应高于酗酒饮酒频率的值。",
     Sandbox_MoreTraits_SmokerStart = "嗜烟如命开局携带烟",
+    Sandbox_MoreTraits_MartialScaling = "武术家修正",
+    Sandbox_MoreTraits_MartialScaling = "表示武术家在伤害上的修正有多大的百分比<br>设置该值为50%会减半所有伤害。",
+    Sandbox_MoreTraits_ButterfingersChance = "黄油手概率",
+    Sandbox_MoreTraits_ButterfingersChance = "该数值代表拥有黄油手特质的玩家会手滑掉落物品的频率。<br>基础值为5，代表默认情况下两千分之五的几率会每游戏内分钟计算掉落。<br>降低该数值会导致玩家持续手滑。",
 }
