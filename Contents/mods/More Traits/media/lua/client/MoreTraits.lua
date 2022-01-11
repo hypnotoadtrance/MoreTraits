@@ -21,7 +21,6 @@ skipxpadd = false;
 suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
-scroungerHighlightsTbl = {};
 
 local function tableContains(t, e)
     for _, value in pairs(t) do
@@ -491,6 +490,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state)
     -- getPlayer():getTraits():add("scrounger") - adding trait manually
     if state == "end" then
         local player = getPlayer();
+        local playerData = player:getModData();
         local containerObj;
         local container;
         if player:HasTrait("scrounger") then
@@ -509,9 +509,11 @@ local function ToadTraitScrounger(_iSInventoryPage, _state)
                     containerObj = v.inventory:getParent();
                     if not containerObj:getModData().bScroungerRolled 
                         and instanceof(containerObj, "IsoObject")
+                        and not instanceof(containerObj, "IsoDeadBody")
                         and containerObj:getContainer() then
                             containerObj:getModData().bScroungerRolled = true;
-                            if ZombRand(100) <= 100 then
+                            containerObj:transmitModData();
+                            if ZombRand(100) <= basechance then
                                 local tempcontainer = {};
                                 container = containerObj:getContainer();
                                 if container:getItems() then
@@ -544,7 +546,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state)
                                                     if item:IsWeapon() then
                                                         bchance = bchance + 5;
                                                     end
-                                                    if ZombRand(100) <= 100 then
+                                                    if ZombRand(100) <= bchance then
                                                         container:AddItems(item, n);
                                                         rolled = true;
                                                     end
@@ -560,7 +562,10 @@ local function ToadTraitScrounger(_iSInventoryPage, _state)
                                                 if rolled then
                                                     player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
                                                     if SandboxVars.MoreTraits.ScroungerHighlights == true then
-                                                        scroungerHighlightsTbl[containerObj] = 0;
+                                                        if not playerData.scroungerHighlightsTbl then
+                                                            playerData.scroungerHighlightsTbl = {}
+                                                        end
+                                                        playerData.scroungerHighlightsTbl[containerObj] = 0;
                                                         containerObj:setHighlighted(true, false);
                                                         containerObj:setHighlightColor(0.5,1,0.4,1);
                                                     end
@@ -583,16 +588,17 @@ local function UnHighlightScrounger()
         if SandboxVars.MoreTraits.ScroungerHighlightsMaxTime then
             maxTime = SandboxVars.MoreTraits.ScroungerHighlightsMaxTime;
         end
+        local player = getPlayer();
+        local playerData = player:getModData();
+        if not playerData.scroungerHighlightsTbl then
+            playerData.scroungerHighlightsTbl = {}
+        end
+        local scroungerHighlightsTbl = playerData.scroungerHighlightsTbl;
         if scroungerHighlightsTbl ~= {} then
-            local player = getPlayer();
             if player:HasTrait("scrounger") then
                 for containerObj, timer in pairs(scroungerHighlightsTbl) do
                     if timer >= maxTime then
-                        if getPlayerLoot(player:getOnlineID()).inventoryPane.inventoryPage.inventory:getParent() ~= containerObj
-                        or getPlayerLoot(player:getPlayerNum()).inventoryPane.inventoryPage.inventory:getParent() ~= containerObj then
-                            -- print("custom color removed!");
-                            containerObj:setHighlighted(false);
-                        end
+                        containerObj:setHighlighted(false);
                         -- print("container removed from table!");
                         scroungerHighlightsTbl[containerObj] = nil;
                     else
