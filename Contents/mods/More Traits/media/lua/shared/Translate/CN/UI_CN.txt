@@ -149,4 +149,5 @@ UI_CN = {
     UI_trait_vagabonddesc = "你懂得在大街上生存之道。<br>你知道总会有些无人问津的地方可以找到食物，说直白点是垃圾桶。<br>几率受到幸运的影响。",
 	UI_trait_paranoia = "偏执症",
     UI_trait_paranoiadesc = "周期性的，你会得到假恐惧和惊慌。<br>你需要更经常地寻找方法减轻你的压力，每次偏执症发作都会使其恶化。",
+    UI_butterfingers_triggered = "*手滑了*",
 }
