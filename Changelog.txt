@@ -13,3 +13,6 @@ Decrease how frequently Butterfingers triggers.
 Add Sandbox option for Butterfingers trigger rate.
 Notify player when Butterfingers triggers.
 Add German translation by Marcv0dka.
+Reimplement Scrounger/Incomprehensive/Antique Collector in multiplayer
+Notify player when Scrounger triggers.
+Various tweaks to item generation statistics.
