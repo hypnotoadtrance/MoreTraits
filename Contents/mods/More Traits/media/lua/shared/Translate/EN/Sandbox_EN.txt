@@ -50,7 +50,7 @@ Sandbox_EN = {
     Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "After how many hours without alcohol should an alcoholic start suffering withdrawal symptoms?<br>This value should be higher than Alcoholic Drink Frequency.",
 	Sandbox_MoreTraits_SmokerStart = "Smokers start with smokes.",
     Sandbox_MoreTraits_MartialScaling = "Martial Artist Scaling",
-    Sandbox_MoreTraits_MartialScaling = "A percent value representing how strong the scaling in damage for Martial Artist is.<br>Setting this to 50% would halve all damage.",
+    Sandbox_MoreTraits_MartialScaling_tooltip = "A percent value representing how strong the scaling in damage for Martial Artist is.<br>Setting this to 50% would halve all damage.",
     Sandbox_MoreTraits_ButterfingersChance = "Butterfingers Chance In X",
-    Sandbox_MoreTraits_ButterfingersChance = "The chance in X how frequently a player with Butterfingers will drop an item.<br>The base chance is 5, so by default this value would be a 5/2000 chance calculated every in-game minute.<br>Lowering this value could result in players constantly dropping their items.",
+    Sandbox_MoreTraits_ButterfingersChance_tooltip = "The chance in X how frequently a player with Butterfingers will drop an item.<br>The base chance is 5, so by default this value would be a 5/2000 chance calculated every in-game minute.<br>Lowering this value could result in players constantly dropping their items.",
 }

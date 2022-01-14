@@ -544,19 +544,27 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                                 bchance = bchance + 5;
                                             end
                                             if ZombRand(100) <= bchance then
-                                                container:AddItems(item, n);
                                                 rolled = true;
                                             end
                                         elseif count > 1 and count < 5 then
                                             n = math.floor(count * modifier);
-                                            container:AddItems(item, n);
                                             rolled = true;
                                         elseif count >= 5 then
                                             n = math.floor((count * modifier) * 2)
-                                            container:AddItems(item, n);
                                             rolled = true;
                                         end
                                         if rolled then
+                                            -- one of these might help
+                                            -- _iSInventoryPage.renderDirty = true;
+                                            -- if container:getType() ~= "TradeUI" and isClient() and not container:isInCharacterInventory(player) and container:getType()~="floor" then
+                                            --     container:addItemOnServer(item);
+                                            --     -- player:Say("add on serv");
+                                            --     -- container:addItemOnServer(item, 2);
+                                            -- end
+                                            -- container:setDrawDirty(true);
+                                            -- they didnt help (
+                                            container:AddItems(item, n);
+                                            
                                             player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
                                             if SandboxVars.MoreTraits.ScroungerHighlights == true then
                                                 if not playerData.scroungerHighlightsTbl then
@@ -610,22 +618,22 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     local player = _player;
     local containerObj;
     local container;
-    for i, v in ipairs(_iSInventoryPage.backpacks) do
-        local tempcontainer = {};
-        if v.inventory:getParent() then
-            containerObj = v.inventory:getParent();
-            if not containerObj:getModData().bIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                containerObj:getModData().bIncomprehensiveRolled = true;
-                containerObj:transmitModData();
-                container = containerObj:getContainer();
-                if player:HasTrait("incomprehensive") then
-                    local basechance = 20;
-                    if player:HasTrait("Lucky") then
-                        basechance = basechance - 5 * luckimpact;
-                    end
-                    if player:HasTrait("Unlucky") then
-                        basechance = basechance + 5 * luckimpact;
-                    end
+    if player:HasTrait("incomprehensive") then
+        local basechance = 100;
+        if player:HasTrait("Lucky") then
+            basechance = basechance - 5 * luckimpact;
+        end
+        if player:HasTrait("Unlucky") then
+            basechance = basechance + 5 * luckimpact;
+        end
+        for i, v in ipairs(_iSInventoryPage.backpacks) do
+            local tempcontainer = {};
+            if v.inventory:getParent() then
+                containerObj = v.inventory:getParent();
+                if not containerObj:getModData().bIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                    containerObj:getModData().bIncomprehensiveRolled = true;
+                    containerObj:transmitModData();
+                    container = containerObj:getContainer();
                     if ZombRand(100) <= basechance then
                         for i = 0, container:getItems():size() - 1 do
                             local item = container:getItems():get(i);
@@ -666,12 +674,22 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                             end
                         end
                     end
+                    if tempcontainer ~= {} then
+                        -- one of these might help
+                        -- _iSInventoryPage.renderDirty = true;
+                        -- container:setDrawDirty(true);
+                        -- 
+                        for _, i in pairs(tempcontainer) do
+                            -- container:DoRemoveItem(i);
+                            -- -- player:Say(string.format("Oh no, my %s", i:getFullType())); -- was for debug
+                            -- if container:getType() ~= "TradeUI" and isClient() and not container:isInCharacterInventory(player) and container:getType()~="floor" then
+                            --     container:removeItemOnServer(i);
+                            --     -- container:removeItemOnServer(item, 2); -- does not work(
+                            -- end
+                            container:Remove(i);
+                        end
+                    end
                 end
-            end
-        end
-        if tempcontainer ~= nil then
-            for _, i in pairs(tempcontainer) do
-                container:Remove(i);
             end
         end
     end
@@ -721,7 +739,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
         if basechance < 1 then
             basechance = 1;
         end
-        for i, v in ipairs(_iSInventoryPage.backpacks) do
+        for j, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
                 if not containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then

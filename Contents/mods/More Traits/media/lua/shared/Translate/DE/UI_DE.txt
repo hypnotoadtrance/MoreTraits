@@ -150,3 +150,5 @@ UI_DE = {
 	UI_trait_paranoia = "Paranoia",
     UI_trait_paranoiadesc = "Von Zeit zu Zeit werden Sie eine falsche Angst und Panik bekommen.<br>Sie müssen aktiv Wege finden, Ihren Stress zu reduzieren, er wird nach einer Paranoia-Attacke nur noch schlimmer.",
     UI_butterfingers_triggered = "*Ich Schussel!*",
+    UI_scrounger_found = "Oh, schau, noch ein %s",
+}
