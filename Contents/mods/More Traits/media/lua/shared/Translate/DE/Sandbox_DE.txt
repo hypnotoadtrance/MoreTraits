@@ -46,7 +46,7 @@ Sandbox_DE = {
     Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "Nach wie vielen Stunden ohne Alkohol sollte ein Alkoholiker mit Entzugßymptomen beginnen?<br>Dieser Wert sollte höher sein als die Häufigkeit alkoholischer Getränke.",
 	Sandbox_MoreTraits_SmokerStart = "Raucher beginnen mit Rauchen.",
     Sandbox_MoreTraits_MartialScaling = "Kampfkünstler-Skalierung",
-    Sandbox_MoreTraits_MartialScaling = "Ein Prozentwert, der angibt, wie stark die Schadenßkalierung für Kampfkünstler ist.<br>Ein Wert von 50 % würde den gesamten Schaden halbieren.",
+    Sandbox_MoreTraits_MartialScaling_tooltip = "Ein Prozentwert, der angibt, wie stark die Schadenßkalierung für Kampfkünstler ist.<br>Ein Wert von 50 % würde den gesamten Schaden halbieren.",
     Sandbox_MoreTraits_ButterfingersChance = "Butterfingers Chance in X",
-    Sandbox_MoreTraits_ButterfingersChance = "Die Wahrscheinlichkeit in X, wie oft ein Spieler mit Butterfingers einen Gegenstand fallen läßt.<br>Die Basischance beträgt 5, daher wäre dieser Wert standardmäßig eine 5/2000-Chance, die jede Spielminute berechnet wird.<br>Dieser Wert könnte führen dazu, daß Spieler ihre Gegenstände ständig fallen laßen.",
+    Sandbox_MoreTraits_ButterfingersChance_tooltip = "Die Wahrscheinlichkeit in X, wie oft ein Spieler mit Butterfingers einen Gegenstand fallen läßt.<br>Die Basischance beträgt 5, daher wäre dieser Wert standardmäßig eine 5/2000-Chance, die jede Spielminute berechnet wird.<br>Dieser Wert könnte führen dazu, daß Spieler ihre Gegenstände ständig fallen laßen.",
 }
