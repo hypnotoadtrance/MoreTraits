@@ -321,9 +321,17 @@ local function ToadTraitEvasive(_player, _playerdata)
         local bodydamage = player:getBodyDamage();
         local modbodydamage = playerdata.ToadTraitBodyDamage;
         local lastinfected = playerdata.bisInfected;
-        if bodydamage:getNumPartsScratched() == nil then
-            return ;
-        end ;
+        local enemies = player:getSpottedList();
+        local nearbyzombies = false;
+        for i = 0, enemies:size() - 1 do
+            local enemy = enemies:get(i);
+            if enemy:isZombie() then
+                local distance = enemy:DistTo(player)
+                if distance <= 3 then
+                    nearbyzombies = true;
+                end
+            end
+        end
         if lastinfected == null then
             playerdata.bisInfected = bodydamage:IsInfected();
             lastinfected = playerdata.bisInfected;
@@ -358,7 +366,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                         end
                         if i:scratched() == true and b[2] == false then
                             print("Scratch Detected On: " .. tostring(i:getType()));
-                            if ZombRand(100) <= basechance then
+                            if ZombRand(100) <= basechance and nearbyzombies == true then
                                 i:RestoreToFullHealth();
                                 i:setScratched(false, false);
                                 i:SetInfected(false);
@@ -373,7 +381,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                             end
                         elseif i:bitten() == true and b[3] == false then
                             print("Bite Detected On: " .. tostring(i:getType()));
-                            if ZombRand(100) <= basechance then
+                            if ZombRand(100) <= basechance and nearbyzombies == true then
                                 i:RestoreToFullHealth();
                                 i:SetBitten(false, false);
                                 i:SetInfected(false);
@@ -388,7 +396,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                             end
                         elseif i:isCut() == true and b[4] == false then
                             print("Laceration Detected On: " .. tostring(i:getType()));
-                            if ZombRand(100) <= basechance then
+                            if ZombRand(100) <= basechance and nearbyzombies == true then
                                 i:RestoreToFullHealth();
                                 i:setCut(false, false);
                                 i:SetInfected(false);

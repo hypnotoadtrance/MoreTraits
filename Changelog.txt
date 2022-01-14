@@ -16,3 +16,4 @@ Add German translation by Marcv0dka.
 Reimplement Scrounger/Incomprehensive/Antique Collector in multiplayer
 Notify player when Scrounger triggers.
 Various tweaks to item generation statistics.
+Prevent Evasive from dodging when Bandaging/Unbandaging wounds.
