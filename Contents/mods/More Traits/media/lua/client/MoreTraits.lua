@@ -495,7 +495,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     local container;
     if player:HasTrait("scrounger") then
         local basechance = 20;
-        local modifier = 1.2;
+        local modifier = 1.3;
         if player:HasTrait("Lucky") then
             basechance = basechance + 5 * luckimpact;
             modifier = modifier + 0.1 * luckimpact;
@@ -526,23 +526,23 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                         if item:getFullType() == "Base.Cigarettes" then
                                             count = math.floor(count / 20);
                                         end
+                                        local bchance = 5;
+                                        if player:HasTrait("Lucky") then
+                                            bchance = bchance + 2 * luckimpact;
+                                        end
+                                        if player:HasTrait("Unlucky") then
+                                            bchance = bchance - 2 * luckimpact;
+                                        end
+                                        if item:getCategory() == "Food" then
+                                            bchance = bchance + 20;
+                                        end
+                                        if item:IsDrainable() then
+                                            bchance = bchance + 10;
+                                        end
+                                        if item:IsWeapon() then
+                                            bchance = bchance + 5;
+                                        end
                                         if count == 1 then
-                                            local bchance = 5;
-                                            if player:HasTrait("Lucky") then
-                                                bchance = bchance + 2 * luckimpact;
-                                            end
-                                            if player:HasTrait("Unlucky") then
-                                                bchance = bchance - 2 * luckimpact;
-                                            end
-                                            if item:getCategory() == "Food" then
-                                                bchance = bchance + 20;
-                                            end
-                                            if item:IsDrainable() then
-                                                bchance = bchance + 10;
-                                            end
-                                            if item:IsWeapon() then
-                                                bchance = bchance + 5;
-                                            end
                                             if ZombRand(100) <= bchance then
                                                 rolled = true;
                                             end
@@ -563,8 +563,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                             -- end
                                             -- container:setDrawDirty(true);
                                             -- they didnt help (
-                                            container:AddItems(item, n);
-                                            
+                                            container:AddItems(item:getFullType(), n);
                                             player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
                                             if SandboxVars.MoreTraits.ScroungerHighlights == true then
                                                 if not playerData.scroungerHighlightsTbl then
