@@ -1,19 +1,2 @@
 Changelog Notes:
-Fix Martial artist not working in different game localizations.
-Added New Trait: Vagabond, Credit: Udo
-Added New Trait: Paranoia, Credit: Udo
-Fix Specialization: Weapons not working with Spears.
-Set Infection Level to Zero when removing Infection
-Fix Scrounger duplicating Cigarettes.
-Fix Bad Teeth Null Pointer Exception.
-Fix getName() to getType() calls for localizations.
-Remove Exclusivity from Bouncer and Action Hero
-Add Scaling factor for martial artist to sandbox settings
-Decrease how frequently Butterfingers triggers.
-Add Sandbox option for Butterfingers trigger rate.
-Notify player when Butterfingers triggers.
-Add German translation by Marcv0dka.
-Reimplement Scrounger/Incomprehensive/Antique Collector in multiplayer
-Notify player when Scrounger triggers.
-Various tweaks to item generation statistics.
-Prevent Evasive from dodging when Bandaging/Unbandaging wounds.
+Fix Ascetic burning food too fast.

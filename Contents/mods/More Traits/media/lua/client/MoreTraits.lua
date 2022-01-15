@@ -2155,8 +2155,9 @@ local function setFoodState(food, state)
         itemdata.sFoodState = "Normal";
     elseif state == "Ascetic" then
         if food:isIsCookable() == true and food:isCooked() == false and curStage == 0 then
-            food:setMinutesToCook(itemdata.origCookTime * 1.5);
-            food:setMinutesToBurn(itemdata.origBurnTime * 0.5);
+            local cookTime = itemdata.origCookTime;
+            food:setMinutesToCook(cookTime * 1.5);
+            food:setMinutesToBurn((cookTime * 1.5) + ((itemdata.origBurnTime - cookTime) * 0.5));
             food:setUnhappyChange(0);
             food:setBoredomChange(0);
             food:setGoodHot(false);
