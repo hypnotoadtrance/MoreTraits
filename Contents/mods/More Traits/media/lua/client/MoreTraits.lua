@@ -66,7 +66,7 @@ function ZombificationCure_OnCreate(items, result, player)
     local bodyParts = bodyDamage:getBodyParts();
     for i = bodyParts:size() - 1, 0, -1 do
         local bodyPart = bodyParts:get(i);
-        if bodyPart.IsInfected() then
+        if bodyPart:IsInfected() then
             bodyPart:RestoreToFullHealth();
         end
     end
