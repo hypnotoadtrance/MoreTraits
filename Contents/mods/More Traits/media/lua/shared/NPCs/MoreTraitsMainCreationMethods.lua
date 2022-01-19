@@ -13,8 +13,11 @@ local function initToadTraits()
     local preparedpack = TraitFactory.addTrait("preparedpack", getText("UI_trait_preparedpack"), 1, getText("UI_trait_preparedpackdesc"), false, false);
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
-    local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
-    generator:getFreeRecipes():add("Generator");
+    if getActivatedMods():contains("DynamicTraits") == false then
+        --Use DynamicTraits' Generator trait if it exists.
+        local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
+        generator:getFreeRecipes():add("Generator");
+    end
     local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 6, getText("UI_trait_ingenuitivedesc"), false, false);
     ingenuitive:getFreeRecipes():add("Generator");
     ingenuitive:getFreeRecipes():add("Make Mildew Cure");
@@ -173,14 +176,17 @@ local function initToadTraits()
     local gymgoer = TraitFactory.addTrait("gymgoer", getText("UI_trait_gymgoer"), 5, getText("UI_trait_gymgoerdesc"), false, false);
     gymgoer:addXPBoost(Perks.Strength, 1);
     gymgoer:addXPBoost(Perks.Fitness, 1);
-	local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 2, getText("UI_trait_vagabonddesc"), false, false);
-	local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
+    local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 2, getText("UI_trait_vagabonddesc"), false, false);
+    local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     --===========--
     --Bad Traits--
     --===========--
     local packmouse = TraitFactory.addTrait("packmouse", getText("UI_trait_packmouse"), -7, getText("UI_trait_packmousedesc"), false, false);
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
-    local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -12, getText("UI_trait_drinkerdesc"), false, false);
+    if getActivatedMods():contains("DynamicTraits") == false then
+        --Use DynamicTraits' Alcoholic trait if it exists.
+        local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -12, getText("UI_trait_drinkerdesc"), false, false);
+    end
     local broke = TraitFactory.addTrait("broke", getText("UI_trait_broke"), -8, getText("UI_trait_brokedesc"), false, false);
     local butterfingers = TraitFactory.addTrait("butterfingers", getText("UI_trait_butterfingers"), -10, getText("UI_trait_butterfingersdesc"), false, false);
     local incomprehensive = TraitFactory.addTrait("incomprehensive", getText("UI_trait_incomprehensive"), -10, getText("UI_trait_incomprehensivedesc"), false, false);
