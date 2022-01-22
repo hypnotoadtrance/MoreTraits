@@ -213,6 +213,7 @@ end
 
 local function initToadTraitsPerks(_player)
     local player = _player;
+    local playerdata = player:getModData();
     local damage = 25;
     local bandagestrength = 5;
     local splintstrength = 0.9;
@@ -222,15 +223,16 @@ local function initToadTraitsPerks(_player)
     if SandboxVars.MoreTraits.LuckImpact then
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
-    player:getModData().bToadTraitDepressed = false;
-    player:getModData().indefatigablecooldown = 0;
-    player:getModData().bindefatigable = false;
-    player:getModData().bSatedDrink = true;
-    player:getModData().iHoursSinceDrink = 0;
-    player:getModData().iTimesCannibal = 0;
-    player:getModData().fPreviousHealthFromFoodTimer = 1000;
-    player:getModData().bWasInfected = false;
-    player:getModData().iHardyInterval = 10;
+    playerdata.bToadTraitDepressed = false;
+    playerdata.indefatigablecooldown = 0;
+    playerdata.bindefatigable = false;
+    playerdata.bSatedDrink = true;
+    playerdata.iHoursSinceDrink = 0;
+    playerdata.iTimesCannibal = 0;
+    playerdata.fPreviousHealthFromFoodTimer = 1000;
+    playerdata.bWasInfected = false;
+    playerdata.iHardyInterval = 10;
+    playerdata.iWithdrawalCooldown = 24;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -1190,6 +1192,7 @@ local function drinkerupdate(_player, _playerdata)
             playerdata.iHoursSinceDrink = 0;
             stats:setAnger(0);
             stats:setStress(0);
+            stats:setFatigue(stats:getFatigue() - 0.01);
         end
         if playerdata.bSatedDrink == false then
             if playerdata.iHoursSinceDrink > hoursthreshold then
@@ -1717,27 +1720,44 @@ local function vehicleCheck(_player)
     if player:isDriving() == true then
         local vehicle = player:getVehicle();
         local vmd = vehicle:getModData();
+        if vmd.fRegulatorSpeed == nil then
+            vmd.bUpdated = nil;
+        end
         if vmd.bUpdated == nil then
             vmd.fBrakingForce = vehicle:getBrakingForce();
             vmd.fMaxSpeed = vehicle:getMaxSpeed();
             vmd.iEngineQuality = vehicle:getEngineQuality();
             vmd.iEngineLoudness = vehicle:getEngineLoudness()
             vmd.iEnginePower = vehicle:getEnginePower();
+            vmd.iMass = vehicle:getMass();
+            vmd.iInitialMass = vehicle:getInitialMass();
+            vmd.fOffRoadEfficiency = vehicle:getScript():getOffroadEfficiency();
+            vmd.fRegulatorSpeed = vehicle:getRegulatorSpeed();
             vmd.sState = "Normal";
             vmd.bUpdated = true;
         else
             if player:HasTrait("expertdriver") and vmd.sState ~= "ExpertDriver" then
                 vehicle:setBrakingForce(vmd.fBrakingForce * 2);
-                vehicle:setEngineFeature(vmd.iEngineQuality * 1.5, vmd.iEngineLoudness * 0.25, vmd.iEnginePower * 1.5);
+                vehicle:setEngineFeature(vmd.iEngineQuality * 2, vmd.iEngineLoudness * 0.25, vmd.iEnginePower * 3);
                 vehicle:setMaxSpeed(vmd.fMaxSpeed * 1.25);
+                vehicle:setMass(vmd.iMass * 0.5);
+                vehicle:setInitialMass(vmd.iInitialMass * 0.5);
+                vehicle:updateTotalMass();
+                vehicle:getScript():setOffroadEfficiency(vmd.fOffRoadEfficiency * 2);
+                vehicle:setRegulatorSpeed(vmd.fRegulatorSpeed * 2);
                 vmd.sState = "ExpertDriver";
                 print("Vehicle State: " .. vmd.sState);
                 vehicle:update();
             end
             if player:HasTrait("poordriver") and vmd.sState ~= "PoorDriver" then
                 vehicle:setBrakingForce(vmd.fBrakingForce * 0.5);
-                vehicle:setEngineFeature(vmd.iEngineQuality * 0.75, vmd.iEngineLoudness * 1.5, vmd.iEnginePower * 0.75);
+                vehicle:setEngineFeature(vmd.iEngineQuality * 0.5, vmd.iEngineLoudness * 1.5, vmd.iEnginePower * 0.66);
                 vehicle:setMaxSpeed(vmd.fMaxSpeed * 0.75);
+                vehicle:setMass(vmd.iMass * 1.33);
+                vehicle:setInitialMass(vmd.iInitialMass * 1.33);
+                vehicle:updateTotalMass();
+                vehicle:getScript():setOffroadEfficiency(vmd.fOffRoadEfficiency * 0.5);
+                vehicle:setRegulatorSpeed(vmd.fRegulatorSpeed * 0.66);
                 vmd.sState = "PoorDriver";
                 print("Vehicle State: " .. vmd.sState);
                 vehicle:update();
@@ -1746,6 +1766,11 @@ local function vehicleCheck(_player)
                 vehicle:setBrakingForce(vmd.fBrakingForce);
                 vehicle:setEngineFeature(vmd.iEngineQuality, vmd.iEngineLoudness, vmd.iEnginePower);
                 vehicle:setMaxSpeed(vmd.fMaxSpeed);
+                vehicle:setMass(vmd.iMass);
+                vehicle:setInitialMass(vmd.iInitialMass);
+                vehicle:updateTotalMass();
+                vehicle:getScript():setOffroadEfficiency(vmd.fOffRoadEfficiency);
+                vehicle:setRegulatorSpeed(vmd.fRegulatorSpeed);
                 vmd.sState = "Normal";
                 print("Vehicle State: " .. vmd.sState);
                 vehicle:update();

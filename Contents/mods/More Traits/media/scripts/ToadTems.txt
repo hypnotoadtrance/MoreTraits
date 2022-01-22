@@ -161,7 +161,7 @@ MoreTraits {
     item BloodyCrowbar
     {
             MaxRange = 1.2,
-            WeaponSprite = Baseballbat,
+            WeaponSprite = Crowbar,
             MinAngle = 0,
             Type = Weapon,
             MinimumSwingTime = 3,
