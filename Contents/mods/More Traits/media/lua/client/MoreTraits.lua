@@ -2373,6 +2373,27 @@ function LearnAllRecipes(_player)
         end
     end
 end
+local function QuickWorker(_player, _playerdata)
+    local player = _player;
+    local playerdata = _playerdata;
+    if playerdata.iTimedActionModifier == nil then
+        playerdata.iTimedActionModifier = 1;
+    end
+    if player:HasTrait("quickworker") then
+        if player:hasTimedActions() == true then
+            local actions = player:getCharacterActions();
+            for i = actions:size() - 1, 0, -1 do
+                local action = actions:get(i);
+                local delta = action:getJobDelta();
+                local modifier = playerdata.iTimedActionModifier;
+                if delta < 0.975 then
+                    --Don't overshoot it.
+                    action:setCurrentTime(action:getCurrentTime() + modifier);
+                end
+            end
+        end
+    end
+end
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -2402,6 +2423,7 @@ local function MainPlayerUpdate(_player)
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
     albino(player);
+    QuickWorker(player, playerdata);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
     end
