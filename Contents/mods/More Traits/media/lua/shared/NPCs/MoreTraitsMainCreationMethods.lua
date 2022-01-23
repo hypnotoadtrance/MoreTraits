@@ -135,9 +135,12 @@ local function initToadTraits()
     local graverobber = TraitFactory.addTrait("graverobber", getText("UI_trait_graverobber"), 7, getText("UI_trait_graverobberdesc"), false, false);
     local gourmand = TraitFactory.addTrait("gourmand", getText("UI_trait_gourmand"), 4, getText("UI_trait_gourmanddesc"), false, false);
     gourmand:addXPBoost(Perks.Cooking, 1);
-    local gymgoer = TraitFactory.addTrait("gymgoer", getText("UI_trait_gymgoer"), 5, getText("UI_trait_gymgoerdesc"), false, false);
-    gymgoer:addXPBoost(Perks.Strength, 1);
-    gymgoer:addXPBoost(Perks.Fitness, 1);
+    if getActivatedMods():contains("DynamicTraits") == false then
+        --Use DynamicTraits' Prodigy trait if it exists.
+        local gymgoer = TraitFactory.addTrait("gymgoer", getText("UI_trait_gymgoer"), 5, getText("UI_trait_gymgoerdesc"), false, false);
+        gymgoer:addXPBoost(Perks.Strength, 1);
+        gymgoer:addXPBoost(Perks.Fitness, 1);
+    end
     local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 3, getText("UI_trait_vagabonddesc"), false, false);
     local quickworker = TraitFactory.addTrait("quickworker", getText("UI_trait_quickworker"), 9, getText("UI_trait_quickworkerdesc"), false, false);
     --===========--
