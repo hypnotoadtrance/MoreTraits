@@ -13,11 +13,6 @@ local function initToadTraits()
     local preparedpack = TraitFactory.addTrait("preparedpack", getText("UI_trait_preparedpack"), 1, getText("UI_trait_preparedpackdesc"), false, false);
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
-    if getActivatedMods():contains("DynamicTraits") == false then
-        --Use DynamicTraits' Generator trait if it exists.
-        local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
-        generator:getFreeRecipes():add("Generator");
-    end
     local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 6, getText("UI_trait_ingenuitivedesc"), false, false);
     ingenuitive:getFreeRecipes():add("Generator");
     ingenuitive:getFreeRecipes():add("Make Mildew Cure");
@@ -57,6 +52,11 @@ local function initToadTraits()
     ingenuitive:getFreeRecipes():add("Make Metal Sheet");
     ingenuitive:getFreeRecipes():add("Make Small Metal Sheet");
     ingenuitive:getFreeRecipes():add("Make Metal Roof");
+    if getActivatedMods():contains("DynamicTraits") == false then
+        --Use DynamicTraits' Generator trait if it exists.
+        local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
+        generator:getFreeRecipes():add("Generator");
+    end
     local olympian = TraitFactory.addTrait("olympian", getText("UI_trait_olympian"), 6, getText("UI_trait_olympiandesc"), false, false);
     olympian:addXPBoost(Perks.Sprinting, 1);
     olympian:addXPBoost(Perks.Fitness, 1);
@@ -259,7 +259,9 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("prospear", "problunt");
     TraitFactory.setMutualExclusive("prospear", "problade");
     TraitFactory.setMutualExclusive("thickblood", "anemic");
-    TraitFactory.setMutualExclusive("generator", "ingenuitive");
+    if getActivatedMods():contains("DynamicTraits") == false then
+        TraitFactory.setMutualExclusive("generator", "ingenuitive");
+    end
     TraitFactory.setMutualExclusive("expertdriver", "poordriver");
     TraitFactory.setMutualExclusive("Resilient", "superimmune");
     TraitFactory.setMutualExclusive("Resilient", "immunocompromised");
