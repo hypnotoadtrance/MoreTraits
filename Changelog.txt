@@ -14,3 +14,4 @@ Disable Amputee trait if Amputation mod is installed.
 Lowered amount of food given by default for Vagabond (you can change it in Sandbox options)
 Adjusted trait costs.
 Make Weight Checks more consistent.
+Tweak Gourmand freshness effect.

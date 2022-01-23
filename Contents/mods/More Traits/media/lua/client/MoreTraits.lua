@@ -2026,6 +2026,7 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                 if item:isRotten() == true then
                                     if ZombRand(100) <= basechance then
                                         item:setAge(0);
+                                        item:setLastAged(0);
                                         item:setRotten(false);
                                         item:updateAge();
                                         item:update();
@@ -2033,6 +2034,7 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                 elseif item:isFresh() == false then
                                     if ZombRand(100) <= basechance then
                                         item:setAge(0);
+                                        item:setLastAged(0);
                                         item:updateAge();
                                         item:update();
                                     end
@@ -2352,7 +2354,6 @@ local function ContainerEvents(_iSInventoryPage, _state)
         ToadTraitAntique(page, state, player);
     end
 end
-
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
