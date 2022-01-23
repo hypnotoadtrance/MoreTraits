@@ -20,17 +20,16 @@ option MoreTraits.AlcoholicFreeDrink
 	type = boolean, default = true,
 	page = MoreTraits, translation = MoreTraits_AlcoholicFreeDrink,
 }
-option MoreTraits.ScroungerHighlights
+option MoreTraits.SmokerStart
 {
 	type = boolean, default = true,
-	page = MoreTraits, translation = MoreTraits_ScroungerHighlights,
+	page = MoreTraits, translation = MoreTraits_SmokerStart,
 }
-option MoreTraits.ScroungerHighlightsMaxTime
+option MoreTraits.LuckImpact
 {
-	type = integer, min = 1, max = 720, default = 10,
-	page = MoreTraits, translation = MoreTraits_ScroungerHighlightsMaxTime,
+	type = integer, min = 0, max = 200, default = 100,
+	page = MoreTraits, translation = MoreTraits_LuckImpact,
 }
-
 option MoreTraits.AlcoholicFrequency
 {
 	type = integer, min = 1, max = 720, default = 24,
@@ -40,11 +39,6 @@ option MoreTraits.AlcoholicWithdrawal
 {
 	type = integer, min = 1, max = 720, default = 72,
 	page = MoreTraits, translation = MoreTraits_AlcoholicWithdrawal,
-}
-option MoreTraits.LuckImpact
-{
-	type = integer, min = 0, max = 200, default = 100,
-	page = MoreTraits, translation = MoreTraits_LuckImpact,
 }
 option MoreTraits.SpecializationXPPercent
 {
@@ -66,6 +60,91 @@ option MoreTraits.HardyRegeneration
 	type = integer, min = 1, max = 1000, default = 100,
 	page = MoreTraits, translation = MoreTraits_HardyRegeneration,
 }
+option MoreTraits.GymGoerPercent
+{
+	type = integer, min = 100, max = 1000, default = 200,
+	page = MoreTraits, translation = MoreTraits_GymGoerPercent,
+}
+option MoreTraits.SuperImmunePercent
+{
+	type = integer, min = 5, max = 100, default = 15,
+	page = MoreTraits, translation = MoreTraits_SuperImmunePercent,
+}
+option MoreTraits.IndefatigableRecharge
+{
+	type = integer, min = 1, max = 30, default = 7,
+	page = MoreTraits, translation = MoreTraits_IndefatigableRecharge,
+}
+option MoreTraits.GordaniteEffectiveness
+{
+	type = integer, min = 0, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_GordaniteEffectiveness,
+}
+option MoreTraits.MartialScaling
+{
+	type = integer, min = 25, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_MartialScaling,
+}
+option MoreTraits.EvasiveChance
+{
+	type = integer, min = 0, max = 100, default = 33,
+	page = MoreTraits, translation = MoreTraits_EvasiveChance,
+}
+option MoreTraits.ButterfingersChance
+{
+	type = integer, min = 100, max = 10000, default = 2000,
+	page = MoreTraits, translation = MoreTraits_ButterfingersChance,
+}
+option MoreTraits.GraveRobberChance
+{
+	type = integer, min = 1, max = 100, default = 3,
+	page = MoreTraits, translation = MoreTraits_GraveRobberChance,
+}
+option MoreTraits.GraveRobberGuaranteedLoot
+{
+	type = integer, min = 0, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_GraveRobberGuaranteedLoot,
+}
+option MoreTraits.ScroungerHighlights
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_ScroungerHighlights,
+}
+option MoreTraits.ScroungerHighlightsMaxTime
+{
+	type = integer, min = 1, max = 720, default = 10,
+	page = MoreTraits, translation = MoreTraits_ScroungerHighlightsMaxTime,
+}
+option MoreTraits.ScroungerChance
+{
+	type = integer, min = 1, max = 100, default = 20,
+	page = MoreTraits, translation = MoreTraits_ScroungerChance,
+}
+option MoreTraits.ScroungerItemChance
+{
+	type = integer, min = 1, max = 100, default = 10,
+	page = MoreTraits, translation = MoreTraits_ScroungerItemChance,
+}
+option MoreTraits.ScroungerLootModifier
+{
+	type = integer, min = 10, max = 1000, default = 30,
+	page = MoreTraits, translation = MoreTraits_ScroungerLootModifier,
+}
+option MoreTraits.IncomprehensiveChance
+{
+	type = integer, min = 1, max = 100, default = 10,
+	page = MoreTraits, translation = MoreTraits_IncomprehensiveChance,
+}
+option MoreTraits.VagabondChance
+{
+	type = integer, min = 1, max = 100, default = 33,
+	page = MoreTraits, translation = MoreTraits_VagabondChance,
+}
+option MoreTraits.VagabondGuaranteedExtraLoot
+{
+	type = integer, min = 0, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_VagabondGuaranteedExtraLoot,
+}
 option MoreTraits.WeightPackMule
 {
 	type = integer, min = 1, max = 100, default = 10,
@@ -86,57 +165,3 @@ option MoreTraits.WeightGlobalMod
 	type = integer, min = -100, max = 100, default = 0,
 	page = MoreTraits, translation = MoreTraits_WeightGlobalMod,
 }
-option MoreTraits.GymGoerPercent
-{
-	type = integer, min = 100, max = 1000, default = 200,
-	page = MoreTraits, translation = MoreTraits_GymGoerPercent,
-}
-option MoreTraits.SuperImmunePercent
-{
-	type = integer, min = 5, max = 100, default = 15,
-	page = MoreTraits, translation = MoreTraits_SuperImmunePercent,
-}
-option MoreTraits.GraveRobberChance
-{
-	type = integer, min = 1, max = 100, default = 3,
-	page = MoreTraits, translation = MoreTraits_GraveRobberChance,
-}
-option MoreTraits.GraveRobberGuaranteedLoot
-{
-	type = integer, min = 0, max = 10, default = 1,
-	page = MoreTraits, translation = MoreTraits_GraveRobberGuaranteedLoot,
-}
-option MoreTraits.IndefatigableRecharge
-{
-	type = integer, min = 1, max = 30, default = 7,
-	page = MoreTraits, translation = MoreTraits_IndefatigableRecharge,
-}
-option MoreTraits.GordaniteEffectiveness
-{
-	type = integer, min = 0, max = 1000, default = 100,
-	page = MoreTraits, translation = MoreTraits_GordaniteEffectiveness,
-}
-option MoreTraits.EvasiveChance
-{
-	type = integer, min = 0, max = 100, default = 33,
-	page = MoreTraits, translation = MoreTraits_EvasiveChance,
-}
-option MoreTraits.SmokerStart
-{
-	type = boolean, default = true,
-	page = MoreTraits, translation = MoreTraits_SmokerStart,
-}
-option MoreTraits.MartialScaling
-{
-	type = integer, min = 25, max = 1000, default = 100,
-	page = MoreTraits, translation = MoreTraits_MartialScaling,
-}
-option MoreTraits.ButterfingersChance
-{
-	type = integer, min = 100, max = 10000, default = 2000,
-	page = MoreTraits, translation = MoreTraits_ButterfingersChance,
-}
-
-
-
-

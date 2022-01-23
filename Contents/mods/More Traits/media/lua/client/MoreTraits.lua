@@ -498,6 +498,12 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     if player:HasTrait("scrounger") then
         local basechance = 20;
         local modifier = 1.3;
+        if SandboxVars.MoreTraits.ScroungerChance then
+            basechance = SandboxVars.MoreTraits.ScroungerChance;
+        end
+        if SandboxVars.MoreTraits.ScroungerLootModifier then
+            modifier = 1.0 + SandboxVars.MoreTraits.ScroungerLootModifier * 0.01;
+        end
         if player:HasTrait("Lucky") then
             basechance = basechance + 5 * luckimpact;
             modifier = modifier + 0.1 * luckimpact;
@@ -528,15 +534,18 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                         if item:getFullType() == "Base.Cigarettes" then
                                             count = math.floor(count / 20);
                                         end
-                                        local bchance = 5;
+                                        local bchance = 10;
+                                        if SandboxVars.MoreTraits.ScroungerItemChance then
+                                            bchance = SandboxVars.MoreTraits.ScroungerItemChance;
+                                        end
                                         if player:HasTrait("Lucky") then
-                                            bchance = bchance + 2 * luckimpact;
+                                            bchance = bchance + 5 * luckimpact;
                                         end
                                         if player:HasTrait("Unlucky") then
-                                            bchance = bchance - 2 * luckimpact;
+                                            bchance = bchance - 5 * luckimpact;
                                         end
                                         if item:getCategory() == "Food" then
-                                            bchance = bchance + 20;
+                                            bchance = bchance + 10;
                                         end
                                         if item:IsDrainable() then
                                             bchance = bchance + 10;
@@ -556,17 +565,8 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                             rolled = true;
                                         end
                                         if rolled then
-                                            -- one of these might help
-                                            -- _iSInventoryPage.renderDirty = true;
-                                            -- if container:getType() ~= "TradeUI" and isClient() and not container:isInCharacterInventory(player) and container:getType()~="floor" then
-                                            --     container:addItemOnServer(item);
-                                            --     -- player:Say("add on serv");
-                                            --     -- container:addItemOnServer(item, 2);
-                                            -- end
-                                            -- container:setDrawDirty(true);
-                                            -- they didnt help (
                                             container:AddItems(item:getFullType(), n);
-                                            player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
+                                            --player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
                                             if SandboxVars.MoreTraits.ScroungerHighlights == true then
                                                 if not playerData.scroungerHighlightsTbl then
                                                     playerData.scroungerHighlightsTbl = {}
@@ -620,7 +620,10 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     local containerObj;
     local container;
     if player:HasTrait("incomprehensive") then
-        local basechance = 100;
+        local basechance = 10;
+        if SandboxVars.MoreTraits.IncomprehensiveChance then
+            basechance = SandboxVars.MoreTraits.IncomprehensiveChance;
+        end
         if player:HasTrait("Lucky") then
             basechance = basechance - 5 * luckimpact;
         end
@@ -648,10 +651,10 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                                     if count == 1 then
                                         local bchance = 5;
                                         if player:HasTrait("Lucky") then
-                                            bchance = bchance - 2 * luckimpact;
+                                            bchance = bchance - 5 * luckimpact;
                                         end
                                         if player:HasTrait("Unlucky") then
-                                            bchance = bchance + 2 * luckimpact;
+                                            bchance = bchance + 5 * luckimpact;
                                         end
                                         if item:IsFood() then
                                             bchance = bchance + 10;
@@ -676,17 +679,7 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                         end
                     end
                     if tempcontainer ~= {} then
-                        -- one of these might help
-                        -- _iSInventoryPage.renderDirty = true;
-                        -- container:setDrawDirty(true);
-                        -- 
                         for _, i in pairs(tempcontainer) do
-                            -- container:DoRemoveItem(i);
-                            -- -- player:Say(string.format("Oh no, my %s", i:getFullType())); -- was for debug
-                            -- if container:getType() ~= "TradeUI" and isClient() and not container:isInCharacterInventory(player) and container:getType()~="floor" then
-                            --     container:removeItemOnServer(i);
-                            --     -- container:removeItemOnServer(item, 2); -- does not work(
-                            -- end
                             container:Remove(i);
                         end
                     end
@@ -801,6 +794,9 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
     local container;
     if player:HasTrait("vagabond") then
         local basechance = 33;
+        if SandboxVars.MoreTraits.VagabondChance then
+            basechance = SandboxVars.MoreTraits.VagabondChance;
+        end
         if player:HasTrait("Lucky") then
             basechance = basechance + 5 * luckimpact;
         end
@@ -815,7 +811,11 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
                     if container:getType() == ("bin") then
-                        local itterations = ZombRand(0, 5);
+                        local extra = 1;
+                        if SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot then
+                            extra = SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot;
+                        end
+                        local itterations = ZombRand(0, 2) + extra;
                         for itt = 0, itterations do
                             itt = itt + 1;
                             local x = ZombRand(length);
