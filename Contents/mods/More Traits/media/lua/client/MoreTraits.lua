@@ -929,6 +929,7 @@ local function Specialization(_player, _perk, _amount)
     local skip = false;
     local modifier = 75;
     local perklvl = player:getPerkLevel(_perk);
+    local perkxpmod = 1;
     if SandboxVars.MoreTraits.SpecializationXPPercent then
         modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
     end
@@ -1890,20 +1891,14 @@ function checkWeight()
         globalmod = SandboxVars.MoreTraits.WeightGlobalMod;
     end
     if player:HasTrait("packmule") then
-        if player:getMaxWeightBase() ~= mule + strength / 5 + globalmod then
-            player:setMaxWeight(mule + strength + globalmod);
-            player:setMaxWeightBase(mule + strength / 5 + globalmod);
-        end
+        player:setMaxWeight(mule + strength + globalmod);
+        player:setMaxWeightBase(mule + strength / 5 + globalmod);
     elseif player:HasTrait("packmouse") then
-        if player:getMaxWeightBase() ~= mouse + globalmod then
-            player:setMaxWeight(mouse + globalmod);
-            player:setMaxWeightBase(mouse + globalmod);
-        end
+        player:setMaxWeight(mouse + globalmod);
+        player:setMaxWeightBase(mouse + globalmod);
     else
-        if player:getMaxWeightBase() ~= default + globalmod then
-            player:setMaxWeight(default + globalmod);
-            player:setMaxWeightBase(default + globalmod);
-        end
+        player:setMaxWeight(default + globalmod);
+        player:setMaxWeightBase(default + globalmod);
     end
 end
 
