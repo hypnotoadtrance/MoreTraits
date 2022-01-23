@@ -13,7 +13,7 @@ local function initToadTraits()
     local preparedpack = TraitFactory.addTrait("preparedpack", getText("UI_trait_preparedpack"), 1, getText("UI_trait_preparedpackdesc"), false, false);
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
-    local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 6, getText("UI_trait_ingenuitivedesc"), false, false);
+    local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 5, getText("UI_trait_ingenuitivedesc"), false, false);
     ingenuitive:getFreeRecipes():add("Generator");
     ingenuitive:getFreeRecipes():add("Make Mildew Cure");
     ingenuitive:getFreeRecipes():add("Make Flies Cure");
@@ -57,7 +57,7 @@ local function initToadTraits()
         local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
         generator:getFreeRecipes():add("Generator");
     end
-    local olympian = TraitFactory.addTrait("olympian", getText("UI_trait_olympian"), 6, getText("UI_trait_olympiandesc"), false, false);
+    local olympian = TraitFactory.addTrait("olympian", getText("UI_trait_olympian"), 5, getText("UI_trait_olympiandesc"), false, false);
     olympian:addXPBoost(Perks.Sprinting, 1);
     olympian:addXPBoost(Perks.Fitness, 1);
     local bouncer = TraitFactory.addTrait("bouncer", getText("UI_trait_bouncer"), 5, getText("UI_trait_bouncerdesc"), false, false);
@@ -66,14 +66,14 @@ local function initToadTraits()
     local martial = TraitFactory.addTrait("martial", getText("UI_trait_martial"), 5, getText("UI_trait_martialdesc"), false, false);
     martial:addXPBoost(Perks.Fitness, 1);
     martial:addXPBoost(Perks.SmallBlunt, 1);
-    local flexible = TraitFactory.addTrait("flexible", getText("UI_trait_flexible"), 2, getText("UI_trait_flexibledesc"), false, false);
+    local flexible = TraitFactory.addTrait("flexible", getText("UI_trait_flexible"), 3, getText("UI_trait_flexibledesc"), false, false);
     flexible:addXPBoost(Perks.Nimble, 1);
     local grunt = TraitFactory.addTrait("grunt", getText("UI_trait_grunt"), 4, getText("UI_trait_gruntdesc"), false, false);
     grunt:addXPBoost(Perks.Woodwork, 1);
     grunt:addXPBoost(Perks.SmallBlunt, 1);
-    local quiet = TraitFactory.addTrait("quiet", getText("UI_trait_quiet"), 3, getText("UI_trait_quietdesc"), false, false);
+    local quiet = TraitFactory.addTrait("quiet", getText("UI_trait_quiet"), 2, getText("UI_trait_quietdesc"), false, false);
     quiet:addXPBoost(Perks.Sneak, 1);
-    local tinkerer = TraitFactory.addTrait("tinkerer", getText("UI_trait_tinkerer"), 6, getText("UI_trait_tinkererdesc"), false, false);
+    local tinkerer = TraitFactory.addTrait("tinkerer", getText("UI_trait_tinkerer"), 5, getText("UI_trait_tinkererdesc"), false, false);
     tinkerer:addXPBoost(Perks.Electricity, 1);
     tinkerer:addXPBoost(Perks.Mechanics, 1);
     tinkerer:addXPBoost(Perks.Tailoring, 1);
@@ -92,7 +92,7 @@ local function initToadTraits()
     wildsman:getFreeRecipes():add("Make Snare Trap");
     wildsman:getFreeRecipes():add("Make Fishing Rod");
     wildsman:getFreeRecipes():add("Fix Fishing Rod");
-    local natural = TraitFactory.addTrait("natural", getText("UI_trait_natural"), 5, getText("UI_trait_naturaldesc"), false, false);
+    local natural = TraitFactory.addTrait("natural", getText("UI_trait_natural"), 4, getText("UI_trait_naturaldesc"), false, false);
     natural:addXPBoost(Perks.Cooking, 1);
     natural:addXPBoost(Perks.PlantScavenging, 1);
     local bladetwirl = TraitFactory.addTrait("bladetwirl", getText("UI_trait_bladetwirl"), 5, getText("UI_trait_bladetwirldesc"), false, false);
@@ -105,7 +105,7 @@ local function initToadTraits()
     local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 4, getText("UI_trait_antiquedesc"), false, false);
     local evasive = TraitFactory.addTrait("evasive", getText("UI_trait_evasive"), 8, getText("UI_trait_evasivedesc"), false, false);
     evasive:addXPBoost(Perks.Nimble, 1);
-    local blissful = TraitFactory.addTrait("blissful", getText("UI_trait_blissful"), 2, getText("UI_trait_blissfuldesc"), false, false);
+    local blissful = TraitFactory.addTrait("blissful", getText("UI_trait_blissful"), 3, getText("UI_trait_blissfuldesc"), false, false);
     local specweapons = TraitFactory.addTrait("specweapons", getText("UI_trait_specweapons"), 12, getText("UI_trait_specweaponsdesc"), false, false);
     specweapons:addXPBoost(Perks.Axe, 2);
     specweapons:addXPBoost(Perks.Spear, 2);
@@ -150,7 +150,7 @@ local function initToadTraits()
     local gordanite = TraitFactory.addTrait("gordanite", getText("UI_trait_gordanite"), 6, getText("UI_trait_gordanitedesc"), false, false);
     gordanite:addXPBoost(Perks.Blunt, 1);
     local indefatigable = TraitFactory.addTrait("indefatigable", getText("UI_trait_indefatigable"), 10, getText("UI_trait_indefatigabledesc"), false, false);
-    local hardy = TraitFactory.addTrait("hardy", getText("UI_trait_hardy"), 6, getText("UI_trait_hardydesc"), false, false);
+    local hardy = TraitFactory.addTrait("hardy", getText("UI_trait_hardy"), 5, getText("UI_trait_hardydesc"), false, false);
     hardy:addXPBoost(Perks.Strength, 1);
     local bluntperk = TraitFactory.addTrait("problunt", getText("UI_trait_problunt"), 7, getText("UI_trait_probluntdesc"), false, false);
     bluntperk:addXPBoost(Perks.SmallBlunt, 1);
@@ -176,11 +176,11 @@ local function initToadTraits()
     local gymgoer = TraitFactory.addTrait("gymgoer", getText("UI_trait_gymgoer"), 5, getText("UI_trait_gymgoerdesc"), false, false);
     gymgoer:addXPBoost(Perks.Strength, 1);
     gymgoer:addXPBoost(Perks.Fitness, 1);
-    local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 2, getText("UI_trait_vagabonddesc"), false, false);
-    local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
+    local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 3, getText("UI_trait_vagabonddesc"), false, false);
     --===========--
     --Bad Traits--
     --===========--
+    local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     local packmouse = TraitFactory.addTrait("packmouse", getText("UI_trait_packmouse"), -7, getText("UI_trait_packmousedesc"), false, false);
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
     if getActivatedMods():contains("DynamicTraits") == false then
@@ -192,7 +192,7 @@ local function initToadTraits()
     local incomprehensive = TraitFactory.addTrait("incomprehensive", getText("UI_trait_incomprehensive"), -10, getText("UI_trait_incomprehensivedesc"), false, false);
     local depressive = TraitFactory.addTrait("depressive", getText("UI_trait_depressive"), -4, getText("UI_trait_depressivedesc"), false, false);
     local selfdestructive = TraitFactory.addTrait("selfdestructive", getText("UI_trait_selfdestructive"), -4, getText("UI_trait_selfdestructivedesc"), false, false);
-    local badteeth = TraitFactory.addTrait("badteeth", getText("UI_trait_badteeth"), -2, getText("UI_trait_badteethdesc"), false, false);
+    local badteeth = TraitFactory.addTrait("badteeth", getText("UI_trait_badteeth"), -3, getText("UI_trait_badteethdesc"), false, false);
     local albino = TraitFactory.addTrait("albino", getText("UI_trait_albino"), -5, getText("UI_trait_albinodesc"), false, false);
     if getActivatedMods():contains("Amputation") == false then
         --Don't enable Amputee trait if the Amputation mod is installed.

@@ -1,6 +1,7 @@
 Changelog Notes:
 Fix Ascetic burning food too fast.
 Fix Zombification Cure not setting infection correctly.
+Fix incomprehensive triggering too often.
 Add Compatibility for Dynamic Traits
 Bloody Crowbar uses correct weapon model
 Alcoholic gets less fatigue from alcohol.
@@ -10,3 +11,5 @@ Add Sandbox options for Scrounger, Incomprehensive, and Vagabond.
 Fix Paranoia triggering during sleep and too frequently.
 Reorganize Sandbox Settings menu.
 Disable Amputee trait if Amputation mod is installed.
+Lowered amount of food given by default for Vagabond (you can change it in Sandbox options)
+Adjusted trait costs.
