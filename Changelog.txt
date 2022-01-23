@@ -7,3 +7,5 @@ Alcoholic gets less fatigue from alcohol.
 Update Expert/Student Driver functions
 Remove Scrounger callout.
 Add Sandbox options for Scrounger, Incomprehensive, and Vagabond.
+Fix Paranoia triggering during sleep and too frequently.
+Reorganize Sandbox Settings menu.

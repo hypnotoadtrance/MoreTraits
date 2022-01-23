@@ -233,6 +233,7 @@ local function initToadTraitsPerks(_player)
     playerdata.bWasInfected = false;
     playerdata.iHardyInterval = 10;
     playerdata.iWithdrawalCooldown = 24;
+    playerdata.iParanoiaCooldown = 10;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -471,21 +472,35 @@ end
 
 local function ToadTraitParanoia()
     local player = getPlayer();
+    local playerdata = player:getModData();
     if player:HasTrait("paranoia") then
-        local basechance = 1;
-        local randNum = ZombRand(100) + 1
-        randNum = randNum - (randNum * player:getStats():getStress())
-        if randNum <= basechance then
-            getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0);
-            local panic = player:getStats():getPanic() + 25
-            local stress = player:getStats():getStress() + 0.1
-            player:getStats():setPanic(panic)
-            player:getStats():setStress(stress)
-            if player:isFemale() then
-                getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.05);
-            else
-                getSoundManager():PlaySound("male_heavybreathpanic", false, 5):setVolume(0.05);
+        if playerdata.iParanoiaCooldown == nil then
+            playerdata.iParanoiaCooldown = 0;
+        end
+        if playerdata.iParanoiaCooldown <= 0 then
+            if player:isPlayerMoving() == true then
+                local basechance = 1;
+                local randNum = ZombRand(100) + 1;
+                local stats = player:getStats();
+                local panic = stats:getPanic();
+                local stress = stats:getStress();
+                randNum = randNum - (randNum * stats:getStress());
+                if randNum <= basechance then
+                    getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0);
+                    panic = panic + 25;
+                    stress = stress + 0.1;
+                    stats:setPanic(panic);
+                    stats:setStress(stress);
+                    playerdata.iParanoiaCooldown = 30;
+                    if player:isFemale() then
+                        getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.05);
+                    else
+                        getSoundManager():PlaySound("male_heavybreathpanic", false, 5):setVolume(0.05);
+                    end
+                end
             end
+        else
+            playerdata.iParanoiaCooldown = playerdata.iParanoiaCooldown - 1;
         end
     end
 end
