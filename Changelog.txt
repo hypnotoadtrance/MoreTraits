@@ -9,3 +9,4 @@ Remove Scrounger callout.
 Add Sandbox options for Scrounger, Incomprehensive, and Vagabond.
 Fix Paranoia triggering during sleep and too frequently.
 Reorganize Sandbox Settings menu.
+Disable Amputee trait if Amputation mod is installed.

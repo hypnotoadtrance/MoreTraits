@@ -1546,6 +1546,10 @@ local function amputee(_player, justGotInfected)
     local player = _player;
     local bodydamage = player:getBodyDamage();
     if player:HasTrait("amputee") then
+        if getActivatedMods():contains("Amputation") == true then
+            --Failsafe just in case Amputee shares its name with the trait from Amputation mod.
+            return ;
+        end
         local handitem = player:getSecondaryHandItem();
         local bodydamage = player:getBodyDamage();
         if handitem ~= nil then
