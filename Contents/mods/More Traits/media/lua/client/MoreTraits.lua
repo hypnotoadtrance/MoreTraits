@@ -313,6 +313,7 @@ local function initToadTraitsPerks(_player)
     player:getModData().ToadTraitBodyDamage = nil;
     suspendevasive = false;
     checkWeight();
+    LearnAllRecipes(player);
 end
 
 local function ToadTraitEvasive(_player, _playerdata)
@@ -1208,14 +1209,20 @@ local function drinkerupdate(_player, _playerdata)
             playerdata.iHoursSinceDrink = 0;
             stats:setAnger(0);
             stats:setStress(0);
-            stats:setFatigue(stats:getFatigue() - 0.01);
+        end
+        if drunkness > 0 then
+            if internalTick >= 25 then
+                stats:setFatigue(stats:getFatigue() - 0.001);
+            end
         end
         if playerdata.bSatedDrink == false then
             if playerdata.iHoursSinceDrink > hoursthreshold then
                 stats:setPain(playerdata.iHoursSinceDrink / divider);
             end
-            stats:setAnger(anger + 0.001);
-            stats:setStress(stress + 0.001);
+            if internalTick >= 25 then
+                stats:setAnger(anger + 0.001);
+                stats:setStress(stress + 0.001);
+            end
         end
     end
 end
@@ -2019,8 +2026,8 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                     containerObj:getModData().bGourmandRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
-                    for i = 0, container:getItems():size() - 1 do
-                        local item = container:getItems():get(i);
+                    for l = 0, container:getItems():size() - 1 do
+                        local item = container:getItems():get(l);
                         if item ~= nil then
                             if item:getCategory() == "Food" then
                                 if item:isRotten() == true then
@@ -2352,6 +2359,18 @@ local function ContainerEvents(_iSInventoryPage, _state)
         ToadTraitVagabond(page, state, player);
         Gourmand(page, state, player);
         ToadTraitAntique(page, state, player);
+    end
+end
+function LearnAllRecipes(_player)
+    local player = _player;
+    local recipes = getScriptManager():getAllRecipes()
+    for i = recipes:size() - 1, 0, -1 do
+        local recipe = recipes:get(i);
+        if recipe:needToBeLearn() == true then
+            if player:isRecipeKnown(recipe) == false then
+                player:learnRecipe(recipe:getOriginalname());
+            end
+        end
     end
 end
 local function MainPlayerUpdate(_player)

@@ -13,45 +13,7 @@ local function initToadTraits()
     local preparedpack = TraitFactory.addTrait("preparedpack", getText("UI_trait_preparedpack"), 1, getText("UI_trait_preparedpackdesc"), false, false);
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
-    local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 5, getText("UI_trait_ingenuitivedesc"), false, false);
-    ingenuitive:getFreeRecipes():add("Generator");
-    ingenuitive:getFreeRecipes():add("Make Mildew Cure");
-    ingenuitive:getFreeRecipes():add("Make Flies Cure");
-    ingenuitive:getFreeRecipes():add("Make Cake Batter");
-    ingenuitive:getFreeRecipes():add("Make Pie Dough");
-    ingenuitive:getFreeRecipes():add("Make Bread Dough");
-    ingenuitive:getFreeRecipes():add("Herbalist");
-    ingenuitive:getFreeRecipes():add("Make Stick Trap");
-    ingenuitive:getFreeRecipes():add("Make Snare Trap");
-    ingenuitive:getFreeRecipes():add("Make Wooden Cage Trap");
-    ingenuitive:getFreeRecipes():add("Make Trap Box");
-    ingenuitive:getFreeRecipes():add("Make Cage Trap");
-    ingenuitive:getFreeRecipes():add("Basic Mechanics");
-    ingenuitive:getFreeRecipes():add("Intermediate Mechanics");
-    ingenuitive:getFreeRecipes():add("Advanced Mechanics")
-    ingenuitive:getFreeRecipes():add("Make Fishing Rod");
-    ingenuitive:getFreeRecipes():add("Fix Fishing Rod");
-    ingenuitive:getFreeRecipes():add("Get Wire Back");
-    ingenuitive:getFreeRecipes():add("Make Fishing Net");
-    ingenuitive:getFreeRecipes():add("Make Remote Controller V1");
-    ingenuitive:getFreeRecipes():add("Make Remote Controller V2");
-    ingenuitive:getFreeRecipes():add("Make Remote Controller V3");
-    ingenuitive:getFreeRecipes():add("Make Remote Trigger");
-    ingenuitive:getFreeRecipes():add("Make Timer");
-    ingenuitive:getFreeRecipes():add("Craft Makeshift Radio");
-    ingenuitive:getFreeRecipes():add("Craft Makeshift HAM Radio");
-    ingenuitive:getFreeRecipes():add("Craft Makeshift Walkie Talkie");
-    ingenuitive:getFreeRecipes():add("Make Aerosol bomb");
-    ingenuitive:getFreeRecipes():add("Make Flame bomb");
-    ingenuitive:getFreeRecipes():add("Make Pipe bomb");
-    ingenuitive:getFreeRecipes():add("Make Noise generator");
-    ingenuitive:getFreeRecipes():add("Make Smoke Bomb");
-    ingenuitive:getFreeRecipes():add("Make Metal Walls");
-    ingenuitive:getFreeRecipes():add("Make Metal Fences");
-    ingenuitive:getFreeRecipes():add("Make Metal Containers");
-    ingenuitive:getFreeRecipes():add("Make Metal Sheet");
-    ingenuitive:getFreeRecipes():add("Make Small Metal Sheet");
-    ingenuitive:getFreeRecipes():add("Make Metal Roof");
+    local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 6, getText("UI_trait_ingenuitivedesc"), false, false);
     if getActivatedMods():contains("DynamicTraits") == false then
         --Use DynamicTraits' Generator trait if it exists.
         local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
