@@ -2373,19 +2373,18 @@ function LearnAllRecipes(_player)
         end
     end
 end
-local function QuickWorker(_player, _playerdata)
+local function QuickWorker(_player)
     local player = _player;
-    local playerdata = _playerdata;
-    if playerdata.iTimedActionModifier == nil then
-        playerdata.iTimedActionModifier = 1;
-    end
     if player:HasTrait("quickworker") then
         if player:hasTimedActions() == true then
             local actions = player:getCharacterActions();
             for i = actions:size() - 1, 0, -1 do
                 local action = actions:get(i);
                 local delta = action:getJobDelta();
-                local modifier = playerdata.iTimedActionModifier;
+                local modifier = 1;
+                if SandboxVars.MoreTraits.QuickWorkerScaler then
+                    modifier = SandboxVars.MoreTraits.QuickWorkerScaler;
+                end
                 if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
                     modifier = modifier + 1 * luckimpact;
                 elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
@@ -2396,7 +2395,10 @@ local function QuickWorker(_player, _playerdata)
                 elseif player:HasTrait("AllThumbs") and ZombRand(100) <= 10 then
                     modifier = modifier - 1;
                 end
-                if delta < 0.975 then
+                if modifier < 0 then
+                    modifier = 0;
+                end
+                if delta < 0.99 - (modifier * 0.01) then
                     --Don't overshoot it.
                     action:setCurrentTime(action:getCurrentTime() + modifier);
                 end
@@ -2433,7 +2435,7 @@ local function MainPlayerUpdate(_player)
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
     albino(player);
-    QuickWorker(player, playerdata);
+    QuickWorker(player);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
     end

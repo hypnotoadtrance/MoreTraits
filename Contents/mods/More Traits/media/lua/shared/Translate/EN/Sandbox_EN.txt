@@ -65,4 +65,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_VagabondChance_tooltip = "A percent value representing the chance that a player with the Vagabond trait will find extra food in a garbage bin.<br>Setting this to 100% would make every trash bin contain extra food.",
     Sandbox_MoreTraits_VagabondGuaranteedExtraLoot = "Vagabond Guaranteed Extra Loot",
     Sandbox_MoreTraits_VagabondGuaranteedExtraLoot_tooltip = "How many extra food items is a player with the Vagabond trait guaranteed to find in a garbage bin?<br>By default, a random value between 0 and 2 is selected. This value adds to that range.<br>(eg; roll a random number between 0 and 2 and then add x, where x is this value.)",
+    Sandbox_MoreTraits_QuickWorkerScaler = "Quick Worker Scaling",
+    Sandbox_MoreTraits_QuickWorkerScaler_tooltip = "How much extra time is added to TimedActions being performed by players with the Quick Worker trait.<br>Higher values make TimedActions perform more rapidly.",
 }

@@ -165,3 +165,8 @@ option MoreTraits.WeightGlobalMod
 	type = integer, min = -100, max = 100, default = 0,
 	page = MoreTraits, translation = MoreTraits_WeightGlobalMod,
 }
+option MoreTraits.QuickWorkerScaler
+{
+	type = integer, min = 1, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_QuickWorkerScaler,
+}
