@@ -17,3 +17,4 @@ Make Weight Checks more consistent.
 Tweak Gourmand freshness effect.
 Ingenuitive now teaches all recipes.
 Add new trait: Quick Worker
+Add options to disable Prepared and Specialization traits.
