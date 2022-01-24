@@ -313,7 +313,9 @@ local function initToadTraitsPerks(_player)
     player:getModData().ToadTraitBodyDamage = nil;
     suspendevasive = false;
     checkWeight();
-    LearnAllRecipes(player);
+    if player:HasTrait("ingenuitive") then
+        LearnAllRecipes(player);
+    end
 end
 
 local function ToadTraitEvasive(_player, _playerdata)
@@ -2363,12 +2365,41 @@ local function ContainerEvents(_iSInventoryPage, _state)
 end
 function LearnAllRecipes(_player)
     local player = _player;
-    local recipes = getScriptManager():getAllRecipes()
-    for i = recipes:size() - 1, 0, -1 do
-        local recipe = recipes:get(i);
-        if recipe:needToBeLearn() == true then
-            if player:isRecipeKnown(recipe) == false then
-                player:learnRecipe(recipe:getOriginalname());
+    local recipes = getScriptManager():getAllRecipes();
+    if SandboxVars.MoreTraits.IngenuitiveLimit == true then
+        local percenttolearn = 0.5;
+        local unknownrecipes = {};
+        if SandboxVars.MoreTraits.IngenuitiveLimitAmount then
+            percenttolearn = SandboxVars.MoreTraits.IngenuitiveLimitAmount * 0.01;
+        end
+        for i = recipes:size() - 1, 0, -1 do
+            local recipe = recipes:get(i);
+            if recipe:needToBeLearn() == true then
+                if player:isRecipeKnown(recipe) == false then
+                    table.insert(unknownrecipes, recipe:getOriginalname());
+                end
+            end
+        end
+        if tablelength(unknownrecipes) > 1 then
+            local amntunknown = tablelength(unknownrecipes) - 1;
+            local newamnt = amntunknown * percenttolearn;
+            local amntlearned = 0;
+            repeat
+                for i = tablelength(unknownrecipes) - 1, 0, -1 do
+                    if ZombRand(0, 100) <= 5 then
+                        player:learnRecipe(unknownrecipes[i]);
+                        amntlearned = amntlearned + 1;
+                    end
+                end
+            until (amntlearned >= newamnt)
+        end
+    else
+        for i = recipes:size() - 1, 0, -1 do
+            local recipe = recipes:get(i);
+            if recipe:needToBeLearn() == true then
+                if player:isRecipeKnown(recipe) == false then
+                    player:learnRecipe(recipe:getOriginalname());
+                end
             end
         end
     end
@@ -2383,7 +2414,7 @@ local function QuickWorker(_player)
                 local delta = action:getJobDelta();
                 local modifier = 1;
                 if SandboxVars.MoreTraits.QuickWorkerScaler then
-                    modifier = SandboxVars.MoreTraits.QuickWorkerScaler;
+                    modifier = SandboxVars.MoreTraits.QuickWorkerScaler * 0.01;
                 end
                 if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
                     modifier = modifier + 1 * luckimpact;

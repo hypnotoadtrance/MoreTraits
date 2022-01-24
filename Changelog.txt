@@ -1,20 +1,5 @@
 Changelog Notes:
-Fix Ascetic burning food too fast.
-Fix Zombification Cure not setting infection correctly.
-Fix incomprehensive triggering too often.
-Add Compatibility for Dynamic Traits
-Bloody Crowbar uses correct weapon model
-Alcoholic gets less fatigue from alcohol.
-Update Expert/Student Driver functions
-Remove Scrounger callout.
-Add Sandbox options for Scrounger, Incomprehensive, and Vagabond.
-Fix Paranoia triggering during sleep and too frequently.
-Reorganize Sandbox Settings menu.
-Disable Amputee trait if Amputation mod is installed.
-Lowered amount of food given by default for Vagabond (you can change it in Sandbox options)
-Adjusted trait costs.
-Make Weight Checks more consistent.
-Tweak Gourmand freshness effect.
-Ingenuitive now teaches all recipes.
-Add new trait: Quick Worker
-Add options to disable Prepared and Specialization traits.
+Fix bug in Ingenuitive giving all recipes even if trait not selected.
+Add finer granularity to Quick Worker scaler in Sandbox settings.
+Add limiter to Ingenuitive in Sandbox options.
+Increase cost of Ingenuitive.

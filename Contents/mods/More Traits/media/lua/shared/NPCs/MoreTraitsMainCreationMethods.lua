@@ -16,7 +16,7 @@ local function initToadTraits()
     end
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
-    local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 6, getText("UI_trait_ingenuitivedesc"), false, false);
+    local ingenuitive = TraitFactory.addTrait("ingenuitive", getText("UI_trait_ingenuitive"), 9, getText("UI_trait_ingenuitivedesc"), false, false);
     if getActivatedMods():contains("DynamicTraits") == false then
         --Use DynamicTraits' Generator trait if it exists.
         local generator = TraitFactory.addTrait("generator", getText("UI_trait_generator"), 2, getText("UI_trait_generatordesc"), false, false);
