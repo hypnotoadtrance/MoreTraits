@@ -6,3 +6,4 @@ Fix Ingenuitive not giving Mechanics for some dumb reason.
 Remove Zombification Cure from the game
 - There are other mods that add a cure and do so much more effectively, if you would like this in your game, consider one of those instead.
 - The Recipes to create the cure have been removed. The item will remain for compatibility purposes for a few versions before being ultimately removed.
+Add new trait: Lead Foot

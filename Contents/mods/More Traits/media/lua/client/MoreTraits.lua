@@ -2441,6 +2441,32 @@ local function QuickWorker(_player)
         end
     end
 end
+local function LeadFoot(_player)
+    local player = _player;
+    local shoes = player:getClothingItem_Feet();
+    local itemdata = nil;
+    if shoes ~= nil then
+        itemdata = shoes:getModData();
+        local origstomp = itemdata.origStomp;
+        if origstomp == nil then
+            origstomp = shoes:getStompPower();
+            itemdata.origStomp = origstomp;
+            itemdata.stompState = "Normal";
+        end
+        if player:HasTrait("leadfoot") then
+            if itemdata.stompState ~= "LeadFoot" then
+                local newstomp = origstomp * 2 + 1;
+                shoes:setStompPower(newstomp);
+                itemdata.stompState = "LeadFoot";
+            end
+        else
+            if shoes:getStompPower() ~= origstomp then
+                shoes:setStompPower(origstomp);
+                itemdata.stompState = "Normal";
+            end
+        end
+    end
+end
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -2482,6 +2508,7 @@ local function EveryOneMinute()
     ToadTraitParanoia(player, playerdata);
     ToadTraitButter(player);
     UnHighlightScrounger(player, playerdata);
+    LeadFoot(player);
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
