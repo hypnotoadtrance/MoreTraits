@@ -285,7 +285,7 @@ MoreTraits {
         Type	=	Literature,
         DisplayName	=	The Medical Magazine Vol. 4,
         Icon	=	MagazineBlacksmith4,
-        TeachedRecipes  =   Improvise Antibiotics; Improvise Zombification Cure,
+        TeachedRecipes  =   Improvise Antibiotics,
          ReplaceOnUse    =   MoreTraits.MedicalMag4,
         StaticModel = Magazine,
     }

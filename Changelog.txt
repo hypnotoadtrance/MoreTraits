@@ -2,3 +2,6 @@ Changelog Notes:
 Re-enable default free recipes for Ingenuitive in addition to learning all other recipes.
 Fix bug in Quick Worker erroring on TimedWalkActions.
 Fix player Weight reducing for a split second.
+Remove Zombification Cure from the game
+- There are other mods that add a cure and do so much more effectively, if you would like this in your game, consider one of those instead.
+- The Recipes to create the cure have been removed. The item will remain for compatibility purposes for a few versions before being ultimately removed.

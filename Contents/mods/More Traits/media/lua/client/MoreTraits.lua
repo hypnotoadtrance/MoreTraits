@@ -2000,7 +2000,7 @@ local function graveRobber(_zombie)
                     local randomitem = { "Base.PropaneTank", "Base.BlowTorch", "Base.Woodglue", "Base.DuctTape", "Base.Rope", "Base.Extinguisher" };
                     inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
                 elseif roll <= 100 then
-                    local randomitem = { "Base.Spiffo", "Base.SpiffoSuit", "Base.Hat_Spiffo", "Base.SpiffoTail", "MoreTraits.ZombificationCure", "Base.Generator" };
+                    local randomitem = { "Base.Spiffo", "Base.SpiffoSuit", "Base.Hat_Spiffo", "Base.SpiffoTail", "Base.Generator" };
                     inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
                 end
             end

@@ -149,7 +149,6 @@ local function initToadTraits()
         specaid:getFreeRecipes():add("Improvise Antidepressants");
         specaid:getFreeRecipes():add("Improvise Betablockers");
         specaid:getFreeRecipes():add("Improvise Sleeping Pills");
-        specaid:getFreeRecipes():add("Improvise Zombification Cure");
     end
     local gordanite = TraitFactory.addTrait("gordanite", getText("UI_trait_gordanite"), 6, getText("UI_trait_gordanitedesc"), false, false);
     gordanite:addXPBoost(Perks.Blunt, 1);

@@ -143,19 +143,6 @@ recipe Improvise Sleeping Pills
     NeedToBeLearn: true,
     Time: 250.0
 }
-recipe Improvise Zombification Cure
-{
-    keep Base.MortarPestle,
-    Base.WhiskeyFull/Base.BeerCan/Base.Wine/Base.Wine2,Base.PetrolCan,Base.CorpseMale/Base.CorpseFemale,Base.Pills;10,Base.Antibiotics=5,
-    Water=10,Base.Flour,Base.Sugar,
-
-    Result: MoreTraits.ZombificationCure,
-    SkillRequired: Doctor=10,
-    CanBeDoneFromFloor: true,
-    Category: Health,
-    NeedToBeLearn: true,
-    Time: 2000.0
-}
 recipe Inject Zombification Cure
 {
     MoreTraits.ZombificationCure,
