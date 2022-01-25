@@ -20,7 +20,7 @@ UI_CN = {
     UI_trait_generator = "发电机知识",
     UI_trait_generatordesc = "你知道如何操作发电机。",
     UI_trait_ingenuitive = "匠心独运",
-    UI_trait_ingenuitivedesc = "你解决问题有一套。<br>你具有一些专业水平的合成配方的知识。",
+    UI_trait_ingenuitivedesc = "你解决问题有一套。<br>你自动拥有所有需要杂志或者专业知识才可以掌握的合成配方。<br>（这包括由mod增加的配方）",
     UI_trait_olympian = "奥运选手",
     UI_trait_olympiandesc = "你是、或者说曾经是一名奥运选手，而你的速度和体格可以反映这一点。<br>+1冲刺<br>+1体格",
     UI_trait_bouncer = "保镖",
@@ -151,4 +151,6 @@ UI_CN = {
     UI_trait_paranoiadesc = "周期性的，你会得到假恐惧和惊慌。<br>你需要更经常地寻找方法减轻你的压力，每次偏执症发作都会使其恶化。",
     UI_butterfingers_triggered = "*手滑了*",
     UI_scrounger_found = "哦，看，多找到一个 %s",
+    UI_trait_quickworker = "快速工作",
+    UI_trait_quickworkerdesc = "你做什么都总能找到较优解。<br>你在进行需时间操作时（例如锯木头、合成物品或拆解家具）会进行的更快。",
 }
