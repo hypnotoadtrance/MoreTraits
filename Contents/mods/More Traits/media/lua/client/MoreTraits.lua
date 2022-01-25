@@ -1899,15 +1899,16 @@ function checkWeight()
     if SandboxVars.MoreTraits.WeightGlobalMod then
         globalmod = SandboxVars.MoreTraits.WeightGlobalMod;
     end
+    local muleMaxWeightbonus = math.floor(mule + strength / 5 + globalmod);
+    local mouseMaxWeightbonus = math.floor(mouse + globalmod);
+    local defaultMaxWeightbonus = math.floor(default + globalmod);
     if player:HasTrait("packmule") then
-        player:setMaxWeight(mule + strength + globalmod);
-        player:setMaxWeightBase(mule + strength / 5 + globalmod);
+    player:setMaxWeightBase(muleMaxWeightbonus);
     elseif player:HasTrait("packmouse") then
-        player:setMaxWeight(mouse + globalmod);
-        player:setMaxWeightBase(mouse + globalmod);
+    player:setMaxWeightBase(mouseMaxWeightbonus);
     else
-        player:setMaxWeight(default + globalmod);
-        player:setMaxWeightBase(default + globalmod);
+    player:setMaxWeightBase(defaultMaxWeightbonus)
+    ;
     end
 end
 
