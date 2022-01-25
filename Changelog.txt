@@ -1,5 +1,2 @@
 Changelog Notes:
-Fix bug in Ingenuitive giving all recipes even if trait not selected.
-Add finer granularity to Quick Worker scaler in Sandbox settings.
-Add limiter to Ingenuitive in Sandbox options.
-Increase cost of Ingenuitive.
+Re-enable default free recipes for Ingenuitive in addition to learning all other recipes.
