@@ -2413,25 +2413,29 @@ local function QuickWorker(_player)
                 local action = actions:get(i);
                 local delta = action:getJobDelta();
                 local modifier = 1;
-                if SandboxVars.MoreTraits.QuickWorkerScaler then
-                    modifier = SandboxVars.MoreTraits.QuickWorkerScaler * 0.01;
-                end
-                if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
-                    modifier = modifier + 1 * luckimpact;
-                elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
-                    modifier = modifier - 1 * luckimpact;
-                end
-                if player:HasTrait("Dextrous") and ZombRand(100) <= 10 then
-                    modifier = modifier + 1;
-                elseif player:HasTrait("AllThumbs") and ZombRand(100) <= 10 then
-                    modifier = modifier - 1;
-                end
-                if modifier < 0 then
-                    modifier = 0;
-                end
-                if delta < 0.99 - (modifier * 0.01) then
-                    --Don't overshoot it.
-                    action:setCurrentTime(action:getCurrentTime() + modifier);
+                local blacklist = { "ISWalkToTimedAction", "ISPathFindAction" }
+                local type = action:getMetaType();
+                if tableContains(blacklist, type) == false then
+                    if SandboxVars.MoreTraits.QuickWorkerScaler then
+                        modifier = SandboxVars.MoreTraits.QuickWorkerScaler * 0.01;
+                    end
+                    if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
+                        modifier = modifier + 1 * luckimpact;
+                    elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
+                        modifier = modifier - 1 * luckimpact;
+                    end
+                    if player:HasTrait("Dextrous") and ZombRand(100) <= 10 then
+                        modifier = modifier + 1;
+                    elseif player:HasTrait("AllThumbs") and ZombRand(100) <= 10 then
+                        modifier = modifier - 1;
+                    end
+                    if modifier < 0 then
+                        modifier = 0;
+                    end
+                    if delta < 0.99 - (modifier * 0.01) then
+                        --Don't overshoot it.
+                        action:setCurrentTime(action:getCurrentTime() + modifier);
+                    end
                 end
             end
         end

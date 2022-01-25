@@ -1,2 +1,3 @@
 Changelog Notes:
 Re-enable default free recipes for Ingenuitive in addition to learning all other recipes.
+Fix bug in Quick Worker erroring on TimedWalkActions.
