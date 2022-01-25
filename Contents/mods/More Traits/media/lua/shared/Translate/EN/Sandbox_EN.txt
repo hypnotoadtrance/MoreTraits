@@ -68,7 +68,7 @@ Sandbox_EN = {
     Sandbox_MoreTraits_QuickWorkerScaler = "Quick Worker Scaling",
     Sandbox_MoreTraits_QuickWorkerScaler_tooltip = "How much extra time is added to TimedActions being performed by players with the Quick Worker trait.<br>Higher values make TimedActions perform more rapidly.<br>This is a fine granular value with 100 translating to a 0.1 (10%) increase in speed.",
     Sandbox_MoreTraits_IngenuitiveLimitAmount = "Ingenuitive Limit Amount",
-    Sandbox_MoreTraits_IngenuitiveLimitAmount_tooltip = "What percent of unknown recipes should be learned by Ingenuitive?<br>This is randomly chose out of all available recipes.",
+    Sandbox_MoreTraits_IngenuitiveLimitAmount_tooltip = "What percent of unknown recipes should be learned by Ingenuitive?<br>This is randomly chosen out of all available recipes.",
     Sandbox_MoreTraits_IngenuitiveLimit = "Ingenuitive Limit",
     Sandbox_MoreTraits_IngenuitiveLimit_tooltip = "Limit the amount of free recipes granted by Ingenuitive?<br>By default, all recipes are taught for players who have Ingenuitive.<br>Turning this on allows you to limit how much they learn instead.",
 }
