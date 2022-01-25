@@ -434,8 +434,8 @@ local function ToadTraitEvasive(_player, _playerdata)
     end
 end
 
-local function ToadTraitButter()
-    local player = getPlayer();
+local function ToadTraitButter(_player)
+    local player = _player;
     if player:HasTrait("butterfingers") and player:isPlayerMoving() then
         local basechance = 5;
         local chanceinx = 2000;
@@ -473,9 +473,9 @@ local function ToadTraitButter()
     end
 end
 
-local function ToadTraitParanoia()
-    local player = getPlayer();
-    local playerdata = player:getModData();
+local function ToadTraitParanoia(_player, _playerdata)
+    local player = _player;
+    local playerdata = _playerdata;
     if player:HasTrait("paranoia") then
         if playerdata.iParanoiaCooldown == nil then
             playerdata.iParanoiaCooldown = 0;
@@ -605,14 +605,14 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     end
 end
 
-local function UnHighlightScrounger()
+local function UnHighlightScrounger(_player, _playerdata)
     if SandboxVars.MoreTraits.ScroungerHighlights == true then
         local maxTime = 10;
         if SandboxVars.MoreTraits.ScroungerHighlightsMaxTime then
             maxTime = SandboxVars.MoreTraits.ScroungerHighlightsMaxTime;
         end
-        local player = getPlayer();
-        local playerData = player:getModData();
+        local player = _player;
+        local playerData = _playerdata;
         if not playerData.scroungerHighlightsTbl then
             playerData.scroungerHighlightsTbl = {}
         end
@@ -1903,12 +1903,12 @@ function checkWeight()
     local mouseMaxWeightbonus = math.floor(mouse + globalmod);
     local defaultMaxWeightbonus = math.floor(default + globalmod);
     if player:HasTrait("packmule") then
-    player:setMaxWeightBase(muleMaxWeightbonus);
+        player:setMaxWeightBase(muleMaxWeightbonus);
     elseif player:HasTrait("packmouse") then
-    player:setMaxWeightBase(mouseMaxWeightbonus);
+        player:setMaxWeightBase(mouseMaxWeightbonus);
     else
-    player:setMaxWeightBase(defaultMaxWeightbonus)
-    ;
+        player:setMaxWeightBase(defaultMaxWeightbonus)
+        ;
     end
 end
 
@@ -2476,6 +2476,13 @@ local function MainPlayerUpdate(_player)
     end
     internalTick = internalTick + 1;
 end
+local function EveryOneMinute()
+    local player = getPlayer();
+    local playerdata = player:getModData();
+    ToadTraitParanoia(player, playerdata);
+    ToadTraitButter(player);
+    UnHighlightScrounger(player, playerdata);
+end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
 Events.OnZombieDead.Add(graveRobber);
@@ -2491,9 +2498,7 @@ Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.EveryHours.Add(indefatigablecounter);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
-Events.EveryOneMinute.Add(ToadTraitParanoia);
-Events.EveryOneMinute.Add(ToadTraitButter);
-Events.EveryOneMinute.Add(UnHighlightScrounger);
+Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(ToadTraitDepressive);
 Events.OnNewGame.Add(initToadTraitsPerks);
