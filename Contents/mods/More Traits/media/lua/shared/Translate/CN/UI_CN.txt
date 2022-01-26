@@ -153,4 +153,6 @@ UI_CN = {
     UI_scrounger_found = "哦，看，多找到一个 %s",
     UI_trait_quickworker = "快速工作",
     UI_trait_quickworkerdesc = "你做什么都总能找到较优解。<br>你在进行需时间操作时（例如锯木头、合成物品或拆解家具）会进行的更快。",
+    UI_trait_leadfoot = "灌铅重踏",
+    UI_trait_leadfootdesc = "你的脚步总是很沉重，而现在终于可以找个缓冲了——在僵尸身上。<br>你的踩踏要更加强力。",
 }
