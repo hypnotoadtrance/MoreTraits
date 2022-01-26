@@ -209,6 +209,7 @@ local function initToadTraits()
     local immunocompromised = TraitFactory.addTrait("immunocompromised", getText("UI_trait_immunocompromised"), -10, getText("UI_trait_immunocompromiseddesc"), false, false);
     local ascetic = TraitFactory.addTrait("ascetic", getText("UI_trait_ascetic"), -4, getText("UI_trait_asceticdesc"), false, false);
     local fearful = TraitFactory.addTrait("fearful", getText("UI_trait_fearful"), -7, getText("UI_trait_fearfuldesc"), false, false);
+    local glassbody = TraitFactory.addTrait("glassbody", getText("UI_trait_glassbody"), -9, getText("UI_trait_glassbodydesc"), false, false);
     --Exclusives
     if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
         TraitFactory.setMutualExclusive("preparedfood", "preparedammo");

@@ -214,7 +214,7 @@ end
 local function initToadTraitsPerks(_player)
     local player = _player;
     local playerdata = player:getModData();
-    local damage = 25;
+    local damage = 20;
     local bandagestrength = 5;
     local splintstrength = 0.9;
     local fracturetime = 50;
@@ -254,7 +254,6 @@ local function initToadTraitsPerks(_player)
 
     if player:HasTrait("injured") then
         suspendevasive = true;
-        --print("Beginning Injury.");
         local bodydamage = player:getBodyDamage();
         local itterations = ZombRand(1, 4) + 1;
         local doburns = true;
@@ -279,6 +278,8 @@ local function initToadTraitsPerks(_player)
                     if doburns == true then
                         b:AddDamage(damage);
                         b:setBurned();
+                        b:setBurnTime(ZombRand(50) + damage);
+                        b:setNeedBurnWash(false);
                         b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
                     else
                         itterations = itterations - 1;
@@ -299,7 +300,6 @@ local function initToadTraitsPerks(_player)
         bodydamage:setInfectionLevel(0);
     end
     if player:HasTrait("broke") then
-        --print("Broke Leg.");
         suspendevasive = true;
         local bodydamage = player:getBodyDamage();
         bodydamage:getBodyPart(BodyPartType.LowerLeg_R):AddDamage(damage);
@@ -310,8 +310,10 @@ local function initToadTraitsPerks(_player)
         bodydamage:setInfected(false);
         bodydamage:setInfectionLevel(0);
     end
-    player:getModData().ToadTraitBodyDamage = nil;
+    playerdata.ToadTraitBodyDamage = nil;
     suspendevasive = false;
+    player:getBodyDamage():Update();
+    playerdata.fLastHP = nil;
     checkWeight();
     if player:HasTrait("ingenuitive") then
         LearnAllRecipes(player);
@@ -2467,6 +2469,36 @@ local function LeadFoot(_player)
         end
     end
 end
+local function GlassBody(_player, _playerdata)
+    local player = _player;
+    local playerdata = _playerdata;
+    local bodydamage = player:getBodyDamage();
+    if player:HasTrait("glassbody") then
+        if playerdata.fLastHP == nil then
+            --Initialize the hp.
+            playerdata.fLastHP = bodydamage:getOverallBodyHealth();
+            return ;
+        end
+        local lasthp = playerdata.fLastHP;
+        local currenthp = bodydamage:getOverallBodyHealth();
+        if currenthp < lasthp then
+            local difference = lasthp - currenthp;
+            --Divide the difference by the number of body parts, since ReduceGeneralHealth applies to each part.
+            difference = difference * 2 / bodydamage:getBodyParts():size();
+            bodydamage:ReduceGeneralHealth(difference);
+            if difference > 0.25 and ZombRand(100) <= 50 then
+                local randompart = ZombRand(0, 16);
+                local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
+                b:setFractureTime(ZombRand(20) + 10);
+            elseif difference > 0.1 and ZombRand(100) <= 50 then
+                local randompart = ZombRand(0, 16);
+                local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
+                b:setScratched(true, true);
+            end
+        end
+        playerdata.fLastHP = bodydamage:getOverallBodyHealth();
+    end
+end
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -2499,6 +2531,7 @@ local function MainPlayerUpdate(_player)
     QuickWorker(player);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
+        GlassBody(player, playerdata);
     end
     internalTick = internalTick + 1;
 end
