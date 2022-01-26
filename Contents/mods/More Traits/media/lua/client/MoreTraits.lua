@@ -2481,16 +2481,18 @@ local function GlassBody(_player, _playerdata)
         end
         local lasthp = playerdata.fLastHP;
         local currenthp = bodydamage:getOverallBodyHealth();
-        if currenthp < lasthp then
+        local multiplier = getGameTime():getMultiplier();
+        --Don't check if the multiplier is too high (prevent from injuring so many times)
+        if currenthp < lasthp and multiplier <= 4.0 then
             local difference = lasthp - currenthp;
             --Divide the difference by the number of body parts, since ReduceGeneralHealth applies to each part.
             difference = difference * 2 / bodydamage:getBodyParts():size();
             bodydamage:ReduceGeneralHealth(difference);
-            if difference > 0.25 and ZombRand(100) <= 50 then
+            if difference > 0.25 and ZombRand(100) <= 33 then
                 local randompart = ZombRand(0, 16);
                 local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
                 b:setFractureTime(ZombRand(20) + 10);
-            elseif difference > 0.1 and ZombRand(100) <= 50 then
+            elseif difference > 0.1 and ZombRand(100) <= 33 then
                 local randompart = ZombRand(0, 16);
                 local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
                 b:setScratched(true, true);

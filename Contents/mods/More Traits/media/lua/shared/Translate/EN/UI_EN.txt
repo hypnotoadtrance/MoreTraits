@@ -156,5 +156,5 @@ UI_EN = {
     UI_trait_leadfoot = "Lead Foot",
     UI_trait_leadfootdesc = "You've always had a heavy step and now it's time to put your foot down - on some zombies.<br>Your stomps are considerably more powerful.",
     UI_trait_glassbody = "Made of Glass",
-    UI_trait_glassbodydesc = "You're particularly vulnerable and frail.<br>You take twice as much damage from all sources.<br>You become easily scratched from minor injuries.<br>Even a short fall or moderate damage can result in a broken bone.",
+    UI_trait_glassbodydesc = "You're particularly vulnerable and frail.<br>You take twice as much damage from all sources.<br>You become easily scratched from minor injuries.<br>Even a short fall or moderate damage can result in a broken bone.<br>Heavy Encumberance can result in severe damage.",
 }
