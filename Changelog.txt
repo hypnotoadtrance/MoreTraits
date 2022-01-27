@@ -9,3 +9,4 @@ Remove Zombification Cure from the game
 Add new trait: Lead Foot
 Add new trait: Made of Glass
 Reduce length of recovery for burns from Injured trait.
+Increase time modifier for Quick Worker when reading books.

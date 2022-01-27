@@ -2432,6 +2432,9 @@ local function QuickWorker(_player)
                 elseif player:HasTrait("AllThumbs") and ZombRand(100) <= 10 then
                     modifier = modifier - 1;
                 end
+                if type == "ISReadABook" then
+                    modifier = modifier * 5;
+                end
                 if modifier < 0 then
                     modifier = 0;
                 end
