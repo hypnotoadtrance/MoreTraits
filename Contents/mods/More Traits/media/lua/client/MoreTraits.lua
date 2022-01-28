@@ -539,8 +539,10 @@ local function ToadTraitButter(_player)
         end
         local chance = (basechance + chancemod);
         if chance >= ZombRand(chanceinx) then
-            player:dropHandItems();
-            player:Say(getText("UI_butterfingers_triggered"));
+            if player:getSecondaryHandItem() ~= nil or player:getPrimaryHandItem() ~= nil then
+                player:dropHandItems();
+                player:Say(getText("UI_butterfingers_triggered"));
+            end
         end
     end
 end
@@ -2422,6 +2424,9 @@ local function GymGoer(_player, _perk, _amount)
             player:getXp():AddXP(perk, amount, false, false);
         end
     end
+end
+local function GymGoerUpdate(_player)
+    local player = _player;
     if player:HasTrait("gymgoer") then
         local bodydamage = player:getBodyDamage();
         for i = 0, bodydamage:getBodyParts():size() - 1 do
@@ -2689,6 +2694,7 @@ local function EveryOneMinute()
     ToadTraitButter(player);
     UnHighlightScrounger(player, playerdata);
     LeadFoot(player);
+    GymGoerUpdate(player);
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
