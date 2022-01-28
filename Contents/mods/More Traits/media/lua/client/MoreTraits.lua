@@ -509,7 +509,7 @@ end
 local function ToadTraitButter(_player)
     local player = _player;
     if player:HasTrait("butterfingers") and player:isPlayerMoving() then
-        local basechance = 5;
+        local basechance = 3;
         local chanceinx = 2000;
         if SandboxVars.MoreTraits.ButterfingersChance then
             chanceinx = SandboxVars.MoreTraits.ButterfingersChance;
@@ -536,6 +536,11 @@ local function ToadTraitButter(_player)
         local chancemod = 0;
         if weight > 0 then
             chancemod = math.floor(weight / 5);
+        end
+        if player:isSprinting() == true then
+            chancemod = chancemod + 10;
+        elseif player:IsRunning() == true then
+            chancemod = chancemod + 5;
         end
         local chance = (basechance + chancemod);
         if chance >= ZombRand(chanceinx) then

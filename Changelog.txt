@@ -21,3 +21,4 @@ Quick and Slow worker now take special consideration for Slow or Fast readers.
 Increase Hardy regeneration strength. (it got nerfed too hard)
 Gymgoer removes Exercise Fatigue.
 Don't trigger Butterfingers if player has nothing in their hands.
+Butterfingers triggers less while walking and more while Running or Sprinting.
