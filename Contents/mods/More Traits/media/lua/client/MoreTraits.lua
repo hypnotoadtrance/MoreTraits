@@ -2640,6 +2640,11 @@ local function GlassBody(_player, _playerdata)
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
     if player:HasTrait("glassbody") then
+        if player:isAsleep() then
+            --Don't wound the player in their sleep.
+            playerdata.fLastHP = 0;
+            return ;
+        end
         if playerdata.fLastHP == nil then
             --Initialize the hp.
             playerdata.fLastHP = bodydamage:getOverallBodyHealth();
