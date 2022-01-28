@@ -2681,7 +2681,7 @@ local function BatteringRam()
                 local enemy = enemies:get(i);
                 if enemy:isZombie() then
                     local distance = enemy:DistTo(player)
-                    if distance <= 1.5 and enemy:isKnockedDown() == false then
+                    if distance <= 1.0 and enemy:isKnockedDown() == false then
                         enemy:setKnockedDown(true);
                         enemy:setStaggerBack(true);
                         enemy:setHitReaction("");
@@ -2691,6 +2691,9 @@ local function BatteringRam()
                         stats:setEndurance(endurance - endurancereduction);
                     end
                 end
+            end
+            if internalTick >= 25 then
+                addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
             end
         else
             if playerdata.bWasJustSprinting == true then
