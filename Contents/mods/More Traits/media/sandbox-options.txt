@@ -160,6 +160,11 @@ option MoreTraits.QuickWorkerScaler
 	type = integer, min = 1, max = 1000, default = 100,
 	page = MoreTraits, translation = MoreTraits_QuickWorkerScaler,
 }
+option MoreTraits.SlowWorkerScaler
+{
+	type = integer, min = 10, max = 75, default = 33,
+	page = MoreTraits, translation = MoreTraits_SlowWorkerScaler,
+}
 option MoreTraits.IngenuitiveLimit
 {
 	type = boolean, default = false,

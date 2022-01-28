@@ -67,4 +67,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_IngenuitiveLimitAmount_tooltip = "What percent of unknown recipes should be learned by Ingenuitive?<br>This is randomly chosen out of all available recipes.",
     Sandbox_MoreTraits_IngenuitiveLimit = "Ingenuitive Limit",
     Sandbox_MoreTraits_IngenuitiveLimit_tooltip = "Limit the amount of free recipes granted by Ingenuitive?<br>By default, all recipes are taught for players who have Ingenuitive.<br>Turning this on allows you to limit how much they learn instead.",
+    Sandbox_MoreTraits_SlowWorkerScaler = "Slow Worker Scaling",
+    Sandbox_MoreTraits_SlowWorkerScaler_tooltip = "How much longer it takes to perform TimedActions.<br>Higher values make TimedActions perform more slowly.<br>Setting this too high can make it excruciatingly slow to do any actions - especially reading books.",
 }

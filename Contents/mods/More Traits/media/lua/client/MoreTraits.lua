@@ -2502,7 +2502,13 @@ local function QuickWorker(_player)
                     modifier = modifier - 1;
                 end
                 if type == "ISReadABook" then
-                    modifier = modifier * 5;
+                    if player:HasTrait("FastReader") then
+                        modifier = modifier * 5;
+                    elseif player:HasTrait("SlowReader") then
+                        modifier = modifier * 1.5;
+                    else
+                        modifier = modifier * 3;
+                    end
                 end
                 if modifier < 0 then
                     modifier = 0;
@@ -2510,6 +2516,52 @@ local function QuickWorker(_player)
                 if delta < 0.99 - (modifier * 0.01) then
                     --Don't overshoot it.
                     action:setCurrentTime(action:getCurrentTime() + modifier);
+                end
+            end
+        end
+    end
+end
+local function SlowWorker(_player)
+    local player = _player;
+    if player:HasTrait("slowworker") then
+        if player:hasTimedActions() == true then
+            local actions = player:getCharacterActions();
+            local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "" }
+            local action = actions:get(0);
+            local type = action:getMetaType();
+            local delta = action:getJobDelta();
+            --Don't modify the action if it is in the Blacklist or if it has not yet started (is valid)
+            if tableContains(blacklist, type) == false and delta > 0 then
+                local modifier = 0.5;
+                local chance = 33;
+                if SandboxVars.MoreTraits.SlowWorkerScaler then
+                    chance = SandboxVars.MoreTraits.SlowWorkerScaler;
+                end
+                if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
+                    modifier = modifier - 0.5 * luckimpact;
+                elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
+                    modifier = modifier + 0.5 * luckimpact;
+                end
+                if player:HasTrait("Dextrous") and ZombRand(100) <= 10 then
+                    modifier = modifier - 0.5;
+                elseif player:HasTrait("AllThumbs") and ZombRand(100) <= 10 then
+                    modifier = modifier + 0.5;
+                end
+                if type == "ISReadABook" then
+                    if player:HasTrait("FastReader") then
+                        modifier = modifier * 0.1;
+                    elseif player:HasTrait("SlowReader") then
+                        modifier = modifier * 0.5;
+                    else
+                        modifier = modifier * 0.25;
+                    end
+                end
+                if modifier < 0 then
+                    modifier = 0;
+                end
+                if delta < 0.99 - (modifier * 0.01) and ZombRand(100) <= chance then
+                    --Don't overshoot it.
+                    action:setCurrentTime(action:getCurrentTime() - modifier);
                 end
             end
         end
@@ -2603,6 +2655,7 @@ local function MainPlayerUpdate(_player)
     badteethtrait(player, playerdata);
     albino(player);
     QuickWorker(player);
+    SlowWorker(player);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
         GlassBody(player, playerdata);

@@ -15,3 +15,6 @@ Add in Mod Options support for Client-Side Settings.
 Automatically put Prepared items into their respective bags where applicable.
 Automatically equip bags given from Prepared traits.
 Reduce amount of free items given from Prepared traits.
+Add new trait: Slow Worker
+Add Sandbox Option for Slow Worker
+Quick and Slow worker now take special consideration for Slow or Fast readers.
