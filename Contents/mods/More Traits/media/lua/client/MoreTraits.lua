@@ -1429,7 +1429,7 @@ local function bouncerupdate(_player, _playerdata)
                         enemy = enemies:get(tonumber(closeenemies[i]));
                         if enemy ~= nil then
                             if enemy:isZombie() == true then
-                                if ZombRand(0, 101) <= chance and enemy:isProne() == false then
+                                if ZombRand(0, 101) <= chance and enemy:isKnockedDown() == false then
                                     enemy:setStaggerBack(true);
                                     playerdata.iBouncercooldown = cooldown;
                                     break ;
@@ -2654,6 +2654,52 @@ local function GlassBody(_player, _playerdata)
         playerdata.fLastHP = bodydamage:getOverallBodyHealth();
     end
 end
+local function BatteringRam()
+    local player = getPlayer();
+    if player:HasTrait("batteringram") then
+        local playerdata = player:getModData();
+        local Fitnesslvl = player:getPerkLevel(Perks.Fitness);
+        if Fitnesslvl == 0 then
+            Fitnesslvl = 1;
+        end
+        local endurancereduction = (10 / Fitnesslvl) * 0.01;
+        local stats = player:getStats();
+        local endurance = stats:getEndurance();
+        local inTree = player:getCurrentSquare():Has(IsoObjectType.tree);
+        if playerdata.bWasJustSprinting == nil then
+            playerdata.bWasJustSprinting = false;
+        end
+        if player:isSprinting() then
+            playerdata.bWasJustSprinting = true;
+            if inTree == false then
+                player:setGhostMode(true);
+            else
+                player:setGhostMode(false);
+            end
+            local enemies = player:getSpottedList();
+            for i = 0, enemies:size() - 1 do
+                local enemy = enemies:get(i);
+                if enemy:isZombie() then
+                    local distance = enemy:DistTo(player)
+                    if distance <= 1.5 and enemy:isKnockedDown() == false then
+                        enemy:setKnockedDown(true);
+                        enemy:setStaggerBack(true);
+                        enemy:setHitReaction("");
+                        enemy:setPlayerAttackPosition("FRONT");
+                        enemy:setHitForce(2.0);
+                        enemy:reportEvent("wasHit");
+                        stats:setEndurance(endurance - endurancereduction);
+                    end
+                end
+            end
+        else
+            if playerdata.bWasJustSprinting == true then
+                player:setGhostMode(false);
+                playerdata.bWasJustSprinting = false;
+            end
+        end
+    end
+end
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -2703,6 +2749,7 @@ local function EveryOneMinute()
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
+Events.OnPlayerMove.Add(BatteringRam);
 Events.OnZombieDead.Add(graveRobber);
 Events.OnWeaponHitCharacter.Add(problunt);
 Events.OnWeaponHitCharacter.Add(problade);

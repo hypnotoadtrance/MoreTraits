@@ -182,6 +182,7 @@ local function initToadTraits()
     local leadfoot = TraitFactory.addTrait("leadfoot", getText("UI_trait_leadfoot"), 2, getText("UI_trait_leadfootdesc"), false, false);
     local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 3, getText("UI_trait_vagabonddesc"), false, false);
     local quickworker = TraitFactory.addTrait("quickworker", getText("UI_trait_quickworker"), 9, getText("UI_trait_quickworkerdesc"), false, false);
+    local batteringram = TraitFactory.addTrait("batteringram", getText("UI_trait_batteringram"), 7, getText("UI_trait_batteringramdesc"), false, false);
     --===========--
     --Bad Traits--
     --===========--

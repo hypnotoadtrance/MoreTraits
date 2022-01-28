@@ -165,4 +165,6 @@ UI_EN = {
     UI_MoreTraits_Options_ScroungerHighlight_ToolTip = "If you have the Scrounger trait, you will see containers highlighted if there is extra loot inside.",
     UI_MoreTraits_Options_ScroungerHighlightTime = "Highlight Time",
     UI_MoreTraits_Options_ScroungerHighlightTime_ToolTip = "In-game minutes after which, container will no longer be highlighted.",
+    UI_trait_batteringram = "Battering Ram",
+    UI_trait_batteringramdesc = "You know how to force your way through crowds like a professional football player.<br>While Sprinting (not running), you knockdown zombies in your path.<br>Every zombie you knockdown depletes some endurance depending upon your Fitness level, so be careful charging into large crowds, as this may leave you exhausted.<br>Note: This trait overrides the Spear's charge ability.",
 }
