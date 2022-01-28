@@ -19,3 +19,4 @@ Add new trait: Slow Worker
 Add Sandbox Option for Slow Worker
 Quick and Slow worker now take special consideration for Slow or Fast readers.
 Increase Hardy regeneration strength. (it got nerfed too hard)
+Gymgoer removed Exercise Fatigue.

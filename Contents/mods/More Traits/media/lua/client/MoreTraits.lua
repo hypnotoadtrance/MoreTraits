@@ -2422,6 +2422,16 @@ local function GymGoer(_player, _perk, _amount)
             player:getXp():AddXP(perk, amount, false, false);
         end
     end
+    if player:HasTrait("gymgoer") then
+        local bodydamage = player:getBodyDamage();
+        for i = 0, bodydamage:getBodyParts():size() - 1 do
+            local b = bodydamage:getBodyParts():get(i);
+            local stiffness = b:getStiffness();
+            if stiffness > 0 then
+                b:setStiffness(0);
+            end
+        end
+    end
 end
 local function ContainerEvents(_iSInventoryPage, _state)
     local page = _iSInventoryPage;
