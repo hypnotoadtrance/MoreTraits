@@ -586,8 +586,10 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                         end
                                         if rolled then
                                             container:AddItems(item:getFullType(), n);
-                                            --player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
-                                            if SandboxVars.MoreTraits.ScroungerHighlights == true then
+                                            if MoreTraits.settings.ScroungerAnnounce == true then
+                                                player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
+                                            end
+                                            if MoreTraits.settings.ScroungerHighlight == true then
                                                 if not playerData.scroungerHighlightsTbl then
                                                     playerData.scroungerHighlightsTbl = {}
                                                 end
@@ -608,11 +610,8 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
 end
 
 local function UnHighlightScrounger(_player, _playerdata)
-    if SandboxVars.MoreTraits.ScroungerHighlights == true then
-        local maxTime = 10;
-        if SandboxVars.MoreTraits.ScroungerHighlightsMaxTime then
-            maxTime = SandboxVars.MoreTraits.ScroungerHighlightsMaxTime;
-        end
+    if MoreTraits.settings.ScroungerHighlight == true then
+        local maxTime = MoreTraits.settings.ScroungerHighlightTime;
         local player = _player;
         local playerData = _playerdata;
         if not playerData.scroungerHighlightsTbl then

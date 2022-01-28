@@ -105,16 +105,6 @@ option MoreTraits.GraveRobberGuaranteedLoot
 	type = integer, min = 0, max = 10, default = 1,
 	page = MoreTraits, translation = MoreTraits_GraveRobberGuaranteedLoot,
 }
-option MoreTraits.ScroungerHighlights
-{
-	type = boolean, default = true,
-	page = MoreTraits, translation = MoreTraits_ScroungerHighlights,
-}
-option MoreTraits.ScroungerHighlightsMaxTime
-{
-	type = integer, min = 1, max = 720, default = 10,
-	page = MoreTraits, translation = MoreTraits_ScroungerHighlightsMaxTime,
-}
 option MoreTraits.ScroungerChance
 {
 	type = integer, min = 1, max = 100, default = 20,
