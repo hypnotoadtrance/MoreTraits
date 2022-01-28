@@ -1225,7 +1225,7 @@ local function hardytrait(_player, _playerdata)
     local stats = player:getStats();
     if player:HasTrait("hardy") then
         local endurance = stats:getEndurance();
-        local regenerationrate = 0.001;
+        local regenerationrate = 0.01;
         if playerdata.iHardyInterval == nil then
             playerdata.iHardyInterval = 0;
         end
