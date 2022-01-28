@@ -113,19 +113,25 @@ local function initToadTraitsItems(_player)
     local player = _player;
     local inv = player:getInventory();
     if player:HasTrait("preparedfood") then
-        inv:AddItem("Base.TinnedBeans");
-        inv:AddItem("Base.CannedMushroomSoup");
-        inv:AddItem("Base.TinnedSoup");
-        inv:AddItem("Base.TunaTin");
-        inv:AddItems("Base.PopBottle", 3);
-        inv:AddItem("Base.TinOpener");
-        inv:AddItems("Base.CannedTomato", 1);
-        inv:AddItems("Base.CannedPotato", 1);
-        inv:AddItems("Base.CannedCarrots", 1);
-        inv:AddItems("Base.CannedBroccoli", 1);
-        inv:AddItems("Base.CannedCabbage", 1);
-        inv:AddItems("Base.CannedEggplant", 1);
         inv:AddItem("Base.Plasticbag");
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.Plasticbag" then
+                    player:setSecondaryHandItem(bag);
+                    local baginv = bag:getInventory();
+                    baginv:AddItems("Base.PopBottle", 3);
+                    baginv:AddItem("Base.TinOpener");
+                    baginv:AddItem("Base.CannedTomato");
+                    baginv:AddItem("Base.CannedPotato");
+                    baginv:AddItem("Base.CannedCarrots");
+                    baginv:AddItem("Base.CannedBroccoli");
+                    baginv:AddItem("Base.CannedCabbage");
+                    baginv:AddItem("Base.CannedEggplant");
+                    break ;
+                end
+            end
+        end
     end
     if player:HasTrait("preparedammo") then
         inv:AddItems("Base.Bullets9mmBox", 3);
@@ -133,64 +139,119 @@ local function initToadTraitsItems(_player)
     end
     if player:HasTrait("preparedweapon") then
         inv:AddItem("Base.BaseballBatNails");
-        inv:AddItem("farming.Shovel");
         inv:AddItem("Base.HuntingKnife");
-        inv:AddItem("Base.Screwdriver");
     end
     if player:HasTrait("preparedmedical") then
-        inv:AddItem("Base.Bandaid");
-        inv:AddItem("Base.PillsAntiDep");
-        inv:AddItem("Base.Disinfectant");
-        inv:AddItem("Base.AlcoholWipes");
-        inv:AddItem("Base.PillsBeta");
-        inv:AddItem("Base.Pills");
-        if SandboxVars.MoreTraits.PreparedMedicalBandageAmount then
-            inv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
-        else
-            inv:AddItems("Base.Bandage", 4);
-        end
-        inv:AddItem("Base.SutureNeedle");
-        inv:AddItem("Base.Tissue");
-        inv:AddItem("Base.Tweezers");
         inv:AddItem("Base.FirstAidKit");
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.FirstAidKit" then
+                    player:setSecondaryHandItem(bag);
+                    local baginv = bag:getInventory();
+                    baginv:AddItem("Base.Bandaid");
+                    baginv:AddItem("Base.PillsAntiDep");
+                    baginv:AddItem("Base.Disinfectant");
+                    baginv:AddItem("Base.AlcoholWipes");
+                    baginv:AddItem("Base.PillsBeta");
+                    baginv:AddItem("Base.Pills");
+                    if SandboxVars.MoreTraits.PreparedMedicalBandageAmount then
+                        baginv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
+                    else
+                        baginv:AddItems("Base.Bandage", 4);
+                    end
+                    baginv:AddItem("Base.SutureNeedle");
+                    baginv:AddItem("Base.Tissue");
+                    baginv:AddItem("Base.Tweezers");
+                    break ;
+                end
+            end
+        end
     end
     if player:HasTrait("preparedrepair") then
-        inv:AddItem("Base.Hammer");
-        inv:AddItem("Base.Screwdriver");
-        inv:AddItem("Base.Crowbar");
-        inv:AddItem("Base.Saw");
-        inv:AddItem("Base.NailsBox");
-        inv:AddItems("Base.Garbagebag", 8);
+        inv:AddItem("Base.Toolbox");
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.Toolbox" then
+                    player:setSecondaryHandItem(bag);
+                    local baginv = bag:getInventory();
+                    baginv:AddItem("Base.Hammer");
+                    baginv:AddItem("Base.Screwdriver");
+                    baginv:AddItem("Base.Crowbar");
+                    baginv:AddItem("Base.Saw");
+                    baginv:AddItem("Base.NailsBox");
+                    baginv:AddItems("Base.Garbagebag", 8);
+                    break ;
+                end
+            end
+        end
     end
     if player:HasTrait("preparedcamp") then
-        inv:AddItems("Base.Matches", 2);
-        inv:AddItem("camping.CampfireKit");
-        inv:AddItem("camping.CampingTentKit");
-        inv:AddItem("Base.BucketEmpty");
-        inv:AddItems("Base.BeefJerky", 2);
-        inv:AddItems("Base.Pop", 1);
-        inv:AddItem("Base.FishingRod");
-        inv:AddItem("Base.FishingLine");
-        inv:AddItem("Base.FishingTackle");
-        inv:AddItems("Base.Battery", 4);
-        inv:AddItem("Base.Torch");
         inv:AddItem("Base.Bag_NormalHikingBag");
-        inv:AddItem("Base.WaterBottleFull");
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.Bag_NormalHikingBag" then
+                    if player:getClothingItem_Back() == nil then
+                        player:setClothingItem_Back(bag);
+                    end
+                    local baginv = bag:getInventory();
+                    baginv:AddItems("Base.Matches", 1);
+                    baginv:AddItem("camping.CampfireKit");
+                    baginv:AddItem("camping.CampingTentKit");
+                    baginv:AddItems("Base.BeefJerky", 1);
+                    baginv:AddItems("Base.Pop", 1);
+                    baginv:AddItem("Base.FishingRod");
+                    baginv:AddItem("Base.FishingLine");
+                    baginv:AddItem("Base.FishingTackle");
+                    baginv:AddItems("Base.Battery", 1);
+                    baginv:AddItem("Base.Torch");
+                    baginv:AddItem("Base.WaterBottleFull");
+                    break ;
+                end
+            end
+        end
     end
     if player:HasTrait("preparedpack") then
         inv:AddItem("Base.Bag_BigHikingBag");
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.Bag_BigHikingBag" then
+                    if player:getClothingItem_Back() == nil then
+                        player:setClothingItem_Back(bag);
+                    end
+                    break ;
+                end
+            end
+        end
     end
 
     if player:HasTrait("preparedcar") then
+        inv:AddItem("Base.Bag_JanitorToolbox");
         if SandboxVars.MoreTraits.PreparedCarGasToggle == true then
             inv:AddItem("Base.PetrolCan");
         end
-        inv:AddItem("Base.CarBatteryCharger");
-        inv:AddItem("Base.Screwdriver");
-        inv:AddItem("Base.Wrench");
-        inv:AddItem("Base.LugWrench");
-        inv:AddItem("Base.TirePump");
-        inv:AddItem("Base.Jack");
+
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.Bag_JanitorToolbox" then
+                    player:setPrimaryHandItem(bag);
+                    local baginv = bag:getInventory();
+                    baginv:AddItem("Base.CarBatteryCharger");
+                    baginv:AddItem("Base.Screwdriver");
+                    baginv:AddItem("Base.Wrench");
+                    baginv:AddItem("Base.LugWrench");
+                    baginv:AddItem("Base.TirePump");
+                    baginv:AddItem("Base.Jack");
+                end
+                if bag:getFullType() == "Base.PetrolCan" then
+                    player:setSecondaryHandItem(bag);
+                end
+            end
+        end
     end
     if player:HasTrait("drinker") then
         if SandboxVars.MoreTraits.AlcoholicFreeDrink == true then
@@ -198,10 +259,19 @@ local function initToadTraitsItems(_player)
         end
     end
     if player:HasTrait("Tailor") then
-        inv:AddItem("Base.Scissors");
-        inv:AddItem("Base.Needle");
         inv:AddItem("Base.SewingKit");
-        inv:AddItems("Base.Thread", 4);
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.SewingKit" then
+                    local baginv = bag:getInventory();
+                    baginv:AddItem("Base.Scissors");
+                    baginv:AddItem("Base.Needle");
+                    baginv:AddItems("Base.Thread", 4);
+                    break ;
+                end
+            end
+        end
     end
     if player:HasTrait("Smoker") then
         if SandboxVars.MoreTraits.SmokerStart == true then
@@ -2539,6 +2609,7 @@ local function MainPlayerUpdate(_player)
     end
     internalTick = internalTick + 1;
 end
+
 local function EveryOneMinute()
     local player = getPlayer();
     local playerdata = player:getModData();

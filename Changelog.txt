@@ -12,3 +12,6 @@ Reduce length of recovery for burns from Injured trait.
 Increase time modifier for Quick Worker when reading books.
 Fixed Prowess: Guns not scaling properly, Credit: vaikke
 Add in Mod Options support for Client-Side Settings.
+Automatically put Prepared items into their respective bags where applicable.
+Automatically equip bags given from Prepared traits.
+Reduce amount of free items given from Prepared traits.
