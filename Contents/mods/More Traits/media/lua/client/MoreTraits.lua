@@ -453,7 +453,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                     bodydamage:setInfectionLevel(0);
                                     print("Infection from Dodged Attack Removed");
                                 end
-                                player:Say(getText("UI_trait_dodgesay"));
+                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
                             else
                                 bMarkForUpdate = true;
                             end
@@ -468,7 +468,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                     bodydamage:setInfectionLevel(0);
                                     print("Infection from Dodged Attack Removed");
                                 end
-                                player:Say(getText("UI_trait_dodgesay"));
+                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
                             else
                                 bMarkForUpdate = true;
                             end
@@ -483,7 +483,7 @@ local function ToadTraitEvasive(_player, _playerdata)
                                     bodydamage:setInfectionLevel(0);
                                     print("Infection from Dodged Attack Removed");
                                 end
-                                player:Say(getText("UI_trait_dodgesay"));
+                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
                             else
                                 bMarkForUpdate = true;
                             end
@@ -1178,7 +1178,8 @@ local function indefatigable(_player, _playerdata)
                         end
                     end
                 end
-                player:Say(getText("UI_trait_indefatigable"));
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
+                --player:Say(getText("UI_trait_indefatigable"));
             end
         end
     end
@@ -1284,7 +1285,7 @@ local function drinkerupdate(_player, _playerdata)
         if drunkness >= 10 then
             if playerdata.bSatedDrink == false then
                 playerdata.bSatedDrink = true;
-                player:Say(getText("UI_trait_alcoholicsatisfied"));
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicsatisfied"), true, HaloTextHelper.getColorGreen());
             end
             playerdata.iHoursSinceDrink = 0;
             stats:setAnger(0);
@@ -1340,7 +1341,7 @@ local function drinkertick()
                 if ZombRand(100) <= hoursthreshold / divider then
                     playerdata.bSatedDrink = false;
                     print("Player needs alcohol.");
-                    player:Say(getText("UI_trait_alcoholicneed"));
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicneed"), false, HaloTextHelper.getColorRed());
                 end
             end
         end
@@ -1377,7 +1378,7 @@ local function drinkerpoison()
         end
         if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false and cooldown <= 0 then
             print("Player is suffering from alcohol withdrawal.");
-            player:Say(getText("UI_trait_alcoholicwithdrawal"));
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
             player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
             playerdata.iWithdrawalCooldown = ZombRand(12, 24);
         end
@@ -1613,19 +1614,31 @@ local function prospear(_actor, _target, _weapon, _damage)
         end
     end
 end
-local function albino(_player)
+local function albino(_player, _playerdata)
     local player = _player;
+    local playerdata = _playerdata;
     if player:HasTrait("albino") then
         local time = getGameTime();
+        if playerdata.bisAlbinoOutside == nil then
+            playerdata.bisAlbinoOutside = false;
+        end
         if player:isOutside() then
             local tod = time:getTimeOfDay();
             if tod > 10 and tod < 16 then
                 local stats = player:getStats();
                 local pain = stats:getPain();
                 if pain < 25 then
+                    if playerdata.bisAlbinoOutside == false then
+                        if MoreTraits.settings.AlbinoAnnounce == true then
+                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_albino"), false, HaloTextHelper.getColorRed());
+                        end
+                        playerdata.bisAlbinoOutside = true;
+                    end
                     stats:setPain(20);
                 end
             end
+        else
+            playerdata.bisAlbinoOutside = false;
         end
     end
 end
@@ -1790,9 +1803,10 @@ local function anemic(_player)
             for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                 local b = player:getBodyDamage():getBodyParts():get(i);
                 if b:bleeding() and b:IsBleedingStemmed() == false then
-                    local adjust = 0.002;
+                    local adjust = 0.1;
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed());
                     if b:getType() == BodyPartType.Neck then
-                        adjust = adjust * 5;
+                        adjust = adjust * 2;
                     end
                     b:ReduceHealth(adjust);
                 end
@@ -1811,8 +1825,9 @@ local function thickblood(_player)
                 local b = player:getBodyDamage():getBodyParts():get(i);
                 if b:bleeding() and b:IsBleedingStemmed() == false then
                     local adjust = 0.002;
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen());
                     if b:getType() == BodyPartType.Neck then
-                        adjust = adjust * 5;
+                        adjust = adjust * 2;
                     end
                     b:AddHealth(adjust);
                 end
@@ -1912,10 +1927,8 @@ local function SuperImmune(_player, _playerdata)
                         bodydamage:setInfectionMortalityDuration(-1);
                         bodydamage:setInfectionTime(-1);
                         bodydamage:setInfectionLevel(0);
-                        if ZombRand(0, 101) > chance then
-                            print("Do fake infection");
-                            bodydamage:setIsFakeInfected(true);
-                            bodydamage:setFakeInfectionLevel(0.1);
+                        if MoreTraits.settings.SuperImmuneAnnounce == true then
+                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmune"), true, HaloTextHelper.getColorGreen());
                         end
                     else
                         print("Immune system failed.");
@@ -2018,6 +2031,9 @@ local function graveRobber(_zombie)
             chance = 1;
         end
         if ZombRand(0, 100) <= chance then
+            if MoreTraits.settings.GraveRobberAnnounce == true then
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_graverobber"), true, HaloTextHelper.getColorGreen());
+            end
             local inv = zombie:getInventory();
             local itterations = ZombRand(0, 3);
             itterations = itterations + extraloot;
@@ -2093,7 +2109,7 @@ local function Gourmand(_iSInventoryPage, _state, _player)
     local containerObj;
     local container;
     if player:HasTrait("gourmand") then
-        local basechance = 50;
+        local basechance = 33;
         if player:HasTrait("Lucky") then
             basechance = basechance + 10 * luckimpact;
         end
@@ -2118,6 +2134,9 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                         item:setRotten(false);
                                         item:updateAge();
                                         item:update();
+                                        if MoreTraits.settings.GourmandAnnounce == true then
+                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen());
+                                        end
                                     end
                                 elseif item:isFresh() == false then
                                     if ZombRand(100) <= basechance then
@@ -2125,6 +2144,9 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                         item:setLastAged(0);
                                         item:updateAge();
                                         item:update();
+                                        if MoreTraits.settings.GourmandAnnounce == true then
+                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen());
+                                        end
                                     end
                                 end
                             end
@@ -2731,7 +2753,7 @@ local function MainPlayerUpdate(_player)
     drinkerupdate(player, playerdata);
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
-    albino(player);
+    albino(player, playerdata);
     QuickWorker(player);
     SlowWorker(player);
     if suspendevasive == false then

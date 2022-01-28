@@ -4,12 +4,20 @@ MoreTraits.settings = MoreTraits.SETTINGS or {};
 MoreTraits.settings.ScroungerAnnounce = false;
 MoreTraits.settings.ScroungerHighlight = true;
 MoreTraits.settings.ScroungerHighlightTime = 20;
+MoreTraits.settings.GraveRobberAnnounce = false;
+MoreTraits.settings.SuperImmuneAnnounce = false;
+MoreTraits.settings.GourmandAnnounce = false;
+MoreTraits.settings.AlbinoAnnounce = true;
 
 if ModOptions and ModOptions.getInstance then
     local function onModOptionsApply(optionValues)
         MoreTraits.settings.ScroungerAnnounce = optionValues.settings.options.ScroungerAnnounce;
         MoreTraits.settings.ScroungerHighlight = optionValues.settings.options.ScroungerHighlight;
         MoreTraits.settings.ScroungerHighlightTime = optionValues.settings.options.ScroungerHighlightTime;
+        MoreTraits.settings.GraveRobberAnnounce = optionValues.settings.options.GraveRobberAnnounce;
+        MoreTraits.settings.SuperImmuneAnnounce = optionValues.settings.options.SuperImmuneAnnounce;
+        MoreTraits.settings.GourmandAnnounce = optionValues.settings.options.GourmandAnnounce;
+        MoreTraits.settings.AlbinoAnnounce = optionValues.settings.options.AlbinoAnnounce;
     end
     local SETTINGS = {
         options_data = {
@@ -32,6 +40,34 @@ if ModOptions and ModOptions.getInstance then
                 name = "UI_MoreTraits_Options_ScroungerHighlightTime",
                 tooltip = "UI_MoreTraits_Options_ScroungerHighlightTime_ToolTip",
                 default = 2,
+                OnApplyMainMenu = onModOptionsApply,
+                OnApplyInGame = onModOptionsApply,
+            },
+            GraveRobberAnnounce = {
+                name = "UI_MoreTraits_Options_GraveRobberAnnounce",
+                tooltip = "UI_MoreTraits_Options_GraveRobberAnnounce_ToolTip",
+                default = false,
+                OnApplyMainMenu = onModOptionsApply,
+                OnApplyInGame = onModOptionsApply,
+            },
+            SuperImmuneAnnounce = {
+                name = "UI_MoreTraits_Options_SuperImmuneAnnounce",
+                tooltip = "UI_MoreTraits_Options_SuperImmuneAnnounce_ToolTip",
+                default = false,
+                OnApplyMainMenu = onModOptionsApply,
+                OnApplyInGame = onModOptionsApply,
+            },
+            GourmandAnnounce = {
+                name = "UI_MoreTraits_Options_GourmandAnnounce",
+                tooltip = "UI_MoreTraits_Options_GourmandAnnounce_ToolTip",
+                default = false,
+                OnApplyMainMenu = onModOptionsApply,
+                OnApplyInGame = onModOptionsApply,
+            },
+            AlbinoAnnounce = {
+                name = "UI_MoreTraits_Options_AlbinoAnnounce",
+                tooltip = "UI_MoreTraits_Options_AlbinoAnnounce_ToolTip",
+                default = true,
                 OnApplyMainMenu = onModOptionsApply,
                 OnApplyInGame = onModOptionsApply,
             },

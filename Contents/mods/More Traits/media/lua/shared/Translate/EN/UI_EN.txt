@@ -167,4 +167,12 @@ UI_EN = {
     UI_MoreTraits_Options_ScroungerHighlightTime_ToolTip = "In-game minutes after which, container will no longer be highlighted.",
     UI_trait_batteringram = "Battering Ram",
     UI_trait_batteringramdesc = "You know how to force your way through crowds like a professional football player.<br>While Sprinting (not running), you knockdown zombies in your path.<br>Every zombie you knockdown depletes some endurance depending upon your Fitness level, so be careful charging into large crowds, as this may leave you exhausted.<br>Note: This trait overrides the Spear's charge ability.",
+    UI_MoreTraits_Options_GraveRobberAnnounce = "Announce Grave Robber",
+    UI_MoreTraits_Options_GraveRobberAnnounce_ToolTip = "If you have the Grave Robber trait, you will be notified when Grave Robber has triggered.<br>You will still need to find which corpse had the extra items.",
+    UI_MoreTraits_Options_SuperImmuneAnnounce = "Announce Super-Immune",
+    UI_MoreTraits_Options_SuperImmuneAnnounce_ToolTip = "Notify the player if Super-Immune fought-off zombification.<br>A green text will appear above your head if you fight-off zombification.",
+    UI_MoreTraits_Options_GourmandAnnounce = "Announce Gourmand Finds",
+    UI_MoreTraits_Options_GourmandAnnounce_ToolTip = "If you have the Gourmand trait, you will be notified when you find Fresh food in a container.",
+    UI_MoreTraits_Options_AlbinoAnnounce = "Sun Sensitivity Warning",
+    UI_MoreTraits_Options_AlbinoAnnounce_ToolTip = "If you have the Sun Sensitivity trait, you will be notified when you are suffering pain from being outside under the sun.",
 }

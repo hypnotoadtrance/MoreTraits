@@ -24,3 +24,7 @@ Don't trigger Butterfingers if player has nothing in their hands.
 Butterfingers triggers less while walking and more while Running or Sprinting.
 Add new trait: Battering Ram
 Fix Bouncer pushing enemies back up from being knocked down.
+Add more Mod Options for Client Side
+Migrate Player:Say() actions to new HaloText method.
+Adjust Anemic bleed amount.
+Reduce Gourmand fresh food find base chance ( 50% - > 33% )
