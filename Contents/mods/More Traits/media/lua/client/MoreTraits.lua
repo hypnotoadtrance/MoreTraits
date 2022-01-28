@@ -1483,7 +1483,7 @@ local function progun(_actor, _weapon)
     local weapon = _weapon;
     local maxCapacity = weapon:getMaxAmmo();
     local currentCapacity = weapon:getCurrentAmmoCount();
-    local chance = 10 + player:getPerkLevel(Perks.Firearm) * 5;
+    local chance = 10 + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading);
     if _actor == player and player:HasTrait("progun") and weapon:getSubCategory() == "Firearm" then
         if player:HasTrait("Lucky") then
             chance = chance + 5 * luckimpact;
