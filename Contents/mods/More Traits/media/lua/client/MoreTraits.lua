@@ -777,6 +777,9 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                     if tempcontainer ~= {} then
                         for _, i in pairs(tempcontainer) do
                             container:Remove(i);
+                            if MoreTraits.settings.ScroungerAnnounce == true then
+                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. i:getName(), false, HaloTextHelper.getColorRed());
+                            end
                         end
                     end
                 end
