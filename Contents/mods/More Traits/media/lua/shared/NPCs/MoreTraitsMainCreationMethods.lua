@@ -282,7 +282,6 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("Resilient", "immunocompromised");
     TraitFactory.setMutualExclusive("superimmune", "immunocompromised");
     TraitFactory.setMutualExclusive("ProneToIllness", "superimmune");
-    TraitFactory.setMutualExclusive("ProneToIllness", "immunocompromised");
     TraitFactory.setMutualExclusive("packmule", "packmouse");
     TraitFactory.setMutualExclusive("gourmand", "ascetic");
     TraitFactory.setMutualExclusive("fearful", "Desensitized");
