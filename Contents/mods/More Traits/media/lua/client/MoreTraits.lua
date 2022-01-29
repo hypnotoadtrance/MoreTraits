@@ -1485,15 +1485,15 @@ local function martial(_actor, _target, _weapon, _damage)
             end
         end
         if weapon:getType() == "BareHands" and allow == true then
-            if playerdata.WeaponBareHands == nil then
-                playerdata.WeaponBareHands = weapon;
+            if playerdata.itemWeaponBareHands == nil then
+                playerdata.itemWeaponBareHands = weapon;
             end
-            playerdata.WeaponBareHands:setDoorDamage(9 + maximumdmg);
-            playerdata.WeaponBareHands:setTreeDamage(1 + maximumdmg);
-            playerdata.WeaponBareHands:getCategories():set(0, "SmallBlunt");
-            playerdata.WeaponBareHands:setMinDamage(minimumdmg);
-            playerdata.WeaponBareHands:setMaxDamage(maximumdmg);
-            playerdata.WeaponBareHands:setCriticalChance(critchance);
+            playerdata.itemWeaponBareHands:setDoorDamage(9 + maximumdmg);
+            playerdata.itemWeaponBareHands:setTreeDamage(1 + maximumdmg);
+            playerdata.itemWeaponBareHands:getCategories():set(0, "SmallBlunt");
+            playerdata.itemWeaponBareHands:setMinDamage(minimumdmg);
+            playerdata.itemWeaponBareHands:setMaxDamage(maximumdmg);
+            playerdata.itemWeaponBareHands:setCriticalChance(critchance);
             if _target:isZombie() and ZombRand(0, 101) <= critchance then
                 damage = damage * 4;
             end
@@ -1506,13 +1506,13 @@ local function martial(_actor, _target, _weapon, _damage)
                 _target:update();
             end
         else
-            if playerdata.WeaponBareHands ~= nil then
-                playerdata.WeaponBareHands:setDoorDamage(0);
-                playerdata.WeaponBareHands:setTreeDamage(0);
-                playerdata.WeaponBareHands:getCategories():set(0, "SmallBlunt");
-                playerdata.WeaponBareHands:setMinDamage(0);
-                playerdata.WeaponBareHands:setMaxDamage(0);
-                playerdata.WeaponBareHands:setCriticalChance(0);
+            if playerdata.itemWeaponBareHands ~= nil then
+                playerdata.itemWeaponBareHands:setDoorDamage(1);
+                playerdata.itemWeaponBareHands:setTreeDamage(1);
+                playerdata.itemWeaponBareHands:getCategories():set(0, "SmallBlunt");
+                playerdata.itemWeaponBareHands:setMinDamage(0.1);
+                playerdata.itemWeaponBareHands:setMaxDamage(0.2);
+                playerdata.itemWeaponBareHands:setCriticalChance(1);
             end
         end
     end
@@ -2730,6 +2730,10 @@ local function BatteringRam()
             playerdata.bWasJustSprinting = false;
         end
         if player:isSprinting() then
+            local bodydamage = player:getBodyDamage();
+            if bodydamage:getBodyPart(BodyPartType.UpperLeg_L):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.UpperLeg_R):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.LowerLeg_L):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.LowerLeg_R):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.Foot_L):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.Foot_R):getFractureTime() > 1 then
+                return ;
+            end
             playerdata.bWasJustSprinting = true;
             if inTree == false then
                 player:setGhostMode(true);

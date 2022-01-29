@@ -1,35 +1,3 @@
 Changelog Notes:
-Re-enable default free recipes for Ingenuitive in addition to learning all other recipes.
-Fix bug in Quick Worker erroring on TimedWalkActions.
-Fix player Weight reducing for a split second.
-Fix Ingenuitive not giving Mechanics for some dumb reason.
-Remove Zombification Cure from the game
-- There are other mods that add a cure and do so much more effectively, if you would like this in your game, consider one of those instead.
-- The Recipes to create the cure have been removed. The item will remain for compatibility purposes for a few versions before being ultimately removed.
-Add new trait: Lead Foot
-Add new trait: Made of Glass
-Reduce length of recovery for burns from Injured trait.
-Increase time modifier for Quick Worker when reading books.
-Fixed Prowess: Guns not scaling properly, Credit: vaikke
-Add in Mod Options support for Client-Side Settings.
-Automatically put Prepared items into their respective bags where applicable.
-Automatically equip bags given from Prepared traits.
-Reduce amount of free items given from Prepared traits.
-Add new trait: Slow Worker
-Add Sandbox Option for Slow Worker
-Quick and Slow worker now take special consideration for Slow or Fast readers.
-Increase Hardy regeneration strength. (it got nerfed too hard)
-Gymgoer removes Exercise Fatigue.
-Don't trigger Butterfingers if player has nothing in their hands.
-Butterfingers triggers less while walking and more while Running or Sprinting.
-Add new trait: Battering Ram
-Fix Bouncer pushing enemies back up from being knocked down.
-Add more Mod Options for Client Side
-Migrate Player:Say() actions to new HaloText method.
-Adjust Anemic bleed amount.
-Reduce Gourmand fresh food find base chance ( 50% - > 33% )
-Fix Martial Artist working even if weapon is in hand
-Fix Martial Artist automatically applying + 20% damage
-Add toggle option to Sandbox settings for Martial Artist
-Add Client side option to show martial artist damage
-Adjust Specialization XP Method - Hopefully this fixes the multiplied bug, again I can't replicate this in Singleplayer so i'll need feedback.
+Fix Martial artist causing Endurance to become NAN.
+Fix Battering Ram allowing sprinting with broken legs.
