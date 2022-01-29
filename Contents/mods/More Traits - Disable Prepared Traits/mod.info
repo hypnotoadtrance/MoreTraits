@@ -1,5 +1,5 @@
 name=More Traits - Disable Prepared Traits
 poster=generic.png
 versionMin=41.0
-description= If this submod is enabled, Prepared traits will be disabled.
+description= If this submod is enabled, Prepared traits will be disabled. More Traits must also be enabled for this to function.
 id=ToadTraitsDisablePrepared
