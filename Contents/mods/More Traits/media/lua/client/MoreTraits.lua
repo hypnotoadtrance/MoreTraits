@@ -1489,7 +1489,7 @@ local function martial(_actor, _target, _weapon, _damage)
             end
             damage = damage * 0.1;
             if MoreTraits.settings.MartialDamage == true then
-                HaloTextHelper.addText(player, "Damage: " .. tostring(damage), HaloTextHelper.getColorGreen());
+                HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), HaloTextHelper.getColorGreen());
             end
             _target:setHealth(_target:getHealth() - damage);
             if _target:getHealth() <= 0 then
