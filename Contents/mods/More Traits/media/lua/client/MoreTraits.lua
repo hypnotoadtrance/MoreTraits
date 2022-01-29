@@ -546,7 +546,7 @@ local function ToadTraitButter(_player)
         if chance >= ZombRand(chanceinx) then
             if player:getSecondaryHandItem() ~= nil or player:getPrimaryHandItem() ~= nil then
                 player:dropHandItems();
-                player:Say(getText("UI_butterfingers_triggered"));
+                HaloTextHelper.addTextWithArrow(player, getText("UI_butterfingers_triggered"), false, HaloTextHelper.getColorRed());
             end
         end
     end
@@ -664,7 +664,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                         if rolled then
                                             container:AddItems(item:getFullType(), n);
                                             if MoreTraits.settings.ScroungerAnnounce == true then
-                                                player:Say(string.format(getText("UI_scrounger_found"), item:getName()));
+                                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
                                             end
                                             if MoreTraits.settings.ScroungerHighlight == true then
                                                 if not playerData.scroungerHighlightsTbl then
