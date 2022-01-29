@@ -1,3 +1,2 @@
 Changelog Notes:
-Fix Martial artist causing Endurance to become NAN.
-Fix Battering Ram allowing sprinting with broken legs.
+Fix trait description "Super Immune"
