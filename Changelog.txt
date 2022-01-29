@@ -32,3 +32,4 @@ Fix Martial Artist working even if weapon is in hand
 Fix Martial Artist automatically applying + 20% damage
 Add toggle option to Sandbox settings for Martial Artist
 Add Client side option to show martial artist damage
+Adjust Specialization XP Method - Hopefully this fixes the multiplied bug, again I can't replicate this in Singleplayer so i'll need feedback.

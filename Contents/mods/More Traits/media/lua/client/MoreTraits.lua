@@ -1058,7 +1058,9 @@ local function Specialization(_player, _perk, _amount)
             --Check if the newxp amount would give the player a negative level.
             --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
             if skip == false then
-                if perklvl == 1 and testxp <= 75 then
+                if perklvl == 0 and testxp <= 0 then
+                    skip = true;
+                elseif perklvl == 1 and testxp <= 75 then
                     skip = true;
                 elseif perklvl == 2 and testxp <= 150 then
                     skip = true;
@@ -1081,9 +1083,15 @@ local function Specialization(_player, _perk, _amount)
                 end
             end
             if skip == false then
-                player:getXp():AddXP(perk, -1 * amount, false, false);
-                while player:getXp():getXP(perk) < correctamount do
-                    player:getXp():AddXP(perk, 0.01, false, false);
+                --player:getXp():AddXP(perk, -1 * amount, false, false);
+                local xpforlevel = perk:getXpForLevel(perklvl) + 10;
+                while player:getXp():getXP(perk) > correctamount do
+                    local curxp = player:getXp():getXP(perk);
+                    if xpforlevel >= curxp then
+                        break ;
+                    else
+                        player:getXp():AddXP(perk, -1 * 0.01, false, false);
+                    end
                 end
             end
         end
@@ -1788,10 +1796,10 @@ end
 local function fast()
     local player = getPlayer();
     local playerdata = player:getModData();
-    local vector = player:getPlayerMoveDir();
+    local vector = player:getMoveForwardVec();
     local length = vector:getLength();
     local modifier = 2.15;
-    if player:HasTrait("fast") and player:isLocalPlayer() then
+    if player:HasTrait("fast") then
         if playerdata.fToadTraitsPlayerX ~= nil and playerdata.fToadTraitsPlayerY ~= nil then
             local oldx = playerdata.fToadTraitsPlayerX;
             local oldy = playerdata.fToadTraitsPlayerY;
