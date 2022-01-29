@@ -1308,7 +1308,7 @@ local function drinkerupdate(_player, _playerdata)
             if playerdata.iHoursSinceDrink > hoursthreshold then
                 stats:setPain(playerdata.iHoursSinceDrink / divider);
             end
-            if internalTick >= 25 then
+            if internalTick >= 29 then
                 stats:setAnger(anger + 0.001);
                 stats:setStress(stress + 0.001);
             end
