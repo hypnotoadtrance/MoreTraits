@@ -1,2 +1,3 @@
 Changelog Notes:
 Fix trait description "Super Immune"
+Make Quick and Slow worker mutually exclusive.
