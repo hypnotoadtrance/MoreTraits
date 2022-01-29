@@ -8,6 +8,7 @@ MoreTraits.settings.GraveRobberAnnounce = false;
 MoreTraits.settings.SuperImmuneAnnounce = false;
 MoreTraits.settings.GourmandAnnounce = false;
 MoreTraits.settings.AlbinoAnnounce = true;
+MoreTraits.settings.MartialDamage = false;
 
 if ModOptions and ModOptions.getInstance then
     local function onModOptionsApply(optionValues)
@@ -18,6 +19,7 @@ if ModOptions and ModOptions.getInstance then
         MoreTraits.settings.SuperImmuneAnnounce = optionValues.settings.options.SuperImmuneAnnounce;
         MoreTraits.settings.GourmandAnnounce = optionValues.settings.options.GourmandAnnounce;
         MoreTraits.settings.AlbinoAnnounce = optionValues.settings.options.AlbinoAnnounce;
+        MoreTraits.settings.MartialDamage = optionValues.settings.options.MartialDamage;
     end
     local SETTINGS = {
         options_data = {
@@ -68,6 +70,13 @@ if ModOptions and ModOptions.getInstance then
                 name = "UI_MoreTraits_Options_AlbinoAnnounce",
                 tooltip = "UI_MoreTraits_Options_AlbinoAnnounce_ToolTip",
                 default = true,
+                OnApplyMainMenu = onModOptionsApply,
+                OnApplyInGame = onModOptionsApply,
+            },
+            MartialDamage = {
+                name = "UI_MoreTraits_Options_MartialDamage",
+                tooltip = "UI_MoreTraits_Options_MartialDamage_ToolTip",
+                default = false,
                 OnApplyMainMenu = onModOptionsApply,
                 OnApplyInGame = onModOptionsApply,
             },

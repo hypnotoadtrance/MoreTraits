@@ -28,3 +28,7 @@ Add more Mod Options for Client Side
 Migrate Player:Say() actions to new HaloText method.
 Adjust Anemic bleed amount.
 Reduce Gourmand fresh food find base chance ( 50% - > 33% )
+Fix Martial Artist working even if weapon is in hand
+Fix Martial Artist automatically applying + 20% damage
+Add toggle option to Sandbox settings for Martial Artist
+Add Client side option to show martial artist damage

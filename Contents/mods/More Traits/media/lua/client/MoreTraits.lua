@@ -1446,6 +1446,7 @@ end
 
 local function martial(_actor, _target, _weapon, _damage)
     local player = getPlayer();
+    local playerdata = player:getModData();
     local weapon = _weapon;
     local damage = _damage;
     local critchance = 5;
@@ -1467,19 +1468,41 @@ local function martial(_actor, _target, _weapon, _damage)
         local minimumdmg = (0.1 * average + SmallBluntLvl * 0.1) * scaling;
         local maximumdmg = (0.5 * average + SmallBluntLvl * 0.1) * scaling;
         critchance = (critchance + SmallBluntLvl) * scaling;
-        if weapon:getType() == "BareHands" then
-            weapon:setDoorDamage(9 + maximumdmg);
-            weapon:setTreeDamage(1 + maximumdmg);
-            weapon:getCategories():set(0, "SmallBlunt");
-            weapon:setMinDamage(minimumdmg);
-            weapon:setMaxDamage(maximumdmg);
-            weapon:setCriticalChance(critchance);
+        local allow = true;
+        if SandboxVars.MoreTraits.MartialWeapons == false then
+            if player:getPrimaryHandItem() ~= nil then
+                allow = false;
+            end
+        end
+        if weapon:getType() == "BareHands" and allow == true then
+            if playerdata.WeaponBareHands == nil then
+                playerdata.WeaponBareHands = weapon;
+            end
+            playerdata.WeaponBareHands:setDoorDamage(9 + maximumdmg);
+            playerdata.WeaponBareHands:setTreeDamage(1 + maximumdmg);
+            playerdata.WeaponBareHands:getCategories():set(0, "SmallBlunt");
+            playerdata.WeaponBareHands:setMinDamage(minimumdmg);
+            playerdata.WeaponBareHands:setMaxDamage(maximumdmg);
+            playerdata.WeaponBareHands:setCriticalChance(critchance);
             if _target:isZombie() and ZombRand(0, 101) <= critchance then
                 damage = damage * 4;
             end
-            _target:setHealth(_target:getHealth() - (damage * 1.2) * 0.1);
+            damage = damage * 0.1;
+            if MoreTraits.settings.MartialDamage == true then
+                HaloTextHelper.addText(player, "Damage: " .. tostring(damage), HaloTextHelper.getColorGreen());
+            end
+            _target:setHealth(_target:getHealth() - damage);
             if _target:getHealth() <= 0 then
                 _target:update();
+            end
+        else
+            if playerdata.WeaponBareHands ~= nil then
+                playerdata.WeaponBareHands:setDoorDamage(0);
+                playerdata.WeaponBareHands:setTreeDamage(0);
+                playerdata.WeaponBareHands:getCategories():set(0, "SmallBlunt");
+                playerdata.WeaponBareHands:setMinDamage(0);
+                playerdata.WeaponBareHands:setMaxDamage(0);
+                playerdata.WeaponBareHands:setCriticalChance(0);
             end
         end
     end

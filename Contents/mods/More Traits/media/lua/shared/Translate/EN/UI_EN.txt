@@ -175,4 +175,6 @@ UI_EN = {
     UI_MoreTraits_Options_GourmandAnnounce_ToolTip = "If you have the Gourmand trait, you will be notified when you find Fresh food in a container.",
     UI_MoreTraits_Options_AlbinoAnnounce = "Sun Sensitivity Warning",
     UI_MoreTraits_Options_AlbinoAnnounce_ToolTip = "If you have the Sun Sensitivity trait, you will be notified when you are suffering pain from being outside under the sun.",
+    UI_MoreTraits_Options_MartialDamage = "Show Martial Artist Damage",
+    UI_MoreTraits_Options_MartialDamage_ToolTip = "If you have the Martial Artist trait, a popup will display the damage you are dealing.",
 }
