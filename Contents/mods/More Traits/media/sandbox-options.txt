@@ -172,7 +172,7 @@ option MoreTraits.IngenuitiveLimit
 }
 option MoreTraits.IngenuitiveLimitAmount
 {
-	type = integer, min = 10, max = 90, default = 50,
+	type = integer, min = 5, max = 95, default = 50,
 	page = MoreTraits, translation = MoreTraits_IngenuitiveLimitAmount,
 }
 option MoreTraits.MartialWeapons

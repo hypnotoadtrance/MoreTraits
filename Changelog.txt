@@ -2,3 +2,4 @@ Changelog Notes:
 Fix trait description "Super Immune"
 Make Quick and Slow worker mutually exclusive.
 Remove Exclusivity from Prone To Illness and Immunocompromised.
+Increase range for Ingenuitive percentile recipes.
