@@ -1091,7 +1091,7 @@ local function Specialization(_player, _perk, _amount)
                     if xpforlevel >= curxp then
                         break ;
                     else
-                        player:getXp():AddXP(perk, -1 * 1, false, false);
+                        player:getXp():AddXP(perk, -1 * 0.1, false, false);
                     end
                 end
             end

@@ -10,3 +10,4 @@ Prepared: Carpentry no longer gives a Crowbar.
 Refactor Prowess traits to properly increase durability of respective weapons.
 Redo math calculations for Martial Artist to prevent scaling from being exponential instead of linear.
 reduce Max damage scaling for Martial Artist.
+Try to prevent Specialization from robbing all xp.
