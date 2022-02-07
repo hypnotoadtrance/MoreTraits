@@ -1473,9 +1473,9 @@ local function martial(_actor, _target, _weapon, _damage)
         local SmallBluntLvl = player:getPerkLevel(Perks.SmallBlunt);
         local StrengthLvl = player:getPerkLevel(Perks.Strength);
         local Fitnesslvl = player:getPerkLevel(Perks.Fitness);
-        local average = ((StrengthLvl + Fitnesslvl) / 2) * scaling;
+        local average = ((StrengthLvl + Fitnesslvl) / 2);
         local minimumdmg = (0.1 * average + SmallBluntLvl * 0.1) * scaling;
-        local maximumdmg = (0.5 * average + SmallBluntLvl * 0.1) * scaling;
+        local maximumdmg = (0.25 * average + SmallBluntLvl * 0.1) * scaling;
         critchance = (critchance + SmallBluntLvl) * scaling;
         local allow = true;
         if SandboxVars.MoreTraits.MartialWeapons == false then
