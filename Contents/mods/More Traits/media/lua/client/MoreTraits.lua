@@ -2609,7 +2609,7 @@ local function SlowWorker(_player)
             --Don't modify the action if it is in the Blacklist or if it has not yet started (is valid)
             if tableContains(blacklist, type) == false and delta > 0 then
                 local modifier = 0.5;
-                local chance = 33;
+                local chance = 15;
                 if SandboxVars.MoreTraits.SlowWorkerScaler then
                     chance = SandboxVars.MoreTraits.SlowWorkerScaler;
                 end
@@ -2773,6 +2773,9 @@ local function BatteringRamUpdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("batteringram") then
+        if playerdata.bWasJustSprinting == nil then
+            playerdata.bWasJustSprinting = false;
+        end
         if playerdata.bWasJustSprinting == true then
             player:setGhostMode(false);
             addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
