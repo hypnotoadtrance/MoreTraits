@@ -13,3 +13,4 @@ reduce Max damage scaling for Martial Artist.
 Try to prevent Specialization from robbing all xp.
 Fix BatteringRam allowing players to stay invisible to Zombies.
 Reduce base chance for Depressive to trigger so it's less annoying.
+Gourmand's Fresh Food Find effect now properly works in Multiplayer.

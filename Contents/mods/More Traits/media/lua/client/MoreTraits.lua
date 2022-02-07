@@ -2168,23 +2168,18 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                             if item:getCategory() == "Food" then
                                 if item:isRotten() == true then
                                     if ZombRand(100) <= basechance then
-                                        item:setAge(0);
-                                        item:setLastAged(0);
-                                        item:setRotten(false);
-                                        item:updateAge();
-                                        item:update();
+                                        local newitem = container:AddItem(item:getFullType());
+                                        container:Remove(item);
                                         if MoreTraits.settings.GourmandAnnounce == true then
-                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen());
+                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
                                         end
                                     end
                                 elseif item:isFresh() == false then
                                     if ZombRand(100) <= basechance then
-                                        item:setAge(0);
-                                        item:setLastAged(0);
-                                        item:updateAge();
-                                        item:update();
+                                        local newitem = container:AddItem(item:getFullType());
+                                        container:Remove(item);
                                         if MoreTraits.settings.GourmandAnnounce == true then
-                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen());
+                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
                                         end
                                     end
                                 end
