@@ -2765,8 +2765,20 @@ local function BatteringRam()
         else
             if playerdata.bWasJustSprinting == true then
                 player:setGhostMode(false);
+                addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
                 playerdata.bWasJustSprinting = false;
             end
+        end
+    end
+end
+local function BatteringRamUpdate(_player, _playerdata)
+    local player = _player;
+    local playerdata = _playerdata;
+    if player:HasTrait("batteringram") then
+        if playerdata.bWasJustSprinting == true then
+            player:setGhostMode(false);
+            addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
+            playerdata.bWasJustSprinting = false;
         end
     end
 end
@@ -2780,6 +2792,7 @@ local function MainPlayerUpdate(_player)
         vehicleCheck(player);
         FoodUpdate(player);
         Gordanite(player);
+        BatteringRamUpdate(player, playerdata);
         --Reset internalTick every 30 ticks
         internalTick = 0;
     elseif internalTick == 20 then
