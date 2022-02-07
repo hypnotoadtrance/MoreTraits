@@ -1519,8 +1519,8 @@ end
 
 local function problunt(_actor, _target, _weapon, _damage)
     local player = getPlayer();
-    local playerdata = player:getModData();
     local weapon = _weapon;
+    local weapondata = weapon:getModData();
     local critchance = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt) + 5;
     local damage = _damage;
     if _actor == player and player:HasTrait("problunt") then
@@ -1538,23 +1538,23 @@ local function problunt(_actor, _target, _weapon, _damage)
             if _target:getHealth() <= 0 and _target:isAlive() then
                 _target:update();
             end
-            if playerdata.iLastWeaponCond == nil then
-                playerdata.iLastWeaponCond = weapon:getCondition();
+            if weapondata.iLastWeaponCond == nil then
+                weapondata.iLastWeaponCond = weapon:getCondition();
             end
-            if playerdata.iLastWeaponCond > weapon:getCondition() then
-                playerdata.iLastWeaponCond = weapon:getCondition();
+            if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
                 if weapon:getCondition() < weapon:getConditionMax() then
                     weapon:setCondition(weapon:getCondition() + 1);
                 end
             end
+            weapondata.iLastWeaponCond = weapon:getCondition();
         end
     end
 end
 
 local function problade(_actor, _target, _weapon, _damage)
     local player = getPlayer();
-    local playerdata = player:getModData();
     local weapon = _weapon;
+    local weapondata = weapon:getModData();
     local critchance = player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.SmallBlade) + player:getPerkLevel(Perks.LongBlade);
     local damage = _damage;
     if _actor == player and player:HasTrait("problade") then
@@ -1572,17 +1572,15 @@ local function problade(_actor, _target, _weapon, _damage)
             if _target:getHealth() <= 0 and _target:isAlive() then
                 _target:update();
             end
-            if ZombRand(0, 101) <= 10 then
-                if playerdata.iLastWeaponCond == nil then
-                    playerdata.iLastWeaponCond = weapon:getCondition();
-                end
-                if playerdata.iLastWeaponCond > weapon:getCondition() then
-                    playerdata.iLastWeaponCond = weapon:getCondition();
-                    if weapon:getCondition() < weapon:getConditionMax() then
-                        weapon:setCondition(weapon:getCondition() + 1);
-                    end
+            if weapondata.iLastWeaponCond == nil then
+                weapondata.iLastWeaponCond = weapon:getCondition();
+            end
+            if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
+                if weapon:getCondition() < weapon:getConditionMax() then
+                    weapon:setCondition(weapon:getCondition() + 1);
                 end
             end
+            weapondata.iLastWeaponCond = weapon:getCondition();
         end
     end
 end
@@ -1590,6 +1588,7 @@ end
 local function progun(_actor, _weapon)
     local player = getPlayer();
     local weapon = _weapon;
+    local weapondata = weapon:getModData();
     local maxCapacity = weapon:getMaxAmmo();
     local currentCapacity = weapon:getCurrentAmmoCount();
     local chance = 10 + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading);
@@ -1600,11 +1599,16 @@ local function progun(_actor, _weapon)
         if player:HasTrait("Unlucky") then
             chance = chance - 5 * luckimpact;
         end
-        if ZombRand(0, 101) <= 10 then
+
+        if weapondata.iLastWeaponCond == nil then
+            weapondata.iLastWeaponCond = weapon:getCondition();
+        end
+        if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
             if weapon:getCondition() < weapon:getConditionMax() then
                 weapon:setCondition(weapon:getCondition() + 1);
             end
         end
+        weapondata.iLastWeaponCond = weapon:getCondition();
         if ZombRand(0, 101) <= chance then
             if currentCapacity < maxCapacity and currentCapacity > 0 then
                 weapon:setCurrentAmmoCount(currentCapacity + 1);
@@ -1615,8 +1619,8 @@ end
 
 local function prospear(_actor, _target, _weapon, _damage)
     local player = getPlayer();
-    local playerdata = player:getModData();
     local weapon = _weapon;
+    local weapondata = weapon:getModData();
     local critchance = player:getPerkLevel(Perks.Spear) + 5;
     local damage = _damage;
     if _actor == player and player:HasTrait("prospear") then
@@ -1634,15 +1638,15 @@ local function prospear(_actor, _target, _weapon, _damage)
             if _target:getHealth() <= 0 and _target:isAlive() then
                 _target:update();
             end
-            if playerdata.iLastWeaponCond == nil then
-                playerdata.iLastWeaponCond = weapon:getCondition();
+            if weapondata.iLastWeaponCond == nil then
+                weapondata.iLastWeaponCond = weapon:getCondition();
             end
-            if playerdata.iLastWeaponCond > weapon:getCondition() then
-                playerdata.iLastWeaponCond = weapon:getCondition();
+            if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
                 if weapon:getCondition() < weapon:getConditionMax() then
                     weapon:setCondition(weapon:getCondition() + 1);
                 end
             end
+            weapondata.iLastWeaponCond = weapon:getCondition();
         end
     end
 end
