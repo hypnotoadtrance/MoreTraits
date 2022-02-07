@@ -162,7 +162,7 @@ option MoreTraits.QuickWorkerScaler
 }
 option MoreTraits.SlowWorkerScaler
 {
-	type = integer, min = 10, max = 75, default = 33,
+	type = integer, min = 5, max = 50, default = 15,
 	page = MoreTraits, translation = MoreTraits_SlowWorkerScaler,
 }
 option MoreTraits.IngenuitiveLimit

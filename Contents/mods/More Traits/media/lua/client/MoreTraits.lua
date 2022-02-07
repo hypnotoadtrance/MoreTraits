@@ -2563,19 +2563,19 @@ local function QuickWorker(_player)
             local delta = action:getJobDelta();
             --Don't modify the action if it is in the Blacklist or if it has not yet started (is valid)
             if tableContains(blacklist, type) == false and delta > 0 then
-                local modifier = 1;
+                local modifier = 0.5;
                 if SandboxVars.MoreTraits.QuickWorkerScaler then
-                    modifier = SandboxVars.MoreTraits.QuickWorkerScaler * 0.01;
+                    modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01);
                 end
                 if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
-                    modifier = modifier + 1 * luckimpact;
+                    modifier = modifier + 0.25 * luckimpact;
                 elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
-                    modifier = modifier - 1 * luckimpact;
+                    modifier = modifier - 0.25 * luckimpact;
                 end
                 if player:HasTrait("Dextrous") and ZombRand(100) <= 10 then
-                    modifier = modifier + 1;
+                    modifier = modifier + 0.25;
                 elseif player:HasTrait("AllThumbs") and ZombRand(100) <= 10 then
-                    modifier = modifier - 1;
+                    modifier = modifier - 0.25;
                 end
                 if type == "ISReadABook" then
                     if player:HasTrait("FastReader") then
