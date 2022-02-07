@@ -178,7 +178,6 @@ local function initToadTraitsItems(_player)
                     local baginv = bag:getInventory();
                     baginv:AddItem("Base.Hammer");
                     baginv:AddItem("Base.Screwdriver");
-                    baginv:AddItem("Base.Crowbar");
                     baginv:AddItem("Base.Saw");
                     baginv:AddItem("Base.NailsBox");
                     baginv:AddItems("Base.Garbagebag", 8);
