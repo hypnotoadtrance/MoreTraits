@@ -476,4 +476,25 @@ MoreTraits {
         WaterResistance = 0.75,
         WorldStaticModel = Boots_Ground,
 	}
+    item Bag_SmallHikingBag
+    {
+        DisplayCategory = Bag,
+        WeightReduction	=	60,
+        Weight	=	0.8,
+        Type	=	Container,
+        Capacity	=	8,
+        DisplayName	=	Small Hiking Bag,
+        IconsForTexture	=	Hiking_Blue;Hiking_Green;Hiking_Red,
+        CanBeEquipped = Back,
+        OpenSound   =   OpenBag,
+        CloseSound   =   CloseBag,
+        PutInSound   =   PutItemInBag,
+        ClothingItem = Bag_HikingBag,
+        BloodLocation = Bag,
+        RunSpeedModifier = 0.9,
+        AttachmentReplacement = Bag,
+        ReplaceInSecondHand = Bag_HikingBag_LHand holdingbagleft,
+        ReplaceInPrimaryHand = Bag_HikingBag_RHand holdingbagright,
+        WorldStaticModel = HikingBag_Ground,
+    }
 }

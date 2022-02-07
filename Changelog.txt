@@ -4,3 +4,5 @@ Make Quick and Slow worker mutually exclusive.
 Remove Exclusivity from Prone To Illness and Immunocompromised.
 Increase range for Ingenuitive percentile recipes.
 Make Injured and Broke Leg traits mutually exclusive to Indefatigable to prevent abuse.
+Prepared: Camping now gives a Small Hiking Bag instead of a Regular Hiking Bag.
+Prepared: Bag now gives a Regular Hiking Bag instead of a Big Hiking Bag.

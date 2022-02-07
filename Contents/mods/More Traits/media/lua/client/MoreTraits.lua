@@ -188,11 +188,11 @@ local function initToadTraitsItems(_player)
         end
     end
     if player:HasTrait("preparedcamp") then
-        inv:AddItem("Base.Bag_NormalHikingBag");
+        inv:AddItem("MoreTraits.Bag_SmallHikingBag");
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
-                if bag:getFullType() == "Base.Bag_NormalHikingBag" then
+                if bag:getFullType() == "MoreTraits.Bag_SmallHikingBag" then
                     if player:getClothingItem_Back() == nil then
                         player:setClothingItem_Back(bag);
                     end
@@ -214,11 +214,11 @@ local function initToadTraitsItems(_player)
         end
     end
     if player:HasTrait("preparedpack") then
-        inv:AddItem("Base.Bag_BigHikingBag");
+        inv:AddItem("Base.Bag_NormalHikingBag");
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
-                if bag:getFullType() == "Base.Bag_BigHikingBag" then
+                if bag:getFullType() == "Base.Bag_NormalHikingBag" then
                     if player:getClothingItem_Back() == nil then
                         player:setClothingItem_Back(bag);
                     end
