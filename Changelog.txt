@@ -12,3 +12,4 @@ Redo math calculations for Martial Artist to prevent scaling from being exponent
 reduce Max damage scaling for Martial Artist.
 Try to prevent Specialization from robbing all xp.
 Fix BatteringRam allowing players to stay invisible to Zombies.
+Reduce base chance for Depressive to trigger so it's less annoying.

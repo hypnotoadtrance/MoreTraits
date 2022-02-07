@@ -934,15 +934,18 @@ end
 local function ToadTraitDepressive()
     local player = getPlayer();
     if player:HasTrait("depressive") then
-        local basechance = 5;
+        local basechance = 2;
         if player:HasTrait("Lucky") then
-            basechance = basechance - 2 * luckimpact;
+            basechance = basechance - 1 * luckimpact;
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance + 2 * luckimpact;
+            basechance = basechance + 1 * luckimpact;
         end
         if player:HasTrait("Brooding") then
-            basechance = basechance + 2;
+            basechance = basechance + 1;
+        end
+        if player:HasTrait("selfdestructive") then
+            basechance = basechance + 1;
         end
         if ZombRand(100) <= basechance then
             if player:getModData().bToadTraitDepressed == false then
