@@ -17,3 +17,4 @@ Gourmand's Fresh Food Find effect now properly works in Multiplayer.
 Reduce severity of Slow Worker.
 Reduce strength of Quick Worker.
 Tune Battering Ram making zombies lose interest in player.
+Slightly increase the amount of damage Glass Body can take before risking broken bones.

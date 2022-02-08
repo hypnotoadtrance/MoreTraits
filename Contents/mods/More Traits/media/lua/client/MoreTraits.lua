@@ -2702,7 +2702,7 @@ local function GlassBody(_player, _playerdata)
             --Divide the difference by the number of body parts, since ReduceGeneralHealth applies to each part.
             difference = difference * 2 / bodydamage:getBodyParts():size();
             bodydamage:ReduceGeneralHealth(difference);
-            if difference > 0.25 and ZombRand(100) <= chance then
+            if difference > 0.33 and ZombRand(100) <= chance then
                 local randompart = ZombRand(0, 16);
                 local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
                 b:setFractureTime(ZombRand(20) + woundstrength);
