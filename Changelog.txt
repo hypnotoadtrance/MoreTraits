@@ -16,3 +16,4 @@ Reduce base chance for Depressive to trigger so it's less annoying.
 Gourmand's Fresh Food Find effect now properly works in Multiplayer.
 Reduce severity of Slow Worker.
 Reduce strength of Quick Worker.
+Tune Battering Ram making zombies lose interest in player.

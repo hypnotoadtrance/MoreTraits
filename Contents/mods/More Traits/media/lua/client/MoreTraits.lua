@@ -2736,12 +2736,23 @@ local function BatteringRam()
                 return ;
             end
             playerdata.bWasJustSprinting = true;
-            if inTree == false then
+            local nearbyzombies = false;
+            local enemies = player:getSpottedList();
+            for i = 0, enemies:size() - 1 do
+                local enemy = enemies:get(i);
+                if enemy:isZombie() then
+                    local distance = enemy:DistTo(player)
+                    if distance <= 2 then
+                        nearbyzombies = true;
+                        break;
+                    end
+                end
+            end
+            if inTree == false and nearbyzombies == true then
                 player:setGhostMode(true);
             else
                 player:setGhostMode(false);
             end
-            local enemies = player:getSpottedList();
             for i = 0, enemies:size() - 1 do
                 local enemy = enemies:get(i);
                 if enemy:isZombie() then
