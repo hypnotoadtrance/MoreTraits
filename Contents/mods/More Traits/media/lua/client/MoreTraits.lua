@@ -2069,7 +2069,7 @@ local function graveRobber(_zombie)
         if chance <= 0 then
             chance = 1;
         end
-        if ZombRand(0, 100) <= chance then
+        if ZombRand(0, 101) <= chance then
             if MoreTraits.settings.GraveRobberAnnounce == true then
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_graverobber"), true, HaloTextHelper.getColorGreen());
             end
@@ -2078,7 +2078,7 @@ local function graveRobber(_zombie)
             itterations = itterations + extraloot;
             for i = 0, itterations do
                 i = i + 1;
-                local roll = ZombRand(0, 100);
+                local roll = ZombRand(0, 101);
                 if roll <= 10 then
                     local randomitem = { "Base.Apple", "Base.Avocado", "Base.Banana", "Base.BellPepper", "Base.BeerCan",
                                          "Base.BeefJerky", "Base.Bread", "Base.Broccoli", "Base.Butter", "Base.CandyPackage", "Base.TinnedBeans",
