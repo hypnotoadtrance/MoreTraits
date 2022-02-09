@@ -21,3 +21,4 @@ Slightly increase the amount of damage Glass Body can take before risking broken
 Reduce cost of Super-Immune from 10 to 8 points, since people consistently pointed out Evasive effectively does the same thing, but with better odds.
 Increase buffer for Specialization traits to prevent underflow xp.
 Fix Grave Robber loot table range not actually being able to roll a 100.
+Nerf Human Meat.

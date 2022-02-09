@@ -374,10 +374,10 @@ MoreTraits {
     }
     item ZombPatty
     {
-        HungerChange	=	-15,
+        HungerChange	=	-8,
         UnhappyChange	=	50,
-        ThirstChange		=		-5,
-        Weight	=	1.0,
+        ThirstChange		=		-4,
+        Weight	=	0.5,
         Type	=	Food,
         IsCookable	=	TRUE,
         DangerousUncooked	=	TRUE,
