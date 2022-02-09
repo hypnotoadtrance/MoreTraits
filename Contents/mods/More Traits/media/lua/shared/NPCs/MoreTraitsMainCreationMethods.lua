@@ -191,10 +191,10 @@ local function initToadTraits()
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
     if getActivatedMods():contains("DynamicTraits") == false then
         --Use DynamicTraits' Alcoholic trait if it exists.
-        local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -12, getText("UI_trait_drinkerdesc"), false, false);
+        local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -14, getText("UI_trait_drinkerdesc"), false, false);
     end
     local broke = TraitFactory.addTrait("broke", getText("UI_trait_broke"), -8, getText("UI_trait_brokedesc"), false, false);
-    local butterfingers = TraitFactory.addTrait("butterfingers", getText("UI_trait_butterfingers"), -10, getText("UI_trait_butterfingersdesc"), false, false);
+    local butterfingers = TraitFactory.addTrait("butterfingers", getText("UI_trait_butterfingers"), -12, getText("UI_trait_butterfingersdesc"), false, false);
     local incomprehensive = TraitFactory.addTrait("incomprehensive", getText("UI_trait_incomprehensive"), -10, getText("UI_trait_incomprehensivedesc"), false, false);
     local depressive = TraitFactory.addTrait("depressive", getText("UI_trait_depressive"), -4, getText("UI_trait_depressivedesc"), false, false);
     local selfdestructive = TraitFactory.addTrait("selfdestructive", getText("UI_trait_selfdestructive"), -4, getText("UI_trait_selfdestructivedesc"), false, false);
@@ -210,8 +210,9 @@ local function initToadTraits()
     local immunocompromised = TraitFactory.addTrait("immunocompromised", getText("UI_trait_immunocompromised"), -10, getText("UI_trait_immunocompromiseddesc"), false, false);
     local ascetic = TraitFactory.addTrait("ascetic", getText("UI_trait_ascetic"), -4, getText("UI_trait_asceticdesc"), false, false);
     local fearful = TraitFactory.addTrait("fearful", getText("UI_trait_fearful"), -7, getText("UI_trait_fearfuldesc"), false, false);
-    local glassbody = TraitFactory.addTrait("glassbody", getText("UI_trait_glassbody"), -9, getText("UI_trait_glassbodydesc"), false, false);
+    local glassbody = TraitFactory.addTrait("glassbody", getText("UI_trait_glassbody"), -10, getText("UI_trait_glassbodydesc"), false, false);
     local slowworker = TraitFactory.addTrait("slowworker", getText("UI_trait_slowworker"), -9, getText("UI_trait_slowworkerdesc"), false, false);
+    local mundane = TraitFactory.addTrait("mundane", getText("UI_trait_mundane"), -9, getText("UI_trait_mundanedesc"), false, false);
     --Exclusives
     if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
         TraitFactory.setMutualExclusive("preparedfood", "preparedammo");

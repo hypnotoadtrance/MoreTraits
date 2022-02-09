@@ -1496,7 +1496,7 @@ local function martial(_actor, _target, _weapon, _damage)
             playerdata.itemWeaponBareHands:setMinDamage(minimumdmg);
             playerdata.itemWeaponBareHands:setMaxDamage(maximumdmg);
             playerdata.itemWeaponBareHands:setCriticalChance(critchance);
-            if _target:isZombie() and ZombRand(0, 101) <= critchance then
+            if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 4;
             end
             damage = damage * 0.1;
@@ -1534,7 +1534,7 @@ local function problunt(_actor, _target, _weapon, _damage)
             if player:HasTrait("Unlucky") then
                 critchance = critchance - 1 * luckimpact;
             end
-            if _target:isZombie() and ZombRand(0, 101) <= critchance then
+            if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 2;
             end
             _target:setHealth(_target:getHealth() - (damage * 1.2) * 0.1);
@@ -1568,7 +1568,7 @@ local function problade(_actor, _target, _weapon, _damage)
             if player:HasTrait("Unlucky") then
                 critchance = critchance - 1 * luckimpact;
             end
-            if _target:isZombie() and ZombRand(0, 101) <= critchance then
+            if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 2;
             end
             _target:setHealth(_target:getHealth() - (damage * 1.2) * 0.1);
@@ -1634,7 +1634,7 @@ local function prospear(_actor, _target, _weapon, _damage)
             if player:HasTrait("Unlucky") then
                 critchance = critchance - 1 * luckimpact;
             end
-            if _target:isZombie() and ZombRand(0, 101) <= critchance then
+            if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 2;
             end
             _target:setHealth(_target:getHealth() - (damage * 1.2) * 0.1);
@@ -1765,7 +1765,7 @@ local function actionhero(_actor, _target, _weapon, _damage)
         if player:HasTrait("Unlucky") then
             critchance = critchance - 5 * luckimpact;
         end
-        if _target:isZombie() and ZombRand(0, 101) <= critchance then
+        if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
             damage = damage * 5;
         end
         _target:setHealth(_target:getHealth() - (damage * multiplier) * 0.1);
@@ -2744,7 +2744,7 @@ local function BatteringRam()
                     local distance = enemy:DistTo(player)
                     if distance <= 2 then
                         nearbyzombies = true;
-                        break;
+                        break ;
                     end
                 end
             end
@@ -2791,6 +2791,23 @@ local function BatteringRamUpdate(_player, _playerdata)
             player:setGhostMode(false);
             addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
             playerdata.bWasJustSprinting = false;
+        end
+    end
+end
+local function mundane(_actor, _target, _weapon, _damage)
+    local player = getPlayer();
+    local weapon = _weapon;
+    local weapondata = weapon:getModData();
+    if _actor == player then
+        if weapondata.origCritChance == nil then
+            weapondata.origCritChance = weapon:getCriticalChance();
+        end
+        if player:HasTrait("mundane") then
+            weapon:setCriticalChance(1);
+        else
+            if weapon:getCriticalChance() < weapondata.origCritChance then
+                weapon:setCriticalChance(weapondata.origCritChance);
+            end
         end
     end
 end
@@ -2850,6 +2867,7 @@ Events.OnWeaponHitCharacter.Add(problunt);
 Events.OnWeaponHitCharacter.Add(problade);
 Events.OnWeaponHitCharacter.Add(prospear);
 Events.OnWeaponHitCharacter.Add(actionhero);
+Events.OnWeaponHitCharacter.Add(mundane);
 Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
 Events.EveryHours.Add(drinkerpoison);
