@@ -278,6 +278,10 @@ local function initToadTraitsItems(_player)
             inv:AddItem("Base.Lighter");
         end
     end
+    if player:HasTrait("deprived") then
+        player:clearWornItems();
+        inv:removeAllItems();
+    end
 end
 
 local function initToadTraitsPerks(_player)

@@ -214,6 +214,7 @@ local function initToadTraits()
     local slowworker = TraitFactory.addTrait("slowworker", getText("UI_trait_slowworker"), -9, getText("UI_trait_slowworkerdesc"), false, false);
     local mundane = TraitFactory.addTrait("mundane", getText("UI_trait_mundane"), -9, getText("UI_trait_mundanedesc"), false, false);
     local burned = TraitFactory.addTrait("burned", getText("UI_trait_burned"), -16, getText("UI_trait_burneddesc"), false, false);
+    local deprived = TraitFactory.addTrait("deprived", getText("UI_trait_deprived"), -6, getText("UI_trait_depriveddesc"), false, false);
     --Exclusives
     if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
         TraitFactory.setMutualExclusive("preparedfood", "preparedammo");
@@ -244,6 +245,14 @@ local function initToadTraits()
         TraitFactory.setMutualExclusive("preparedcar", "preparedmedical");
         TraitFactory.setMutualExclusive("preparedcar", "preparedcamp");
         TraitFactory.setMutualExclusive("preparedcar", "preparedpack");
+        TraitFactory.setMutualExclusive("deprived", "preparedfood");
+        TraitFactory.setMutualExclusive("deprived", "preparedammo");
+        TraitFactory.setMutualExclusive("deprived", "preparedrepair");
+        TraitFactory.setMutualExclusive("deprived", "preparedmedical");
+        TraitFactory.setMutualExclusive("deprived", "preparedcamp");
+        TraitFactory.setMutualExclusive("deprived", "preparedpack");
+        TraitFactory.setMutualExclusive("deprived", "preparedcar");
+        TraitFactory.setMutualExclusive("deprived", "preparedweapon");
     end
     TraitFactory.setMutualExclusive("quiet", "Clumsy");
     TraitFactory.setMutualExclusive("flexible", "Obese");

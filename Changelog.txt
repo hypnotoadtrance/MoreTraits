@@ -25,3 +25,4 @@ Nerf Human Meat.
 Add new trait: Mundane
 Adjusted costs of some traits.
 Add new trait: Burn Ward Patient - for the masochists out there!
+Add new trait: Deprived
