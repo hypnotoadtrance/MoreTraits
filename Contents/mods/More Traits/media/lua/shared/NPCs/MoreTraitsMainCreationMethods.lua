@@ -297,6 +297,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("burned", "injured");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
+    TraitFactory.sortList();
 end
 
 Events.OnGameBoot.Add(initToadTraits);
