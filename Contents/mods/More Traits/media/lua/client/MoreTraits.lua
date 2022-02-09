@@ -1088,7 +1088,7 @@ local function Specialization(_player, _perk, _amount)
                 end
             end
             if skip == false then
-                local xpforlevel = perk:getXpForLevel(perklvl) + 10;
+                local xpforlevel = perk:getXpForLevel(perklvl) + 50;
                 while player:getXp():getXP(perk) > correctamount do
                     local curxp = player:getXp():getXP(perk);
                     if xpforlevel >= curxp then

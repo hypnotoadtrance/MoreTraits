@@ -19,3 +19,4 @@ Reduce strength of Quick Worker.
 Tune Battering Ram making zombies lose interest in player.
 Slightly increase the amount of damage Glass Body can take before risking broken bones.
 Reduce cost of Super-Immune from 10 to 8 points, since people consistently pointed out Evasive effectively does the same thing, but with better odds.
+Increase buffer for Specialization traits to prevent underflow xp.
