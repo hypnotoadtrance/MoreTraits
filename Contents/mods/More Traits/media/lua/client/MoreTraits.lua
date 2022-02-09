@@ -379,6 +379,16 @@ local function initToadTraitsPerks(_player)
         bodydamage:setInfected(false);
         bodydamage:setInfectionLevel(0);
     end
+    if player:HasTrait("burned") then
+        local bodydamage = player:getBodyDamage();
+        for i = 0, bodydamage:getBodyParts():size() - 1 do
+            local b = bodydamage:getBodyParts():get(i);
+            b:setBurned();
+            b:setBurnTime(ZombRand(10, 100) + damage);
+            b:setNeedBurnWash(false);
+            b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+        end
+    end
     playerdata.ToadTraitBodyDamage = nil;
     suspendevasive = false;
     player:getBodyDamage():Update();

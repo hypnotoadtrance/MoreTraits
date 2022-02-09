@@ -24,3 +24,4 @@ Fix Grave Robber loot table range not actually being able to roll a 100.
 Nerf Human Meat.
 Add new trait: Mundane
 Adjusted costs of some traits.
+Add new trait: Burn Ward Patient - for the masochists out there!

@@ -213,6 +213,7 @@ local function initToadTraits()
     local glassbody = TraitFactory.addTrait("glassbody", getText("UI_trait_glassbody"), -10, getText("UI_trait_glassbodydesc"), false, false);
     local slowworker = TraitFactory.addTrait("slowworker", getText("UI_trait_slowworker"), -9, getText("UI_trait_slowworkerdesc"), false, false);
     local mundane = TraitFactory.addTrait("mundane", getText("UI_trait_mundane"), -9, getText("UI_trait_mundanedesc"), false, false);
+    local burned = TraitFactory.addTrait("burned", getText("UI_trait_burned"), -16, getText("UI_trait_burneddesc"), false, false);
     --Exclusives
     if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
         TraitFactory.setMutualExclusive("preparedfood", "preparedammo");
@@ -291,6 +292,9 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("quickworker", "slowworker");
     TraitFactory.setMutualExclusive("indefatigable", "injured");
     TraitFactory.setMutualExclusive("indefatigable", "broke");
+    TraitFactory.setMutualExclusive("indefatigable", "burned");
+    TraitFactory.setMutualExclusive("burned", "broke");
+    TraitFactory.setMutualExclusive("burned", "injured");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
 end
