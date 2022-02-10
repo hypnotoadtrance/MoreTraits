@@ -27,3 +27,4 @@ Adjusted costs of some traits.
 Add new trait: Burn Ward Patient - for the masochists out there!
 Add new trait: Deprived
 Add new trait: Well-Fitted
+Reduce volume level of Paranoia trait.
