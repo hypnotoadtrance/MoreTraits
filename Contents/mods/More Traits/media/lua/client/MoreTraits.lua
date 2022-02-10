@@ -281,6 +281,7 @@ local function initToadTraitsItems(_player)
     if player:HasTrait("deprived") then
         player:clearWornItems();
         inv:removeAllItems();
+        player:createKeyRing();
     end
 end
 
