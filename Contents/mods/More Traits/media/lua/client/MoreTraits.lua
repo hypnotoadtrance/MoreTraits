@@ -2825,6 +2825,69 @@ local function mundane(_actor, _target, _weapon, _damage)
         end
     end
 end
+local function clothingUpdate(_player)
+    local player = _player;
+    local state = "Normal";
+    local wornItems = player:getWornItems();
+    local inventory = player:getInventory();
+    if player:HasTrait("fitted") then
+        state = "Fitted";
+    end
+    if wornItems ~= nil and wornItems:size() > 1 then
+        for i = 0, inventory:getItems():size() - 1 do
+            local item = inventory:getItems():get(i);
+            if item:IsClothing() then
+                --Don't reduce weight of unequipped clothing.
+                local itemdata = item:getModData();
+                if itemdata.sState ~= nil and itemdata.sState ~= "Normal" and wornItems:contains(item) == false then
+                    item:setRunSpeedModifier(itemdata.iOrigRunSpeedMod);
+                    item:setCombatSpeedModifier(itemdata.iOrigCombatSpeedMod);
+                    item:setActualWeight(itemdata.iOrigWeight);
+                    itemdata.sState = "Normal";
+                end
+            end
+        end
+        for i = wornItems:size() - 1, 0, -1 do
+            local item = wornItems:getItemByIndex(i);
+            if item:IsClothing() then
+                local itemdata = item:getModData();
+                if itemdata.sState == nil then
+                    --first time checking item. Initialize it.
+                    itemdata.sState = "Normal";
+                    itemdata.iOrigRunSpeedMod = item:getRunSpeedModifier();
+                    itemdata.iOrigCombatSpeedMod = item:getCombatSpeedModifier();
+                    itemdata.iOrigWeight = item:getActualWeight();
+                end
+                if state ~= itemdata.sState then
+                    --update state
+                    if itemdata.iOrigRunSpeedMod ~= nil and itemdata.iOrigRunSpeedMod < 1 then
+                        if state == "Fitted" then
+                            item:setRunSpeedModifier(1.0);
+                        else
+                            item:setRunSpeedModifier(itemdata.iOrigRunSpeedMod);
+                        end
+                    end
+                    if itemdata.iOrigCombatSpeedMod ~= nil and itemdata.iOrigCombatSpeedMod < 1 then
+                        if state == "Fitted" then
+                            item:setCombatSpeedModifier(1.0);
+                        else
+                            item:setCombatSpeedModifier(itemdata.iOrigCombatSpeedMod);
+                        end
+                    end
+                    if itemdata.iOrigWeight ~= nil then
+                        if state == "Fitted" then
+                            item:setActualWeight(itemdata.iOrigWeight * 0.5);
+                        else
+                            item:setActualWeight(itemdata.iOrigWeight);
+                        end
+                    end
+                    itemdata.sState = state;
+                    player:setWornItems(wornItems);
+                end
+            end
+        end
+    end
+end
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -2836,6 +2899,7 @@ local function MainPlayerUpdate(_player)
         FoodUpdate(player);
         Gordanite(player);
         BatteringRamUpdate(player, playerdata);
+        clothingUpdate(player)
         --Reset internalTick every 30 ticks
         internalTick = 0;
     elseif internalTick == 20 then
