@@ -390,7 +390,7 @@ local function initToadTraitsPerks(_player)
             b:setBurned();
             b:setBurnTime(ZombRand(10, 100) + damage);
             b:setNeedBurnWash(false);
-            b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+            b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
         end
     end
     playerdata.ToadTraitBodyDamage = nil;
