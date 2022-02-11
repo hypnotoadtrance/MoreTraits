@@ -2938,6 +2938,18 @@ local function EveryOneMinute()
     LeadFoot(player);
     GymGoerUpdate(player);
 end
+local function OnLoad()
+    --reset any worn clothing to default state.
+    local player = getPlayer();
+    local wornItems = player:getWornItems();
+    for i = wornItems:size() - 1, 0, -1 do
+        local item = wornItems:getItemByIndex(i);
+        if item:IsClothing() then
+            local itemdata = item:getModData();
+            itemdata.sState = nil;
+        end
+    end
+end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
 Events.OnPlayerMove.Add(BatteringRam);
@@ -2961,3 +2973,4 @@ Events.EveryHours.Add(ToadTraitDepressive);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
+Events.OnLoad.Add(OnLoad);
