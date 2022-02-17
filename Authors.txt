@@ -11,6 +11,7 @@ SteadySpring
 Xenu47
 Aristrofl
 Vaikke
+Domestos
 
 Translations:
 Simplified Chinese, by EndsM

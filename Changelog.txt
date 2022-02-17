@@ -2,3 +2,4 @@ Changelog Notes:
 Fix Well-Fitted not retaining stats when reloading game.
 Fix Evasive not working upon exiting and reloading a game.
 Add new trait: Tavern Brawler.
+Fix clothing appearing on Zombies, when it should be exclusive to Antique Collector. (Credit: Domestos)
