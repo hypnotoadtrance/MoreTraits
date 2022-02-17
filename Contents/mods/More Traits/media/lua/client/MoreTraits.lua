@@ -1676,24 +1676,33 @@ local function tavernbrawler(_actor, _target, _weapon, _damage)
     local chance = 50;
     local whitelist = { "ToolWeapon", "WeaponCrafted", "Cooking", "Household", "FirstAid", "Gardening", "Sports" };
     local damage = _damage;
+    local multiplier = 1;
     if _actor == player and player:HasTrait("tavernbrawler") then
         if tableContains(whitelist, weapon:getDisplayCategory()) == true or weapon:getCategories():contains("Improvised") then
+            if weapon:getCategories():contains("Spear") then
+                chance = 0;
+                multiplier = 0.25;
+            end
             if player:HasTrait("Lucky") then
                 chance = chance + 5 * luckimpact;
+                multiplier = multiplier + 0.1;
             end
             if player:HasTrait("Unlucky") then
                 chance = chance - 5 * luckimpact;
+                multiplier = multiplier - 0.1;
             end
             if weapon:getConditionLowerChance() <= 2 then
                 chance = chance + 25;
+                multiplier = multiplier + 0.5;
             end
             if weapon:getConditionMax() <= 5 then
                 chance = chance + 25;
+                multiplier = multiplier + 0.5;
             end
             if chance >= 100 then
                 chance = 95;
             end
-            _target:setHealth(_target:getHealth() - (damage * 2) * 0.1);
+            _target:setHealth(_target:getHealth() - (damage * multiplier) * 0.1);
             if _target:getHealth() <= 0 and _target:isAlive() then
                 _target:update();
             end
