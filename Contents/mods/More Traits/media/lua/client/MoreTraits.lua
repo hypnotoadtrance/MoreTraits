@@ -825,6 +825,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
     local container;
     if player:HasTrait("antique") then
         local basechance = 10;
+        local roll = 1000;
         if player:HasTrait("Lucky") then
             basechance = basechance + 1 * luckimpact;
         end
@@ -846,6 +847,9 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
         if basechance < 1 then
             basechance = 1;
         end
+        if SandboxVars.MoreTraits.AntiqueChance then
+            roll = SandboxVars.MoreTraits.AntiqueChance;
+        end
         for j, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
@@ -853,7 +857,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
                     containerObj:getModData().bAntiqueRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
-                    if ZombRand(1000) <= basechance then
+                    if ZombRand(roll) <= basechance then
                         local i = ZombRand(length);
                         if i == 0 then
                             i = 1;
