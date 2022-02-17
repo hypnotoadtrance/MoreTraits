@@ -2941,6 +2941,7 @@ end
 local function OnLoad()
     --reset any worn clothing to default state.
     local player = getPlayer();
+    local playerdata = player:getModData();
     local wornItems = player:getWornItems();
     for i = wornItems:size() - 1, 0, -1 do
         local item = wornItems:getItemByIndex(i);
@@ -2949,6 +2950,10 @@ local function OnLoad()
             itemdata.sState = nil;
         end
     end
+    --reset evasive on game load
+    playerdata.ToadTraitBodyDamage = nil;
+    suspendevasive = false;
+    player:getBodyDamage():Update();
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);

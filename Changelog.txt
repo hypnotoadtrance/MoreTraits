@@ -1,2 +1,3 @@
 Changelog Notes:
 Fix Well-Fitted not retaining stats when reloading game.
+Fix Evasive not working upon exiting and reloading a game.
