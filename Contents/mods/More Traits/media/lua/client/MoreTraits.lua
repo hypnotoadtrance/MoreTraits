@@ -1668,6 +1668,48 @@ local function prospear(_actor, _target, _weapon, _damage)
         end
     end
 end
+
+local function tavernbrawler(_actor, _target, _weapon, _damage)
+    local player = getPlayer();
+    local weapon = _weapon;
+    local weapondata = weapon:getModData();
+    local chance = 50;
+    local whitelist = { "ToolWeapon", "WeaponCrafted", "Cooking", "Household", "FirstAid", "Gardening", "Sports" };
+    local damage = _damage;
+    if _actor == player and player:HasTrait("tavernbrawler") then
+        if tableContains(whitelist, weapon:getDisplayCategory()) == true or weapon:getCategories():contains("Improvised") then
+            if player:HasTrait("Lucky") then
+                chance = chance + 5 * luckimpact;
+            end
+            if player:HasTrait("Unlucky") then
+                chance = chance - 5 * luckimpact;
+            end
+            if weapon:getConditionLowerChance() <= 2 then
+                chance = chance + 25;
+            end
+            if weapon:getConditionMax() <= 5 then
+                chance = chance + 25;
+            end
+            if chance >= 100 then
+                chance = 95;
+            end
+            _target:setHealth(_target:getHealth() - (damage * 2) * 0.1);
+            if _target:getHealth() <= 0 and _target:isAlive() then
+                _target:update();
+            end
+            if weapondata.iLastWeaponCond == nil then
+                weapondata.iLastWeaponCond = weapon:getCondition();
+            end
+            if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= chance then
+                if weapon:getCondition() < weapon:getConditionMax() then
+                    weapon:setCondition(weapon:getCondition() + 1);
+                end
+            end
+            weapondata.iLastWeaponCond = weapon:getCondition();
+        end
+    end
+end
+
 local function albino(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
@@ -2964,6 +3006,7 @@ Events.OnWeaponHitCharacter.Add(problade);
 Events.OnWeaponHitCharacter.Add(prospear);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);
+Events.OnWeaponHitCharacter.Add(tavernbrawler);
 Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
 Events.EveryHours.Add(drinkerpoison);
