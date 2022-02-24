@@ -2123,7 +2123,7 @@ local function graveRobber(_zombie)
     if SandboxVars.MoreTraits.GraveRobberGuaranteedLoot then
         extraloot = SandboxVars.MoreTraits.GraveRobberGuaranteedLoot;
     end
-    if player:HasTrait("graverobber") then
+    if player:HasTrait("graverobber") and zombie:DistTo(player) <= 12 then
         if player:HasTrait("Lucky") then
             chance = chance + 1 * luckimpact;
         end
