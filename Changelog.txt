@@ -4,3 +4,4 @@ Traditional Chinese Translation by 紅茶老師
 Fixed Grave Robber triggering for all players in the same cell as the zombie. Now only considers nearby players to zombies.
 Add support for Driving Skill mod.
 Re-Enable Lucky/Unlucky in MP if using 41.66 or higher.
+Add in Foraging system values to various traits.
