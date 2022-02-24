@@ -5,3 +5,4 @@ Fixed Grave Robber triggering for all players in the same cell as the zombie. No
 Add support for Driving Skill mod.
 Re-Enable Lucky/Unlucky in MP if using 41.66 or higher.
 Add in Foraging system values to various traits.
+Patch AddXP causing undefined method error. (Resolved GymGoer)

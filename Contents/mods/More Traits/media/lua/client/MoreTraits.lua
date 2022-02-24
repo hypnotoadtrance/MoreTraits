@@ -16,6 +16,7 @@ skipxpadd = false;
 suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
+MTVersion = getCore():getGameVersion();
 
 local function tableContains(t, e)
     for _, value in pairs(t) do
@@ -1113,7 +1114,11 @@ local function Specialization(_player, _perk, _amount)
                     if xpforlevel >= curxp then
                         break ;
                     else
-                        player:getXp():AddXP(perk, -1 * 0.1, false, false);
+                        if MTVersion:getMajor() >= 41 and MTVersion:getMinor() >= 66 then
+                            player:getXp():AddXP(perk, -1 * 0.1, false, false, false);
+                        else
+                            player:getXp():AddXP(perk, -1 * 0.1, false, false);
+                        end
                     end
                 end
             end
@@ -2556,7 +2561,11 @@ local function GymGoer(_player, _perk, _amount)
     if player:HasTrait("gymgoer") and player:getCurrentState() == FitnessState.instance() then
         if perk == Perks.Fitness or perk == Perks.Strength then
             amount = amount * (modifier - 1);
-            player:getXp():AddXP(perk, amount, false, false);
+            if MTVersion:getMajor() >= 41 and MTVersion:getMinor() >= 66 then
+                player:getXp():AddXP(perk, amount, false, false, false);
+            else
+                player:getXp():AddXP(perk, amount, false, false);
+            end
         end
     end
 end
