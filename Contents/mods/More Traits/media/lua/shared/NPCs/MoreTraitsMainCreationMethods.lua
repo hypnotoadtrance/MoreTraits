@@ -170,7 +170,9 @@ local function initToadTraits()
     local spearperk = TraitFactory.addTrait("prospear", getText("UI_trait_prospear"), 7, getText("UI_trait_prospeardesc"), false, false);
     spearperk:addXPBoost(Perks.Spear, 2);
     local thickblood = TraitFactory.addTrait("thickblood", getText("UI_trait_thickblood"), 4, getText("UI_trait_thickblooddesc"), false, false);
-    local expertdriver = TraitFactory.addTrait("expertdriver", getText("UI_trait_expertdriver"), 5, getText("UI_trait_expertdriverdesc"), false, false);
+    if getActivatedMods():contains("DrivingSkill") == false then
+        local expertdriver = TraitFactory.addTrait("expertdriver", getText("UI_trait_expertdriver"), 5, getText("UI_trait_expertdriverdesc"), false, false);
+    end
     local superimmune = TraitFactory.addTrait("superimmune", getText("UI_trait_superimmune"), 8, getText("UI_trait_superimmunedesc"), false, false);
     local packmule = TraitFactory.addTrait("packmule", getText("UI_trait_packmule"), 7, getText("UI_trait_packmuledesc"), false, false);
     local graverobber = TraitFactory.addTrait("graverobber", getText("UI_trait_graverobber"), 7, getText("UI_trait_graverobberdesc"), false, false);
@@ -206,7 +208,9 @@ local function initToadTraits()
         --Don't enable Amputee trait if the Amputation mod is installed.
         local amputee = TraitFactory.addTrait("amputee", getText("UI_trait_amputee"), -16, getText("UI_trait_amputeedesc"), false, false);
     end
-    local poordriver = TraitFactory.addTrait("poordriver", getText("UI_trait_poordriver"), -5, getText("UI_trait_poordriverdesc"), false, false);
+    if getActivatedMods():contains("DrivingSkill") == false then
+        local poordriver = TraitFactory.addTrait("poordriver", getText("UI_trait_poordriver"), -5, getText("UI_trait_poordriverdesc"), false, false);
+    end
     --  local gimp = TraitFactory.addTrait("gimp", getText("UI_trait_gimp"), -8, getText("UI_trait_gimpdesc"), false, false);
     local anemic = TraitFactory.addTrait("anemic", getText("UI_trait_anemic"), -4, getText("UI_trait_anemicdesc"), false, false);
     local immunocompromised = TraitFactory.addTrait("immunocompromised", getText("UI_trait_immunocompromised"), -10, getText("UI_trait_immunocompromiseddesc"), false, false);
@@ -290,7 +294,9 @@ local function initToadTraits()
     if getActivatedMods():contains("DynamicTraits") == false then
         TraitFactory.setMutualExclusive("generator", "ingenuitive");
     end
-    TraitFactory.setMutualExclusive("expertdriver", "poordriver");
+    if getActivatedMods():contains("DrivingSkill") == false then
+        TraitFactory.setMutualExclusive("expertdriver", "poordriver");
+    end
     TraitFactory.setMutualExclusive("Resilient", "superimmune");
     TraitFactory.setMutualExclusive("Resilient", "immunocompromised");
     TraitFactory.setMutualExclusive("superimmune", "immunocompromised");

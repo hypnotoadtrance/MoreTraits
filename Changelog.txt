@@ -2,3 +2,4 @@ Changelog Notes:
 Korean Translation by teray
 Traditional Chinese Translation by 紅茶老師
 Fixed Grave Robber triggering for all players in the same cell as the zombie. Now only considers nearby players to zombies.
+Add support for Driving Skill mod.

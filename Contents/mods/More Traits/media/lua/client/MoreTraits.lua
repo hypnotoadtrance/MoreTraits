@@ -1948,6 +1948,10 @@ end
 
 local function vehicleCheck(_player)
     local player = _player;
+    if getActivatedMods():contains("DrivingSkill") == true then
+        --skip processing if Driving Skill mod is installed.
+        return ;
+    end
     if player:isDriving() == true then
         local vehicle = player:getVehicle();
         local vmd = vehicle:getModData();
