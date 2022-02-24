@@ -5,3 +5,5 @@ Add new trait: Tavern Brawler.
 Fix clothing appearing on Zombies, when it should be exclusive to Antique Collector. (Credit: Domestos)
 Add Sandbox Option for Antique Collector chance.
 Portuguese translation by Cinissh
+Korean Translation by teray
+Traditional Chinese Translation by 紅茶老師
