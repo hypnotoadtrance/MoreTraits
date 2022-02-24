@@ -315,6 +315,12 @@ local function initToadTraits()
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();
+    local version = getCore():getGameVersion();
+    if version:getMajor() >= 41 and version:getMinor() >= 66 then
+        --Re-enable Lucky/Unlucky
+        TraitFactory.getTrait("Lucky"):setRemoveInMP(false);
+        TraitFactory.getTrait("Unlucky"):setRemoveInMP(false);
+    end
 end
 
 Events.OnGameBoot.Add(initToadTraits);
