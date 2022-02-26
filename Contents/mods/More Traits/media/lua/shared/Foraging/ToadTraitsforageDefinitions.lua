@@ -1,4 +1,5 @@
-forageSkills = {
+require "forageDefinitions";
+MoreTraitsSkills = {
     incomprehensive = {
         name = "incomprehensive",
         type = "trait",
@@ -127,3 +128,4 @@ forageSkills = {
         },
     },
 };
+table.insert(forageSkills, MoreTraitsSkills);
