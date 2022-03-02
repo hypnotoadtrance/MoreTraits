@@ -17,6 +17,7 @@ suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
 MTVersion = getCore():getGameVersion();
+BodyDamagedFromTrait = {};
 
 local function tableContains(t, e)
     for _, value in pairs(t) do
@@ -349,6 +350,7 @@ local function initToadTraitsPerks(_player)
                     b:AddDamage(damage);
                     b:setScratched(true, true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    table.insert(BodyDamagedFromTrait, b);
                 elseif injury == 2 then
                     if doburns == true then
                         b:AddDamage(damage);
@@ -356,6 +358,7 @@ local function initToadTraitsPerks(_player)
                         b:setBurnTime(ZombRand(50) + damage);
                         b:setNeedBurnWash(false);
                         b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                        table.insert(BodyDamagedFromTrait, b);
                     else
                         itterations = itterations - 1;
                     end
@@ -363,11 +366,13 @@ local function initToadTraitsPerks(_player)
                     b:AddDamage(damage);
                     b:setCut(true, true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    table.insert(BodyDamagedFromTrait, b);
                 elseif injury >= 4 then
                     b:AddDamage(damage);
                     b:setDeepWounded(true);
                     b:setStitched(true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    table.insert(BodyDamagedFromTrait, b);
                 end
             end
         end
@@ -384,6 +389,7 @@ local function initToadTraitsPerks(_player)
         bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
         bodydamage:setInfected(false);
         bodydamage:setInfectionLevel(0);
+        table.insert(BodyDamagedFromTrait, bodydamage:getBodyPart(BodyPartType.LowerLeg_R));
     end
     if player:HasTrait("burned") then
         local bodydamage = player:getBodyDamage();
@@ -393,6 +399,7 @@ local function initToadTraitsPerks(_player)
             b:setBurnTime(ZombRand(10, 100) + damage);
             b:setNeedBurnWash(false);
             b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
+            table.insert(BodyDamagedFromTrait, b); --i forgor to add in the thing for burned, but i think this should work fine
         end
     end
     playerdata.ToadTraitBodyDamage = nil;
@@ -1201,7 +1208,9 @@ local function indefatigable(_player, _playerdata)
                 print("Healed to full.");
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
-                    b:RestoreToFullHealth();
+                    if tableContains(BodyDamagedFromTrait, b) == false then
+                      b:RestoreToFullHealth();
+                      end
                 end
                 playerdata.bindefatigable = true;
                 playerdata.indefatigablecooldown = 0;
@@ -2957,6 +2966,18 @@ local function clothingUpdate(_player)
         end
     end
 end
+
+local function CheckInjuredHeal()
+    if #BodyDamagedFromTrait > 0 then
+       for i, v in ipairs(BodyDamagedFromTrait) do
+         if v:HasInjury() == false then
+            table.remove(BodyDamagedFromTrait, i, v);
+            i = i - 1;
+         end
+      end
+   end
+end
+
 local function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -3040,6 +3061,7 @@ Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.EveryHours.Add(indefatigablecounter);
+Events.EveryHours.Add(CheckInjuredHeal); 
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);
