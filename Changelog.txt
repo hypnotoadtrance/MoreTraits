@@ -1,2 +1,3 @@
 Changelog Notes:
-Hotfix Foraging System.
+Add French Translation, by MonsterKillers1973
+Add Turkish Translation, by Sariserpito

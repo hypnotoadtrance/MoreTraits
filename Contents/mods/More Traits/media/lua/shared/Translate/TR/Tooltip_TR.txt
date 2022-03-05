@@ -1,0 +1,16 @@
+Tooltip_TR = {
+    Tooltip_MoreTraits_AntiqueAxe = "Nadir Sertleştirilmiş Taş Balta.<br>Çok güçlü ve dayanıklı olsa da ne yazık ki tamir edilebilir değil.",
+    Tooltip_MoreTraits_Thumper = "Nadir taştan Balyoz.<br>Tüm kalabalığı tek vuruşta devirebilir.<br>İnanılmaz derecede güçlü ama aynı zamanda son derece ağır!",
+    Tooltip_MoreTraits_ObsidianBlade = "Nadir bir antika kurban hançeri.<br>Çok güçlü ama kırılgan.",
+    Tooltip_MoreTraits_PackerBag = "Nadir bir çanta.<br>Geniş kapasite ve yüksek ağırlık azaltmaya sahip.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Bu levye, daha hızlı sallanıp daha fazla hasar verecek şekilde şekillendirildi ve geliştirildi.",
+    Tooltip_MoreTraits_Slugger = "Nadir bulunan, imzalı bir alüminyum beyzbol sopası.<br>Standart bir beyzbol sopasından daha hafiftir, daha hızlı sallanır ve daha dayanıklıdır.",
+    Tooltip_MoreTraits_Cure = "Zombileştirmenin etkilerini tersine çevirebilen güçlü bir karışım.<br>Yalnızca en yetenekli tıp araştırmacıları tarafından yapılabilir.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Sınırlı sayıda bir dergi.<br>Bu dergi Cesetler ile gübre yapmana olanak sağlar.",
+    Tooltip_MoreTraits_AntiqueMag2 = "Sınırlı sayıda bir dergi.<br>Bu dergi evdeki eşyalarla PapierMache yapmanızı sağlar.",
+    Tooltip_MoreTraits_AntiqueMag3 = "Sınırlı sayıda bir dergi.<br>Bu baskı, belirli Papua Yeni Gine kabilelerinin yamyam tarifleri hakkında yorumlar sunuyor.",
+    Tooltip_MoreTraits_PapierMacheSword = "Tüm aile için eğlence!<br>Dört yaşın altındaki çocuklar için uygun değildir.",
+    Tooltip_MoreTraits_ItemBoost = "Bu öğenin istatislikleri özelliklerinizden biri tarafından arttırılıyor.",
+    Tooltip_MoreTraits_GordaniteBoost = "Levye+",
+    Tooltip_MoreTraits_GordaniteDefault = "Levye",
+}
