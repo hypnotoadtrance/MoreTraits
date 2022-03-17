@@ -1,3 +1,5 @@
 Changelog Notes:
 Add French Translation, by MonsterKillers1973
 Add Turkish Translation, by Sariserpito
+Add Spanish Translation, by franz
+Attempt to resolve items disappearing on servers.

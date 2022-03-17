@@ -677,7 +677,11 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                             rolled = true;
                                         end
                                         if rolled then
-                                            container:AddItems(item:getFullType(), n);
+                                            local addeditems = container:AddItems(item:getFullType(), n);
+                                            for i = 0, addeditems:size() - 1 do
+                                                local item = container:getItems():get(i);
+                                                container:addItemOnServer(item);
+                                            end
                                             if MoreTraits.settings.ScroungerAnnounce == true then
                                                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
                                             end
@@ -792,6 +796,7 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                     if tempcontainer ~= {} then
                         for _, i in pairs(tempcontainer) do
                             container:Remove(i);
+                            container:removeItemOnServer(i);
                             if MoreTraits.settings.ScroungerAnnounce == true then
                                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. i:getName(), false, HaloTextHelper.getColorRed());
                             end
@@ -863,7 +868,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
                         if i == 0 then
                             i = 1;
                         end
-                        container:AddItem(items[i]);
+                        container:addItemOnServer(container:AddItem(items[i]));
                     end
                 end
             end
@@ -941,7 +946,7 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                                 x = 1;
                             end
                             if ZombRand(100) <= basechance then
-                                container:AddItem(items[x]);
+                                container:addItemOnServer(container:AddItem(items[x]));
                             end
                         end
                     end
@@ -2248,7 +2253,9 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                 if item:isRotten() == true then
                                     if ZombRand(100) <= basechance then
                                         local newitem = container:AddItem(item:getFullType());
+                                        container:addItemOnServer(newitem)
                                         container:Remove(item);
+                                        container:removeItemOnServer(item);
                                         if MoreTraits.settings.GourmandAnnounce == true then
                                             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
                                         end
@@ -2256,7 +2263,9 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                 elseif item:isFresh() == false then
                                     if ZombRand(100) <= basechance then
                                         local newitem = container:AddItem(item:getFullType());
+                                        container:addItemOnServer(newitem);
                                         container:Remove(item);
+                                        container:removeItemOnServer(item);
                                         if MoreTraits.settings.GourmandAnnounce == true then
                                             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
                                         end
