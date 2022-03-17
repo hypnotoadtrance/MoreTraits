@@ -110,7 +110,7 @@ local function addXPNoMultiplier(_player, _perk, _amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
-local function initToadTraitsItems(_player)
+function initToadTraitsItems(_player)
     local player = _player;
     local inv = player:getInventory();
     if player:HasTrait("preparedfood") then
@@ -286,7 +286,7 @@ local function initToadTraitsItems(_player)
     end
 end
 
-local function initToadTraitsPerks(_player)
+function initToadTraitsPerks(_player)
     local player = _player;
     local playerdata = player:getModData();
     local damage = 20;
@@ -405,7 +405,7 @@ local function initToadTraitsPerks(_player)
     end
 end
 
-local function ToadTraitEvasive(_player, _playerdata)
+function ToadTraitEvasive(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("evasive") then
@@ -521,7 +521,7 @@ local function ToadTraitEvasive(_player, _playerdata)
     end
 end
 
-local function ToadTraitButter(_player)
+function ToadTraitButter(_player)
     local player = _player;
     if player:HasTrait("butterfingers") and player:isPlayerMoving() then
         local basechance = 3;
@@ -567,7 +567,7 @@ local function ToadTraitButter(_player)
     end
 end
 
-local function ToadTraitParanoia(_player, _playerdata)
+function ToadTraitParanoia(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("paranoia") then
@@ -602,7 +602,7 @@ local function ToadTraitParanoia(_player, _playerdata)
     end
 end
 
-local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
+function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     local player = _player;
     local playerData = player:getModData();
     local containerObj;
@@ -705,7 +705,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     end
 end
 
-local function UnHighlightScrounger(_player, _playerdata)
+function UnHighlightScrounger(_player, _playerdata)
     if MoreTraits.settings.ScroungerHighlight == true then
         local maxTime = MoreTraits.settings.ScroungerHighlightTime;
         local player = _player;
@@ -730,7 +730,7 @@ local function UnHighlightScrounger(_player, _playerdata)
     end
 end
 
-local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
+function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     local player = _player;
     local containerObj;
     local container;
@@ -808,7 +808,7 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     end
 end
 
-local function ToadTraitAntique(_iSInventoryPage, _state, _player)
+function ToadTraitAntique(_iSInventoryPage, _state, _player)
     local items = {};
     table.insert(items, "MoreTraits.AntiqueAxe");
     table.insert(items, "MoreTraits.Thumper");
@@ -876,7 +876,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
     end
 end
 
-local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
+function ToadTraitVagabond(_iSInventoryPage, _state, _player)
     local items = {};
     table.insert(items, "Base.BreadSlices");
     table.insert(items, "Base.Pizza");
@@ -956,7 +956,7 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
     end
 end
 
-local function ToadTraitDepressive()
+function ToadTraitDepressive()
     local player = getPlayer();
     if player:HasTrait("depressive") then
         local basechance = 2;
@@ -982,7 +982,7 @@ local function ToadTraitDepressive()
     end
 end
 
-local function CheckDepress(_player, _playerdata)
+function CheckDepress(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local depressed = playerdata.bToadTraitDepressed;
@@ -999,7 +999,7 @@ local function CheckDepress(_player, _playerdata)
     end
 end
 
-local function CheckSelfHarm(_player)
+function CheckSelfHarm(_player)
     local player = _player;
     local modifier = 3;
     if player:HasTrait("depressive") then
@@ -1017,7 +1017,7 @@ local function CheckSelfHarm(_player)
     end
 end
 
-local function Blissful(_player)
+function Blissful(_player)
     local player = _player;
     local bodydamage = player:getBodyDamage();
     local unhappiness = bodydamage:getUnhappynessLevel();
@@ -1032,7 +1032,7 @@ local function Blissful(_player)
     end
 end
 
-local function Specialization(_player, _perk, _amount)
+function Specialization(_player, _perk, _amount)
     local player = _player;
     local perk = _perk;
     local amount = _amount;
@@ -1133,7 +1133,7 @@ local function Specialization(_player, _perk, _amount)
     end
 end
 
-local function Gordanite(_player)
+function Gordanite(_player)
     local player = _player;
     if player:HasTrait("gordanite") then
         local longBluntLvl = player:getPerkLevel(Perks.Blunt);
@@ -1195,7 +1195,7 @@ local function Gordanite(_player)
     end
 end
 
-local function indefatigable(_player, _playerdata)
+function indefatigable(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local enemies = player:getSpottedList();
@@ -1226,7 +1226,7 @@ local function indefatigable(_player, _playerdata)
     end
 end
 
-local function indefatigablecounter()
+function indefatigablecounter()
     local player = getPlayer();
     local playerdata = player:getModData();
     local recharge = 7 * 24;
@@ -1246,7 +1246,7 @@ local function indefatigablecounter()
     end
 end
 
-local function badteethtrait(_player, _playerdata)
+function badteethtrait(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
@@ -1268,7 +1268,7 @@ local function badteethtrait(_player, _playerdata)
     end
 end
 
-local function hardytrait(_player, _playerdata)
+function hardytrait(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local stats = player:getStats();
@@ -1301,7 +1301,7 @@ local function hardytrait(_player, _playerdata)
     end
 end
 
-local function drinkerupdate(_player, _playerdata)
+function drinkerupdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("drinker") then
@@ -1349,7 +1349,7 @@ local function drinkerupdate(_player, _playerdata)
     end
 end
 
-local function drinkertick()
+function drinkertick()
     local player = getPlayer();
     local playerdata = player:getModData();
     if player:HasTrait("drinker") then
@@ -1389,7 +1389,7 @@ local function drinkertick()
     end
 end
 
-local function drinkerpoison()
+function drinkerpoison()
     local player = getPlayer();
     local playerdata = player:getModData();
     local hoursthreshold = 72;
@@ -1427,7 +1427,7 @@ local function drinkerpoison()
     end
 end
 
-local function bouncerupdate(_player, _playerdata)
+function bouncerupdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local chance = 5;
@@ -1485,7 +1485,7 @@ local function bouncerupdate(_player, _playerdata)
     end
 end
 
-local function martial(_actor, _target, _weapon, _damage)
+function martial(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local playerdata = player:getModData();
     local weapon = _weapon;
@@ -1549,7 +1549,7 @@ local function martial(_actor, _target, _weapon, _damage)
     end
 end
 
-local function problunt(_actor, _target, _weapon, _damage)
+function problunt(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1583,7 +1583,7 @@ local function problunt(_actor, _target, _weapon, _damage)
     end
 end
 
-local function problade(_actor, _target, _weapon, _damage)
+function problade(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1617,7 +1617,7 @@ local function problade(_actor, _target, _weapon, _damage)
     end
 end
 
-local function progun(_actor, _weapon)
+function progun(_actor, _weapon)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1649,7 +1649,7 @@ local function progun(_actor, _weapon)
     end
 end
 
-local function prospear(_actor, _target, _weapon, _damage)
+function prospear(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1683,7 +1683,7 @@ local function prospear(_actor, _target, _weapon, _damage)
     end
 end
 
-local function tavernbrawler(_actor, _target, _weapon, _damage)
+function tavernbrawler(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1733,7 +1733,7 @@ local function tavernbrawler(_actor, _target, _weapon, _damage)
     end
 end
 
-local function albino(_player, _playerdata)
+function albino(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("albino") then
@@ -1762,7 +1762,7 @@ local function albino(_player, _playerdata)
     end
 end
 
-local function amputee(_player, justGotInfected)
+function amputee(_player, justGotInfected)
     local player = _player;
     local bodydamage = player:getBodyDamage();
     if player:HasTrait("amputee") then
@@ -1810,7 +1810,7 @@ local function amputee(_player, justGotInfected)
     end
 end
 
-local function actionhero(_actor, _target, _weapon, _damage)
+function actionhero(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local critchance = 10;
@@ -1855,7 +1855,7 @@ local function actionhero(_actor, _target, _weapon, _damage)
     end
 end
 
-local function gimp()
+function gimp()
     local player = getPlayer();
     local playerdata = player:getModData();
     local modifier = 0.85;
@@ -1881,7 +1881,7 @@ local function gimp()
     end
 end
 
-local function fast()
+function fast()
     local player = getPlayer();
     local playerdata = player:getModData();
     local vector = player:getMoveForwardVec();
@@ -1913,7 +1913,7 @@ local function fast()
         end
     end
 end
-local function anemic(_player)
+function anemic(_player)
     local player = _player;
     if player:HasTrait("anemic") then
         local bodydamage = player:getBodyDamage();
@@ -1934,7 +1934,7 @@ local function anemic(_player)
 
     end
 end
-local function thickblood(_player)
+function thickblood(_player)
     local player = _player;
     if player:HasTrait("thickblood") then
         local bodydamage = player:getBodyDamage();
@@ -1956,7 +1956,7 @@ local function thickblood(_player)
     end
 end
 
-local function vehicleCheck(_player)
+function vehicleCheck(_player)
     local player = _player;
     if getActivatedMods():contains("DrivingSkill") == true then
         --skip processing if Driving Skill mod is installed.
@@ -2026,7 +2026,7 @@ local function vehicleCheck(_player)
     end
 end
 
-local function SuperImmune(_player, _playerdata)
+function SuperImmune(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
@@ -2077,7 +2077,7 @@ local function SuperImmune(_player, _playerdata)
     end
 end
 
-local function Immunocompromised(_player, _playerdata)
+function Immunocompromised(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
@@ -2126,7 +2126,7 @@ function checkWeight()
     end
 end
 
-local function graveRobber(_zombie)
+function graveRobber(_zombie)
     local player = getPlayer();
     local zombie = _zombie;
     local chance = 3;
@@ -2227,7 +2227,7 @@ local function graveRobber(_zombie)
 
 end
 
-local function Gourmand(_iSInventoryPage, _state, _player)
+function Gourmand(_iSInventoryPage, _state, _player)
     local player = _player;
     local containerObj;
     local container;
@@ -2279,7 +2279,7 @@ local function Gourmand(_iSInventoryPage, _state, _player)
         end
     end
 end
-local function setFoodState(food, state)
+function setFoodState(food, state)
     --States: "Gourmand", "Normal", "Ascetic"
     local player = getPlayer();
     local itemdata = food:getModData();
@@ -2505,7 +2505,7 @@ local function setFoodState(food, state)
     end
 
 end
-local function FoodUpdate(_player)
+function FoodUpdate(_player)
     local player = _player;
     local inv = player:getInventory();
     for i = 0, inv:getItems():size() - 1 do
@@ -2523,7 +2523,7 @@ local function FoodUpdate(_player)
         end
     end
 end
-local function FearfulUpdate(_player)
+function FearfulUpdate(_player)
     local player = _player;
     if player:HasTrait("fearful") then
         local stats = player:getStats();
@@ -2557,7 +2557,7 @@ local function FearfulUpdate(_player)
         end
     end
 end
-local function GymGoer(_player, _perk, _amount)
+function GymGoer(_player, _perk, _amount)
     local player = _player;
     local perk = _perk;
     local amount = _amount;
@@ -2578,7 +2578,7 @@ local function GymGoer(_player, _perk, _amount)
         end
     end
 end
-local function GymGoerUpdate(_player)
+function GymGoerUpdate(_player)
     local player = _player;
     if player:HasTrait("gymgoer") then
         local bodydamage = player:getBodyDamage();
@@ -2591,7 +2591,7 @@ local function GymGoerUpdate(_player)
         end
     end
 end
-local function ContainerEvents(_iSInventoryPage, _state)
+function ContainerEvents(_iSInventoryPage, _state)
     local page = _iSInventoryPage;
     local state = _state;
     if state == "end" then
@@ -2644,7 +2644,7 @@ function LearnAllRecipes(_player)
         end
     end
 end
-local function QuickWorker(_player)
+function QuickWorker(_player)
     local player = _player;
     if player:HasTrait("quickworker") then
         if player:hasTimedActions() == true then
@@ -2689,7 +2689,7 @@ local function QuickWorker(_player)
         end
     end
 end
-local function SlowWorker(_player)
+function SlowWorker(_player)
     local player = _player;
     if player:HasTrait("slowworker") then
         if player:hasTimedActions() == true then
@@ -2735,7 +2735,7 @@ local function SlowWorker(_player)
         end
     end
 end
-local function LeadFoot(_player)
+function LeadFoot(_player)
     local player = _player;
     local shoes = player:getClothingItem_Feet();
     local itemdata = nil;
@@ -2761,7 +2761,7 @@ local function LeadFoot(_player)
         end
     end
 end
-local function GlassBody(_player, _playerdata)
+function GlassBody(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
@@ -2807,7 +2807,7 @@ local function GlassBody(_player, _playerdata)
         playerdata.fLastHP = bodydamage:getOverallBodyHealth();
     end
 end
-local function BatteringRam()
+function BatteringRam()
     local player = getPlayer();
     if player:HasTrait("batteringram") then
         local playerdata = player:getModData();
@@ -2872,7 +2872,7 @@ local function BatteringRam()
         end
     end
 end
-local function BatteringRamUpdate(_player, _playerdata)
+function BatteringRamUpdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("batteringram") then
@@ -2886,7 +2886,7 @@ local function BatteringRamUpdate(_player, _playerdata)
         end
     end
 end
-local function mundane(_actor, _target, _weapon, _damage)
+function mundane(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -2903,7 +2903,7 @@ local function mundane(_actor, _target, _weapon, _damage)
         end
     end
 end
-local function clothingUpdate(_player)
+function clothingUpdate(_player)
     local player = _player;
     local state = "Normal";
     local wornItems = player:getWornItems();
@@ -2966,7 +2966,7 @@ local function clothingUpdate(_player)
         end
     end
 end
-local function MainPlayerUpdate(_player)
+function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
     if internalTick >= 30 then
@@ -3006,7 +3006,7 @@ local function MainPlayerUpdate(_player)
     internalTick = internalTick + 1;
 end
 
-local function EveryOneMinute()
+function EveryOneMinute()
     local player = getPlayer();
     local playerdata = player:getModData();
     ToadTraitParanoia(player, playerdata);
@@ -3015,7 +3015,7 @@ local function EveryOneMinute()
     LeadFoot(player);
     GymGoerUpdate(player);
 end
-local function OnLoad()
+function OnLoad()
     --reset any worn clothing to default state.
     local player = getPlayer();
     local playerdata = player:getModData();
