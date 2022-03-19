@@ -1,2 +1,3 @@
 Changelog Notes:
 Synchronize Grave Robber with Server.
+Add Mod Options setting to announce Vagabond food finds.

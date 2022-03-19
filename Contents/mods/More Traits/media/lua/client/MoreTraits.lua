@@ -947,6 +947,9 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                             end
                             if ZombRand(100) <= basechance then
                                 container:addItemOnServer(container:AddItem(items[x]));
+                                if MoreTraits.settings.VagabondAnnounce == true then
+                                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
+                                end
                             end
                         end
                     end

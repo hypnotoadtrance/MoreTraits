@@ -9,6 +9,7 @@ MoreTraits.settings.SuperImmuneAnnounce = false;
 MoreTraits.settings.GourmandAnnounce = false;
 MoreTraits.settings.AlbinoAnnounce = true;
 MoreTraits.settings.MartialDamage = false;
+MoreTraits.settings.VagabondAnnounce = false;
 
 if ModOptions and ModOptions.getInstance then
     local function onModOptionsApply(optionValues)
@@ -20,6 +21,7 @@ if ModOptions and ModOptions.getInstance then
         MoreTraits.settings.GourmandAnnounce = optionValues.settings.options.GourmandAnnounce;
         MoreTraits.settings.AlbinoAnnounce = optionValues.settings.options.AlbinoAnnounce;
         MoreTraits.settings.MartialDamage = optionValues.settings.options.MartialDamage;
+        MoreTraits.settings.VagabondAnnounce = optionValues.settings.options.VagabondAnnounce;
     end
     local SETTINGS = {
         options_data = {
@@ -42,6 +44,13 @@ if ModOptions and ModOptions.getInstance then
                 name = "UI_MoreTraits_Options_ScroungerHighlightTime",
                 tooltip = "UI_MoreTraits_Options_ScroungerHighlightTime_ToolTip",
                 default = 2,
+                OnApplyMainMenu = onModOptionsApply,
+                OnApplyInGame = onModOptionsApply,
+            },
+            VagabondAnnounce = {
+                name = "UI_MoreTraits_Options_VagabondAnnounce",
+                tooltip = "UI_MoreTraits_Options_VagabondAnnounce_ToolTip",
+                default = false,
                 OnApplyMainMenu = onModOptionsApply,
                 OnApplyInGame = onModOptionsApply,
             },
