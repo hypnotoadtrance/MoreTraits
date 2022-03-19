@@ -2168,57 +2168,57 @@ function graveRobber(_zombie)
                                          "Base.BeefJerky", "Base.Bread", "Base.Broccoli", "Base.Butter", "Base.CandyPackage", "Base.TinnedBeans",
                                          "Base.CannedCarrots2", "Base.CannedChili", "Base.CannedCorn", "Base.CannedCornedBeef", "CannedMushroomSoup",
                                          "Base.CannedPeas", "Base.CannedPotato2", "Base.CannedSardines", "Base.CannedTomato2", "Base.TunaTin" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 20 then
                     local randomitem = { "Base.PillsAntiDep", "Base.AlcoholWipes", "Base.AlcoholedCottonBalls", "Base.Pills", "Base.PillsSleepingTablets",
                                          "Base.Tissue", "Base.ToiletPaper", "Base.PillsVitamins", "Base.Bandaid", "Base.Bandage", "Base.CottonBalls", "Base.Splint", "Base.AlcoholBandage",
                                          "Base.AlcoholRippedSheets", "Base.SutureNeedle", "Base.Tweezers", "Base.WildGarlicCataplasm", "Base.ComfreyCataplasm", "Base.PlantainCataplasm", "Base.Disinfectant" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 30 then
                     local randomitem = { "Base.223Box", "Base.308Box", "Base.Bullets38Box", "Base.Bullets44Box", "Base.Bullets45Box", "Base.556Box", "Base.Bullets9mmBox",
                                          "Base.ShotgunShellsBox", "Base.DoubleBarrelShotgun", "Base.Shotgun", "Base.ShotgunSawnoff", "Base.Pistol", "Base.Pistol2", "Base.Pistol3", "Base.AssaultRifle", "Base.AssaultRifle2",
                                          "Base.VarmintRifle", "Base.HuntingRifle", "Base.556Clip", "Base.M14Clip", "Base.308Clip", "Base.223Clip", "Base.44Clip", "Base.45Clip", "Base.9mmClip", "Base.Revolver_Short", "Base.Revolver_Long",
                                          "Base.Revolver" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 40 then
                     local randomitem = { "Base.Aerosolbomb", "Base.Axe", "Base.BaseballBat", "Base.SpearCrafted", "Base.Crowbar", "Base.FlameTrap", "Base.HandAxe", "Base.HuntingKnife", "Base.Katana",
                                          "Base.PipeBomb", "Base.Sledgehammer", "Base.Shovel", "Base.SmokeBomb", "Base.WoodAxe", "Base.GardenFork", "Base.WoodenLance", "Base.SpearBreadKnife",
                                          "Base.SpearButterKnife", "Base.SpearFork", "Base.SpearLetterOpener", "Base.SpearScalpel", "Base.SpearSpoon", "Base.SpearScissors", "Base.SpearHandFork",
                                          "Base.SpearScrewdriver", "Base.SpearHuntingKnife", "Base.SpearMachete", "Base.SpearIcePick", "Base.SpearKnife", "Base.Machete", "Base.GardenHoe" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 50 then
                     local randomitem = { "Base.Bag_SurvivorBag", "Base.Bag_BigHikingBag", "Base.Bag_DuffelBag", "Base.Bag_FannyPackFront", "Base.Bag_NormalHikingBag", "Base.Bag_ALICEpack", "Base.Bag_ALICEpack_Army",
                                          "Base.Bag_Schoolbag", "Base.SackOnions", "Base.SackPotatoes", "Base.SackCarrots", "Base.SackCabbages" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 60 then
                     local randomitem = { "Base.Hat_SPHhelmet", "Base.Jacket_CoatArmy", "Base.Hat_BalaclavaFull", "Base.Hat_BicycleHelmet", "Base.Shoes_BlackBoots", "Base.Hat_CrashHelmet",
                                          "Base.HolsterDouble", "Base.Hat_Fireman", "Base.Jacket_Fireman", "Base.Trousers_Fireman", "Base.Hat_FootballHelmet", "Base.Hat_GasMask", "Base.Ghillie_Trousers", "Base.Ghillie_Top",
                                          "Base.Gloves_LeatherGloves", "Base.JacketLong_Random", "Base.Shoes_ArmyBoots", "Base.Vest_BulletArmy", "Base.Hat_Army", "Base.Hat_HardHat_Miner", "Base.Hat_NBCmask",
                                          "Base.Vest_BulletPolice", "Base.Hat_RiotHelmet", "Base.AmmoStrap_Shells" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 70 then
                     local randomitem = { "Base.CarBattery1", "Base.CarBattery2", "Base.CarBattery3", "Base.Extinguisher", "Base.PetrolCan", "Base.ConcretePowder", "Base.PlasterPowder", "Base.BarbedWire", "Base.Log",
                                          "Base.SheetMetal", "Base.MotionSensor", "Base.ModernTire1", "Base.ModernTire2", "Base.ModernTire3", "Base.ModernSuspension1", "Base.ModernSuspension2", "Base.ModernSuspension3",
                                          "Base.ModernCarMuffler1", "Base.ModernCarMuffler2", "Base.ModernCarMuffler3", "Base.ModernBrake1", "Base.ModernBrake2", "Base.ModernBrake3", "Base.smallSheetMetal",
                                          "Base.Speaker", "Base.EngineParts", "Base.LogStacks2", "Base.LogStacks3", "Base.LogStacks4", "Base.NailsBox" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 80 then
                     local randomitem = { "Base.ComicBook", "Base.ElectronicsMag4", "Base.HerbalistMag", "Base.MetalworkMag1", "Base.MetalworkMag2", "Base.MetalworkMag3", "Base.MetalworkMag4",
                                          "Base.HuntingMag1", "Base.HuntingMag2", "Base.HuntingMag3", "Base.FarmingMag1", "Base.MechanicMag1", "Base.MechanicMag2", "Base.MechanicMag3",
                                          "Base.CookingMag1", "Base.CookingMag2", "Base.EngineerMagazine1", "Base.EngineerMagazine2", "Base.ElectronicsMag1", "Base.ElectronicsMag2", "Base.ElectronicsMag3", "Base.ElectronicsMag5",
                                          "Base.FishingMag1", "Base.FishingMag2", "Base.Book", "MoreTraits.MedicalMag1", "MoreTraits.MedicalMag2", "MoreTraits.MedicalMag3", "MoreTraits.MedicalMag4", "MoreTraits.AntiqueMag1",
                                          "MoreTraits.AntiqueMag2", "MoreTraits.AntiqueMag3" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 90 then
                     local randomitem = { "Base.DumbBell", "Base.EggCarton", "Base.HomeAlarm", "Base.HotDog", "Base.HottieZ", "Base.Icecream", "Base.Machete", "Base.Revolver_Long",
                                          "Base.MeatPatty", "Base.Milk", "Base.MuttonChop", "Base.Padlock", "Base.PorkChop", "Base.Wine", "Base.Wine2", "Base.WhiskeyFull", "Base.Ham" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 95 then
                     local randomitem = { "Base.PropaneTank", "Base.BlowTorch", "Base.Woodglue", "Base.DuctTape", "Base.Rope", "Base.Extinguisher" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 elseif roll <= 100 then
                     local randomitem = { "Base.Spiffo", "Base.SpiffoSuit", "Base.Hat_Spiffo", "Base.SpiffoTail", "Base.Generator" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]));
                 end
             end
 
