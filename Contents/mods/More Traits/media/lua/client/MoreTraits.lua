@@ -1819,7 +1819,7 @@ function actionhero(_actor, _target, _weapon, _damage)
     local critchance = 10;
     local damage = _damage * 0.5;
     local enemies = player:getSpottedList();
-    local multiplier = 1;
+    local multiplier = 0.1;
     if _actor == player and player:HasTrait("actionhero") then
         if player:HasTrait("martial") == false and weapon:getType() == "BareHands" then
             return
