@@ -6,3 +6,4 @@ Fix Action Hero damage scaling not reducing by 50%.
 Fix typo in Grunt Worker description.
 Clarify Bloodied Crowbar Tooltip Description.
 Change name of Hardy in Spanish translation to prevent conflict with Vanilla "Robusto"
+Make Indefatigable Compatible with injury traits. - Credit: Fadjek.
