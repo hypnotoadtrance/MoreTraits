@@ -77,7 +77,7 @@ MoreTraits {
     }
     item Thumper
     {
-            MaxRange = 3.0,
+            MaxRange = 2.5,
             WeaponSprite = Sledgehammer,
             MinAngle = 0.2,
             Type = Weapon,
@@ -88,12 +88,12 @@ MoreTraits {
             Categories = Blunt,
             ConditionLowerChanceOneIn = 100,
             Weight = 10,
-            SplatNumber = 10,
+            SplatNumber = 6,
             PushBackMod = 8,
             MaxDamage = 30,
             SubCategory = Swinging,
             ConditionMax = 10,
-            MaxHitCount = 10,
+            MaxHitCount = 6,
             DoorDamage = 60,
             IdleAnim = Idle_Weapon2,
             CriticalChance = 20,
