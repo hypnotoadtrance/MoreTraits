@@ -13,6 +13,7 @@ local function initToadTraits()
         local preparedweapon = TraitFactory.addTrait("preparedweapon", getText("UI_trait_preparedweapon"), 1, getText("UI_trait_preparedweapondesc"), false, false);
         local preparedpack = TraitFactory.addTrait("preparedpack", getText("UI_trait_preparedpack"), 1, getText("UI_trait_preparedpackdesc"), false, false);
         local preparedcar = TraitFactory.addTrait("preparedcar", getText("UI_trait_preparedcar"), 1, getText("UI_trait_preparedcardesc"), false, false);
+        local preparedcoordination = TraitFactory.addTrait("preparedcoordination", getText("UI_trait_preparedcoordination"), 1, getText("UI_trait_preparedcoordinationdesc"), false, false);
     end
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
@@ -251,6 +252,14 @@ local function initToadTraits()
         TraitFactory.setMutualExclusive("preparedcar", "preparedmedical");
         TraitFactory.setMutualExclusive("preparedcar", "preparedcamp");
         TraitFactory.setMutualExclusive("preparedcar", "preparedpack");
+        TraitFactory.setMutualExclusive("preparedcoordination", "preparedammo");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedcamp");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedcar");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedfood");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedmedical");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedpack");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedrepair");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedweapon");
         TraitFactory.setMutualExclusive("deprived", "preparedfood");
         TraitFactory.setMutualExclusive("deprived", "preparedammo");
         TraitFactory.setMutualExclusive("deprived", "preparedrepair");
@@ -259,6 +268,7 @@ local function initToadTraits()
         TraitFactory.setMutualExclusive("deprived", "preparedpack");
         TraitFactory.setMutualExclusive("deprived", "preparedcar");
         TraitFactory.setMutualExclusive("deprived", "preparedweapon");
+        TraitFactory.setMutualExclusive("deprived", "preparedcoordination");
     end
     TraitFactory.setMutualExclusive("quiet", "Clumsy");
     TraitFactory.setMutualExclusive("flexible", "Obese");
