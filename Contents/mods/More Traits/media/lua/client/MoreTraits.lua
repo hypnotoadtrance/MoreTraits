@@ -10,6 +10,8 @@ This is constantly ongoing. Whenever I see something that can be written more ef
 TODO Reimplement Fast and Slow traits
 Ever since the animations update, the previous calculations stopped working, and despite hours wracking my brain,
 I have been unable to find a workaround.
+TODO Implement Motion Sickness trait
+Gives sickness while in a moving vehicle.
 --]]
 --Global Variables
 skipxpadd = false;
@@ -17,6 +19,7 @@ suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
 MTVersion = getCore():getGameVersion();
+BodyDamagedFromTrait = {};
 
 local function tableContains(t, e)
     for _, value in pairs(t) do
@@ -110,85 +113,101 @@ local function addXPNoMultiplier(_player, _perk, _amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
-local function initToadTraitsItems(_player)
+function initToadTraitsItems(_player)
     local player = _player;
     local inv = player:getInventory();
     if player:HasTrait("preparedfood") then
-        inv:AddItem("Base.Plasticbag");
+        inv:addItemOnServer(inv:AddItem("Base.Plasticbag"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.Plasticbag" then
                     player:setSecondaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItems("Base.PopBottle", 3);
-                    baginv:AddItem("Base.TinOpener");
-                    baginv:AddItem("Base.CannedTomato");
-                    baginv:AddItem("Base.CannedPotato");
-                    baginv:AddItem("Base.CannedCarrots");
-                    baginv:AddItem("Base.CannedBroccoli");
-                    baginv:AddItem("Base.CannedCabbage");
-                    baginv:AddItem("Base.CannedEggplant");
+                    local addeditems = baginv:AddItems("Base.PopBottle", 3);
+                    for i = 0, addeditems:size() - 1 do
+                        local item = baginv:getItems():get(i);
+                        baginv:addItemOnServer(item);
+                    end
+                    baginv:addItemOnServer(baginv:AddItem("Base.TinOpener"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedTomato"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedPotato"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedCarrots"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedBroccoli"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedCabbage"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedEggplant"));
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedammo") then
-        inv:AddItems("Base.Bullets9mmBox", 3);
-        inv:AddItems("Base.ShotgunShellsBox", 2);
+        inv:addItemOnServer(inv:AddItems("Base.Bullets9mmBox", 3));
+        inv:addItemOnServer(inv:AddItems("Base.ShotgunShellsBox", 2));
     end
     if player:HasTrait("preparedweapon") then
-        inv:AddItem("Base.BaseballBatNails");
-        inv:AddItem("Base.HuntingKnife");
+        inv:addItemOnServer(inv:AddItem("Base.BaseballBatNails"));
+        inv:addItemOnServer(inv:AddItem("Base.HuntingKnife"));
     end
     if player:HasTrait("preparedmedical") then
-        inv:AddItem("Base.FirstAidKit");
+        inv:addItemOnServer(inv:AddItem("Base.FirstAidKit"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.FirstAidKit" then
                     player:setSecondaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.Bandaid");
-                    baginv:AddItem("Base.PillsAntiDep");
-                    baginv:AddItem("Base.Disinfectant");
-                    baginv:AddItem("Base.AlcoholWipes");
-                    baginv:AddItem("Base.PillsBeta");
-                    baginv:AddItem("Base.Pills");
+                    baginv:addItemOnServer(baginv:AddItem("Base.Bandaid"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.PillsAntiDep"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Disinfectant"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.AlcoholWipes"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.PillsBeta"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Pills"));
                     if SandboxVars.MoreTraits.PreparedMedicalBandageAmount then
-                        baginv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
+                        local addeditems = baginv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
+                        for i = 0, addeditems:size() - 1 do
+                            local item = baginv:getItems():get(i);
+                            baginv:addItemOnServer(item);
+                        end
                     else
-                        baginv:AddItems("Base.Bandage", 4);
+                        local addeditems = baginv:AddItems("Base.Bandage", 4);
+                        for i = 0, addeditems:size() - 1 do
+                            local item = baginv:getItems():get(i);
+                            baginv:addItemOnServer(item);
+                        end
                     end
-                    baginv:AddItem("Base.SutureNeedle");
-                    baginv:AddItem("Base.Tissue");
-                    baginv:AddItem("Base.Tweezers");
+                    baginv:addItemOnServer(baginv:AddItem("Base.SutureNeedle"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Tissue"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Tweezers"));
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedrepair") then
-        inv:AddItem("Base.Toolbox");
+        inv:addItemOnServer(inv:AddItem("Base.Toolbox"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.Toolbox" then
                     player:setSecondaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.Hammer");
-                    baginv:AddItem("Base.Screwdriver");
-                    baginv:AddItem("Base.Saw");
-                    baginv:AddItem("Base.NailsBox");
-                    baginv:AddItems("Base.Garbagebag", 8);
+                    baginv:addItemOnServer(baginv:AddItem("Base.Hammer"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Screwdriver"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Saw"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.NailsBox"));
+                    local addeditems = baginv:AddItems("Base.Garbagebag", 8);
+                    for i = 0, addeditems:size() - 1 do
+                        local item = baginv:getItems():get(i);
+                        baginv:addItemOnServer(item);
+                    end
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedcamp") then
-        inv:AddItem("MoreTraits.Bag_SmallHikingBag");
+        inv:addItemOnServer(inv:AddItem("MoreTraits.Bag_SmallHikingBag"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
@@ -197,24 +216,24 @@ local function initToadTraitsItems(_player)
                         player:setClothingItem_Back(bag);
                     end
                     local baginv = bag:getInventory();
-                    baginv:AddItems("Base.Matches", 1);
-                    baginv:AddItem("camping.CampfireKit");
-                    baginv:AddItem("camping.CampingTentKit");
-                    baginv:AddItems("Base.BeefJerky", 1);
-                    baginv:AddItems("Base.Pop", 1);
-                    baginv:AddItem("Base.FishingRod");
-                    baginv:AddItem("Base.FishingLine");
-                    baginv:AddItem("Base.FishingTackle");
-                    baginv:AddItems("Base.Battery", 1);
-                    baginv:AddItem("Base.Torch");
-                    baginv:AddItem("Base.WaterBottleFull");
+                    baginv:addItemOnServer(baginv:AddItem("Base.Matches"));
+                    baginv:addItemOnServer(baginv:AddItem("camping.CampfireKit"));
+                    baginv:addItemOnServer(baginv:AddItem("camping.CampingTentKit"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.BeefJerky"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Pop"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.FishingRod"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.FishingLine"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.FishingTackle"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Battery"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Torch"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.WaterBottleFull"));
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedpack") then
-        inv:AddItem("Base.Bag_NormalHikingBag");
+        inv:addItemOnServer(inv:AddItem("Base.Bag_NormalHikingBag"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
@@ -231,7 +250,7 @@ local function initToadTraitsItems(_player)
     if player:HasTrait("preparedcar") then
         inv:AddItem("Base.Bag_JanitorToolbox");
         if SandboxVars.MoreTraits.PreparedCarGasToggle == true then
-            inv:AddItem("Base.PetrolCan");
+            inv:addItemOnServer(inv:AddItem("Base.PetrolCan"));
         end
 
         for i = 0, inv:getItems():size() - 1 do
@@ -240,12 +259,12 @@ local function initToadTraitsItems(_player)
                 if bag:getFullType() == "Base.Bag_JanitorToolbox" then
                     player:setPrimaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.CarBatteryCharger");
-                    baginv:AddItem("Base.Screwdriver");
-                    baginv:AddItem("Base.Wrench");
-                    baginv:AddItem("Base.LugWrench");
-                    baginv:AddItem("Base.TirePump");
-                    baginv:AddItem("Base.Jack");
+                    baginv:addItemOnServer(baginv:AddItem("Base.CarBatteryCharger"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Screwdriver"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Wrench"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.LugWrench"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.TirePump"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Jack"));
                 end
                 if bag:getFullType() == "Base.PetrolCan" then
                     player:setSecondaryHandItem(bag);
@@ -266,19 +285,23 @@ local function initToadTraitsItems(_player)
     
     if player:HasTrait("drinker") then
         if SandboxVars.MoreTraits.AlcoholicFreeDrink == true then
-            inv:AddItem("Base.WhiskeyFull");
+            inv:addItemOnServer(inv:AddItem("Base.WhiskeyFull"));
         end
     end
     if player:HasTrait("Tailor") then
-        inv:AddItem("Base.SewingKit");
+        inv:addItemOnServer(inv:AddItem("Base.SewingKit"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.SewingKit" then
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.Scissors");
-                    baginv:AddItem("Base.Needle");
-                    baginv:AddItems("Base.Thread", 4);
+                    baginv:addItemOnServer(baginv:AddItem("Base.Scissors"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Needle"));
+                    local addeditems = baginv:AddItems("Base.Thread", 4);
+                    for i = 0, addeditems:size() - 1 do
+                        local item = baginv:getItems():get(i);
+                        baginv:addItemOnServer(item);
+                    end
                     break ;
                 end
             end
@@ -286,18 +309,21 @@ local function initToadTraitsItems(_player)
     end
     if player:HasTrait("Smoker") then
         if SandboxVars.MoreTraits.SmokerStart == true then
-            inv:AddItem("Base.Cigarettes");
-            inv:AddItem("Base.Lighter");
+            inv:addItemOnServer(inv:AddItem("Base.Cigarettes"));
+            inv:addItemOnServer(inv:AddItem("Base.Lighter"));
         end
     end
     if player:HasTrait("deprived") then
         player:clearWornItems();
         inv:removeAllItems();
         player:createKeyRing();
+        if SandboxVars.MoreTraits.ForgivingDeprived == true then
+            inv:addItemOnServer(inv:AddItem("Base.Belt"));
+        end
     end
 end
 
-local function initToadTraitsPerks(_player)
+function initToadTraitsPerks(_player)
     local player = _player;
     local playerdata = player:getModData();
     local damage = 20;
@@ -360,6 +386,7 @@ local function initToadTraitsPerks(_player)
                     b:AddDamage(damage);
                     b:setScratched(true, true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    table.insert(BodyDamagedFromTrait, b);
                 elseif injury == 2 then
                     if doburns == true then
                         b:AddDamage(damage);
@@ -367,6 +394,7 @@ local function initToadTraitsPerks(_player)
                         b:setBurnTime(ZombRand(50) + damage);
                         b:setNeedBurnWash(false);
                         b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                        table.insert(BodyDamagedFromTrait, b);
                     else
                         itterations = itterations - 1;
                     end
@@ -374,11 +402,13 @@ local function initToadTraitsPerks(_player)
                     b:AddDamage(damage);
                     b:setCut(true, true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    table.insert(BodyDamagedFromTrait, b);
                 elseif injury >= 4 then
                     b:AddDamage(damage);
                     b:setDeepWounded(true);
                     b:setStitched(true);
                     b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+                    table.insert(BodyDamagedFromTrait, b);
                 end
             end
         end
@@ -395,6 +425,7 @@ local function initToadTraitsPerks(_player)
         bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
         bodydamage:setInfected(false);
         bodydamage:setInfectionLevel(0);
+        table.insert(BodyDamagedFromTrait, bodydamage:getBodyPart(BodyPartType.LowerLeg_R));
     end
     if player:HasTrait("burned") then
         local bodydamage = player:getBodyDamage();
@@ -404,6 +435,7 @@ local function initToadTraitsPerks(_player)
             b:setBurnTime(ZombRand(10, 100) + damage);
             b:setNeedBurnWash(false);
             b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
+            table.insert(BodyDamagedFromTrait, b); --i forgor to add in the thing for burned, but i think this should work fine
         end
     end
     playerdata.ToadTraitBodyDamage = nil;
@@ -416,7 +448,7 @@ local function initToadTraitsPerks(_player)
     end
 end
 
-local function ToadTraitEvasive(_player, _playerdata)
+function ToadTraitEvasive(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("evasive") then
@@ -532,7 +564,7 @@ local function ToadTraitEvasive(_player, _playerdata)
     end
 end
 
-local function ToadTraitButter(_player)
+function ToadTraitButter(_player)
     local player = _player;
     if player:HasTrait("butterfingers") and player:isPlayerMoving() then
         local basechance = 3;
@@ -578,7 +610,7 @@ local function ToadTraitButter(_player)
     end
 end
 
-local function ToadTraitParanoia(_player, _playerdata)
+function ToadTraitParanoia(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("paranoia") then
@@ -613,7 +645,7 @@ local function ToadTraitParanoia(_player, _playerdata)
     end
 end
 
-local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
+function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     local player = _player;
     local playerData = player:getModData();
     local containerObj;
@@ -638,8 +670,8 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bScroungerRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bScroungerRolled = true;
+                if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                    containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
                     if ZombRand(100) <= basechance then
                         local tempcontainer = {};
@@ -688,7 +720,11 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                             rolled = true;
                                         end
                                         if rolled then
-                                            container:AddItems(item:getFullType(), n);
+                                            local addeditems = container:AddItems(item:getFullType(), n);
+                                            for i = 0, addeditems:size() - 1 do
+                                                local item = container:getItems():get(i);
+                                                container:addItemOnServer(item);
+                                            end
                                             if MoreTraits.settings.ScroungerAnnounce == true then
                                                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
                                             end
@@ -712,7 +748,7 @@ local function ToadTraitScrounger(_iSInventoryPage, _state, _player)
     end
 end
 
-local function UnHighlightScrounger(_player, _playerdata)
+function UnHighlightScrounger(_player, _playerdata)
     if MoreTraits.settings.ScroungerHighlight == true then
         local maxTime = MoreTraits.settings.ScroungerHighlightTime;
         local player = _player;
@@ -737,7 +773,7 @@ local function UnHighlightScrounger(_player, _playerdata)
     end
 end
 
-local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
+function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     local player = _player;
     local containerObj;
     local container;
@@ -756,8 +792,8 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
             local tempcontainer = {};
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bIncomprehensiveRolled = true;
+                if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                    containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
                     if ZombRand(100) <= basechance then
@@ -803,6 +839,7 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                     if tempcontainer ~= {} then
                         for _, i in pairs(tempcontainer) do
                             container:Remove(i);
+                            container:removeItemOnServer(i);
                             if MoreTraits.settings.ScroungerAnnounce == true then
                                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. i:getName(), false, HaloTextHelper.getColorRed());
                             end
@@ -814,7 +851,7 @@ local function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     end
 end
 
-local function ToadTraitAntique(_iSInventoryPage, _state, _player)
+function ToadTraitAntique(_iSInventoryPage, _state, _player)
     local items = {};
     table.insert(items, "MoreTraits.AntiqueAxe");
     table.insert(items, "MoreTraits.Thumper");
@@ -828,6 +865,10 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
     table.insert(items, "MoreTraits.AntiqueMag1");
     table.insert(items, "MoreTraits.AntiqueMag2");
     table.insert(items, "MoreTraits.AntiqueMag3");
+    table.insert(items, "MoreTraits.AntiqueSpear");
+    table.insert(items, "MoreTraits.AntiqueHammer");
+    table.insert(items, "MoreTraits.AntiqueKatana");
+
     local length = 0
     for k, v in pairs(items) do
         length = length + 1;
@@ -874,7 +915,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
                         if i == 0 then
                             i = 1;
                         end
-                        container:AddItem(items[i]);
+                        container:addItemOnServer(container:AddItem(items[i]));
                     end
                 end
             end
@@ -882,7 +923,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, _player)
     end
 end
 
-local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
+function ToadTraitVagabond(_iSInventoryPage, _state, _player)
     local items = {};
     table.insert(items, "Base.BreadSlices");
     table.insert(items, "Base.Pizza");
@@ -952,7 +993,10 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                                 x = 1;
                             end
                             if ZombRand(100) <= basechance then
-                                container:AddItem(items[x]);
+                                container:addItemOnServer(container:AddItem(items[x]));
+                                if MoreTraits.settings.VagabondAnnounce == true then
+                                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
+                                end
                             end
                         end
                     end
@@ -962,7 +1006,7 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, _player)
     end
 end
 
-local function ToadTraitDepressive()
+function ToadTraitDepressive()
     local player = getPlayer();
     if player:HasTrait("depressive") then
         local basechance = 2;
@@ -988,7 +1032,7 @@ local function ToadTraitDepressive()
     end
 end
 
-local function CheckDepress(_player, _playerdata)
+function CheckDepress(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local depressed = playerdata.bToadTraitDepressed;
@@ -1005,7 +1049,7 @@ local function CheckDepress(_player, _playerdata)
     end
 end
 
-local function CheckSelfHarm(_player)
+function CheckSelfHarm(_player)
     local player = _player;
     local modifier = 3;
     if player:HasTrait("depressive") then
@@ -1023,7 +1067,7 @@ local function CheckSelfHarm(_player)
     end
 end
 
-local function Blissful(_player)
+function Blissful(_player)
     local player = _player;
     local bodydamage = player:getBodyDamage();
     local unhappiness = bodydamage:getUnhappynessLevel();
@@ -1038,7 +1082,7 @@ local function Blissful(_player)
     end
 end
 
-local function Specialization(_player, _perk, _amount)
+function Specialization(_player, _perk, _amount)
     local player = _player;
     local perk = _perk;
     local amount = _amount;
@@ -1139,7 +1183,7 @@ local function Specialization(_player, _perk, _amount)
     end
 end
 
-local function Gordanite(_player)
+function Gordanite(_player)
     local player = _player;
     if player:HasTrait("gordanite") then
         local longBluntLvl = player:getPerkLevel(Perks.Blunt);
@@ -1201,7 +1245,7 @@ local function Gordanite(_player)
     end
 end
 
-local function indefatigable(_player, _playerdata)
+function indefatigable(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local enemies = player:getSpottedList();
@@ -1212,7 +1256,9 @@ local function indefatigable(_player, _playerdata)
                 print("Healed to full.");
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
-                    b:RestoreToFullHealth();
+                    if tableContains(BodyDamagedFromTrait, b) == false then
+                        b:RestoreToFullHealth();
+                    end
                 end
                 playerdata.bindefatigable = true;
                 playerdata.indefatigablecooldown = 0;
@@ -1232,7 +1278,7 @@ local function indefatigable(_player, _playerdata)
     end
 end
 
-local function indefatigablecounter()
+function indefatigablecounter()
     local player = getPlayer();
     local playerdata = player:getModData();
     local recharge = 7 * 24;
@@ -1252,7 +1298,7 @@ local function indefatigablecounter()
     end
 end
 
-local function badteethtrait(_player, _playerdata)
+function badteethtrait(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
@@ -1274,7 +1320,7 @@ local function badteethtrait(_player, _playerdata)
     end
 end
 
-local function hardytrait(_player, _playerdata)
+function hardytrait(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local stats = player:getStats();
@@ -1307,7 +1353,7 @@ local function hardytrait(_player, _playerdata)
     end
 end
 
-local function drinkerupdate(_player, _playerdata)
+function drinkerupdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("drinker") then
@@ -1355,7 +1401,7 @@ local function drinkerupdate(_player, _playerdata)
     end
 end
 
-local function drinkertick()
+function drinkertick()
     local player = getPlayer();
     local playerdata = player:getModData();
     if player:HasTrait("drinker") then
@@ -1395,7 +1441,7 @@ local function drinkertick()
     end
 end
 
-local function drinkerpoison()
+function drinkerpoison()
     local player = getPlayer();
     local playerdata = player:getModData();
     local hoursthreshold = 72;
@@ -1426,14 +1472,18 @@ local function drinkerpoison()
         if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false and cooldown <= 0 then
             print("Player is suffering from alcohol withdrawal.");
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
-            player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+            if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
+                player:getBodyDamage():setPoisonLevel(20);
+            else
+                player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+            end
             playerdata.iWithdrawalCooldown = ZombRand(12, 24);
         end
         playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown - 1;
     end
 end
 
-local function bouncerupdate(_player, _playerdata)
+function bouncerupdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local chance = 5;
@@ -1491,7 +1541,7 @@ local function bouncerupdate(_player, _playerdata)
     end
 end
 
-local function martial(_actor, _target, _weapon, _damage)
+function martial(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local playerdata = player:getModData();
     local weapon = _weapon;
@@ -1511,7 +1561,7 @@ local function martial(_actor, _target, _weapon, _damage)
         local SmallBluntLvl = player:getPerkLevel(Perks.SmallBlunt);
         local StrengthLvl = player:getPerkLevel(Perks.Strength);
         local Fitnesslvl = player:getPerkLevel(Perks.Fitness);
-        local average = ((StrengthLvl + Fitnesslvl) / 2);
+        local average = ((StrengthLvl + Fitnesslvl) * 0.25);
         local minimumdmg = (0.1 * average + SmallBluntLvl * 0.1) * scaling;
         local maximumdmg = (0.25 * average + SmallBluntLvl * 0.1) * scaling;
         critchance = (critchance + SmallBluntLvl) * scaling;
@@ -1555,7 +1605,7 @@ local function martial(_actor, _target, _weapon, _damage)
     end
 end
 
-local function problunt(_actor, _target, _weapon, _damage)
+function problunt(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1589,7 +1639,7 @@ local function problunt(_actor, _target, _weapon, _damage)
     end
 end
 
-local function problade(_actor, _target, _weapon, _damage)
+function problade(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1623,7 +1673,7 @@ local function problade(_actor, _target, _weapon, _damage)
     end
 end
 
-local function progun(_actor, _weapon)
+function progun(_actor, _weapon)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1655,7 +1705,7 @@ local function progun(_actor, _weapon)
     end
 end
 
-local function prospear(_actor, _target, _weapon, _damage)
+function prospear(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1689,7 +1739,7 @@ local function prospear(_actor, _target, _weapon, _damage)
     end
 end
 
-local function tavernbrawler(_actor, _target, _weapon, _damage)
+function tavernbrawler(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -1739,7 +1789,7 @@ local function tavernbrawler(_actor, _target, _weapon, _damage)
     end
 end
 
-local function albino(_player, _playerdata)
+function albino(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("albino") then
@@ -1768,7 +1818,7 @@ local function albino(_player, _playerdata)
     end
 end
 
-local function amputee(_player, justGotInfected)
+function amputee(_player, justGotInfected)
     local player = _player;
     local bodydamage = player:getBodyDamage();
     if player:HasTrait("amputee") then
@@ -1816,13 +1866,13 @@ local function amputee(_player, justGotInfected)
     end
 end
 
-local function actionhero(_actor, _target, _weapon, _damage)
+function actionhero(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local critchance = 10;
     local damage = _damage * 0.5;
     local enemies = player:getSpottedList();
-    local multiplier = 1;
+    local multiplier = 0.1;
     if _actor == player and player:HasTrait("actionhero") then
         if player:HasTrait("martial") == false and weapon:getType() == "BareHands" then
             return
@@ -1861,7 +1911,7 @@ local function actionhero(_actor, _target, _weapon, _damage)
     end
 end
 
-local function gimp()
+function gimp()
     local player = getPlayer();
     local playerdata = player:getModData();
     local modifier = 0.85;
@@ -1887,7 +1937,7 @@ local function gimp()
     end
 end
 
-local function fast()
+function fast()
     local player = getPlayer();
     local playerdata = player:getModData();
     local vector = player:getMoveForwardVec();
@@ -1919,7 +1969,7 @@ local function fast()
         end
     end
 end
-local function anemic(_player)
+function anemic(_player)
     local player = _player;
     if player:HasTrait("anemic") then
         local bodydamage = player:getBodyDamage();
@@ -1940,7 +1990,7 @@ local function anemic(_player)
 
     end
 end
-local function thickblood(_player)
+function thickblood(_player)
     local player = _player;
     if player:HasTrait("thickblood") then
         local bodydamage = player:getBodyDamage();
@@ -1962,7 +2012,7 @@ local function thickblood(_player)
     end
 end
 
-local function vehicleCheck(_player)
+function vehicleCheck(_player)
     local player = _player;
     if getActivatedMods():contains("DrivingSkill") == true then
         --skip processing if Driving Skill mod is installed.
@@ -2032,7 +2082,7 @@ local function vehicleCheck(_player)
     end
 end
 
-local function SuperImmune(_player, _playerdata)
+function SuperImmune(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
@@ -2083,7 +2133,7 @@ local function SuperImmune(_player, _playerdata)
     end
 end
 
-local function Immunocompromised(_player, _playerdata)
+function Immunocompromised(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
@@ -2132,10 +2182,10 @@ function checkWeight()
     end
 end
 
-local function graveRobber(_zombie)
+function graveRobber(_zombie)
     local player = getPlayer();
     local zombie = _zombie;
-    local chance = 3;
+    local chance = 10;
     local extraloot = 1;
     if SandboxVars.MoreTraits.GraveRobberChance then
         chance = SandboxVars.MoreTraits.GraveRobberChance;
@@ -2145,21 +2195,21 @@ local function graveRobber(_zombie)
     end
     if player:HasTrait("graverobber") and zombie:DistTo(player) <= 12 then
         if player:HasTrait("Lucky") then
-            chance = chance + 1 * luckimpact;
+            chance = chance + 2 * luckimpact;
         end
         if player:HasTrait("Unlucky") then
-            chance = chance - 1 * luckimpact;
+            chance = chance - 2 * luckimpact;
         end
         if player:HasTrait("scrounger") then
-            chance = chance + 1;
+            chance = chance + 2;
         end
         if player:HasTrait("incomprehensive") then
-            chance = chance - 1;
+            chance = chance - 2;
         end
         if chance <= 0 then
             chance = 1;
         end
-        if ZombRand(0, 101) <= chance then
+        if ZombRand(0, 1001) <= chance then
             if MoreTraits.settings.GraveRobberAnnounce == true then
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_graverobber"), true, HaloTextHelper.getColorGreen());
             end
@@ -2174,57 +2224,57 @@ local function graveRobber(_zombie)
                                          "Base.BeefJerky", "Base.Bread", "Base.Broccoli", "Base.Butter", "Base.CandyPackage", "Base.TinnedBeans",
                                          "Base.CannedCarrots2", "Base.CannedChili", "Base.CannedCorn", "Base.CannedCornedBeef", "CannedMushroomSoup",
                                          "Base.CannedPeas", "Base.CannedPotato2", "Base.CannedSardines", "Base.CannedTomato2", "Base.TunaTin" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 20 then
                     local randomitem = { "Base.PillsAntiDep", "Base.AlcoholWipes", "Base.AlcoholedCottonBalls", "Base.Pills", "Base.PillsSleepingTablets",
                                          "Base.Tissue", "Base.ToiletPaper", "Base.PillsVitamins", "Base.Bandaid", "Base.Bandage", "Base.CottonBalls", "Base.Splint", "Base.AlcoholBandage",
                                          "Base.AlcoholRippedSheets", "Base.SutureNeedle", "Base.Tweezers", "Base.WildGarlicCataplasm", "Base.ComfreyCataplasm", "Base.PlantainCataplasm", "Base.Disinfectant" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 30 then
                     local randomitem = { "Base.223Box", "Base.308Box", "Base.Bullets38Box", "Base.Bullets44Box", "Base.Bullets45Box", "Base.556Box", "Base.Bullets9mmBox",
                                          "Base.ShotgunShellsBox", "Base.DoubleBarrelShotgun", "Base.Shotgun", "Base.ShotgunSawnoff", "Base.Pistol", "Base.Pistol2", "Base.Pistol3", "Base.AssaultRifle", "Base.AssaultRifle2",
                                          "Base.VarmintRifle", "Base.HuntingRifle", "Base.556Clip", "Base.M14Clip", "Base.308Clip", "Base.223Clip", "Base.44Clip", "Base.45Clip", "Base.9mmClip", "Base.Revolver_Short", "Base.Revolver_Long",
                                          "Base.Revolver" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 40 then
                     local randomitem = { "Base.Aerosolbomb", "Base.Axe", "Base.BaseballBat", "Base.SpearCrafted", "Base.Crowbar", "Base.FlameTrap", "Base.HandAxe", "Base.HuntingKnife", "Base.Katana",
                                          "Base.PipeBomb", "Base.Sledgehammer", "Base.Shovel", "Base.SmokeBomb", "Base.WoodAxe", "Base.GardenFork", "Base.WoodenLance", "Base.SpearBreadKnife",
                                          "Base.SpearButterKnife", "Base.SpearFork", "Base.SpearLetterOpener", "Base.SpearScalpel", "Base.SpearSpoon", "Base.SpearScissors", "Base.SpearHandFork",
                                          "Base.SpearScrewdriver", "Base.SpearHuntingKnife", "Base.SpearMachete", "Base.SpearIcePick", "Base.SpearKnife", "Base.Machete", "Base.GardenHoe" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 50 then
                     local randomitem = { "Base.Bag_SurvivorBag", "Base.Bag_BigHikingBag", "Base.Bag_DuffelBag", "Base.Bag_FannyPackFront", "Base.Bag_NormalHikingBag", "Base.Bag_ALICEpack", "Base.Bag_ALICEpack_Army",
                                          "Base.Bag_Schoolbag", "Base.SackOnions", "Base.SackPotatoes", "Base.SackCarrots", "Base.SackCabbages" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 60 then
                     local randomitem = { "Base.Hat_SPHhelmet", "Base.Jacket_CoatArmy", "Base.Hat_BalaclavaFull", "Base.Hat_BicycleHelmet", "Base.Shoes_BlackBoots", "Base.Hat_CrashHelmet",
                                          "Base.HolsterDouble", "Base.Hat_Fireman", "Base.Jacket_Fireman", "Base.Trousers_Fireman", "Base.Hat_FootballHelmet", "Base.Hat_GasMask", "Base.Ghillie_Trousers", "Base.Ghillie_Top",
                                          "Base.Gloves_LeatherGloves", "Base.JacketLong_Random", "Base.Shoes_ArmyBoots", "Base.Vest_BulletArmy", "Base.Hat_Army", "Base.Hat_HardHat_Miner", "Base.Hat_NBCmask",
                                          "Base.Vest_BulletPolice", "Base.Hat_RiotHelmet", "Base.AmmoStrap_Shells" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 70 then
                     local randomitem = { "Base.CarBattery1", "Base.CarBattery2", "Base.CarBattery3", "Base.Extinguisher", "Base.PetrolCan", "Base.ConcretePowder", "Base.PlasterPowder", "Base.BarbedWire", "Base.Log",
                                          "Base.SheetMetal", "Base.MotionSensor", "Base.ModernTire1", "Base.ModernTire2", "Base.ModernTire3", "Base.ModernSuspension1", "Base.ModernSuspension2", "Base.ModernSuspension3",
                                          "Base.ModernCarMuffler1", "Base.ModernCarMuffler2", "Base.ModernCarMuffler3", "Base.ModernBrake1", "Base.ModernBrake2", "Base.ModernBrake3", "Base.smallSheetMetal",
                                          "Base.Speaker", "Base.EngineParts", "Base.LogStacks2", "Base.LogStacks3", "Base.LogStacks4", "Base.NailsBox" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 80 then
                     local randomitem = { "Base.ComicBook", "Base.ElectronicsMag4", "Base.HerbalistMag", "Base.MetalworkMag1", "Base.MetalworkMag2", "Base.MetalworkMag3", "Base.MetalworkMag4",
                                          "Base.HuntingMag1", "Base.HuntingMag2", "Base.HuntingMag3", "Base.FarmingMag1", "Base.MechanicMag1", "Base.MechanicMag2", "Base.MechanicMag3",
                                          "Base.CookingMag1", "Base.CookingMag2", "Base.EngineerMagazine1", "Base.EngineerMagazine2", "Base.ElectronicsMag1", "Base.ElectronicsMag2", "Base.ElectronicsMag3", "Base.ElectronicsMag5",
                                          "Base.FishingMag1", "Base.FishingMag2", "Base.Book", "MoreTraits.MedicalMag1", "MoreTraits.MedicalMag2", "MoreTraits.MedicalMag3", "MoreTraits.MedicalMag4", "MoreTraits.AntiqueMag1",
                                          "MoreTraits.AntiqueMag2", "MoreTraits.AntiqueMag3" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 90 then
                     local randomitem = { "Base.DumbBell", "Base.EggCarton", "Base.HomeAlarm", "Base.HotDog", "Base.HottieZ", "Base.Icecream", "Base.Machete", "Base.Revolver_Long",
                                          "Base.MeatPatty", "Base.Milk", "Base.MuttonChop", "Base.Padlock", "Base.PorkChop", "Base.Wine", "Base.Wine2", "Base.WhiskeyFull", "Base.Ham" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 95 then
                     local randomitem = { "Base.PropaneTank", "Base.BlowTorch", "Base.Woodglue", "Base.DuctTape", "Base.Rope", "Base.Extinguisher" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 elseif roll <= 100 then
                     local randomitem = { "Base.Spiffo", "Base.SpiffoSuit", "Base.Hat_Spiffo", "Base.SpiffoTail", "Base.Generator" };
-                    inv:AddItem(randomitem[ZombRand(1, tablelength(randomitem) - 1)]);
+                    inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem))]));
                 end
             end
 
@@ -2233,7 +2283,7 @@ local function graveRobber(_zombie)
 
 end
 
-local function Gourmand(_iSInventoryPage, _state, _player)
+function Gourmand(_iSInventoryPage, _state, _player)
     local player = _player;
     local containerObj;
     local container;
@@ -2259,7 +2309,9 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                 if item:isRotten() == true then
                                     if ZombRand(100) <= basechance then
                                         local newitem = container:AddItem(item:getFullType());
+                                        container:addItemOnServer(newitem)
                                         container:Remove(item);
+                                        container:removeItemOnServer(item);
                                         if MoreTraits.settings.GourmandAnnounce == true then
                                             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
                                         end
@@ -2267,7 +2319,9 @@ local function Gourmand(_iSInventoryPage, _state, _player)
                                 elseif item:isFresh() == false then
                                     if ZombRand(100) <= basechance then
                                         local newitem = container:AddItem(item:getFullType());
+                                        container:addItemOnServer(newitem);
                                         container:Remove(item);
+                                        container:removeItemOnServer(item);
                                         if MoreTraits.settings.GourmandAnnounce == true then
                                             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
                                         end
@@ -2281,7 +2335,7 @@ local function Gourmand(_iSInventoryPage, _state, _player)
         end
     end
 end
-local function setFoodState(food, state)
+function setFoodState(food, state)
     --States: "Gourmand", "Normal", "Ascetic"
     local player = getPlayer();
     local itemdata = food:getModData();
@@ -2507,7 +2561,7 @@ local function setFoodState(food, state)
     end
 
 end
-local function FoodUpdate(_player)
+function FoodUpdate(_player)
     local player = _player;
     local inv = player:getInventory();
     for i = 0, inv:getItems():size() - 1 do
@@ -2525,7 +2579,7 @@ local function FoodUpdate(_player)
         end
     end
 end
-local function FearfulUpdate(_player)
+function FearfulUpdate(_player)
     local player = _player;
     if player:HasTrait("fearful") then
         local stats = player:getStats();
@@ -2559,7 +2613,7 @@ local function FearfulUpdate(_player)
         end
     end
 end
-local function GymGoer(_player, _perk, _amount)
+function GymGoer(_player, _perk, _amount)
     local player = _player;
     local perk = _perk;
     local amount = _amount;
@@ -2580,7 +2634,7 @@ local function GymGoer(_player, _perk, _amount)
         end
     end
 end
-local function GymGoerUpdate(_player)
+function GymGoerUpdate(_player)
     local player = _player;
     if player:HasTrait("gymgoer") then
         local bodydamage = player:getBodyDamage();
@@ -2593,7 +2647,7 @@ local function GymGoerUpdate(_player)
         end
     end
 end
-local function ContainerEvents(_iSInventoryPage, _state)
+function ContainerEvents(_iSInventoryPage, _state)
     local page = _iSInventoryPage;
     local state = _state;
     if state == "end" then
@@ -2646,7 +2700,7 @@ function LearnAllRecipes(_player)
         end
     end
 end
-local function QuickWorker(_player)
+function QuickWorker(_player)
     local player = _player;
     if player:HasTrait("quickworker") then
         if player:hasTimedActions() == true then
@@ -2691,7 +2745,7 @@ local function QuickWorker(_player)
         end
     end
 end
-local function SlowWorker(_player)
+function SlowWorker(_player)
     local player = _player;
     if player:HasTrait("slowworker") then
         if player:hasTimedActions() == true then
@@ -2737,7 +2791,7 @@ local function SlowWorker(_player)
         end
     end
 end
-local function LeadFoot(_player)
+function LeadFoot(_player)
     local player = _player;
     local shoes = player:getClothingItem_Feet();
     local itemdata = nil;
@@ -2763,7 +2817,7 @@ local function LeadFoot(_player)
         end
     end
 end
-local function GlassBody(_player, _playerdata)
+function GlassBody(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
@@ -2809,7 +2863,7 @@ local function GlassBody(_player, _playerdata)
         playerdata.fLastHP = bodydamage:getOverallBodyHealth();
     end
 end
-local function BatteringRam()
+function BatteringRam()
     local player = getPlayer();
     if player:HasTrait("batteringram") then
         local playerdata = player:getModData();
@@ -2874,7 +2928,7 @@ local function BatteringRam()
         end
     end
 end
-local function BatteringRamUpdate(_player, _playerdata)
+function BatteringRamUpdate(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("batteringram") then
@@ -2888,7 +2942,7 @@ local function BatteringRamUpdate(_player, _playerdata)
         end
     end
 end
-local function mundane(_actor, _target, _weapon, _damage)
+function mundane(_actor, _target, _weapon, _damage)
     local player = getPlayer();
     local weapon = _weapon;
     local weapondata = weapon:getModData();
@@ -2905,7 +2959,7 @@ local function mundane(_actor, _target, _weapon, _damage)
         end
     end
 end
-local function clothingUpdate(_player)
+function clothingUpdate(_player)
     local player = _player;
     local state = "Normal";
     local wornItems = player:getWornItems();
@@ -2968,7 +3022,18 @@ local function clothingUpdate(_player)
         end
     end
 end
-local function MainPlayerUpdate(_player)
+
+local function CheckInjuredHeal()
+    if #BodyDamagedFromTrait > 0 then
+        for i, v in ipairs(BodyDamagedFromTrait) do
+            if v:HasInjury() == false then
+                table.remove(BodyDamagedFromTrait, i, v);
+                i = i - 1;
+            end
+        end
+    end
+end
+function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
     if internalTick >= 30 then
@@ -3008,7 +3073,7 @@ local function MainPlayerUpdate(_player)
     internalTick = internalTick + 1;
 end
 
-local function EveryOneMinute()
+function EveryOneMinute()
     local player = getPlayer();
     local playerdata = player:getModData();
     ToadTraitParanoia(player, playerdata);
@@ -3017,7 +3082,7 @@ local function EveryOneMinute()
     LeadFoot(player);
     GymGoerUpdate(player);
 end
-local function OnLoad()
+function OnLoad()
     --reset any worn clothing to default state.
     local player = getPlayer();
     local playerdata = player:getModData();
@@ -3051,6 +3116,7 @@ Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.EveryHours.Add(indefatigablecounter);
+Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);

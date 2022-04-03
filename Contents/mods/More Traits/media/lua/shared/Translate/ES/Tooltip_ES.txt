@@ -1,0 +1,16 @@
+Tooltip_ES = {
+    Tooltip_MoreTraits_AntiqueAxe = "Un hacha de piedra endurecida extremadamente rara.<br>Muy resistente y duradera, pero irreparable.",
+    Tooltip_MoreTraits_Thumper = "Un mazo de piedra excepcional.<br>Capaz de derribar multitudes enteras de un solo golpe.<br>¡Increíblemente poderoso, pero también extremadamente pesado!",
+    Tooltip_MoreTraits_ObsidianBlade = "Una rara daga antigua utilizada en sacrificios.<br>Muy poderosa, pero frágil.",
+    Tooltip_MoreTraits_PackerBag = "Una mochila bastante rara.<br>Gran capacidad y alta reducción de peso.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Esta palanca ha sido moldeada y refinada para golpear más rápido y causar más daño.",
+    Tooltip_MoreTraits_Slugger = "Un bate de béisbol de aluminio exclusivo y firmado.<br>Pesa menos, gira más rápido y es más duradero que un bate de béisbol estándar.",
+    Tooltip_MoreTraits_Cure = "Un brebaje poderoso capaz de revertir los efectos de la zombificación.<br>Solo puede ser elaborado por los investigadores médicos más talentosos.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Una revista de Edición Limitada.<br>Esta edición enseña el arte tabú de convertir cadáveres humanos en fertilizante útil. No preguntes...",
+    Tooltip_MoreTraits_AntiqueMag2 = "Una revista de Edición Limitada.<br>Esta edición profundiza en recetas caseras con papel maché.",
+    Tooltip_MoreTraits_AntiqueMag3 = "Una revista de Edición Limitada.<br>Esta edición ofrece comentarios sobre las recetas caníbales de ciertas tribus de Papúa Nueva Guniea. No preguntes...",
+    Tooltip_MoreTraits_PapierMacheSword = "¡Diversión para toda la familia!<br>No apto para niños menores de cuatro años.",
+    Tooltip_MoreTraits_ItemBoost = "Las estadísticas de este objeto están siendo mejoradas debido a uno de tus rasgos.",
+    Tooltip_MoreTraits_GordaniteBoost = "Palanca+",
+    Tooltip_MoreTraits_GordaniteDefault = "Palanca",
+}

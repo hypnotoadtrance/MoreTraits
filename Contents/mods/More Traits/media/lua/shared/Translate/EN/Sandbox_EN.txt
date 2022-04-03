@@ -31,7 +31,7 @@ Sandbox_EN = {
     Sandbox_MoreTraits_SuperImmunePercent = "Superimmune Effectiveness",
     Sandbox_MoreTraits_SuperImmunePercent_tooltip = "The percent chance that a player who has the SuperImmune trait will fight-off zombification.<br>Setting this to 100% would make the player immune to zombification.<br>Note: Even if a player's immune system fights off zombification, there is still a chance they will suffer a 'Fake' Infection.",
     Sandbox_MoreTraits_GraveRobberChance = "Grave Robber: Loot Chance",
-    Sandbox_MoreTraits_GraveRobberChance_tooltip = "The percent chance that a player with the Grave Robber trait will find extra loot on a zombie corpse.<br>Setting this to 100% will make every zombie killed by the player have extra loot.",
+    Sandbox_MoreTraits_GraveRobberChance_tooltip = "The chance that a player with the Grave Robber trait will find extra loot on a zombie corpse.<br>Setting this to 1000 will make every zombie killed by the player have extra loot.",
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot = "Grave Robber: Guaranteed Extra Loot",
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot_tooltip = "How much guaranteed extra loot will Grave Robber's find on zombie corpses?<br>By default, a random value is determined. Increasing this value guarantees extra loot whenever loot is rolled.",
     Sandbox_MoreTraits_IndefatigableRecharge = "Indefatigable Recharge",
@@ -73,4 +73,8 @@ Sandbox_EN = {
     Sandbox_MoreTraits_MartialWeapons_tooltip = "By default, Martial Artist will only deal damage if the player is unarmed.<br>If enabled, players' shoves will still deal damage even if they are wielding a weapon.<br>If this option is disabled, you can still benefit from Martial Artist with an item in your Secondary slot (Flashlight, Bag, etc). It only checks if the Primary slot is equipped.",
     Sandbox_MoreTraits_AntiqueChance = "Antique Collector Chance in X",
     Sandbox_MoreTraits_AntiqueChance_tooltip = "How rare Antique Collector items are.<br>This value is representative of a 1 in X roll.<br>Higher values mean drops happen less frequently.",
+    Sandbox_MoreTraits_ForgivingDeprived = "Forgiving Deprived",
+    Sandbox_MoreTraits_ForgivingDeprived_tooltip = "Players who take the Deprived trait will still be allowed to keep a belt.<br>Belts are ordinarily difficult to obtain through normal play without killing other players or mods which add them to loot tables.",
+    Sandbox_MoreTraits_NonlethalAlcoholic = "Nonlethal Alcoholism",
+    Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Players who take the alcoholic trait can never die from alcohol poisoning, but will still suffer periodic withdrawal.",
 }

@@ -317,9 +317,6 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("fearful", "Brave");
     TraitFactory.setMutualExclusive("blissful", "Smoker");
     TraitFactory.setMutualExclusive("quickworker", "slowworker");
-    TraitFactory.setMutualExclusive("indefatigable", "injured");
-    TraitFactory.setMutualExclusive("indefatigable", "broke");
-    TraitFactory.setMutualExclusive("indefatigable", "burned");
     TraitFactory.setMutualExclusive("burned", "broke");
     TraitFactory.setMutualExclusive("burned", "injured");
     --TraitFactory.setMutualExclusive("gimp", "fast");
