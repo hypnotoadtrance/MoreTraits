@@ -657,8 +657,8 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bScroungerRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bScroungerRolled = true;
+                if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                    containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
                     if ZombRand(100) <= basechance then
                         local tempcontainer = {};
@@ -779,8 +779,8 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
             local tempcontainer = {};
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bIncomprehensiveRolled = true;
+                if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                    containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
                     if ZombRand(100) <= basechance then
