@@ -185,3 +185,8 @@ option MoreTraits.AntiqueChance
 	type = integer, min = 100, max = 10000, default = 1000,
 	page = MoreTraits, translation = MoreTraits_AntiqueChance,
 }
+option MoreTraits.ForgivingDeprived
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_ForgivingDeprived,
+}

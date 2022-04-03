@@ -73,4 +73,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_MartialWeapons_tooltip = "By default, Martial Artist will only deal damage if the player is unarmed.<br>If enabled, players' shoves will still deal damage even if they are wielding a weapon.<br>If this option is disabled, you can still benefit from Martial Artist with an item in your Secondary slot (Flashlight, Bag, etc). It only checks if the Primary slot is equipped.",
     Sandbox_MoreTraits_AntiqueChance = "Antique Collector Chance in X",
     Sandbox_MoreTraits_AntiqueChance_tooltip = "How rare Antique Collector items are.<br>This value is representative of a 1 in X roll.<br>Higher values mean drops happen less frequently.",
+    Sandbox_MoreTraits_ForgivingDeprived = "Forgiving Deprived",
+    Sandbox_MoreTraits_ForgivingDeprived_tooltip = "Players who take the Deprived trait will still be allowed to keep a belt.<br>Belts are ordinarily difficult to obtain through normal play without killing other players or mods which add them to loot tables.",
 }

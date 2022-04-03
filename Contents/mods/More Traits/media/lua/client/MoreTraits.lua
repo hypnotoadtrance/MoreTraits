@@ -304,6 +304,9 @@ function initToadTraitsItems(_player)
         player:clearWornItems();
         inv:removeAllItems();
         player:createKeyRing();
+        if SandboxVars.MoreTraits.ForgivingDeprived == true then
+            inv:addItemOnServer(inv:AddItem("Base.Belt"));
+        end
     end
 end
 
