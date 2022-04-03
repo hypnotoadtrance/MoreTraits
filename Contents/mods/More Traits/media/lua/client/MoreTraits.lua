@@ -854,6 +854,10 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
     table.insert(items, "MoreTraits.AntiqueMag1");
     table.insert(items, "MoreTraits.AntiqueMag2");
     table.insert(items, "MoreTraits.AntiqueMag3");
+    table.insert(items, "MoreTraits.AntiqueSpear");
+    table.insert(items, "MoreTraits.AntiqueHammer");
+    table.insert(items, "MoreTraits.AntiqueKatana");
+
     local length = 0
     for k, v in pairs(items) do
         length = length + 1;

@@ -13,3 +13,4 @@ Add option for nonlethal alcoholism in Sandbox Settings.
 Tie Scrounger and Incomprehensive rolls to one boolean so that it is not possible for Scrounger and Incomprehensive to be rolled for the same container.
 Nerf range and max hit count of Maul antique item
 Expand Grave Robber Loot Chance to allow rolls between 1 and 1000 instead of 1 and 100.
+Add a few antique weapon types for each category of weapon.
