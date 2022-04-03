@@ -1249,6 +1249,7 @@ function indefatigable(_player, _playerdata)
                         b:RestoreToFullHealth();
                     end
                 end
+                player:getBodyDamage():setOverallBodyHealth(100);
                 playerdata.bindefatigable = true;
                 playerdata.indefatigablecooldown = 0;
                 if enemies:size() > 2 then
