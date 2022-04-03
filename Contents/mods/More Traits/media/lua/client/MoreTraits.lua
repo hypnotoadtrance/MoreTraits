@@ -10,6 +10,8 @@ This is constantly ongoing. Whenever I see something that can be written more ef
 TODO Reimplement Fast and Slow traits
 Ever since the animations update, the previous calculations stopped working, and despite hours wracking my brain,
 I have been unable to find a workaround.
+TODO Implement Motion Sickness trait
+Gives sickness while in a moving vehicle.
 --]]
 --Global Variables
 skipxpadd = false;
@@ -2168,7 +2170,7 @@ end
 function graveRobber(_zombie)
     local player = getPlayer();
     local zombie = _zombie;
-    local chance = 3;
+    local chance = 10;
     local extraloot = 1;
     if SandboxVars.MoreTraits.GraveRobberChance then
         chance = SandboxVars.MoreTraits.GraveRobberChance;
@@ -2178,21 +2180,21 @@ function graveRobber(_zombie)
     end
     if player:HasTrait("graverobber") and zombie:DistTo(player) <= 12 then
         if player:HasTrait("Lucky") then
-            chance = chance + 1 * luckimpact;
+            chance = chance + 2 * luckimpact;
         end
         if player:HasTrait("Unlucky") then
-            chance = chance - 1 * luckimpact;
+            chance = chance - 2 * luckimpact;
         end
         if player:HasTrait("scrounger") then
-            chance = chance + 1;
+            chance = chance + 2;
         end
         if player:HasTrait("incomprehensive") then
-            chance = chance - 1;
+            chance = chance - 2;
         end
         if chance <= 0 then
             chance = 1;
         end
-        if ZombRand(0, 101) <= chance then
+        if ZombRand(0, 1001) <= chance then
             if MoreTraits.settings.GraveRobberAnnounce == true then
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_graverobber"), true, HaloTextHelper.getColorGreen());
             end
