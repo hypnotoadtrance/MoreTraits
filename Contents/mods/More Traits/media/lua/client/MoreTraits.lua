@@ -115,81 +115,97 @@ function initToadTraitsItems(_player)
     local player = _player;
     local inv = player:getInventory();
     if player:HasTrait("preparedfood") then
-        inv:AddItem("Base.Plasticbag");
+        inv:addItemOnServer(inv:AddItem("Base.Plasticbag"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.Plasticbag" then
                     player:setSecondaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItems("Base.PopBottle", 3);
-                    baginv:AddItem("Base.TinOpener");
-                    baginv:AddItem("Base.CannedTomato");
-                    baginv:AddItem("Base.CannedPotato");
-                    baginv:AddItem("Base.CannedCarrots");
-                    baginv:AddItem("Base.CannedBroccoli");
-                    baginv:AddItem("Base.CannedCabbage");
-                    baginv:AddItem("Base.CannedEggplant");
+                    local addeditems = baginv:AddItems("Base.PopBottle", 3);
+                    for i = 0, addeditems:size() - 1 do
+                        local item = baginv:getItems():get(i);
+                        baginv:addItemOnServer(item);
+                    end
+                    baginv:addItemOnServer(baginv:AddItem("Base.TinOpener"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedTomato"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedPotato"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedCarrots"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedBroccoli"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedCabbage"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.CannedEggplant"));
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedammo") then
-        inv:AddItems("Base.Bullets9mmBox", 3);
-        inv:AddItems("Base.ShotgunShellsBox", 2);
+        inv:addItemOnServer(inv:AddItems("Base.Bullets9mmBox", 3));
+        inv:addItemOnServer(inv:AddItems("Base.ShotgunShellsBox", 2));
     end
     if player:HasTrait("preparedweapon") then
-        inv:AddItem("Base.BaseballBatNails");
-        inv:AddItem("Base.HuntingKnife");
+        inv:addItemOnServer(inv:AddItem("Base.BaseballBatNails"));
+        inv:addItemOnServer(inv:AddItem("Base.HuntingKnife"));
     end
     if player:HasTrait("preparedmedical") then
-        inv:AddItem("Base.FirstAidKit");
+        inv:addItemOnServer(inv:AddItem("Base.FirstAidKit"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.FirstAidKit" then
                     player:setSecondaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.Bandaid");
-                    baginv:AddItem("Base.PillsAntiDep");
-                    baginv:AddItem("Base.Disinfectant");
-                    baginv:AddItem("Base.AlcoholWipes");
-                    baginv:AddItem("Base.PillsBeta");
-                    baginv:AddItem("Base.Pills");
+                    baginv:addItemOnServer(baginv:AddItem("Base.Bandaid"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.PillsAntiDep"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Disinfectant"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.AlcoholWipes"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.PillsBeta"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Pills"));
                     if SandboxVars.MoreTraits.PreparedMedicalBandageAmount then
-                        baginv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
+                        local addeditems = baginv:AddItems("Base.Bandage", SandboxVars.MoreTraits.PreparedMedicalBandageAmount);
+                        for i = 0, addeditems:size() - 1 do
+                            local item = baginv:getItems():get(i);
+                            baginv:addItemOnServer(item);
+                        end
                     else
-                        baginv:AddItems("Base.Bandage", 4);
+                        local addeditems = baginv:AddItems("Base.Bandage", 4);
+                        for i = 0, addeditems:size() - 1 do
+                            local item = baginv:getItems():get(i);
+                            baginv:addItemOnServer(item);
+                        end
                     end
-                    baginv:AddItem("Base.SutureNeedle");
-                    baginv:AddItem("Base.Tissue");
-                    baginv:AddItem("Base.Tweezers");
+                    baginv:addItemOnServer(baginv:AddItem("Base.SutureNeedle"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Tissue"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Tweezers"));
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedrepair") then
-        inv:AddItem("Base.Toolbox");
+        inv:addItemOnServer(inv:AddItem("Base.Toolbox"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.Toolbox" then
                     player:setSecondaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.Hammer");
-                    baginv:AddItem("Base.Screwdriver");
-                    baginv:AddItem("Base.Saw");
-                    baginv:AddItem("Base.NailsBox");
-                    baginv:AddItems("Base.Garbagebag", 8);
+                    baginv:addItemOnServer(baginv:AddItem("Base.Hammer"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Screwdriver"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Saw"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.NailsBox"));
+                    local addeditems = baginv:AddItems("Base.Garbagebag", 8);
+                    for i = 0, addeditems:size() - 1 do
+                        local item = baginv:getItems():get(i);
+                        baginv:addItemOnServer(item);
+                    end
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedcamp") then
-        inv:AddItem("MoreTraits.Bag_SmallHikingBag");
+        inv:addItemOnServer(inv:AddItem("MoreTraits.Bag_SmallHikingBag"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
@@ -198,24 +214,24 @@ function initToadTraitsItems(_player)
                         player:setClothingItem_Back(bag);
                     end
                     local baginv = bag:getInventory();
-                    baginv:AddItems("Base.Matches", 1);
-                    baginv:AddItem("camping.CampfireKit");
-                    baginv:AddItem("camping.CampingTentKit");
-                    baginv:AddItems("Base.BeefJerky", 1);
-                    baginv:AddItems("Base.Pop", 1);
-                    baginv:AddItem("Base.FishingRod");
-                    baginv:AddItem("Base.FishingLine");
-                    baginv:AddItem("Base.FishingTackle");
-                    baginv:AddItems("Base.Battery", 1);
-                    baginv:AddItem("Base.Torch");
-                    baginv:AddItem("Base.WaterBottleFull");
+                    baginv:addItemOnServer(baginv:AddItem("Base.Matches"));
+                    baginv:addItemOnServer(baginv:AddItem("camping.CampfireKit"));
+                    baginv:addItemOnServer(baginv:AddItem("camping.CampingTentKit"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.BeefJerky"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Pop"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.FishingRod"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.FishingLine"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.FishingTackle"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Battery"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Torch"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.WaterBottleFull"));
                     break ;
                 end
             end
         end
     end
     if player:HasTrait("preparedpack") then
-        inv:AddItem("Base.Bag_NormalHikingBag");
+        inv:addItemOnServer(inv:AddItem("Base.Bag_NormalHikingBag"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
@@ -232,7 +248,7 @@ function initToadTraitsItems(_player)
     if player:HasTrait("preparedcar") then
         inv:AddItem("Base.Bag_JanitorToolbox");
         if SandboxVars.MoreTraits.PreparedCarGasToggle == true then
-            inv:AddItem("Base.PetrolCan");
+            inv:addItemOnServer(inv:AddItem("Base.PetrolCan"));
         end
 
         for i = 0, inv:getItems():size() - 1 do
@@ -241,12 +257,12 @@ function initToadTraitsItems(_player)
                 if bag:getFullType() == "Base.Bag_JanitorToolbox" then
                     player:setPrimaryHandItem(bag);
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.CarBatteryCharger");
-                    baginv:AddItem("Base.Screwdriver");
-                    baginv:AddItem("Base.Wrench");
-                    baginv:AddItem("Base.LugWrench");
-                    baginv:AddItem("Base.TirePump");
-                    baginv:AddItem("Base.Jack");
+                    baginv:addItemOnServer(baginv:AddItem("Base.CarBatteryCharger"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Screwdriver"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Wrench"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.LugWrench"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.TirePump"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Jack"));
                 end
                 if bag:getFullType() == "Base.PetrolCan" then
                     player:setSecondaryHandItem(bag);
@@ -256,19 +272,23 @@ function initToadTraitsItems(_player)
     end
     if player:HasTrait("drinker") then
         if SandboxVars.MoreTraits.AlcoholicFreeDrink == true then
-            inv:AddItem("Base.WhiskeyFull");
+            inv:addItemOnServer(inv:AddItem("Base.WhiskeyFull"));
         end
     end
     if player:HasTrait("Tailor") then
-        inv:AddItem("Base.SewingKit");
+        inv:addItemOnServer(inv:AddItem("Base.SewingKit"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
             if bag ~= nil then
                 if bag:getFullType() == "Base.SewingKit" then
                     local baginv = bag:getInventory();
-                    baginv:AddItem("Base.Scissors");
-                    baginv:AddItem("Base.Needle");
-                    baginv:AddItems("Base.Thread", 4);
+                    baginv:addItemOnServer(baginv:AddItem("Base.Scissors"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Needle"));
+                    local addeditems = baginv:AddItems("Base.Thread", 4);
+                    for i = 0, addeditems:size() - 1 do
+                        local item = baginv:getItems():get(i);
+                        baginv:addItemOnServer(item);
+                    end
                     break ;
                 end
             end
@@ -276,8 +296,8 @@ function initToadTraitsItems(_player)
     end
     if player:HasTrait("Smoker") then
         if SandboxVars.MoreTraits.SmokerStart == true then
-            inv:AddItem("Base.Cigarettes");
-            inv:AddItem("Base.Lighter");
+            inv:addItemOnServer(inv:AddItem("Base.Cigarettes"));
+            inv:addItemOnServer(inv:AddItem("Base.Lighter"));
         end
     end
     if player:HasTrait("deprived") then
@@ -1217,8 +1237,8 @@ function indefatigable(_player, _playerdata)
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
                     if tableContains(BodyDamagedFromTrait, b) == false then
-                      b:RestoreToFullHealth();
-                      end
+                        b:RestoreToFullHealth();
+                    end
                 end
                 playerdata.bindefatigable = true;
                 playerdata.indefatigablecooldown = 0;
@@ -2981,13 +3001,13 @@ end
 
 local function CheckInjuredHeal()
     if #BodyDamagedFromTrait > 0 then
-       for i, v in ipairs(BodyDamagedFromTrait) do
-         if v:HasInjury() == false then
-            table.remove(BodyDamagedFromTrait, i, v);
-            i = i - 1;
-         end
-      end
-   end
+        for i, v in ipairs(BodyDamagedFromTrait) do
+            if v:HasInjury() == false then
+                table.remove(BodyDamagedFromTrait, i, v);
+                i = i - 1;
+            end
+        end
+    end
 end
 function MainPlayerUpdate(_player)
     local player = _player;
@@ -3072,7 +3092,7 @@ Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.EveryHours.Add(indefatigablecounter);
-Events.EveryHours.Add(CheckInjuredHeal); 
+Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);

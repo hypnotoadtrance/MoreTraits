@@ -7,3 +7,4 @@ Fix typo in Grunt Worker description.
 Clarify Bloodied Crowbar Tooltip Description.
 Change name of Hardy in Spanish translation to prevent conflict with Vanilla "Robusto"
 Make Indefatigable Compatible with injury traits. - Credit: Fadjek.
+Synchronize Prepared traits with Server to prevent items disappearing on spawn.
