@@ -14,3 +14,4 @@ Tie Scrounger and Incomprehensive rolls to one boolean so that it is not possibl
 Nerf range and max hit count of Maul antique item
 Expand Grave Robber Loot Chance to allow rolls between 1 and 1000 instead of 1 and 100.
 Add a few antique weapon types for each category of weapon.
+Strength and Fitness now have only a marginal impact on Martial Artist damage scaling, with Short Blunt now being the major determining factor.
