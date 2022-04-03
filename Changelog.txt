@@ -9,3 +9,4 @@ Change name of Hardy in Spanish translation to prevent conflict with Vanilla "Ro
 Make Indefatigable Compatible with injury traits. - Credit: Fadjek.
 Synchronize Prepared traits with Server to prevent items disappearing on spawn.
 Add option to allow players who take the deprived Trait to spawn with a belt.
+Add option for nonlethal alcoholism in Sandbox Settings.

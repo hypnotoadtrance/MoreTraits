@@ -1455,7 +1455,11 @@ function drinkerpoison()
         if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false and cooldown <= 0 then
             print("Player is suffering from alcohol withdrawal.");
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
-            player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+            if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
+                player:getBodyDamage():setPoisonLevel(20);
+            else
+                player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+            end
             playerdata.iWithdrawalCooldown = ZombRand(12, 24);
         end
         playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown - 1;

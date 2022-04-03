@@ -75,4 +75,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_AntiqueChance_tooltip = "How rare Antique Collector items are.<br>This value is representative of a 1 in X roll.<br>Higher values mean drops happen less frequently.",
     Sandbox_MoreTraits_ForgivingDeprived = "Forgiving Deprived",
     Sandbox_MoreTraits_ForgivingDeprived_tooltip = "Players who take the Deprived trait will still be allowed to keep a belt.<br>Belts are ordinarily difficult to obtain through normal play without killing other players or mods which add them to loot tables.",
+    Sandbox_MoreTraits_NonlethalAlcoholic = "Nonlethal Alcoholism",
+    Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Players who take the alcoholic trait can never die from alcohol poisoning, but will still suffer periodic withdrawal.",
 }

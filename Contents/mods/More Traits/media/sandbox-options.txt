@@ -190,3 +190,8 @@ option MoreTraits.ForgivingDeprived
 	type = boolean, default = false,
 	page = MoreTraits, translation = MoreTraits_ForgivingDeprived,
 }
+option MoreTraits.NonlethalAlcoholic
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_NonlethalAlcoholic,
+}
