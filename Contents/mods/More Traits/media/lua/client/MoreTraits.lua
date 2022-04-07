@@ -272,6 +272,17 @@ function initToadTraitsItems(_player)
             end
         end
     end
+    
+    if player:HasTrait("preparedcoordination") then
+	inv:AddItem("MuldraughMap");
+	inv:AddItem("RosewoodMap");
+	inv:AddItem("RiversideMap");
+	inv:AddItem("WestpointMap");
+	inv:AddItem("MarchRidgeMap");
+	inv:AddItem("Pencil");
+	inv:AddItem("DigitalWatch2");
+	end
+    
     if player:HasTrait("drinker") then
         if SandboxVars.MoreTraits.AlcoholicFreeDrink == true then
             inv:addItemOnServer(inv:AddItem("Base.WhiskeyFull"));
