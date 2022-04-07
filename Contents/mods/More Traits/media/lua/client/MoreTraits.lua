@@ -3048,6 +3048,65 @@ local function CheckInjuredHeal()
     end
 end
 
+local function NoodleLegs(_player, _playerdata)
+	if _player:HasTrait("noodlelegs") then
+	local CurrentLocation = _player:getCurrentSquare();
+	local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
+	local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
+	local N_Chance = 10;
+	N_Chance = N_Chance - ((NimbleLvl+SprintingLvl)/4); --Decreases odds by .25 for every level in nimble or sprinting, for a total of -5 with nimble and sprinting at lvl 10
+	if _player:HasTrait("Graceful") then
+		N_Chance = N_Chance - 2;
+		end	
+	if _player:HasTrait("Clumsy") then
+		N_Chance = N_Chance + 2;
+		end
+	if _player:HasTrait("Lucky") then
+		N_Chance = N_Chance - 1;
+		end
+	if _player:HasTrait("Unlucky") then
+		N_Chance = N_Chance + 1;
+		end
+	if _player:IsRunning() == true then
+		local Roll = ZombRand(0, 101);
+			if Roll <= N_Chance then
+		local type = nil;
+		local random = ZombRand(2);
+
+        if random == 0 then
+            type = "left"
+        else
+            type = "right"
+        end
+			_player:setBumpFallType("FallForward");
+			_player:setBumpType(type);
+			_player:setBumpDone(false);
+			_player:setBumpFall(true);
+			_player:reportEvent("wasBumped");
+			end
+		end
+	if _player:isSprinting() == true then
+		N_Chance = N_Chance * 2;
+		local Roll = ZombRand(0, 101);
+			if Roll <= N_Chance then
+		local type = nil;
+		local random = ZombRand(2);
+
+        if random == 0 then
+            type = "left"
+        else
+            type = "right"
+        end
+			_player:setBumpFallType("FallForward");
+			_player:setBumpType(type);
+			_player:setBumpDone(false);
+			_player:setBumpFall(true);
+			_player:reportEvent("wasBumped");
+			end
+		end	
+	end 
+end
+
 local function SecondWind(player)
 	local zombiesnearplayer = 0;
 	local playerdata = player:getModData();
@@ -3145,6 +3204,7 @@ function EveryOneMinute()
     UnHighlightScrounger(player, playerdata);
     LeadFoot(player);
     GymGoerUpdate(player);
+    NoodleLegs(player, playerData);
 end
 function OnLoad()
     --reset any worn clothing to default state.
