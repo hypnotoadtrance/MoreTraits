@@ -274,13 +274,13 @@ function initToadTraitsItems(_player)
     end
 
     if player:HasTrait("preparedcoordination") then
-        inv:addItemOnServer(inv:AddItem("MuldraughMap"));
-        inv:addItemOnServer(inv:AddItem("RosewoodMap"));
-        inv:addItemOnServer(inv:AddItem("RiversideMap"));
-        inv:addItemOnServer(inv:AddItem("WestpointMap"));
-        inv:addItemOnServer(inv:AddItem("MarchRidgeMap"));
-        inv:addItemOnServer(inv:AddItem("Pencil"));
-        inv:addItemOnServer(inv:AddItem("DigitalWatch2"));
+        inv:addItemOnServer(inv:AddItem("Base.MuldraughMap"));
+        inv:addItemOnServer(inv:AddItem("Base.RosewoodMap"));
+        inv:addItemOnServer(inv:AddItem("Base.RiversideMap"));
+        inv:addItemOnServer(inv:AddItem("Base.WestpointMap"));
+        inv:addItemOnServer(inv:AddItem("Base.MarchRidgeMap"));
+        inv:addItemOnServer(inv:AddItem("Base.Pencil"));
+        inv:addItemOnServer(inv:AddItem("Base.DigitalWatch2"));
     end
 
     if player:HasTrait("drinker") then
