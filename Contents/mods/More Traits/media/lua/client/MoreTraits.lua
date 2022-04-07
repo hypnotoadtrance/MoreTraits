@@ -3067,7 +3067,7 @@ local function SecondWind(player)
 	if zombiesnearplayer > 2 then
 		playerstats:setEndurance(1);
 		if playerstats:getFatigue() > 0.5 then
-			playerstats:setFatigue(0.5)
+			playerstats:setFatigue(0.5);
 		end
 		playerdata.secondwindcooldown = 0;
 		secondwinddisabled = true;
