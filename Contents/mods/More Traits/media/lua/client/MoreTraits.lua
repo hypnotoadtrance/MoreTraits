@@ -274,13 +274,24 @@ function initToadTraitsItems(_player)
     end
 
     if player:HasTrait("preparedcoordination") then
-        inv:addItemOnServer(inv:AddItem("Base.MuldraughMap"));
-        inv:addItemOnServer(inv:AddItem("Base.RosewoodMap"));
-        inv:addItemOnServer(inv:AddItem("Base.RiversideMap"));
-        inv:addItemOnServer(inv:AddItem("Base.WestpointMap"));
-        inv:addItemOnServer(inv:AddItem("Base.MarchRidgeMap"));
-        inv:addItemOnServer(inv:AddItem("Base.Pencil"));
+        inv:addItemOnServer(inv:AddItem("Base.Bag_FannyPackFront"));
         inv:addItemOnServer(inv:AddItem("Base.WristWatch_Right_DigitalBlack"));
+        for i = 0, inv:getItems():size() - 1 do
+            local bag = inv:getItems():get(i);
+            if bag ~= nil then
+                if bag:getFullType() == "Base.Bag_FannyPackFront" then
+                    player:setWornItem("FannyPackFront", bag);
+                    local baginv = bag:getInventory();
+                    baginv:addItemOnServer(baginv:AddItem("Base.MuldraughMap"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.RosewoodMap"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.RiversideMap"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.WestpointMap"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.MarchRidgeMap"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Pencil"));
+                    break ;
+                end
+            end
+        end
     end
 
     if player:HasTrait("drinker") then
