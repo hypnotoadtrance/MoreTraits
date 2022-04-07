@@ -346,6 +346,8 @@ function initToadTraitsPerks(_player)
     if SandboxVars.MoreTraits.LuckImpact then
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
+    playerdata.secondwinddisabled = false;
+    playerdata.secondwindcooldown = 0;
     playerdata.bToadTraitDepressed = false;
     playerdata.indefatigablecooldown = 0;
     playerdata.bindefatigable = false;
@@ -3053,28 +3055,26 @@ local function SecondWind(player)
 	local playerstats = player:getStats();
 	if player:HasTrait("secondwind") then
 		if playerstats:getEndurance() < 0.5 or playerstats:getFatigue() > 0.8 then
-		print("lol");
 			if playerdata.secondwinddisabled == false then
-			print("xd");
 			if enemies:size() > 2 then
                     for i = 0, enemies:size() - 1 do
                         if enemies:get(i):isZombie() then
                             if enemies:get(i):DistTo(player) <= 5 then
-								zombiesnearplayer = zombiesnearplayer + 1;
+				zombiesnearplayer = zombiesnearplayer + 1;
                             end
                         end
                     end
-					if zombiesnearplayer > 2 then
-						playerstats:setEndurance(1);
-						if playerstats:getFatigue() > 0.5 then
-							playerstats:setFatigue(0.5);
-						end
-						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
-					end
-                end
-			end	
+	if zombiesnearplayer > 2 then
+		playerstats:setEndurance(1);
+		if playerstats:getFatigue() > 0.5 then
+			playerstats:setFatigue(0.5);
 		end
-	end
+		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
+		end
+            end
+	 end	
+      end
+   end
 end
 
 local function SecondWindRecharge()
@@ -3089,7 +3089,7 @@ local function SecondWindRecharge()
                 player:Say(getText("UI_trait_secondwindcooldown"));
             else
                 playerdata.secondwindcooldown = playerdata.secondwindcooldown + 1;
-	        end
+	    end
         end
     end
 end
@@ -3114,6 +3114,7 @@ function MainPlayerUpdate(_player)
         SuperImmune(player, playerdata);
         Immunocompromised(player, playerdata);
     end
+    SecondWind(player);
     indefatigable(player, playerdata);
     anemic(player);
     thickblood(player);
@@ -3176,6 +3177,7 @@ Events.EveryHours.Add(drinkerpoison);
 Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
+Events.EveryHours.Add(SecondWindRecharge);
 Events.EveryHours.Add(indefatigablecounter);
 Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
