@@ -3067,8 +3067,10 @@ local function SecondWind(player)
 	if zombiesnearplayer > 2 then
 		playerstats:setEndurance(1);
 		if playerstats:getFatigue() > 0.5 then
-			playerstats:setFatigue(0.5);
+			playerstats:setFatigue(0.5)
 		end
+		playerdata.secondwindcooldown = 0;
+		secondwinddisabled = true;
 		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
 		end
             end
@@ -3083,8 +3085,8 @@ local function SecondWindRecharge()
     local recharge = 14 * 24;
 	if player:HasTrait("secondwind") then
 		if playerdata.secondwinddisabled == true then
-            if playerdata.secondwinddisabled >= recharge then
-                playerdata.secondwinddisabled = 0;
+            if playerdata.secondwindcooldown >= recharge then
+                playerdata.secondwindcooldown = 0;
                 playerdata.secondwinddisabled = false;
                 player:Say(getText("UI_trait_secondwindcooldown"));
             else
