@@ -1,17 +1,3 @@
 Changelog Notes:
-Synchronize Grave Robber with Server.
-Add Mod Options setting to announce Vagabond food finds.
-Fix Grave Robber some items in pool being impossible to roll.
-Fix Action Hero damage scaling not reducing by 50%.
-Fix typo in Grunt Worker description.
-Clarify Bloodied Crowbar Tooltip Description.
-Change name of Hardy in Spanish translation to prevent conflict with Vanilla "Robusto"
-Make Indefatigable Compatible with injury traits. - Credit: Fadjek.
-Synchronize Prepared traits with Server to prevent items disappearing on spawn.
-Add option to allow players who take the deprived Trait to spawn with a belt.
-Add option for nonlethal alcoholism in Sandbox Settings.
-Tie Scrounger and Incomprehensive rolls to one boolean so that it is not possible for Scrounger and Incomprehensive to be rolled for the same container.
-Nerf range and max hit count of Maul antique item
-Expand Grave Robber Loot Chance to allow rolls between 1 and 1000 instead of 1 and 100.
-Add a few antique weapon types for each category of weapon.
-Strength and Fitness now have only a marginal impact on Martial Artist damage scaling, with Short Blunt now being the major determining factor.
+Add new trait: Prepared: Coordination , Credit: Fajdek
+Fix Indefatigable not setting overall body health, credit: Fajdek
