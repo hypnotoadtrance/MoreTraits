@@ -3045,6 +3045,55 @@ local function CheckInjuredHeal()
         end
     end
 end
+
+local function SecondWind(player)
+	local zombiesnearplayer = 0;
+	local playerdata = player:getModData();
+	local enemies = player:getSpottedList();
+	local playerstats = player:getStats();
+	if player:HasTrait("secondwind") then
+		if playerstats:getEndurance() < 0.5 or playerstats:getFatigue() > 0.8 then
+		print("lol");
+			if playerdata.secondwinddisabled == false then
+			print("xd");
+			if enemies:size() > 2 then
+                    for i = 0, enemies:size() - 1 do
+                        if enemies:get(i):isZombie() then
+                            if enemies:get(i):DistTo(player) <= 5 then
+								zombiesnearplayer = zombiesnearplayer + 1;
+                            end
+                        end
+                    end
+					if zombiesnearplayer > 2 then
+						playerstats:setEndurance(1);
+						if playerstats:getFatigue() > 0.5 then
+							playerstats:setFatigue(0.5);
+						end
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
+					end
+                end
+			end	
+		end
+	end
+end
+
+local function SecondWindRecharge()
+	local player = getPlayer();
+    local playerdata = player:getModData();
+    local recharge = 14 * 24;
+	if player:HasTrait("secondwind") then
+		if playerdata.secondwinddisabled == true then
+            if playerdata.secondwinddisabled >= recharge then
+                playerdata.secondwinddisabled = 0;
+                playerdata.secondwinddisabled = false;
+                player:Say(getText("UI_trait_secondwindcooldown"));
+            else
+                playerdata.secondwindcooldown = playerdata.secondwindcooldown + 1;
+	        end
+        end
+    end
+end
+
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
