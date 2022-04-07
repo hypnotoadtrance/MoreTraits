@@ -280,7 +280,7 @@ function initToadTraitsItems(_player)
         inv:addItemOnServer(inv:AddItem("Base.WestpointMap"));
         inv:addItemOnServer(inv:AddItem("Base.MarchRidgeMap"));
         inv:addItemOnServer(inv:AddItem("Base.Pencil"));
-        inv:addItemOnServer(inv:AddItem("Base.DigitalWatch2"));
+        inv:addItemOnServer(inv:AddItem("Base.WristWatch_Right_DigitalBlack"));
     end
 
     if player:HasTrait("drinker") then
