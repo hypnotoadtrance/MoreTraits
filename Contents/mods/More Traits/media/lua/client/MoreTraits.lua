@@ -346,6 +346,8 @@ function initToadTraitsPerks(_player)
     if SandboxVars.MoreTraits.LuckImpact then
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
+    playerdata.secondwinddisabled = false;
+    playerdata.secondwindcooldown = 0;
     playerdata.bToadTraitDepressed = false;
     playerdata.indefatigablecooldown = 0;
     playerdata.bindefatigable = false;
@@ -3045,6 +3047,114 @@ local function CheckInjuredHeal()
         end
     end
 end
+
+local function NoodleLegs(_player, _playerdata)
+	if _player:HasTrait("noodlelegs") then
+	local CurrentLocation = _player:getCurrentSquare();
+	local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
+	local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
+	local N_Chance = 10;
+	N_Chance = N_Chance - ((NimbleLvl+SprintingLvl)/4); --Decreases odds by .25 for every level in nimble or sprinting, for a total of -5 with nimble and sprinting at lvl 10
+	if _player:HasTrait("Graceful") then
+		N_Chance = N_Chance - 2;
+		end	
+	if _player:HasTrait("Clumsy") then
+		N_Chance = N_Chance + 2;
+		end
+	if _player:HasTrait("Lucky") then
+		N_Chance = N_Chance - 1;
+		end
+	if _player:HasTrait("Unlucky") then
+		N_Chance = N_Chance + 1;
+		end
+	if _player:IsRunning() == true then
+		local Roll = ZombRand(0, 101);
+			if Roll <= N_Chance then
+		local type = nil;
+		local random = ZombRand(2);
+
+        if random == 0 then
+            type = "left"
+        else
+            type = "right"
+        end
+			_player:setBumpFallType("FallForward");
+			_player:setBumpType(type);
+			_player:setBumpDone(false);
+			_player:setBumpFall(true);
+			_player:reportEvent("wasBumped");
+			end
+		end
+	if _player:isSprinting() == true then
+		N_Chance = N_Chance * 2;
+		local Roll = ZombRand(0, 101);
+			if Roll <= N_Chance then
+		local type = nil;
+		local random = ZombRand(2);
+
+        if random == 0 then
+            type = "left"
+        else
+            type = "right"
+        end
+			_player:setBumpFallType("FallForward");
+			_player:setBumpType(type);
+			_player:setBumpDone(false);
+			_player:setBumpFall(true);
+			_player:reportEvent("wasBumped");
+			end
+		end	
+	end 
+end
+
+local function SecondWind(player)
+	local zombiesnearplayer = 0;
+	local playerdata = player:getModData();
+	local enemies = player:getSpottedList();
+	local playerstats = player:getStats();
+	if player:HasTrait("secondwind") then
+		if playerstats:getEndurance() < 0.5 or playerstats:getFatigue() > 0.8 then
+			if playerdata.secondwinddisabled == false then
+			if enemies:size() > 2 then
+                    for i = 0, enemies:size() - 1 do
+                        if enemies:get(i):isZombie() then
+                            if enemies:get(i):DistTo(player) <= 5 then
+				zombiesnearplayer = zombiesnearplayer + 1;
+                            end
+                        end
+                    end
+	if zombiesnearplayer > 2 then
+		playerstats:setEndurance(1);
+		if playerstats:getFatigue() > 0.5 then
+			playerstats:setFatigue(0.5);
+		end
+		playerdata.secondwindcooldown = 0;
+		secondwinddisabled = true;
+		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
+		end
+            end
+	 end	
+      end
+   end
+end
+
+local function SecondWindRecharge()
+	local player = getPlayer();
+    local playerdata = player:getModData();
+    local recharge = 14 * 24;
+	if player:HasTrait("secondwind") then
+		if playerdata.secondwinddisabled == true then
+            if playerdata.secondwindcooldown >= recharge then
+                playerdata.secondwindcooldown = 0;
+                playerdata.secondwinddisabled = false;
+                player:Say(getText("UI_trait_secondwindcooldown"));
+            else
+                playerdata.secondwindcooldown = playerdata.secondwindcooldown + 1;
+	    end
+        end
+    end
+end
+
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -3065,6 +3175,7 @@ function MainPlayerUpdate(_player)
         SuperImmune(player, playerdata);
         Immunocompromised(player, playerdata);
     end
+    SecondWind(player);
     indefatigable(player, playerdata);
     anemic(player);
     thickblood(player);
@@ -3093,6 +3204,7 @@ function EveryOneMinute()
     UnHighlightScrounger(player, playerdata);
     LeadFoot(player);
     GymGoerUpdate(player);
+    NoodleLegs(player, playerData);
 end
 function OnLoad()
     --reset any worn clothing to default state.
@@ -3127,6 +3239,7 @@ Events.EveryHours.Add(drinkerpoison);
 Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
+Events.EveryHours.Add(SecondWindRecharge);
 Events.EveryHours.Add(indefatigablecounter);
 Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);

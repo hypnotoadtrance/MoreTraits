@@ -188,9 +188,12 @@ local function initToadTraits()
     local batteringram = TraitFactory.addTrait("batteringram", getText("UI_trait_batteringram"), 7, getText("UI_trait_batteringramdesc"), false, false);
     local fitted = TraitFactory.addTrait("fitted", getText("UI_trait_fitted"), 4, getText("UI_trait_fitteddesc"), false, false);
     local tavernbrawler = TraitFactory.addTrait("tavernbrawler", getText("UI_trait_tavernbrawler"), 3, getText("UI_trait_tavernbrawlerdesc"), false, false);
+    local secondwind = TraitFactory.addTrait("secondwind", getText("UI_trait_secondwind"), 10, getText("UI_trait_secondwinddesc"), false, false);
+    secondwind:addXPBoost(Perks.Fitness, 1);
     --===========--
     --Bad Traits--
     --===========--
+    local noodlelegs = TraitFactory.addTrait("noodlelegs", getText("UI_trait_noodlelegs"),  -4, getText("UI_trait_noodlelegsdesc"), false, false);
     local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     local packmouse = TraitFactory.addTrait("packmouse", getText("UI_trait_packmouse"), -7, getText("UI_trait_packmousedesc"), false, false);
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
