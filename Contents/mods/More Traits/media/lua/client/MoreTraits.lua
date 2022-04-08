@@ -10,8 +10,6 @@ This is constantly ongoing. Whenever I see something that can be written more ef
 TODO Reimplement Fast and Slow traits
 Ever since the animations update, the previous calculations stopped working, and despite hours wracking my brain,
 I have been unable to find a workaround.
-TODO Implement Motion Sickness trait
-Gives sickness while in a moving vehicle.
 --]]
 --Global Variables
 skipxpadd = false;
