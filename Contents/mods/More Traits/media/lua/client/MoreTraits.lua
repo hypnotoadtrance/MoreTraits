@@ -1281,6 +1281,7 @@ function indefatigable(_player, _playerdata)
                         if enemies:get(i):isZombie() then
                             if enemies:get(i):DistTo(player) <= 2.5 then
                                 enemies:get(i):setStaggerBack(true);
+				enemies:get(i):setKnockedDown(true);
                             end
                         end
                     end
