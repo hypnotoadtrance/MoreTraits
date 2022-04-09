@@ -10,8 +10,6 @@ This is constantly ongoing. Whenever I see something that can be written more ef
 TODO Reimplement Fast and Slow traits
 Ever since the animations update, the previous calculations stopped working, and despite hours wracking my brain,
 I have been unable to find a workaround.
-TODO Implement Motion Sickness trait
-Gives sickness while in a moving vehicle.
 --]]
 --Global Variables
 skipxpadd = false;
@@ -3156,6 +3154,60 @@ local function SecondWindRecharge()
     end
 end
 
+local function MotionSickness(player)
+	local playerstats = player:getBodyDamage();
+	local Sickness = playerstats:getFakeInfectionLevel();
+	if player:HasTrait("motionsickness") then
+	if player:isDriving() == true and Sickness < 98 then
+		local vehicle = player:getVehicle()
+		if not vehicle then return end 
+		if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.01);
+		end
+		if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.05);
+		end
+		if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.1);
+		end
+		if vehicle:getCurrentSpeedKmHour() >= 45 and vehicle:getCurrentSpeedKmHour() < 60 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.2);
+		end
+		if vehicle:getCurrentSpeedKmHour() >= 60 and vehicle:getCurrentSpeedKmHour() < 90 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.5);
+		end
+		if vehicle:getCurrentSpeedKmHour() >= 90 then
+		playerstats:setFakeInfectionLevel(Sickness + 1);
+		end
+		
+		--This section is for reversed driving, because positive values are when you drive forward, and negative when you drive back--
+		
+		if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.01);
+		end
+		if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.05);
+		end
+		if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 then
+		playerstats:setFakeInfectionLevel(sickness + 0.1);
+		end
+		if vehicle:getCurrentSpeedKmHour() <= -45 and vehicle:getCurrentSpeedKmHour() > -60 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.2);
+		end
+		if vehicle:getCurrentSpeedKmHour() <= -60 and vehicle:getCurrentSpeedKmHour() > -90 then
+		playerstats:setFakeInfectionLevel(Sickness + 0.5);
+		end
+		if vehicle:getCurrentSpeedKmHour() <= -90 then
+		playerstats:setFakeInfectionLevel(Sickness + 1);
+		end
+	end
+	if not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then
+		playerstats:setFakeInfectionLevel(Sickness - 0.1);
+	end
+	end
+end
+
+
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -3176,6 +3228,7 @@ function MainPlayerUpdate(_player)
         SuperImmune(player, playerdata);
         Immunocompromised(player, playerdata);
     end
+    MotionSickness(player);
     SecondWind(player);
     indefatigable(player, playerdata);
     anemic(player);

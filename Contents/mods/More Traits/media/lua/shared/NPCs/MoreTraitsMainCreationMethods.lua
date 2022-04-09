@@ -194,6 +194,7 @@ local function initToadTraits()
     --Bad Traits--
     --===========--
     local noodlelegs = TraitFactory.addTrait("noodlelegs", getText("UI_trait_noodlelegs"),  -4, getText("UI_trait_noodlelegsdesc"), false, false);
+    local motionsickness = TraitFactory.addTrait("motionsickness", getText("UI_trait_motionsickness"), -6, getText("UI_trait_motionsicknessdesc"), false, false);
     local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     local packmouse = TraitFactory.addTrait("packmouse", getText("UI_trait_packmouse"), -7, getText("UI_trait_packmousedesc"), false, false);
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
@@ -322,6 +323,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("quickworker", "slowworker");
     TraitFactory.setMutualExclusive("burned", "broke");
     TraitFactory.setMutualExclusive("burned", "injured");
+    TraitFactory.setMutualExclusive("motionsickness", "expertdriver");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();
