@@ -125,7 +125,7 @@ MoreTraits {
             MinimumSwingTime = 1,
             KnockBackOnNoDeath = FALSE,
             SwingAmountBeforeImpact = 0.02,
-            Categories = Blade,
+            Categories = SmallBlade,
             ConditionLowerChanceOneIn = 10,
             Weight = 0.2,
             SplatNumber = 0,
