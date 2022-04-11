@@ -195,3 +195,8 @@ option MoreTraits.NonlethalAlcoholic
 	type = boolean, default = false,
 	page = MoreTraits, translation = MoreTraits_NonlethalAlcoholic,
 }
+option MoreTraits.SecondWindCooldown
+{
+	type = integer, min = 1, max = 30, default = 14,
+	page = MoreTraits, translation = MoreTraits_SecondWindCooldown,
+}
