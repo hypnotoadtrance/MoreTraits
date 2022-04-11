@@ -3061,12 +3061,12 @@ local function NoodleLegs(_player, _playerdata)
 		N_Chance = N_Chance + 2;
 		end
 	if _player:HasTrait("Lucky") then
-		N_Chance = N_Chance - 1;
+		N_Chance = N_Chance - 1 * luckimpact;
 		end
 	if _player:HasTrait("Unlucky") then
-		N_Chance = N_Chance + 1;
+		N_Chance = N_Chance + 1 * luckimpact;
 		end
-	if _player:IsRunning() == true then
+	if _player:IsRunning() == true and _player:isMoving() == true then
 		local Roll = ZombRand(0, 101);
 			if Roll <= N_Chance then
 		local type = nil;
@@ -3084,7 +3084,7 @@ local function NoodleLegs(_player, _playerdata)
 			_player:reportEvent("wasBumped");
 			end
 		end
-	if _player:isSprinting() == true then
+	if _player:isSprinting() == true and _player:isMoving() == true then
 		N_Chance = N_Chance * 2;
 		local Roll = ZombRand(0, 101);
 			if Roll <= N_Chance then
