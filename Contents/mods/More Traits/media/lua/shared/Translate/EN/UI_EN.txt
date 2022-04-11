@@ -196,4 +196,6 @@ UI_EN = {
     UI_MoreTraits_Options_AlbinoAnnounce_ToolTip = "If you have the Sun Sensitivity trait, you will be notified when you are suffering pain from being outside under the sun.",
     UI_MoreTraits_Options_MartialDamage = "Show Martial Artist Damage",
     UI_MoreTraits_Options_MartialDamage_ToolTip = "If you have the Martial Artist trait, a popup will display the damage you are dealing.",
+    UI_MoreTraits_Options_VagabondAnnounce = "Announce Vagabond Finds",
+    UI_MoreTraits_Options_VagabondAnnounce_Tooltip = "If you have the Vagabond trait, you will be notified when you find food in the trash.",
 }
