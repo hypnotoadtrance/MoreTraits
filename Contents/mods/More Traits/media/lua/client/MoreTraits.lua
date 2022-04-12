@@ -3142,6 +3142,9 @@ local function SecondWindRecharge()
     local playerdata = player:getModData();
     local recharge = 14 * 24;
 	if player:HasTrait("secondwind") then
+	if SandboxVars.MoreTraits.SecondWindCooldown then
+        recharge = SandboxVars.MoreTraits.SecondWindCooldown * 24;
+		end
 		if playerdata.secondwinddisabled == true then
             if playerdata.secondwindcooldown >= recharge then
                 playerdata.secondwindcooldown = 0;

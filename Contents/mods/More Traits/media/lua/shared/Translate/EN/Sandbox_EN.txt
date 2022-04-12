@@ -77,4 +77,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_ForgivingDeprived_tooltip = "Players who take the Deprived trait will still be allowed to keep a belt.<br>Belts are ordinarily difficult to obtain through normal play without killing other players or mods which add them to loot tables.",
     Sandbox_MoreTraits_NonlethalAlcoholic = "Nonlethal Alcoholism",
     Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Players who take the alcoholic trait can never die from alcohol poisoning, but will still suffer periodic withdrawal.",
+    Sandbox_MoreTraits_SecondWindCooldown = "Second Wind Recharge",
+    Sandbox_MoreTraits_SecondWindCooldown_tooltip = "After how much days should Second Wind recharge?",
 }
