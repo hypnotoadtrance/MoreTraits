@@ -79,4 +79,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Players who take the alcoholic trait can never die from alcohol poisoning, but will still suffer periodic withdrawal.",
     Sandbox_MoreTraits_SecondWindCooldown = "Second Wind Recharge",
     Sandbox_MoreTraits_SecondWindCooldown_tooltip = "After how much days should Second Wind recharge?",
+    Sandbox_MoreTraits_NoodleLegsChance = "Noodle Legs Chance in X",
+    Sandbox_MoreTraits_NoodleLegsChance_tooltip = "The chance in X for you to trip with Noodle Legs<br>Base chance is 100, decreasing this will make you far more likely to trip",
 }
