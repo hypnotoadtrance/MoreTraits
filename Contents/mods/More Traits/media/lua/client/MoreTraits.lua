@@ -345,6 +345,7 @@ function initToadTraitsPerks(_player)
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
     playerdata.secondwinddisabled = false;
+    playerdata.secondwindrecoveredfatigue = false;
     playerdata.secondwindcooldown = 0;
     playerdata.bToadTraitDepressed = false;
     playerdata.indefatigablecooldown = 0;
@@ -3126,6 +3127,7 @@ local function SecondWind(player)
 		playerstats:setEndurance(1);
 		if playerstats:getFatigue() > 0.5 then
 			playerstats:setFatigue(0.5);
+			playerdata.secondwindrecoveredfatigue = true;
 		end
 		playerdata.secondwindcooldown = 0;
 		secondwinddisabled = true;
@@ -3140,15 +3142,19 @@ end
 local function SecondWindRecharge()
 	local player = getPlayer();
     local playerdata = player:getModData();
-    local recharge = 14 * 24;
+    local recharge = 14 * 12;
 	if player:HasTrait("secondwind") then
 	if SandboxVars.MoreTraits.SecondWindCooldown then
-        recharge = SandboxVars.MoreTraits.SecondWindCooldown * 24;
+        recharge = SandboxVars.MoreTraits.SecondWindCooldown * 12;
 		end
+	if playerdata.secondwindrecoveredfatigue == true then
+	recharge = recharge * 2;
+	end
 		if playerdata.secondwinddisabled == true then
             if playerdata.secondwindcooldown >= recharge then
                 playerdata.secondwindcooldown = 0;
                 playerdata.secondwinddisabled = false;
+		playerdata.secondwindrecoveredfatigue = false;
                 player:Say(getText("UI_trait_secondwindcooldown"));
             else
                 playerdata.secondwindcooldown = playerdata.secondwindcooldown + 1;
