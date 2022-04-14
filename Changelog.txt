@@ -1,7 +1,6 @@
 Changelog Notes:
 Fixed localization issue in Russian translation that caused Thuggish to be removed.
 Update Russian translation, Credit: Hea.
-Update Russian translation, Credit: Hea.
 New Trait: Motion Sickness, Credit: Fajdek.
 Noodle Legs' luck traits bonuses are now affected by luck impact, Credit: Fajdek.
 Noodle Legs now activates everytime player moves instead of every one minute, allowing for it to be the same regardless of time per day in sandbox, Credit: Fajdek.
