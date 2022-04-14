@@ -1,4 +1,2 @@
 Changelog Notes:
-Add new trait: Prepared: Coordination , Credit: Fajdek
-Fix Indefatigable not setting overall body health, credit: Fajdek
-Fix Forgiving Deprived option spawning Junk Belt.
+Fixed localization issue in Russian translation that caused Thuggish to be removed.
