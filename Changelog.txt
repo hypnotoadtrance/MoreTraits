@@ -1,2 +1,3 @@
 Changelog Notes:
 Fixed localization issue in Russian translation that caused Thuggish to be removed.
+Update Russian translation, Credit: Hea.
