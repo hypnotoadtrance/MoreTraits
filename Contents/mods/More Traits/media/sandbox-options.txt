@@ -97,7 +97,7 @@ option MoreTraits.ButterfingersChance
 }
 option MoreTraits.GraveRobberChance
 {
-	type = integer, min = 1, max = 100, default = 3,
+	type = integer, min = 1, max = 1000, default = 10,
 	page = MoreTraits, translation = MoreTraits_GraveRobberChance,
 }
 option MoreTraits.GraveRobberGuaranteedLoot
@@ -184,4 +184,24 @@ option MoreTraits.AntiqueChance
 {
 	type = integer, min = 100, max = 10000, default = 1000,
 	page = MoreTraits, translation = MoreTraits_AntiqueChance,
+}
+option MoreTraits.ForgivingDeprived
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_ForgivingDeprived,
+}
+option MoreTraits.NonlethalAlcoholic
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_NonlethalAlcoholic,
+}
+option MoreTraits.SecondWindCooldown
+{
+	type = integer, min = 1, max = 30, default = 14,
+	page = MoreTraits, translation = MoreTraits_SecondWindCooldown,
+}
+option MoreTraits.NoodleLegsChance
+{
+	type = integer, min = 20000, max = 500000, default = 200000,
+	page = MoreTraits, translation = MoreTraits_NoodleLegsChance,
 }

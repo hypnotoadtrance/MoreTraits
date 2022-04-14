@@ -13,6 +13,7 @@ local function initToadTraits()
         local preparedweapon = TraitFactory.addTrait("preparedweapon", getText("UI_trait_preparedweapon"), 1, getText("UI_trait_preparedweapondesc"), false, false);
         local preparedpack = TraitFactory.addTrait("preparedpack", getText("UI_trait_preparedpack"), 1, getText("UI_trait_preparedpackdesc"), false, false);
         local preparedcar = TraitFactory.addTrait("preparedcar", getText("UI_trait_preparedcar"), 1, getText("UI_trait_preparedcardesc"), false, false);
+        local preparedcoordination = TraitFactory.addTrait("preparedcoordination", getText("UI_trait_preparedcoordination"), 1, getText("UI_trait_preparedcoordinationdesc"), false, false);
     end
     local swift = TraitFactory.addTrait("swift", getText("UI_trait_swift"), 2, getText("UI_trait_swiftdesc"), false, false);
     swift:addXPBoost(Perks.Lightfoot, 1);
@@ -170,7 +171,9 @@ local function initToadTraits()
     local spearperk = TraitFactory.addTrait("prospear", getText("UI_trait_prospear"), 7, getText("UI_trait_prospeardesc"), false, false);
     spearperk:addXPBoost(Perks.Spear, 2);
     local thickblood = TraitFactory.addTrait("thickblood", getText("UI_trait_thickblood"), 4, getText("UI_trait_thickblooddesc"), false, false);
-    local expertdriver = TraitFactory.addTrait("expertdriver", getText("UI_trait_expertdriver"), 5, getText("UI_trait_expertdriverdesc"), false, false);
+    if getActivatedMods():contains("DrivingSkill") == false then
+        local expertdriver = TraitFactory.addTrait("expertdriver", getText("UI_trait_expertdriver"), 5, getText("UI_trait_expertdriverdesc"), false, false);
+    end
     local superimmune = TraitFactory.addTrait("superimmune", getText("UI_trait_superimmune"), 8, getText("UI_trait_superimmunedesc"), false, false);
     local packmule = TraitFactory.addTrait("packmule", getText("UI_trait_packmule"), 7, getText("UI_trait_packmuledesc"), false, false);
     local graverobber = TraitFactory.addTrait("graverobber", getText("UI_trait_graverobber"), 7, getText("UI_trait_graverobberdesc"), false, false);
@@ -185,9 +188,13 @@ local function initToadTraits()
     local batteringram = TraitFactory.addTrait("batteringram", getText("UI_trait_batteringram"), 7, getText("UI_trait_batteringramdesc"), false, false);
     local fitted = TraitFactory.addTrait("fitted", getText("UI_trait_fitted"), 4, getText("UI_trait_fitteddesc"), false, false);
     local tavernbrawler = TraitFactory.addTrait("tavernbrawler", getText("UI_trait_tavernbrawler"), 3, getText("UI_trait_tavernbrawlerdesc"), false, false);
+    local secondwind = TraitFactory.addTrait("secondwind", getText("UI_trait_secondwind"), 10, getText("UI_trait_secondwinddesc"), false, false);
+    secondwind:addXPBoost(Perks.Fitness, 1);
     --===========--
     --Bad Traits--
     --===========--
+    local noodlelegs = TraitFactory.addTrait("noodlelegs", getText("UI_trait_noodlelegs"),  -6, getText("UI_trait_noodlelegsdesc"), false, false);
+    local motionsickness = TraitFactory.addTrait("motionsickness", getText("UI_trait_motionsickness"), -6, getText("UI_trait_motionsicknessdesc"), false, false);
     local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     local packmouse = TraitFactory.addTrait("packmouse", getText("UI_trait_packmouse"), -7, getText("UI_trait_packmousedesc"), false, false);
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
@@ -206,7 +213,9 @@ local function initToadTraits()
         --Don't enable Amputee trait if the Amputation mod is installed.
         local amputee = TraitFactory.addTrait("amputee", getText("UI_trait_amputee"), -16, getText("UI_trait_amputeedesc"), false, false);
     end
-    local poordriver = TraitFactory.addTrait("poordriver", getText("UI_trait_poordriver"), -5, getText("UI_trait_poordriverdesc"), false, false);
+    if getActivatedMods():contains("DrivingSkill") == false then
+        local poordriver = TraitFactory.addTrait("poordriver", getText("UI_trait_poordriver"), -5, getText("UI_trait_poordriverdesc"), false, false);
+    end
     --  local gimp = TraitFactory.addTrait("gimp", getText("UI_trait_gimp"), -8, getText("UI_trait_gimpdesc"), false, false);
     local anemic = TraitFactory.addTrait("anemic", getText("UI_trait_anemic"), -4, getText("UI_trait_anemicdesc"), false, false);
     local immunocompromised = TraitFactory.addTrait("immunocompromised", getText("UI_trait_immunocompromised"), -10, getText("UI_trait_immunocompromiseddesc"), false, false);
@@ -247,6 +256,14 @@ local function initToadTraits()
         TraitFactory.setMutualExclusive("preparedcar", "preparedmedical");
         TraitFactory.setMutualExclusive("preparedcar", "preparedcamp");
         TraitFactory.setMutualExclusive("preparedcar", "preparedpack");
+        TraitFactory.setMutualExclusive("preparedcoordination", "preparedammo");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedcamp");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedcar");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedfood");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedmedical");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedpack");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedrepair");
+		TraitFactory.setMutualExclusive("preparedcoordination", "preparedweapon");
         TraitFactory.setMutualExclusive("deprived", "preparedfood");
         TraitFactory.setMutualExclusive("deprived", "preparedammo");
         TraitFactory.setMutualExclusive("deprived", "preparedrepair");
@@ -255,6 +272,7 @@ local function initToadTraits()
         TraitFactory.setMutualExclusive("deprived", "preparedpack");
         TraitFactory.setMutualExclusive("deprived", "preparedcar");
         TraitFactory.setMutualExclusive("deprived", "preparedweapon");
+        TraitFactory.setMutualExclusive("deprived", "preparedcoordination");
     end
     TraitFactory.setMutualExclusive("quiet", "Clumsy");
     TraitFactory.setMutualExclusive("flexible", "Obese");
@@ -290,7 +308,9 @@ local function initToadTraits()
     if getActivatedMods():contains("DynamicTraits") == false then
         TraitFactory.setMutualExclusive("generator", "ingenuitive");
     end
-    TraitFactory.setMutualExclusive("expertdriver", "poordriver");
+    if getActivatedMods():contains("DrivingSkill") == false then
+        TraitFactory.setMutualExclusive("expertdriver", "poordriver");
+    end
     TraitFactory.setMutualExclusive("Resilient", "superimmune");
     TraitFactory.setMutualExclusive("Resilient", "immunocompromised");
     TraitFactory.setMutualExclusive("superimmune", "immunocompromised");
@@ -301,14 +321,18 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("fearful", "Brave");
     TraitFactory.setMutualExclusive("blissful", "Smoker");
     TraitFactory.setMutualExclusive("quickworker", "slowworker");
-    TraitFactory.setMutualExclusive("indefatigable", "injured");
-    TraitFactory.setMutualExclusive("indefatigable", "broke");
-    TraitFactory.setMutualExclusive("indefatigable", "burned");
     TraitFactory.setMutualExclusive("burned", "broke");
     TraitFactory.setMutualExclusive("burned", "injured");
+    TraitFactory.setMutualExclusive("motionsickness", "expertdriver");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();
+    local version = getCore():getGameVersion();
+    if version:getMajor() >= 41 and version:getMinor() >= 66 then
+        --Re-enable Lucky/Unlucky
+        TraitFactory.getTrait("Lucky"):setRemoveInMP(false);
+        TraitFactory.getTrait("Unlucky"):setRemoveInMP(false);
+    end
 end
 
 Events.OnGameBoot.Add(initToadTraits);
