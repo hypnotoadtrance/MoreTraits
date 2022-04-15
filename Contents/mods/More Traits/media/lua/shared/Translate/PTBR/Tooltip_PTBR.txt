@@ -1,4 +1,4 @@
-Tooltip_EN = {
+Tooltip_PTBR = {
     Tooltip_MoreTraits_AntiqueAxe = "Um machado raro de pedra endurecida.<br>Muito forte e durável, mas não pode ser reparado.",
     Tooltip_MoreTraits_Thumper = "Uma marreta de pedra rara.<br>Capaz de derrubar multidões inteiras em um único golpe.<br>Incrivelmente poderoso, mas também extremamente pesado!",
     Tooltip_MoreTraits_ObsidianBlade = "Um punhal de sacrifício antigo raro.<br>Muito poderoso, mas frágil.",
@@ -11,6 +11,6 @@ Tooltip_EN = {
     Tooltip_MoreTraits_AntiqueMag3 = "Uma revista de edição limitada.<br>Esta edição oferece comentários sobre as receitas canibais de certas tribos de Papua-Nova Guiné.",
     Tooltip_MoreTraits_PapierMacheSword = "Diversão para a família toda!<br>(Exceto para crianças menores de quatro anos).",
     Tooltip_MoreTraits_ItemBoost = "Os status deste item estão sendo aumentados por um de seus traços.",
-    Tooltip_MoreTraits_GordaniteBoost = "Pé-de-Cabra+",
-    Tooltip_MoreTraits_GordaniteDefault = "Pé-de-Cabra",
+    Tooltip_MoreTraits_GordaniteBoost = "Pé de Cabra+",
+    Tooltip_MoreTraits_GordaniteDefault = "Pé de Cabra",
 }

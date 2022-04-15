@@ -345,6 +345,7 @@ function initToadTraitsPerks(_player)
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
     playerdata.secondwinddisabled = false;
+    playerdata.secondwindrecoveredfatigue = false;
     playerdata.secondwindcooldown = 0;
     playerdata.bToadTraitDepressed = false;
     playerdata.indefatigablecooldown = 0;
@@ -3047,27 +3048,33 @@ local function CheckInjuredHeal()
     end
 end
 
-local function NoodleLegs(_player, _playerdata)
+local function NoodleLegs(_player)
 	if _player:HasTrait("noodlelegs") then
-	local CurrentLocation = _player:getCurrentSquare();
 	local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
 	local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
-	local N_Chance = 10;
-	N_Chance = N_Chance - ((NimbleLvl+SprintingLvl)/4); --Decreases odds by .25 for every level in nimble or sprinting, for a total of -5 with nimble and sprinting at lvl 10
+	local N_Chance = 100;
+	local ChanceToTrip = 200001;
+	if SandboxVars.MoreTraits.NoodleLegsChance then
+	ChanceToTrip = SandboxVars.MoreTraits.NoodleLegsChance + 1;
+	end
+	N_Chance = N_Chance - (((NimbleLvl*4)+(SprintingLvl*4))/2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
 	if _player:HasTrait("Graceful") then
-		N_Chance = N_Chance - 2;
+		N_Chance = N_Chance - 20;
 		end	
 	if _player:HasTrait("Clumsy") then
-		N_Chance = N_Chance + 2;
+		N_Chance = N_Chance + 20;
 		end
 	if _player:HasTrait("Lucky") then
-		N_Chance = N_Chance - 1 * luckimpact;
+		N_Chance = N_Chance - 5 * luckimpact;
 		end
 	if _player:HasTrait("Unlucky") then
-		N_Chance = N_Chance + 1 * luckimpact;
+		N_Chance = N_Chance + 5 * luckimpact;
 		end
-	if _player:IsRunning() == true and _player:isMoving() == true then
-		local Roll = ZombRand(0, 101);
+	if N_Chance <= 0 then
+		N_Chance = 1;
+		end
+	if _player:IsRunning() == true then
+		local Roll = ZombRand(0, ChanceToTrip);
 			if Roll <= N_Chance then
 		local type = nil;
 		local random = ZombRand(2);
@@ -3084,9 +3091,9 @@ local function NoodleLegs(_player, _playerdata)
 			_player:reportEvent("wasBumped");
 			end
 		end
-	if _player:isSprinting() == true and _player:isMoving() == true then
+	if _player:isSprinting() == true then
 		N_Chance = N_Chance * 2;
-		local Roll = ZombRand(0, 101);
+		local Roll = ZombRand(0, ChanceToTrip);
 			if Roll <= N_Chance then
 		local type = nil;
 		local random = ZombRand(2);
@@ -3126,6 +3133,7 @@ local function SecondWind(player)
 		playerstats:setEndurance(1);
 		if playerstats:getFatigue() > 0.5 then
 			playerstats:setFatigue(0.5);
+			playerdata.secondwindrecoveredfatigue = true;
 		end
 		playerdata.secondwindcooldown = 0;
 		secondwinddisabled = true;
@@ -3140,15 +3148,19 @@ end
 local function SecondWindRecharge()
 	local player = getPlayer();
     local playerdata = player:getModData();
-    local recharge = 14 * 24;
+    local recharge = 14 * 12;
 	if player:HasTrait("secondwind") then
 	if SandboxVars.MoreTraits.SecondWindCooldown then
-        recharge = SandboxVars.MoreTraits.SecondWindCooldown * 24;
+        recharge = SandboxVars.MoreTraits.SecondWindCooldown * 12;
 		end
+	if playerdata.secondwindrecoveredfatigue == true then
+	recharge = recharge * 2;
+	end
 		if playerdata.secondwinddisabled == true then
             if playerdata.secondwindcooldown >= recharge then
                 playerdata.secondwindcooldown = 0;
                 playerdata.secondwinddisabled = false;
+		playerdata.secondwindrecoveredfatigue = false;
                 player:Say(getText("UI_trait_secondwindcooldown"));
             else
                 playerdata.secondwindcooldown = playerdata.secondwindcooldown + 1;
@@ -3261,7 +3273,6 @@ function EveryOneMinute()
     UnHighlightScrounger(player, playerdata);
     LeadFoot(player);
     GymGoerUpdate(player);
-    NoodleLegs(player, playerData);
 end
 function OnLoad()
     --reset any worn clothing to default state.
@@ -3282,6 +3293,7 @@ function OnLoad()
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
+Events.OnPlayerMove.Add(NoodleLegs);
 Events.OnPlayerMove.Add(BatteringRam);
 Events.OnZombieDead.Add(graveRobber);
 Events.OnWeaponHitCharacter.Add(problunt);
