@@ -73,4 +73,8 @@ Sandbox_ES = {
     Sandbox_MoreTraits_MartialWeapons_tooltip = "De forma predeterminada, el rasgo Artista Marcial solo infligirá daño si el jugador no está armado.<br>Si está habilitado, los empujones de los jugadores seguirán infligiendo daño incluso si están empuñando un arma.<br>Si esta opción está desactivada, aún puede beneficiarse de Artista marcial con un objeto equipado en tu espacio secundario (Linterna, Bolsas, etc.). Solo comprueba si la ranura principal está equipada o no.",
     Sandbox_MoreTraits_AntiqueChance = "Probabilidad de Coleccionista de antigüedades en X",
     Sandbox_MoreTraits_AntiqueChance_tooltip = "Cuán raros son los objetos del rasgo Coleccionista de Antigüedades.<br>Este valor es representativo en un roll de 1 en X.<br>Los valores más altos significan que los drops ocurren con menos frecuencia.",
+	Sandbox_MoreTraits_ForgivingDeprived = "Nudista Clemente",
+    Sandbox_MoreTraits_ForgivingDeprived_tooltip = "Los jugadores que eligen el rasgo Nudista podrán seguir conservando un cinturón.<br>Los cinturones son normalmente difíciles de obtener a través del juego normal sin matar a otros jugadores o con mods que los añadan a las tablas de botín.",
+    Sandbox_MoreTraits_NonlethalAlcoholic = "Alcoholismo No Letal",
+    Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Los jugadores que eligen el rasgo de Alcohólico nunca podrán morir por intoxicación etílica, pero seguirán sufriendo un síndrome de abstinencia periódico.",
 }
