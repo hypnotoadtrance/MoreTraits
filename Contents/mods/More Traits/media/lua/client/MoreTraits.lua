@@ -349,6 +349,8 @@ function initToadTraitsPerks(_player)
     playerdata.secondwindcooldown = 0;
     playerdata.bToadTraitDepressed = false;
     playerdata.indefatigablecooldown = 0;
+    playerdata.indefatigablecuredinfection = false;
+    playerdata.indefatigabledisabled = false;
     playerdata.bindefatigable = false;
     playerdata.bSatedDrink = true;
     playerdata.iHoursSinceDrink = 0;
@@ -1273,6 +1275,19 @@ function indefatigable(_player, _playerdata)
                     end
                 end
                 player:getBodyDamage():setOverallBodyHealth(100);
+		if SandboxVars.MoreTraits.IndefatigableCuresInfection == true then
+			if player:getBodyDamage():IsInfected() then
+				local bodydamage = player:getBodyDamage();
+				bodydamage:setInfected(false);
+                        	bodydamage:setInfectionMortalityDuration(-1);
+                        	bodydamage:setInfectionTime(-1);
+                        	bodydamage:setInfectionLevel(0);
+				playerdata.indefatigablecuredinfection = true;
+				if SandboxVars.MoreTraits.IndefatigableTurnsOffAfterCuringInfection == true then
+					playerdata.indefatigabledisabled = true;
+				end
+			end
+		end
                 playerdata.bindefatigable = true;
                 playerdata.indefatigablecooldown = 0;
                 if enemies:size() > 2 then
@@ -1297,9 +1312,13 @@ function indefatigablecounter()
     local playerdata = player:getModData();
     local recharge = 7 * 24;
     if player:HasTrait("indefatigable") then
+	if playerdata.indefatigabledisabled == true then return end
         if SandboxVars.MoreTraits.IndefatigableRecharge then
             recharge = SandboxVars.MoreTraits.IndefatigableRecharge * 24;
         end
+	if playerdata.indefatigablecuredinfection == true then
+		recharge = recharge * 2;
+	end
         if playerdata.bindefatigable == true then
             if playerdata.indefatigablecooldown >= recharge then
                 playerdata.indefatigablecooldown = 0;
