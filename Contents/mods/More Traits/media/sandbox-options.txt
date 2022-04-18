@@ -75,6 +75,16 @@ option MoreTraits.IndefatigableRecharge
 	type = integer, min = 1, max = 30, default = 7,
 	page = MoreTraits, translation = MoreTraits_IndefatigableRecharge,
 }
+option MoreTraits.IndefatigableCuresInfection
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_IndefatigableCuresInfection,
+}
+option MoreTraits.IndefatigableTurnsOffAfterCuringInfection
+{
+	type = boolean, default = false
+	page = MoreTraits, translation = MoreTraits_IndefatigableTurnsOffAfterCuringInfection,
+}
 option MoreTraits.GordaniteEffectiveness
 {
 	type = integer, min = 0, max = 1000, default = 100,
