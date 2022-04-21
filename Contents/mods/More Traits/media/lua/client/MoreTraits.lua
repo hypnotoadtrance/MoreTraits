@@ -1284,7 +1284,7 @@ function indefatigable(_player, _playerdata)
                         		bodydamage:setInfectionTime(-1);
                         		bodydamage:setInfectionLevel(0);
 					playerdata.indefatigablecuredinfection = true;
-					if SandboxVars.MoreTraits.IndefatigableTurnsOffAfterCuringInfection == true then
+					if SandboxVars.MoreTraits.IndefatigableCuresInfectionOnce == true then
 						playerdata.indefatigabledisabled = true;
 					end
 				end
