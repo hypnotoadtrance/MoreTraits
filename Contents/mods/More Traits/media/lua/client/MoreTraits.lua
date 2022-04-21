@@ -1324,6 +1324,7 @@ function indefatigablecounter()
             if playerdata.indefatigablecooldown >= recharge then
                 playerdata.indefatigablecooldown = 0;
                 playerdata.bindefatigable = false;
+		playerdata.indefatigablecuredinfection = false;
                 player:Say(getText("UI_trait_indefatigablecooldown"));
             else
                 playerdata.indefatigablecooldown = playerdata.indefatigablecooldown + 1;
