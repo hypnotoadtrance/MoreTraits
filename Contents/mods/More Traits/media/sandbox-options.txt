@@ -80,10 +80,10 @@ option MoreTraits.IndefatigableCuresInfection
 	type = boolean, default = false,
 	page = MoreTraits, translation = MoreTraits_IndefatigableCuresInfection,
 }
-option MoreTraits.IndefatigableTurnsOffAfterCuringInfection
+option MoreTraits.IndefatigableCuresInfectionOnce
 {
 	type = boolean, default = false
-	page = MoreTraits, translation = MoreTraits_IndefatigableTurnsOffAfterCuringInfection,
+	page = MoreTraits, translation = MoreTraits_IndefatigableCuresInfectionOnce,
 }
 option MoreTraits.GordaniteEffectiveness
 {
