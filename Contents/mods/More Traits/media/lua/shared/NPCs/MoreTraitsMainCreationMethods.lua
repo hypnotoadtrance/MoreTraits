@@ -310,6 +310,7 @@ local function initToadTraits()
     end
     if getActivatedMods():contains("DrivingSkill") == false then
         TraitFactory.setMutualExclusive("expertdriver", "poordriver");
+	TraitFactory.setMutualExclusive("motionsickness", "expertdriver");
     end
     TraitFactory.setMutualExclusive("Resilient", "superimmune");
     TraitFactory.setMutualExclusive("Resilient", "immunocompromised");
@@ -323,7 +324,6 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("quickworker", "slowworker");
     TraitFactory.setMutualExclusive("burned", "broke");
     TraitFactory.setMutualExclusive("burned", "injured");
-    TraitFactory.setMutualExclusive("motionsickness", "expertdriver");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();
