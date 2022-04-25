@@ -360,6 +360,10 @@ function initToadTraitsPerks(_player)
     playerdata.iHardyInterval = 10;
     playerdata.iWithdrawalCooldown = 24;
     playerdata.iParanoiaCooldown = 10;
+    playerdata.SuperImmuneRecovery = 0;
+    playerdata.SuperImmuneActive = false;
+    playerdata.SuperImmuneHoursPassed = 0;
+    playerdata.SuperImmuneTextSaid = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -2117,45 +2121,102 @@ function vehicleCheck(_player)
     end
 end
 
+local function SuperImmuneRecoveryProcess()
+	local player = getPlayer();
+	local playerdata = player:getModData();
+	local HoursPerDay = 24;
+	if player:HasTrait("superimmune") then
+		if playerdata.SuperImmuneActive == true then
+			local Illness = player:getBodyDamage():getFakeInfectionLevel();
+			local RecoveryTime = playerdata.SuperImmuneRecovery;
+			local Recovery = 0;
+			local TimeElapsed = playerdata.SuperImmuneHoursPassed;
+			if RecoveryTime > 30 then 
+				RecoveryTime = 30; 
+			end
+			Recovery = RecoveryTime;
+			if Recovery * HoursPerDay >= TimeElapsed then
+				if (Recovery * HoursPerDay)/2 >= TimeElapsed then
+					Illness = Illness + (11-ZombRand(1, 15)); --You can decrease illness up to 4 or increase it up to 11 per hour
+				else --Once half the required time passes, your immunity system starts gaining victory
+					Illness = Illness + (6-ZombRand(1,15)); -- You can decrease illness up to 9 or increase it up to 5 per hour
+				end --The random illness reduction and gain is to simulate your immune system fighting the virus.
+				if player:HasTrait("FastHealer") then 
+					Illness = Illness - 0.25;
+				end
+				if player:HasTrait("SlowHealer") then
+					Illness = Illness + 0.25;
+				end
+				if Illness < 26 then --Prevent illness from going too low or too high
+					Illness = Illness + 10;
+				end
+				if Illness > 91 then
+					Illness = 91;
+				end
+				player:getBodyDamage():setFakeInfectionLevel(Illness);
+				playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+			else
+				if Illness ~= 0 then --Recover from illness completely over-time once recovery time ends.
+					if player:HasTrait("FastHealer") then
+						Illness = Illness - 1.5; --0.7 to 2.5 days
+					elseif player:HasTrait("SlowHealer") then
+						Illness = Illness - 0.75; --1.4 to 5 days
+					else
+					Illness = Illness - 1; --1 to 3.7 days
+					end
+					player:getBodyDamage():setFakeInfectionLevel(Illness);
+				else --Once illness fully recovers
+					if MoreTraits.settings.SuperImmuneAnnounce == true then
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen());
+					end
+					playerdata.SuperImmuneTextSaid = false;
+					playerdata.SuperImmuneActive = false;
+					playerdata.SuperImmuneHoursPassed = 0;
+					playerdata.SuperImmuneRecovery = 0;
+				end
+				if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
+					playerdata.SuperImmuneTextSaid = true;
+                end
+			end
+		end
+	end
+end
+
 function SuperImmune(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
-    local chance = 15;
-    if SandboxVars.MoreTraits.SuperImmunePercent then
-        chance = SandboxVars.MoreTraits.SuperImmunePercent;
-    end
     if player:HasTrait("superimmune") then
-        if playerdata.bSuperImmune ~= nil then
-            if player:HasTrait("Lucky") then
-                chance = chance + 1 * luckimpact;
-            end
-            if player:HasTrait("Unlucky") then
-                chance = chance - 1 * luckimpact;
-            end
-            if playerdata.bSuperImmune == true then
-                if bodydamage:IsInfected() then
-                    if ZombRand(0, 101) <= chance then
-                        print("Player's Immune system fought-off zombification.");
-                        bodydamage:setInfected(false);
-                        bodydamage:setInfectionMortalityDuration(-1);
-                        bodydamage:setInfectionTime(-1);
-                        bodydamage:setInfectionLevel(0);
-                        if MoreTraits.settings.SuperImmuneAnnounce == true then
-                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmune"), true, HaloTextHelper.getColorGreen());
-                        end
-                    else
-                        print("Immune system failed.");
-                        playerdata.bSuperImmune = false;
-                    end
-                end
-            end
-        else
-            playerdata.bSuperImmune = true;
-        end
-        if bodydamage:IsInfected() == false and playerdata.bSuperImmune == false then
-            playerdata.bSuperImmune = true;
-        end
+        if bodydamage:isInfected() == true then
+			bodydamage:setInfected(false);
+            bodydamage:setInfectionMortalityDuration(-1);
+			bodydamage:setInfectionTime(-1);
+            bodydamage:setInfectionLevel(0);
+			local TimeOfRecovery = ZombRand(10, 31); 
+			if player:HasTrait("FastHealer") then
+				TimeOfRecovery = TimeOfRecovery - 5;
+			end
+			if player:HasTrait("SlowHealer") then
+				TimeOfRecovery = TimeOfRecovery + 5;
+			end
+			if player:HasTrait("Lucky") then
+				TimeOfRecovery = TimeOfRecovery - 2 * luckimpact;
+			end
+			if player:HasTrait("Unlucky") then
+				TimeOfRecovery = TimeOfRecovery + 2 * luckimpact;
+			end
+			if TimeOfRecovery < 10 then --Prevent time of healing to be too short or too high 
+				TimeOfRecovery = 10; 
+			end
+			if TimeOfRecovery > 30 then 
+				TimeOfRecovery = 30; 
+			end
+			if playerdata.SuperImmuneActive == false then
+				playerdata.SuperImmuneActive = true;
+			end
+			playerdata.SuperImmuneRecovery = playerdata.SuperImmuneRecovery + TimeOfRecovery;
+		end
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
             if b:HasInjury() then
@@ -2166,6 +2227,24 @@ function SuperImmune(_player, _playerdata)
             end
         end
     end
+end
+
+local function SuperImmuneFakeInfectionHealthLoss(player)
+	local playerdata = player:getModData();
+	local Health = player:getBodyDamage():getOverallBodyHealth();
+	local Stress = player:getStats():getStress();
+	local Illness = player:getBodyDamage():getFakeInfectionLevel();
+	if player:HasTrait("superimmune") then
+		if playerdata.SuperImmuneActive then
+			if Health >= 100-Illness then
+				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+					local b = player:getBodyDamage():getBodyParts():get(i);
+					b:AddDamage(0.003); 
+				end                     
+			end
+			player:getStats():setStress(Stress+0.001);
+		end
+	end
 end
 
 function Immunocompromised(_player, _playerdata)
@@ -3279,6 +3358,7 @@ function MainPlayerUpdate(_player)
     albino(player, playerdata);
     QuickWorker(player);
     SlowWorker(player);
+    SuperImmuneFakeInfectionHealthLoss(player);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
         GlassBody(player, playerdata);
@@ -3336,6 +3416,7 @@ Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(ToadTraitDepressive);
+Events.EveryHours.Add(SuperImmuneRecoveryProcess);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
