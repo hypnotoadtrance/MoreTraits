@@ -364,6 +364,7 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneActive = false;
     playerdata.SuperImmuneHoursPassed = 0;
     playerdata.SuperImmuneTextSaid = false;
+    playerdata.SuperImmuneHealedOnce = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -2136,6 +2137,10 @@ local function SuperImmuneRecoveryProcess()
 			end
 			Recovery = RecoveryTime;
 			if Recovery * HoursPerDay >= TimeElapsed then
+				if playerdata.SuperImmuneTextSaid == true then
+					playerdata.SuperImmuneTextSaid = false;
+				end
+				
 				if (Recovery * HoursPerDay)/2 >= TimeElapsed then
 					Illness = Illness + (11-ZombRand(1, 15)); --You can decrease illness up to 4 or increase it up to 11 per hour
 				else --Once half the required time passes, your immunity system starts gaining victory
@@ -2173,6 +2178,7 @@ local function SuperImmuneRecoveryProcess()
 					playerdata.SuperImmuneActive = false;
 					playerdata.SuperImmuneHoursPassed = 0;
 					playerdata.SuperImmuneRecovery = 0;
+					playerdata.SuperImmuneHealedOnce = true;
 				end
 				if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
@@ -2212,6 +2218,9 @@ function SuperImmune(_player, _playerdata)
 			if TimeOfRecovery > 30 then 
 				TimeOfRecovery = 30; 
 			end
+			if playerdata.SuperImmuneHealedOnce == true then --Halve the time needed once it beat the virus once, since immune system
+				TimeOfRecovery = TimeOfRecovery/2; --will know how to beat it.
+			end
 			if playerdata.SuperImmuneActive == false then
 				playerdata.SuperImmuneActive = true;
 			end
@@ -2236,13 +2245,15 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 	local Illness = player:getBodyDamage():getFakeInfectionLevel();
 	if player:HasTrait("superimmune") then
 		if playerdata.SuperImmuneActive then
-			if Health >= 100-Illness then
+			if Health >= 100-Illness and Health > 20 then
 				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 					local b = player:getBodyDamage():getBodyParts():get(i);
 					b:AddDamage(0.003); 
 				end                     
 			end
-			player:getStats():setStress(Stress+0.001);
+			if Illness>24 then --Do not gain stress unless you're queasy
+				player:getStats():setStress(Stress+0.001);
+			end
 		end
 	end
 end
