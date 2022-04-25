@@ -1,10 +1,2 @@
 Changelog Notes:
-Fixed localization issue in Russian translation that caused Thuggish to be removed.
-Update Russian translation, Credit: Hea.
-New Trait: Motion Sickness, Credit: Fajdek.
-Noodle Legs' luck traits bonuses are now affected by luck impact, Credit: Fajdek.
-Noodle Legs now activates everytime player moves instead of every one minute, allowing for it to be the same regardless of time per day in sandbox, Credit: Fajdek.
-Vagabond settings text now shows properly, Credit: Fajdek.
-Second Wind now only takes half the time to recharge if it did not restore fatigue, Credit: Fajdek
-Update Spanish Translation, by HawK.
-Added Polish Translation, Credit: Tony.
+Completely Re-Worked Super Immune
