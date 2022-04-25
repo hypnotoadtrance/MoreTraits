@@ -197,5 +197,5 @@ UI_PL = {
     UI_MoreTraits_Options_MartialDamage = "Pokaż obrażenia Mistrza Sztuk Walki",
     UI_MoreTraits_Options_MartialDamage_ToolTip = "Jeśli masz cechę Mistrza Sztuk Walki, wyskoczy powiadomienie ile obrażeń zadajesz.",
     UI_MoreTraits_Options_VagabondAnnounce = "Ogłoś znalezienie przedmiotów przez Włóczęgę",
-    UI_MoreTraits_Options_VagabondAnnounce_Tooltip = "Jeśli masz cechę Włóczęgi, zostaniesz powiadomiony kiedy znajdziesz jedzenie w śmieciach.",
+    UI_MoreTraits_Options_VagabondAnnounce_ToolTip = "Jeśli masz cechę Włóczęgi, zostaniesz powiadomiony kiedy znajdziesz jedzenie w śmieciach.",
 }
