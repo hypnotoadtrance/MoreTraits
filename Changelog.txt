@@ -1,2 +1,4 @@
 Changelog Notes:
 Completely Re-Worked Super Immune
+Super Immune now costs 10 points (from 8)
+Fixed bug that would prevent indefatigable sandbox setting from showing up
