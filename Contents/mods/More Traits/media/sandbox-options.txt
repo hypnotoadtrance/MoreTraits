@@ -77,7 +77,7 @@ option MoreTraits.IndefatigableCuresInfection
 }
 option MoreTraits.IndefatigableCuresInfectionOnce
 {
-	type = boolean, default = false
+	type = boolean, default = false,
 	page = MoreTraits, translation = MoreTraits_IndefatigableCuresInfectionOnce,
 }
 option MoreTraits.GordaniteEffectiveness
