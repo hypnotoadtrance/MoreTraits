@@ -2142,9 +2142,9 @@ local function SuperImmuneRecoveryProcess()
 				end
 				
 				if (Recovery * HoursPerDay)/2 >= TimeElapsed then
-					Illness = Illness + (11-ZombRand(1, 15)); --You can decrease illness up to 4 or increase it up to 11 per hour
+					Illness = Illness + (3-ZombRand(1, 4)); --You can decrease illness up to 1 or increase it up to 2 per hour
 				else --Once half the required time passes, your immunity system starts gaining victory
-					Illness = Illness + (6-ZombRand(1,15)); -- You can decrease illness up to 9 or increase it up to 5 per hour
+					Illness = Illness + (2-ZombRand(1, 4)); -- You can decrease illness up to 2 or increase it up to 1 per hour
 				end --The random illness reduction and gain is to simulate your immune system fighting the virus.
 				if player:HasTrait("FastHealer") then 
 					Illness = Illness - 0.25;
@@ -2197,9 +2197,9 @@ function SuperImmune(_player, _playerdata)
     if player:HasTrait("superimmune") then
         if bodydamage:isInfected() == true then
 			bodydamage:setInfected(false);
-            bodydamage:setInfectionMortalityDuration(-1);
+          		bodydamage:setInfectionMortalityDuration(-1);
 			bodydamage:setInfectionTime(-1);
-            bodydamage:setInfectionLevel(0);
+            		bodydamage:setInfectionLevel(0);
 			local TimeOfRecovery = ZombRand(10, 31); 
 			if player:HasTrait("FastHealer") then
 				TimeOfRecovery = TimeOfRecovery - 5;
@@ -2249,11 +2249,24 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 			if Health >= 100-Illness and Health > 20 then
 				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 					local b = player:getBodyDamage():getBodyParts():get(i);
-					b:AddDamage(0.003); 
+					if Illness < 25 then
+						b:AddDamage(0.002);
+					end
+					if Illness < 25 and Illness > 50 then
+						b:AddDamage(0.005);
+					end
+					if Illness >= 50 then
+						b:AddDamage(0.01);
+					end
+					if Illness >= 50 and Health > 60 then
+						b:AddDamage(0.1); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
+					end
 				end                     
 			end
-			if Illness>24 then --Do not gain stress unless you're queasy
-				player:getStats():setStress(Stress+0.001);
+			if Illness>14 then
+				if internalTick >= 20 then
+					player:getStats():setStress(Stress+0.001);
+				end
 			end
 		end
 	end
