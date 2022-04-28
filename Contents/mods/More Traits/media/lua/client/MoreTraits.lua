@@ -2142,9 +2142,9 @@ local function SuperImmuneRecoveryProcess()
 				end
 				if TimeElapsed > 6 then
 					if (Recovery * HoursPerDay)/2 <= TimeElapsed then
-						Illness = Illness + (2-ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
+						Illness = Illness - (2-ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
 					else --Once half the required time passes, your immunity system starts gaining victory
-						Illness = Illness - (2-ZombRand(1, 5)); -- You can decrease illness up to 2 or increase it up to 1 per hour
+						Illness = Illness - (3-ZombRand(1, 5)); -- You can decrease illness up to 2 or increase it up to 1 per hour
 					end --The random illness reduction and gain is to simulate your immune system fighting the virus.
 				else
 					Illness = Illness + ZombRand(1, 5); --Immune system doesn't notice the virus until 6 hours in
