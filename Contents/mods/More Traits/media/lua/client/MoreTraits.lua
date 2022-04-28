@@ -2158,6 +2158,9 @@ local function SuperImmuneRecoveryProcess()
 				if Illness > 91 then
 					Illness = 91;
 				end
+                                if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
+                                        Illness = Illness + 2;
+                                end
 				player:getBodyDamage():setFakeInfectionLevel(Illness);
 				playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
 			else
@@ -2182,9 +2185,9 @@ local function SuperImmuneRecoveryProcess()
 					playerdata.SuperImmuneHealedOnce = true;
 				end
 				if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
+                                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
 					playerdata.SuperImmuneTextSaid = true;
-                end
+                                end
 			end
 		end
 	end
@@ -2252,7 +2255,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 					if Illness < 25 then
 						b:AddDamage(0.002);
 					end
-					if Illness < 25 and Illness > 50 then
+					if Illness > 25 and Illness < 50 then
 						b:AddDamage(0.005);
 					end
 					if Illness >= 50 then
@@ -2263,7 +2266,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 					end
 				end                     
 			end
-			if Illness>14 then
+			if Illness>10 then
 				if internalTick >= 20 then
 					player:getStats():setStress(Stress+0.001);
 				end
