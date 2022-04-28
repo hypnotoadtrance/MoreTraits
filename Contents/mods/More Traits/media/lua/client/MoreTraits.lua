@@ -2140,12 +2140,15 @@ local function SuperImmuneRecoveryProcess()
 				if playerdata.SuperImmuneTextSaid == true then
 					playerdata.SuperImmuneTextSaid = false;
 				end
-				
-				if (Recovery * HoursPerDay)/2 >= TimeElapsed then
-					Illness = Illness + (3-ZombRand(1, 4)); --You can decrease illness up to 1 or increase it up to 2 per hour
-				else --Once half the required time passes, your immunity system starts gaining victory
-					Illness = Illness + (2-ZombRand(1, 4)); -- You can decrease illness up to 2 or increase it up to 1 per hour
-				end --The random illness reduction and gain is to simulate your immune system fighting the virus.
+				if TimeElapsed > 6 then
+					if (Recovery * HoursPerDay)/2 <= TimeElapsed then
+						Illness = Illness - (2-ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
+					else --Once half the required time passes, your immunity system starts gaining victory
+						Illness = Illness - (3-ZombRand(1, 5)); -- You can decrease illness up to 2 or increase it up to 1 per hour
+					end --The random illness reduction and gain is to simulate your immune system fighting the virus.
+				else
+					Illness = Illness + ZombRand(1, 5); --Immune system doesn't notice the virus until 6 hours in
+				end
 				if player:HasTrait("FastHealer") then 
 					Illness = Illness - 0.25;
 				end
@@ -2156,10 +2159,16 @@ local function SuperImmuneRecoveryProcess()
 					Illness = Illness + 10;
 				end
 				if Illness > 91 then
-					Illness = 91;
+					Illness = Illness - 20;
+				end
+				if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
+					Illness = Illness + 2; --Prevent the injured moodle from being spammed
 				end
 				player:getBodyDamage():setFakeInfectionLevel(Illness);
 				playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+				--following is for debug purposes
+				--player:Say("My illness is: "..Illness); 
+				--player:Say("Time to recovery: "..(Recovery*24-TimeElapsed).." hours");
 			else
 				if Illness ~= 0 then --Recover from illness completely over-time once recovery time ends.
 					if player:HasTrait("FastHealer") then
@@ -2182,9 +2191,9 @@ local function SuperImmuneRecoveryProcess()
 					playerdata.SuperImmuneHealedOnce = true;
 				end
 				if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
+					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
 					playerdata.SuperImmuneTextSaid = true;
-                end
+				end
 			end
 		end
 	end
@@ -2197,9 +2206,9 @@ function SuperImmune(_player, _playerdata)
     if player:HasTrait("superimmune") then
         if bodydamage:isInfected() == true then
 			bodydamage:setInfected(false);
-          		bodydamage:setInfectionMortalityDuration(-1);
+			bodydamage:setInfectionMortalityDuration(-1);
 			bodydamage:setInfectionTime(-1);
-            		bodydamage:setInfectionLevel(0);
+			bodydamage:setInfectionLevel(0);
 			local TimeOfRecovery = ZombRand(10, 31); 
 			if player:HasTrait("FastHealer") then
 				TimeOfRecovery = TimeOfRecovery - 5;
@@ -2241,30 +2250,41 @@ end
 
 local function SuperImmuneFakeInfectionHealthLoss(player)
 	local playerdata = player:getModData();
+	local MaxHealth = 10;
 	local Health = player:getBodyDamage():getOverallBodyHealth();
 	local Stress = player:getStats():getStress();
 	local Illness = player:getBodyDamage():getFakeInfectionLevel();
+	local stop = false;
 	if player:HasTrait("superimmune") then
 		if playerdata.SuperImmuneActive then
-			if Health >= 100-Illness and Health > 20 then
+			if player:HasTrait("indefatigable") then
+				MaxHealth = 22;
+			end
+			if Health >= 100-Illness and Health > MaxHealth then
 				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 					local b = player:getBodyDamage():getBodyParts():get(i);
-					if Illness < 25 then
-						b:AddDamage(0.002);
+					if Health >= (100-Illness)*1.5 then
+						b:AddDamage(0.2); --Simulate Max Health Loss
+						stop = true;
 					end
-					if Illness < 25 and Illness > 50 then
-						b:AddDamage(0.005);
-					end
-					if Illness >= 50 then
-						b:AddDamage(0.01);
-					end
-					if Illness >= 50 and Health > 60 then
-						b:AddDamage(0.1); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
+					if stop == false then
+						if Illness < 25 then
+							b:AddDamage(0.002);
+						end
+						if Illness > 25 and Illness < 50 then
+							b:AddDamage(0.005);
+						end
+						if Illness >= 50 then
+							b:AddDamage(0.01);
+						end
+						if Illness >= 50 and Health > 60 then
+							b:AddDamage(0.1); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
+						end
 					end
 				end                     
 			end
-			if Illness>14 then
-				if internalTick >= 20 then
+			if Illness>10 then
+				if internalTick >= 25 and Stress <= Illness*3 then
 					player:getStats():setStress(Stress+0.001);
 				end
 			end
