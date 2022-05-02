@@ -3378,10 +3378,10 @@ local function RestfulSleeper()
 			Multiplier = 1.25;
 		end
 		if Fatigue >= 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.003*Multiplier));
+			player:getStats():setFatigue(Fatigue-(0.01*Multiplier));
 		end
 		if Fatigue >= 0.3 and Fatigue < 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.001*Multiplier));
+			player:getStats():setFatigue(Fatigue-(0.005*Multiplier));
 		end
 	end
 end
@@ -3478,7 +3478,7 @@ Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);
-Events.EveryTenMinutes.Add(RestfulSleeper);
+Events.EveryHours.Add(RestfulSleeper);
 Events.EveryHours.Add(ToadTraitDepressive);
 Events.EveryHours.Add(SuperImmuneRecoveryProcess);
 Events.OnNewGame.Add(initToadTraitsPerks);
