@@ -3378,10 +3378,10 @@ local function RestfulSleeper()
 			Multiplier = 1.25;
 		end
 		if Fatigue >= 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.01*Multiplier));
+			player:getStats():setFatigue(Fatigue-(0.1*Multiplier));
 		end
 		if Fatigue >= 0.3 and Fatigue < 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.005*Multiplier));
+			player:getStats():setFatigue(Fatigue-(0.05*Multiplier));
 		end
 	end
 end
