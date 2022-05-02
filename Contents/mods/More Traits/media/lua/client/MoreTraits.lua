@@ -3372,16 +3372,16 @@ local function RestfulSleeper()
 	local Multiplier = 1;
 	local Fatigue = player:getStats():getFatigue();
 	if player:HasTrait("restfulsleeper") and player:isAsleep() then
-		if player:HasTrait("Wakeful") then
+		if player:HasTrait("NeedsLessSleep") then
 			Multiplier = 0.5;
-		elseif player:HasTrait("SleepyHead") then
+		elseif player:HasTrait("NeedsMoreSleep") then
 			Multiplier = 1.25;
 		end
 		if Fatigue >= 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.01*Multiplier));
+			player:getStats():setFatigue(Fatigue-(0.003*Multiplier));
 		end
 		if Fatigue >= 0.3 and Fatigue < 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.002*Multiplier));
+			player:getStats():setFatigue(Fatigue-(0.001*Multiplier));
 		end
 	end
 end
