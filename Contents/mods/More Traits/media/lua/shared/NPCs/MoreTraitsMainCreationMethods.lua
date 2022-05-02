@@ -190,6 +190,7 @@ local function initToadTraits()
     local tavernbrawler = TraitFactory.addTrait("tavernbrawler", getText("UI_trait_tavernbrawler"), 3, getText("UI_trait_tavernbrawlerdesc"), false, false);
     local secondwind = TraitFactory.addTrait("secondwind", getText("UI_trait_secondwind"), 10, getText("UI_trait_secondwinddesc"), false, false);
     secondwind:addXPBoost(Perks.Fitness, 1);
+	local restfulsleeper = TraitFactory.addTrait("restfulsleeper", getText("UI_trait_restfulsleeper"), 6, getText("UI_trait_restfulsleeperdesc"), false, false);
     --===========--
     --Bad Traits--
     --===========--
@@ -324,6 +325,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("quickworker", "slowworker");
     TraitFactory.setMutualExclusive("burned", "broke");
     TraitFactory.setMutualExclusive("burned", "injured");
+	TraitFactory.setMutualExclusive("restfulsleeper", "Insomniac");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();

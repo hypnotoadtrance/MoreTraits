@@ -3367,6 +3367,24 @@ local function MotionSickness(player)
 	end
 end
 
+local function RestfulSleeper()
+	local player = getPlayer();
+	local Multiplier = 1;
+	local Fatigue = player:getStats():getFatigue();
+	if player:HasTrait("restfulsleeper") and player:isAsleep() then
+		if player:HasTrait("NeedsLessSleep") then
+			Multiplier = 0.5;
+		elseif player:HasTrait("NeedsMoreSleep") then
+			Multiplier = 1.25;
+		end
+		if Fatigue >= 0.6 then
+			player:getStats():setFatigue(Fatigue-(0.1*Multiplier));
+		end
+		if Fatigue >= 0.3 and Fatigue < 0.6 then
+			player:getStats():setFatigue(Fatigue-(0.02*Multiplier));
+		end
+	end
+end
 
 function MainPlayerUpdate(_player)
     local player = _player;
@@ -3379,7 +3397,7 @@ function MainPlayerUpdate(_player)
         FoodUpdate(player);
         Gordanite(player);
         BatteringRamUpdate(player, playerdata);
-        clothingUpdate(player)
+        clothingUpdate(player);
         --Reset internalTick every 30 ticks
         internalTick = 0;
     elseif internalTick == 20 then
@@ -3460,6 +3478,7 @@ Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);
+Events.EveryHours.Add(RestfulSleeper);
 Events.EveryHours.Add(ToadTraitDepressive);
 Events.EveryHours.Add(SuperImmuneRecoveryProcess);
 Events.OnNewGame.Add(initToadTraitsPerks);
