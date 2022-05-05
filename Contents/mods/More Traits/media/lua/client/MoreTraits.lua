@@ -3276,9 +3276,11 @@ local function SecondWind(player)
                     end
 	if zombiesnearplayer > 2 then
 		playerstats:setEndurance(1);
-		if playerstats:getFatigue() > 0.5 then
-			playerstats:setFatigue(0.5);
+		if playerstats:getFatigue() > 0.6 then
 			playerdata.secondwindrecoveredfatigue = true;
+		end
+		if playerstats:getFatigue() > 0.4 then
+			playerstats:setFatigue(0.4);
 		end
 		playerdata.secondwindcooldown = 0;
 		secondwinddisabled = true;
@@ -3380,8 +3382,8 @@ local function RestfulSleeper()
 		if Fatigue >= 0.6 then
 			player:getStats():setFatigue(Fatigue-(0.1*Multiplier));
 		end
-		if Fatigue >= 0.3 and Fatigue < 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.02*Multiplier));
+		if Fatigue >= 0.2 and Fatigue < 0.6 then
+			player:getStats():setFatigue(Fatigue-(0.05*Multiplier));
 		end
 	end
 end
