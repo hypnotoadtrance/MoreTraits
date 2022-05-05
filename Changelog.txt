@@ -3,3 +3,6 @@ Completely Re-Worked Super Immune.
 Super Immune now costs 10 points (from 8)
 Fixed bug that would prevent indefatigable sandbox setting from showing up.
 Add New Trait - Restful Sleeper.
+New Trait Group - Hobby and Student. Pick one of the traits if you want to have a head start in a skill early game, levels gained from the traits do not have XP boosts.
+Second Wind buff - Second Wind now restores more fatigue (from 0.5 to 0.4).
+Second Wind buff - Second Wind now only has doubled cooldown if you were drowsy or higher.

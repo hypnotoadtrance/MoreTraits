@@ -465,6 +465,73 @@ function initToadTraitsPerks(_player)
     if player:HasTrait("ingenuitive") then
         LearnAllRecipes(player);
     end
+	if player:HasTrait("noxpshooter") then
+		local PerkLevel = player:getPerkLevel(Perks.Aiming);
+		if PerkLevel ~= 10 and PerkLevel ~= 9 then
+			player:LevelPerk(Perks.Aiming);
+			player:LevelPerk(Perks.Aiming);
+		elseif PerkLevel == 9 then
+			player:LevelPerk(Perks.Aiming);
+		end
+	end
+	if player:HasTrait("noxptechnician") then
+		local PerkLevel1 = player:getPerkLevel(Perks.Mechanics);
+		local PerkLevel2 = player:getPerkLevel(Perks.Electricity);
+		if PerkLevel1 ~= 10 then
+			player:LevelPerk(Perks.Mechanics);
+		end
+		if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
+			player:LevelPerk(Perks.Electricity);
+			player:LevelPerk(Perks.Electricity);
+		elseif PerkLevel == 9 then
+			player:LevelPerk(Perks.Electricity);
+		end
+	end
+	if player:HasTrait("noxpfirstaid") then
+		local PerkLevel = player:getPerkLevel(Perks.Doctor);
+		if PerkLevel ~= 10 and PerkLevel ~= 9 and PerkLevel ~= 8 then
+			player:LevelPerk(Perks.Doctor);
+			player:LevelPerk(Perks.Doctor);
+			player:LevelPerk(Perks.Doctor);
+		elseif Level ~= 10 and PerkLevel ~= 9 then
+			player:LevelPerk(Perks.Doctor);
+			player:LevelPerk(Perks.Doctor);
+		elseif PerkLevel == 9 then
+			player:LevelPerk(Perks.Doctor);
+		end
+	end
+	if player:HasTrait("noxpaxe") then
+		local PerkLevel1 = player:getPerkLevel(Perks.Axe);
+		local PerkLevel2 = player:getPerkLevel(Perks.Woodwork);
+		if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 then
+			player:LevelPerk(Perks.Axe);
+			player:LevelPerk(Perks.Axe);
+		elseif PerkLevel1 == 9 then
+			player:LevelPerk(Perks.Axe);
+		end
+		if PerkLevel2 ~= 10 then
+			player:LevelPerk(Perks.Woodwork);
+		end
+	end
+	if player:HasTrait("noxpmaintenance") then
+		local PerkLevel = player:getPerkLevel(Perks.Maintenance);
+		if PerkLevel ~= 10 then
+			player:LevelPerk(Perks.Maintenance);
+		end
+	end
+	if player:HasTrait("noxpsneaky") then
+		local PerkLevel1 = player:getPerkLevel(Perks.Sneak);
+		local PerkLevel2 = player:getPerkLevel(Perks.Lightfoot);
+		if PerkLevel1 ~= 10 and PerkLevel ~= 9 then
+			player:LevelPerk(Perks.Sneak);
+			player:LevelPerk(Perks.Sneak);
+		elseif PerkLevel1 == 9 then
+			player:LevelPerk(Perks.Sneak);
+		end
+		if PerkLevel2 ~= 10 then
+			player:LevelPerk(Perks.Lightfoot);
+		end
+	end
 end
 
 function ToadTraitEvasive(_player, _playerdata)
@@ -3276,9 +3343,11 @@ local function SecondWind(player)
                     end
 	if zombiesnearplayer > 2 then
 		playerstats:setEndurance(1);
-		if playerstats:getFatigue() > 0.5 then
-			playerstats:setFatigue(0.5);
+		if playerstats:getFatigue() > 0.6 then
 			playerdata.secondwindrecoveredfatigue = true;
+		end
+		if playerstats:getFatigue() > 0.4 then
+			playerstats:setFatigue(0.4);
 		end
 		playerdata.secondwindcooldown = 0;
 		secondwinddisabled = true;
@@ -3380,8 +3449,8 @@ local function RestfulSleeper()
 		if Fatigue >= 0.6 then
 			player:getStats():setFatigue(Fatigue-(0.1*Multiplier));
 		end
-		if Fatigue >= 0.3 and Fatigue < 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.02*Multiplier));
+		if Fatigue >= 0.2 and Fatigue < 0.6 then
+			player:getStats():setFatigue(Fatigue-(0.05*Multiplier));
 		end
 	end
 end
