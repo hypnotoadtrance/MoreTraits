@@ -515,7 +515,10 @@ function initToadTraitsPerks(_player)
 	end
 	if player:HasTrait("noxpmaintenance") then
 		local PerkLevel = player:getPerkLevel(Perks.Maintenance);
-		if PerkLevel ~= 10 then
+		if PerkLevel ~= 10 and PerkLevel ~= 9 then
+			player:LevelPerk(Perks.Maintenance);
+			player:LevelPerk(Perks.Maintenance);
+		elseif PerkLevel == 9 then
 			player:LevelPerk(Perks.Maintenance);
 		end
 	end
