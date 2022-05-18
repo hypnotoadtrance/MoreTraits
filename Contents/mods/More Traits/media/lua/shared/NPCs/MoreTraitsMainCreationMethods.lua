@@ -192,7 +192,7 @@ local function initToadTraits()
     secondwind:addXPBoost(Perks.Fitness, 1);
 	local restfulsleeper = TraitFactory.addTrait("restfulsleeper", getText("UI_trait_restfulsleeper"), 6, getText("UI_trait_restfulsleeperdesc"), false, false);
 	local noxpshooter = TraitFactory.addTrait("noxpshooter", getText("UI_trait_noxpshooter"), 3, getText("UI_trait_noxpshooterdesc"), false, false);
-	local noxptechnician = TraitFactory.addTrait("noxptechnician", getText("UI_trait_noxptechnician"), 3, getText("UI_trait_noxptechniciadesc"), false, false);
+	local noxptechnician = TraitFactory.addTrait("noxptechnician", getText("UI_trait_noxptechnician"), 3, getText("UI_trait_noxptechniciandesc"), false, false);
 	local noxpaxe = TraitFactory.addTrait("noxpaxe", getText("UI_trait_noxpaxe"), 3, getText("UI_trait_noxpaxedesc"), false, false);
 	local noxpfirstaid = TraitFactory.addTrait("noxpfirstaid", getText("UI_trait_noxpfirstaid"), 3, getText("UI_trait_noxpfirstaiddesc"), false, false);
 	local noxpmaintenance = TraitFactory.addTrait("noxpmaintenance", getText("UI_trait_noxpmaintenance"), 3, getText("UI_trait_noxpmaintenancedesc"), false, false);
