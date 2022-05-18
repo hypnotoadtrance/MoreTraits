@@ -191,12 +191,12 @@ local function initToadTraits()
     local secondwind = TraitFactory.addTrait("secondwind", getText("UI_trait_secondwind"), 10, getText("UI_trait_secondwinddesc"), false, false);
     secondwind:addXPBoost(Perks.Fitness, 1);
 	local restfulsleeper = TraitFactory.addTrait("restfulsleeper", getText("UI_trait_restfulsleeper"), 6, getText("UI_trait_restfulsleeperdesc"), false, false);
-	local noxpshooter = TraitFactory.addTrait("noxpshooter", getText("UI_trait_noxpshooter"), 2, getText("UI_trait_noxpshooterdesc"), false, false);
-	local noxptechnician = TraitFactory.addTrait("noxptechnician", getText("UI_trait_noxptechnician"), 2, getText("UI_trait_noxptechniciadesc"), false, false);
-	local noxpaxe = TraitFactory.addTrait("noxpaxe", getText("UI_trait_noxpaxe"), 2, getText("UI_trait_noxpaxedesc"), false, false);
-	local noxpfirstaid = TraitFactory.addTrait("noxpfirstaid", getText("UI_trait_noxpfirstaid"), 2, getText("UI_trait_noxpfirstaiddesc"), false, false);
-	local noxpmaintenance = TraitFactory.addTrait("noxpmaintenance", getText("UI_trait_noxpmaintenance"), 2, getText("UI_trait_noxpmaintenancedesc"), false, false);
-	local noxpsneaky = TraitFactory.addTrait("noxpsneaky", getText("UI_trait_noxpsneaky"), 2, getText("UI_trait_noxpsneakydesc"), false, false);
+	local noxpshooter = TraitFactory.addTrait("noxpshooter", getText("UI_trait_noxpshooter"), 3, getText("UI_trait_noxpshooterdesc"), false, false);
+	local noxptechnician = TraitFactory.addTrait("noxptechnician", getText("UI_trait_noxptechnician"), 3, getText("UI_trait_noxptechniciandesc"), false, false);
+	local noxpaxe = TraitFactory.addTrait("noxpaxe", getText("UI_trait_noxpaxe"), 3, getText("UI_trait_noxpaxedesc"), false, false);
+	local noxpfirstaid = TraitFactory.addTrait("noxpfirstaid", getText("UI_trait_noxpfirstaid"), 3, getText("UI_trait_noxpfirstaiddesc"), false, false);
+	local noxpmaintenance = TraitFactory.addTrait("noxpmaintenance", getText("UI_trait_noxpmaintenance"), 3, getText("UI_trait_noxpmaintenancedesc"), false, false);
+	local noxpsneaky = TraitFactory.addTrait("noxpsneaky", getText("UI_trait_noxpsneaky"), 3, getText("UI_trait_noxpsneakydesc"), false, false);
     --===========--
     --Bad Traits--
     --===========--
@@ -281,16 +281,6 @@ local function initToadTraits()
         TraitFactory.setMutualExclusive("deprived", "preparedweapon");
         TraitFactory.setMutualExclusive("deprived", "preparedcoordination");
     end
-	--[[Leaving this in a comment to let toad decide if he wants them exclusive or not, because I don't
-	Version 1 - Hobby-Hobby is exclusive
-	TraitFactory.setMutualExclusive("noxpsneaky", "noxptechnician");
-	TraitFactory.setMutualExclusive("noxpsneaky", "noxpshooter");
-	TraitFactory.setMutualExclusive("noxpsneaky", "noxpaxe");
-	TraitFactory.setMutualExclusive("noxptechnician", "noxpshooter");
-	TraitFactory.setMutualExclusive("noxptechnician", "noxpaxe");
-	TraitFactory.setMutualExclusive("noxpshooter", "noxpaxe");
-
-	Version 2 - All are exclusive to each other
 	TraitFactory.setMutualExclusive("noxpsneaky", "noxptechnician");
 	TraitFactory.setMutualExclusive("noxpsneaky", "noxpshooter");
 	TraitFactory.setMutualExclusive("noxpsneaky", "noxpaxe");
@@ -306,10 +296,6 @@ local function initToadTraits()
 	TraitFactory.setMutualExclusive("noxpaxe", "noxpfirstaid");
 	TraitFactory.setMutualExclusive("noxpaxe", "noxpmaintenance");
 	TraitFactory.setMutualExclusive("noxpfirstaid", "noxpmaintenance");
-	
-	Version 3 - Student-Student is exclusive
-	TraitFactory.setMutualExclusive("noxpfirstaid", "noxpmaintenance");
-	--]]
     TraitFactory.setMutualExclusive("quiet", "Clumsy");
     TraitFactory.setMutualExclusive("flexible", "Obese");
     TraitFactory.setMutualExclusive("olympian", "Unfit");
