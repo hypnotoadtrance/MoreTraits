@@ -3252,6 +3252,15 @@ function clothingUpdate(_player)
     end
 end
 
+local function FixSpecialization(player, perk)
+	if player:HasTrait("specaid") or player:HasTrait("speccrafting") or player:HasTrait("specfood") or player:HasTrait("specguns") or player:HasTrait("specmove") or player:HasTrait("specweapons") then
+		if player:getXp():getXP(perk) < 0 then
+			local xp = player:getXp():getXP(perk);
+			player:getXp():AddXPNoMultiplier(perk, 0-xp); --Xp will be negative, so subtracting 0 by xp will return a positive number
+		end
+	end
+end
+
 local function CheckInjuredHeal()
     if #BodyDamagedFromTrait > 0 then
         for i, v in ipairs(BodyDamagedFromTrait) do
@@ -3557,3 +3566,4 @@ Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnLoad.Add(OnLoad);
+Events.LevelPerk.Add(FixSpecialization);
