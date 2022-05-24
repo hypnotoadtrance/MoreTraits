@@ -469,9 +469,12 @@ function initToadTraitsPerks(_player)
 		local PerkLevel = player:getPerkLevel(Perks.Aiming);
 		if PerkLevel ~= 10 and PerkLevel ~= 9 then
 			player:LevelPerk(Perks.Aiming);
+			player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
 			player:LevelPerk(Perks.Aiming);
+			player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
 		elseif PerkLevel == 9 then
 			player:LevelPerk(Perks.Aiming);
+			player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
 		end
 	end
 	if player:HasTrait("noxptechnician") then
@@ -479,25 +482,35 @@ function initToadTraitsPerks(_player)
 		local PerkLevel2 = player:getPerkLevel(Perks.Electricity);
 		if PerkLevel1 ~= 10 then
 			player:LevelPerk(Perks.Mechanics);
+			player:getXp():setXPToLevel(Perks.Mechanics, PerkLevel1);
 		end
 		if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
 			player:LevelPerk(Perks.Electricity);
+			player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
 			player:LevelPerk(Perks.Electricity);
+			player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
 		elseif PerkLevel == 9 then
 			player:LevelPerk(Perks.Electricity);
+			player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
 		end
 	end
 	if player:HasTrait("noxpfirstaid") then
 		local PerkLevel = player:getPerkLevel(Perks.Doctor);
 		if PerkLevel ~= 10 and PerkLevel ~= 9 and PerkLevel ~= 8 then
 			player:LevelPerk(Perks.Doctor);
+			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
 			player:LevelPerk(Perks.Doctor);
+			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
 			player:LevelPerk(Perks.Doctor);
+			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
 		elseif Level ~= 10 and PerkLevel ~= 9 then
 			player:LevelPerk(Perks.Doctor);
+			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
 			player:LevelPerk(Perks.Doctor);
+			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
 		elseif PerkLevel == 9 then
 			player:LevelPerk(Perks.Doctor);
+			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
 		end
 	end
 	if player:HasTrait("noxpaxe") then
@@ -505,21 +518,28 @@ function initToadTraitsPerks(_player)
 		local PerkLevel2 = player:getPerkLevel(Perks.Woodwork);
 		if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 then
 			player:LevelPerk(Perks.Axe);
+			player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
 			player:LevelPerk(Perks.Axe);
+			player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
 		elseif PerkLevel1 == 9 then
 			player:LevelPerk(Perks.Axe);
+			player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
 		end
 		if PerkLevel2 ~= 10 then
 			player:LevelPerk(Perks.Woodwork);
+			player:getXp():setXPToLevel(Perks.Woodwork, PerkLevel2);
 		end
 	end
 	if player:HasTrait("noxpmaintenance") then
 		local PerkLevel = player:getPerkLevel(Perks.Maintenance);
 		if PerkLevel ~= 10 and PerkLevel ~= 9 then
 			player:LevelPerk(Perks.Maintenance);
+			player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
 			player:LevelPerk(Perks.Maintenance);
+			player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
 		elseif PerkLevel == 9 then
 			player:LevelPerk(Perks.Maintenance);
+			player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
 		end
 	end
 	if player:HasTrait("noxpsneaky") then
@@ -527,12 +547,16 @@ function initToadTraitsPerks(_player)
 		local PerkLevel2 = player:getPerkLevel(Perks.Lightfoot);
 		if PerkLevel1 ~= 10 and PerkLevel ~= 9 then
 			player:LevelPerk(Perks.Sneak);
+			player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
 			player:LevelPerk(Perks.Sneak);
+			player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
 		elseif PerkLevel1 == 9 then
 			player:LevelPerk(Perks.Sneak);
+			player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
 		end
 		if PerkLevel2 ~= 10 then
 			player:LevelPerk(Perks.Lightfoot);
+			player:getXp():setXPToLevel(Perks.Lightfoot, PerkLevel2);
 		end
 	end
 end
