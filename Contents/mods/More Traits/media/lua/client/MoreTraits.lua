@@ -2223,6 +2223,21 @@ local function SuperImmuneRecoveryProcess()
 	local playerdata = player:getModData();
 	local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
 	local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
+	if playerdata.SuperImmuneRecovery == nil then
+		playerdata.SuperImmuneRecovery = 0;
+	end
+	if playerdata.SuperImmuneHoursPassed == nil then
+		playerdata.SuperImmuneHoursPassed = 0;
+	end
+	if playerdata.SuperImmuneActive == nil then
+		playerdata.SuperImmuneActive = false;
+	end
+	if playerdata.SuperImmuneTextSaid == nil then
+		playerdata.SuperImmuneTextSaid = false;
+	end
+	if playerdata.SuperImmuneHealedOnce == nil then
+		playerdata.SuperImmuneHealedOnce = false;
+	end
 	if playerdata.SuperImmuneMinutesWellFed == nil then
 		playerdata.SuperImmuneMinutesWellFed = 0;
 	end
