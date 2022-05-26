@@ -365,6 +365,8 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneHoursPassed = 0;
     playerdata.SuperImmuneTextSaid = false;
     playerdata.SuperImmuneHealedOnce = false;
+	playerdata.SuperImmuneMinutesWellFed = 0;
+	playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -2219,6 +2221,29 @@ end
 local function SuperImmuneRecoveryProcess()
 	local player = getPlayer();
 	local playerdata = player:getModData();
+	local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
+	local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
+	if playerdata.SuperImmuneRecovery == nil then
+		playerdata.SuperImmuneRecovery = 0;
+	end
+	if playerdata.SuperImmuneHoursPassed == nil then
+		playerdata.SuperImmuneHoursPassed = 0;
+	end
+	if playerdata.SuperImmuneActive == nil then
+		playerdata.SuperImmuneActive = false;
+	end
+	if playerdata.SuperImmuneTextSaid == nil then
+		playerdata.SuperImmuneTextSaid = false;
+	end
+	if playerdata.SuperImmuneHealedOnce == nil then
+		playerdata.SuperImmuneHealedOnce = false;
+	end
+	if playerdata.SuperImmuneMinutesWellFed == nil then
+		playerdata.SuperImmuneMinutesWellFed = 0;
+	end
+	if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
+		playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+	end
 	local HoursPerDay = 24;
 	if player:HasTrait("superimmune") then
 		if playerdata.SuperImmuneActive == true then
@@ -2260,11 +2285,17 @@ local function SuperImmuneRecoveryProcess()
 				end
 				player:getBodyDamage():setFakeInfectionLevel(Illness);
 				playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+				playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
+				playerdata.SuperImmuneMinutesWellFed = 0;
+				if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
+					playerdata.SuperImmuneHoursPassed + 1;
+					playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
+				end
 				--following is for debug purposes
 				--player:Say("My illness is: "..Illness); 
 				--player:Say("Time to recovery: "..(Recovery*24-TimeElapsed).." hours");
 			else
-				if Illness ~= 0 then --Recover from illness completely over-time once recovery time ends.
+				if Illness > 0 or Illness ~= 0 then --Recover from illness completely over-time once recovery time ends.
 					if player:HasTrait("FastHealer") then
 						Illness = Illness - 1.5; --0.7 to 2.5 days
 					elseif player:HasTrait("SlowHealer") then
@@ -2283,6 +2314,7 @@ local function SuperImmuneRecoveryProcess()
 					playerdata.SuperImmuneHoursPassed = 0;
 					playerdata.SuperImmuneRecovery = 0;
 					playerdata.SuperImmuneHealedOnce = true;
+					playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 				end
 				if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
 					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
@@ -3303,7 +3335,7 @@ local function NoodleLegs(_player)
 	local N_Chance = 100;
 	local ChanceToTrip = 200001;
 	if SandboxVars.MoreTraits.NoodleLegsChance then
-	ChanceToTrip = SandboxVars.MoreTraits.NoodleLegsChance + 1;
+	ChanceToTrip = (SandboxVars.MoreTraits.NoodleLegsChance) + 1;
 	end
 	N_Chance = N_Chance - (((NimbleLvl*4)+(SprintingLvl*4))/2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
 	if _player:HasTrait("Graceful") then
@@ -3491,6 +3523,20 @@ local function RestfulSleeper()
 	end
 end
 
+local function HungerCheck(player)
+	if player:HasTrait("SuperImmune") then
+		local stats = player:getStats();
+		local hunger = stats:getHunger();
+		local SuperImmuneMinutesWellFed = player:getModData().SuperImmuneMinutesWellFed;
+		if playerdata.SuperImmuneMinutesWellFed == nil then
+			playerdata.SuperImmuneMinutesWellFed = 0;
+		end
+		if hunger == 0 and player:getModData().SuperImmuneActive == true then
+			player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
+		end
+	end
+end
+
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -3542,6 +3588,7 @@ function EveryOneMinute()
     UnHighlightScrounger(player, playerdata);
     LeadFoot(player);
     GymGoerUpdate(player);
+	HungerCheck(player);
 end
 function OnLoad()
     --reset any worn clothing to default state.

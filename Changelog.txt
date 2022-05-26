@@ -1,2 +1,3 @@
 Changelog Notes:
 Fixed bug that would give the player negative XP if they use a hobby trait
+Super Immune takes being well fed into account, and now speeds up recovery phase for each minute the player was well fed.
