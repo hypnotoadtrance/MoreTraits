@@ -367,6 +367,7 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneHealedOnce = false;
 	playerdata.SuperImmuneMinutesWellFed = 0;
 	playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+	playerdata.MotionActive = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -2263,7 +2264,7 @@ local function SuperImmuneRecoveryProcess()
 					if (Recovery * HoursPerDay)/2 <= TimeElapsed then
 						Illness = Illness - (2-ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
 					else --Once half the required time passes, your immunity system starts gaining victory
-						Illness = Illness - (3-ZombRand(1, 5)); -- You can decrease illness up to 2 or increase it up to 1 per hour
+						Illness = Illness - (4-ZombRand(1, 6)); -- You can decrease illness up to 3 or increase it up to 1 per hour
 					end --The random illness reduction and gain is to simulate your immune system fighting the virus.
 				else
 					Illness = Illness + ZombRand(1, 5); --Immune system doesn't notice the virus until 6 hours in
@@ -2410,7 +2411,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 				end                     
 			end
 			if Illness>10 then
-				if internalTick >= 25 and Stress <= Illness*3 then
+				if internalTick >= 25 and Stress <= Illness * 3 then
 					player:getStats():setStress(Stress+0.001);
 				end
 			end
@@ -3452,12 +3453,19 @@ local function SecondWindRecharge()
 end
 
 local function MotionSickness(player)
+	local playerdata = player:getModData();
 	local playerstats = player:getBodyDamage();
 	local Sickness = playerstats:getFakeInfectionLevel();
+	if playerdata.MotionActive == nil then
+		playerdata.MotionActive = false;
+	end
 	if player:HasTrait("motionsickness") then
 	if player:isDriving() == true and Sickness < 98 then
-		local vehicle = player:getVehicle()
-		if not vehicle then return end 
+		local vehicle = player:getVehicle();
+		if not vehicle then return end
+		if playerdata.MotionActive == false then
+			playerdata.MotionActive = true;
+		end
 		if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 then
 		playerstats:setFakeInfectionLevel(Sickness + 0.01);
 		end
@@ -3499,8 +3507,35 @@ local function MotionSickness(player)
 		end
 	end
 	if not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then
+		if playerdata.MotionActive == true then
+			playerdata.MotionActive = false;
+		end
 		playerstats:setFakeInfectionLevel(Sickness - 0.1);
 	end
+	end
+end
+
+local function MotionSicknessHealthLoss(player)
+	local playerdata = player:getModData();
+	local MaxHealth = 40;
+	local Health = player:getBodyDamage():getOverallBodyHealth();
+	local Sickness = player:getBodyDamage():getFakeInfectionLevel();
+	if playerdata.MotionActive == nil then
+		playerdata.MotionActive = false;
+	end
+	if player:HasTrait("MotionSickness") and playerdata.MotionActive == true then
+		if Health >= 100-Sickness and Health > MaxHealth then
+			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+				local b = player:getBodyDamage():getBodyParts():get(i);
+				if Sickness > 10 and Sickness < 25 then
+					b:AddDamage(0.001);
+				elseif Sickness >= 25 and Sickness < 50 then
+					b:AddDamage(0.002);
+				elseif Sickness <= 50 then
+					b:AddDamage(0.005);
+				end
+			end
+		end
 	end
 end
 
@@ -3558,6 +3593,7 @@ function MainPlayerUpdate(_player)
         Immunocompromised(player, playerdata);
     end
     MotionSickness(player);
+	MotionSicknessHealthLoss(player);
     SecondWind(player);
     indefatigable(player, playerdata);
     anemic(player);
