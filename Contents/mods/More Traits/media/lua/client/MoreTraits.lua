@@ -3528,8 +3528,8 @@ local function HungerCheck(player)
 		local stats = player:getStats();
 		local hunger = stats:getHunger();
 		local SuperImmuneMinutesWellFed = player:getModData().SuperImmuneMinutesWellFed;
-		if playerdata.SuperImmuneMinutesWellFed == nil then
-			playerdata.SuperImmuneMinutesWellFed = 0;
+		if player:getModData().SuperImmuneMinutesWellFed == nil then
+			player:getModData().SuperImmuneMinutesWellFed = 0;
 		end
 		if hunger == 0 and player:getModData().SuperImmuneActive == true then
 			player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
