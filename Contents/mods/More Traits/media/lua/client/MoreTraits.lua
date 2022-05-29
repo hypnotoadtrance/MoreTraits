@@ -3334,10 +3334,7 @@ local function NoodleLegs(_player)
 	local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
 	local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
 	local N_Chance = 100;
-	local ChanceToTrip = 200001;
-	if SandboxVars.MoreTraits.NoodleLegsChance then
-	ChanceToTrip = (SandboxVars.MoreTraits.NoodleLegsChance) + 1;
-	end
+	local ChanceToTrip = 500001;
 	N_Chance = N_Chance - (((NimbleLvl*4)+(SprintingLvl*4))/2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
 	if _player:HasTrait("Graceful") then
 		N_Chance = N_Chance - 20;
