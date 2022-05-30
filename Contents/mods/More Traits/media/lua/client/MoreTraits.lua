@@ -3334,10 +3334,7 @@ local function NoodleLegs(_player)
 	local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
 	local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
 	local N_Chance = 100;
-	local ChanceToTrip = 200001;
-	if SandboxVars.MoreTraits.NoodleLegsChance then
-	ChanceToTrip = (SandboxVars.MoreTraits.NoodleLegsChance) + 1;
-	end
+	local ChanceToTrip = 500001;
 	N_Chance = N_Chance - (((NimbleLvl*4)+(SprintingLvl*4))/2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
 	if _player:HasTrait("Graceful") then
 		N_Chance = N_Chance - 20;
@@ -3466,13 +3463,13 @@ local function MotionSickness(player)
 		if playerdata.MotionActive == false then
 			playerdata.MotionActive = true;
 		end
-		if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 then
+		if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 and Sickness < 26 then
 		playerstats:setFakeInfectionLevel(Sickness + 0.01);
 		end
-		if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 then
+		if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 and Sickness < 51 then
 		playerstats:setFakeInfectionLevel(Sickness + 0.05);
 		end
-		if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 then
+		if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 and Sickness < 51 then
 		playerstats:setFakeInfectionLevel(Sickness + 0.1);
 		end
 		if vehicle:getCurrentSpeedKmHour() >= 45 and vehicle:getCurrentSpeedKmHour() < 60 then
@@ -3487,13 +3484,13 @@ local function MotionSickness(player)
 		
 		--This section is for reversed driving, because positive values are when you drive forward, and negative when you drive back--
 		
-		if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 then
+		if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 and Sickness < 26 then
 		playerstats:setFakeInfectionLevel(Sickness + 0.01);
 		end
-		if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 then
+		if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 and Sickness < 51 then
 		playerstats:setFakeInfectionLevel(Sickness + 0.05);
 		end
-		if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 then
+		if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 and Sickness < 51 then
 		playerstats:setFakeInfectionLevel(sickness + 0.1);
 		end
 		if vehicle:getCurrentSpeedKmHour() <= -45 and vehicle:getCurrentSpeedKmHour() > -60 then
@@ -3517,11 +3514,14 @@ end
 
 local function MotionSicknessHealthLoss(player)
 	local playerdata = player:getModData();
-	local MaxHealth = 40;
+	local MaxHealth = 10;
 	local Health = player:getBodyDamage():getOverallBodyHealth();
 	local Sickness = player:getBodyDamage():getFakeInfectionLevel();
 	if playerdata.MotionActive == nil then
 		playerdata.MotionActive = false;
+	end
+	if player:HasTrait("Indefatigable") then
+		MaxHealth = 16;
 	end
 	if player:HasTrait("MotionSickness") and playerdata.MotionActive == true then
 		if Health >= 100-Sickness and Health > MaxHealth then
