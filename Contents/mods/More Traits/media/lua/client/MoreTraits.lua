@@ -2289,8 +2289,8 @@ local function SuperImmuneRecoveryProcess()
 				playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
 				playerdata.SuperImmuneMinutesWellFed = 0;
 				if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
-					playerdata.SuperImmuneHoursPassed + 1;
-					playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
+					playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+                    playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
 				end
 				--following is for debug purposes
 				--player:Say("My illness is: "..Illness); 
