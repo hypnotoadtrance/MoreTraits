@@ -111,7 +111,7 @@ local function addXPNoMultiplier(_player, _perk, _amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
-function initToadTraitsItems(_player)
+function initToadTraitsItems(_playerindex, _player)
     local player = _player;
     local inv = player:getInventory();
     if player:HasTrait("preparedfood") then
@@ -332,7 +332,7 @@ function initToadTraitsItems(_player)
     end
 end
 
-function initToadTraitsPerks(_player)
+function initToadTraitsPerks(_playerindex, _player)
     local player = _player;
     local playerdata = player:getModData();
     local damage = 20;
@@ -365,9 +365,9 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneHoursPassed = 0;
     playerdata.SuperImmuneTextSaid = false;
     playerdata.SuperImmuneHealedOnce = false;
-	playerdata.SuperImmuneMinutesWellFed = 0;
-	playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-	playerdata.MotionActive = false;
+    playerdata.SuperImmuneMinutesWellFed = 0;
+    playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+    playerdata.MotionActive = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -468,100 +468,100 @@ function initToadTraitsPerks(_player)
     if player:HasTrait("ingenuitive") then
         LearnAllRecipes(player);
     end
-	if player:HasTrait("noxpshooter") then
-		local PerkLevel = player:getPerkLevel(Perks.Aiming);
-		if PerkLevel ~= 10 and PerkLevel ~= 9 then
-			player:LevelPerk(Perks.Aiming);
-			player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
-			player:LevelPerk(Perks.Aiming);
-			player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
-		elseif PerkLevel == 9 then
-			player:LevelPerk(Perks.Aiming);
-			player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
-		end
-	end
-	if player:HasTrait("noxptechnician") then
-		local PerkLevel1 = player:getPerkLevel(Perks.Mechanics);
-		local PerkLevel2 = player:getPerkLevel(Perks.Electricity);
-		if PerkLevel1 ~= 10 then
-			player:LevelPerk(Perks.Mechanics);
-			player:getXp():setXPToLevel(Perks.Mechanics, PerkLevel1);
-		end
-		if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
-			player:LevelPerk(Perks.Electricity);
-			player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
-			player:LevelPerk(Perks.Electricity);
-			player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
-		elseif PerkLevel == 9 then
-			player:LevelPerk(Perks.Electricity);
-			player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
-		end
-	end
-	if player:HasTrait("noxpfirstaid") then
-		local PerkLevel = player:getPerkLevel(Perks.Doctor);
-		if PerkLevel ~= 10 and PerkLevel ~= 9 and PerkLevel ~= 8 then
-			player:LevelPerk(Perks.Doctor);
-			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
-			player:LevelPerk(Perks.Doctor);
-			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
-			player:LevelPerk(Perks.Doctor);
-			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
-		elseif Level ~= 10 and PerkLevel ~= 9 then
-			player:LevelPerk(Perks.Doctor);
-			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
-			player:LevelPerk(Perks.Doctor);
-			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
-		elseif PerkLevel == 9 then
-			player:LevelPerk(Perks.Doctor);
-			player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
-		end
-	end
-	if player:HasTrait("noxpaxe") then
-		local PerkLevel1 = player:getPerkLevel(Perks.Axe);
-		local PerkLevel2 = player:getPerkLevel(Perks.Woodwork);
-		if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 then
-			player:LevelPerk(Perks.Axe);
-			player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
-			player:LevelPerk(Perks.Axe);
-			player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
-		elseif PerkLevel1 == 9 then
-			player:LevelPerk(Perks.Axe);
-			player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
-		end
-		if PerkLevel2 ~= 10 then
-			player:LevelPerk(Perks.Woodwork);
-			player:getXp():setXPToLevel(Perks.Woodwork, PerkLevel2);
-		end
-	end
-	if player:HasTrait("noxpmaintenance") then
-		local PerkLevel = player:getPerkLevel(Perks.Maintenance);
-		if PerkLevel ~= 10 and PerkLevel ~= 9 then
-			player:LevelPerk(Perks.Maintenance);
-			player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
-			player:LevelPerk(Perks.Maintenance);
-			player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
-		elseif PerkLevel == 9 then
-			player:LevelPerk(Perks.Maintenance);
-			player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
-		end
-	end
-	if player:HasTrait("noxpsneaky") then
-		local PerkLevel1 = player:getPerkLevel(Perks.Sneak);
-		local PerkLevel2 = player:getPerkLevel(Perks.Lightfoot);
-		if PerkLevel1 ~= 10 and PerkLevel ~= 9 then
-			player:LevelPerk(Perks.Sneak);
-			player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
-			player:LevelPerk(Perks.Sneak);
-			player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
-		elseif PerkLevel1 == 9 then
-			player:LevelPerk(Perks.Sneak);
-			player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
-		end
-		if PerkLevel2 ~= 10 then
-			player:LevelPerk(Perks.Lightfoot);
-			player:getXp():setXPToLevel(Perks.Lightfoot, PerkLevel2);
-		end
-	end
+    if player:HasTrait("noxpshooter") then
+        local PerkLevel = player:getPerkLevel(Perks.Aiming);
+        if PerkLevel ~= 10 and PerkLevel ~= 9 then
+            player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
+            player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
+        elseif PerkLevel == 9 then
+            player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel);
+        end
+    end
+    if player:HasTrait("noxptechnician") then
+        local PerkLevel1 = player:getPerkLevel(Perks.Mechanics);
+        local PerkLevel2 = player:getPerkLevel(Perks.Electricity);
+        if PerkLevel1 ~= 10 then
+            player:LevelPerk(Perks.Mechanics);
+            player:getXp():setXPToLevel(Perks.Mechanics, PerkLevel1);
+        end
+        if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
+            player:LevelPerk(Perks.Electricity);
+            player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
+            player:LevelPerk(Perks.Electricity);
+            player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
+        elseif PerkLevel == 9 then
+            player:LevelPerk(Perks.Electricity);
+            player:getXp():setXPToLevel(Perks.Electricity, PerkLevel2);
+        end
+    end
+    if player:HasTrait("noxpfirstaid") then
+        local PerkLevel = player:getPerkLevel(Perks.Doctor);
+        if PerkLevel ~= 10 and PerkLevel ~= 9 and PerkLevel ~= 8 then
+            player:LevelPerk(Perks.Doctor);
+            player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
+            player:LevelPerk(Perks.Doctor);
+            player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
+            player:LevelPerk(Perks.Doctor);
+            player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
+        elseif Level ~= 10 and PerkLevel ~= 9 then
+            player:LevelPerk(Perks.Doctor);
+            player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
+            player:LevelPerk(Perks.Doctor);
+            player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
+        elseif PerkLevel == 9 then
+            player:LevelPerk(Perks.Doctor);
+            player:getXp():setXPToLevel(Perks.Doctor, PerkLevel);
+        end
+    end
+    if player:HasTrait("noxpaxe") then
+        local PerkLevel1 = player:getPerkLevel(Perks.Axe);
+        local PerkLevel2 = player:getPerkLevel(Perks.Woodwork);
+        if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 then
+            player:LevelPerk(Perks.Axe);
+            player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
+            player:LevelPerk(Perks.Axe);
+            player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
+        elseif PerkLevel1 == 9 then
+            player:LevelPerk(Perks.Axe);
+            player:getXp():setXPToLevel(Perks.Axe, PerkLevel1);
+        end
+        if PerkLevel2 ~= 10 then
+            player:LevelPerk(Perks.Woodwork);
+            player:getXp():setXPToLevel(Perks.Woodwork, PerkLevel2);
+        end
+    end
+    if player:HasTrait("noxpmaintenance") then
+        local PerkLevel = player:getPerkLevel(Perks.Maintenance);
+        if PerkLevel ~= 10 and PerkLevel ~= 9 then
+            player:LevelPerk(Perks.Maintenance);
+            player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
+            player:LevelPerk(Perks.Maintenance);
+            player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
+        elseif PerkLevel == 9 then
+            player:LevelPerk(Perks.Maintenance);
+            player:getXp():setXPToLevel(Perks.Maintenance, PerkLevel);
+        end
+    end
+    if player:HasTrait("noxpsneaky") then
+        local PerkLevel1 = player:getPerkLevel(Perks.Sneak);
+        local PerkLevel2 = player:getPerkLevel(Perks.Lightfoot);
+        if PerkLevel1 ~= 10 and PerkLevel ~= 9 then
+            player:LevelPerk(Perks.Sneak);
+            player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
+            player:LevelPerk(Perks.Sneak);
+            player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
+        elseif PerkLevel1 == 9 then
+            player:LevelPerk(Perks.Sneak);
+            player:getXp():setXPToLevel(Perks.Sneak, PerkLevel1);
+        end
+        if PerkLevel2 ~= 10 then
+            player:LevelPerk(Perks.Lightfoot);
+            player:getXp():setXPToLevel(Perks.Lightfoot, PerkLevel2);
+        end
+    end
 end
 
 function ToadTraitEvasive(_player, _playerdata)
@@ -1377,21 +1377,21 @@ function indefatigable(_player, _playerdata)
                     end
                 end
                 player:getBodyDamage():setOverallBodyHealth(100);
-		if SandboxVars.MoreTraits.IndefatigableCuresInfection == true then
-			if player:getBodyDamage():IsInfected() then
-				if playerdata.indefatigabledisabled == false then
-					local bodydamage = player:getBodyDamage();
-					bodydamage:setInfected(false);
-                        		bodydamage:setInfectionMortalityDuration(-1);
-                        		bodydamage:setInfectionTime(-1);
-                        		bodydamage:setInfectionLevel(0);
-					playerdata.indefatigablecuredinfection = true;
-					if SandboxVars.MoreTraits.IndefatigableCuresInfectionOnce == true then
-						playerdata.indefatigabledisabled = true;
-					end
-				end
-			end
-		end
+                if SandboxVars.MoreTraits.IndefatigableCuresInfection == true then
+                    if player:getBodyDamage():IsInfected() then
+                        if playerdata.indefatigabledisabled == false then
+                            local bodydamage = player:getBodyDamage();
+                            bodydamage:setInfected(false);
+                            bodydamage:setInfectionMortalityDuration(-1);
+                            bodydamage:setInfectionTime(-1);
+                            bodydamage:setInfectionLevel(0);
+                            playerdata.indefatigablecuredinfection = true;
+                            if SandboxVars.MoreTraits.IndefatigableCuresInfectionOnce == true then
+                                playerdata.indefatigabledisabled = true;
+                            end
+                        end
+                    end
+                end
                 playerdata.bindefatigable = true;
                 playerdata.indefatigablecooldown = 0;
                 if enemies:size() > 2 then
@@ -1399,7 +1399,7 @@ function indefatigable(_player, _playerdata)
                         if enemies:get(i):isZombie() then
                             if enemies:get(i):DistTo(player) <= 2.5 then
                                 enemies:get(i):setStaggerBack(true);
-				enemies:get(i):setKnockedDown(true);
+                                enemies:get(i):setKnockedDown(true);
                             end
                         end
                     end
@@ -1419,14 +1419,14 @@ function indefatigablecounter()
         if SandboxVars.MoreTraits.IndefatigableRecharge then
             recharge = SandboxVars.MoreTraits.IndefatigableRecharge * 24;
         end
-	if playerdata.indefatigablecuredinfection == true then
-		recharge = recharge * 2;
-	end
+        if playerdata.indefatigablecuredinfection == true then
+            recharge = recharge * 2;
+        end
         if playerdata.bindefatigable == true then
             if playerdata.indefatigablecooldown >= recharge then
                 playerdata.indefatigablecooldown = 0;
                 playerdata.bindefatigable = false;
-		playerdata.indefatigablecuredinfection = false;
+                playerdata.indefatigablecuredinfection = false;
                 player:Say(getText("UI_trait_indefatigablecooldown"));
             else
                 playerdata.indefatigablecooldown = playerdata.indefatigablecooldown + 1;
@@ -2220,110 +2220,114 @@ function vehicleCheck(_player)
 end
 
 local function SuperImmuneRecoveryProcess()
-	local player = getPlayer();
-	local playerdata = player:getModData();
-	local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
-	local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
-	if playerdata.SuperImmuneRecovery == nil then
-		playerdata.SuperImmuneRecovery = 0;
-	end
-	if playerdata.SuperImmuneHoursPassed == nil then
-		playerdata.SuperImmuneHoursPassed = 0;
-	end
-	if playerdata.SuperImmuneActive == nil then
-		playerdata.SuperImmuneActive = false;
-	end
-	if playerdata.SuperImmuneTextSaid == nil then
-		playerdata.SuperImmuneTextSaid = false;
-	end
-	if playerdata.SuperImmuneHealedOnce == nil then
-		playerdata.SuperImmuneHealedOnce = false;
-	end
-	if playerdata.SuperImmuneMinutesWellFed == nil then
-		playerdata.SuperImmuneMinutesWellFed = 0;
-	end
-	if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
-		playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-	end
-	local HoursPerDay = 24;
-	if player:HasTrait("superimmune") then
-		if playerdata.SuperImmuneActive == true then
-			local Illness = player:getBodyDamage():getFakeInfectionLevel();
-			local RecoveryTime = playerdata.SuperImmuneRecovery;
-			local Recovery = 0;
-			local TimeElapsed = playerdata.SuperImmuneHoursPassed;
-			if RecoveryTime > 30 then 
-				RecoveryTime = 30; 
-			end
-			Recovery = RecoveryTime;
-			if Recovery * HoursPerDay >= TimeElapsed then
-				if playerdata.SuperImmuneTextSaid == true then
-					playerdata.SuperImmuneTextSaid = false;
-				end
-				if TimeElapsed > 6 then
-					if (Recovery * HoursPerDay)/2 <= TimeElapsed then
-						Illness = Illness - (2-ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
-					else --Once half the required time passes, your immunity system starts gaining victory
-						Illness = Illness - (4-ZombRand(1, 6)); -- You can decrease illness up to 3 or increase it up to 1 per hour
-					end --The random illness reduction and gain is to simulate your immune system fighting the virus.
-				else
-					Illness = Illness + ZombRand(1, 5); --Immune system doesn't notice the virus until 6 hours in
-				end
-				if player:HasTrait("FastHealer") then 
-					Illness = Illness - 0.25;
-				end
-				if player:HasTrait("SlowHealer") then
-					Illness = Illness + 0.25;
-				end
-				if Illness < 26 then --Prevent illness from going too low or too high
-					Illness = Illness + 10;
-				end
-				if Illness > 91 then
-					Illness = Illness - 20;
-				end
-				if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
-					Illness = Illness + 2; --Prevent the injured moodle from being spammed
-				end
-				player:getBodyDamage():setFakeInfectionLevel(Illness);
-				playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
-				playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
-				playerdata.SuperImmuneMinutesWellFed = 0;
-				if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
-					playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+    local player = getPlayer();
+    local playerdata = player:getModData();
+    local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
+    local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
+    if playerdata.SuperImmuneRecovery == nil then
+        playerdata.SuperImmuneRecovery = 0;
+    end
+    if playerdata.SuperImmuneHoursPassed == nil then
+        playerdata.SuperImmuneHoursPassed = 0;
+    end
+    if playerdata.SuperImmuneActive == nil then
+        playerdata.SuperImmuneActive = false;
+    end
+    if playerdata.SuperImmuneTextSaid == nil then
+        playerdata.SuperImmuneTextSaid = false;
+    end
+    if playerdata.SuperImmuneHealedOnce == nil then
+        playerdata.SuperImmuneHealedOnce = false;
+    end
+    if playerdata.SuperImmuneMinutesWellFed == nil then
+        playerdata.SuperImmuneMinutesWellFed = 0;
+    end
+    if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
+        playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+    end
+    local HoursPerDay = 24;
+    if player:HasTrait("superimmune") then
+        if playerdata.SuperImmuneActive == true then
+            local Illness = player:getBodyDamage():getFakeInfectionLevel();
+            local RecoveryTime = playerdata.SuperImmuneRecovery;
+            local Recovery = 0;
+            local TimeElapsed = playerdata.SuperImmuneHoursPassed;
+            if RecoveryTime > 30 then
+                RecoveryTime = 30;
+            end
+            Recovery = RecoveryTime;
+            if Recovery * HoursPerDay >= TimeElapsed then
+                if playerdata.SuperImmuneTextSaid == true then
+                    playerdata.SuperImmuneTextSaid = false;
+                end
+                if TimeElapsed > 6 then
+                    if (Recovery * HoursPerDay) / 2 <= TimeElapsed then
+                        Illness = Illness - (2 - ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
+                    else
+                        --Once half the required time passes, your immunity system starts gaining victory
+                        Illness = Illness - (4 - ZombRand(1, 6)); -- You can decrease illness up to 3 or increase it up to 1 per hour
+                    end --The random illness reduction and gain is to simulate your immune system fighting the virus.
+                else
+                    Illness = Illness + ZombRand(1, 5); --Immune system doesn't notice the virus until 6 hours in
+                end
+                if player:HasTrait("FastHealer") then
+                    Illness = Illness - 0.25;
+                end
+                if player:HasTrait("SlowHealer") then
+                    Illness = Illness + 0.25;
+                end
+                if Illness < 26 then
+                    --Prevent illness from going too low or too high
+                    Illness = Illness + 10;
+                end
+                if Illness > 91 then
+                    Illness = Illness - 20;
+                end
+                if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
+                    Illness = Illness + 2; --Prevent the injured moodle from being spammed
+                end
+                player:getBodyDamage():setFakeInfectionLevel(Illness);
+                playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+                playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
+                playerdata.SuperImmuneMinutesWellFed = 0;
+                if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
+                    playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
                     playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
-				end
-				--following is for debug purposes
-				--player:Say("My illness is: "..Illness); 
-				--player:Say("Time to recovery: "..(Recovery*24-TimeElapsed).." hours");
-			else
-				if Illness > 0 or Illness ~= 0 then --Recover from illness completely over-time once recovery time ends.
-					if player:HasTrait("FastHealer") then
-						Illness = Illness - 1.5; --0.7 to 2.5 days
-					elseif player:HasTrait("SlowHealer") then
-						Illness = Illness - 0.75; --1.4 to 5 days
-					else
-					Illness = Illness - 1; --1 to 3.7 days
-					end
-					playerdata.SuperImmuneHoursPassed = 0;
-					player:getBodyDamage():setFakeInfectionLevel(Illness);
-				else --Once illness fully recovers
-					if MoreTraits.settings.SuperImmuneAnnounce == true then
-						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen());
-					end
-					playerdata.SuperImmuneTextSaid = false;
-					playerdata.SuperImmuneActive = false;
-					playerdata.SuperImmuneHoursPassed = 0;
-					playerdata.SuperImmuneRecovery = 0;
-					playerdata.SuperImmuneHealedOnce = true;
-					playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-				end
-				if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
-					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
-					playerdata.SuperImmuneTextSaid = true;
-				end
-			end
-		end
-	end
+                end
+                --following is for debug purposes
+                --player:Say("My illness is: "..Illness);
+                --player:Say("Time to recovery: "..(Recovery*24-TimeElapsed).." hours");
+            else
+                if Illness > 0 or Illness ~= 0 then
+                    --Recover from illness completely over-time once recovery time ends.
+                    if player:HasTrait("FastHealer") then
+                        Illness = Illness - 1.5; --0.7 to 2.5 days
+                    elseif player:HasTrait("SlowHealer") then
+                        Illness = Illness - 0.75; --1.4 to 5 days
+                    else
+                        Illness = Illness - 1; --1 to 3.7 days
+                    end
+                    playerdata.SuperImmuneHoursPassed = 0;
+                    player:getBodyDamage():setFakeInfectionLevel(Illness);
+                else
+                    --Once illness fully recovers
+                    if MoreTraits.settings.SuperImmuneAnnounce == true then
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen());
+                    end
+                    playerdata.SuperImmuneTextSaid = false;
+                    playerdata.SuperImmuneActive = false;
+                    playerdata.SuperImmuneHoursPassed = 0;
+                    playerdata.SuperImmuneRecovery = 0;
+                    playerdata.SuperImmuneHealedOnce = true;
+                    playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+                end
+                if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
+                    playerdata.SuperImmuneTextSaid = true;
+                end
+            end
+        end
+    end
 end
 
 function SuperImmune(_player, _playerdata)
@@ -2332,37 +2336,39 @@ function SuperImmune(_player, _playerdata)
     local bodydamage = player:getBodyDamage();
     if player:HasTrait("superimmune") then
         if bodydamage:isInfected() == true then
-			bodydamage:setInfected(false);
-			bodydamage:setInfectionMortalityDuration(-1);
-			bodydamage:setInfectionTime(-1);
-			bodydamage:setInfectionLevel(0);
-			local TimeOfRecovery = ZombRand(10, 31); 
-			if player:HasTrait("FastHealer") then
-				TimeOfRecovery = TimeOfRecovery - 5;
-			end
-			if player:HasTrait("SlowHealer") then
-				TimeOfRecovery = TimeOfRecovery + 5;
-			end
-			if player:HasTrait("Lucky") then
-				TimeOfRecovery = TimeOfRecovery - 2 * luckimpact;
-			end
-			if player:HasTrait("Unlucky") then
-				TimeOfRecovery = TimeOfRecovery + 2 * luckimpact;
-			end
-			if TimeOfRecovery < 10 then --Prevent time of healing to be too short or too high 
-				TimeOfRecovery = 10; 
-			end
-			if TimeOfRecovery > 30 then 
-				TimeOfRecovery = 30; 
-			end
-			if playerdata.SuperImmuneHealedOnce == true then --Halve the time needed once it beat the virus once, since immune system
-				TimeOfRecovery = TimeOfRecovery/2; --will know how to beat it.
-			end
-			if playerdata.SuperImmuneActive == false then
-				playerdata.SuperImmuneActive = true;
-			end
-			playerdata.SuperImmuneRecovery = playerdata.SuperImmuneRecovery + TimeOfRecovery;
-		end
+            bodydamage:setInfected(false);
+            bodydamage:setInfectionMortalityDuration(-1);
+            bodydamage:setInfectionTime(-1);
+            bodydamage:setInfectionLevel(0);
+            local TimeOfRecovery = ZombRand(10, 31);
+            if player:HasTrait("FastHealer") then
+                TimeOfRecovery = TimeOfRecovery - 5;
+            end
+            if player:HasTrait("SlowHealer") then
+                TimeOfRecovery = TimeOfRecovery + 5;
+            end
+            if player:HasTrait("Lucky") then
+                TimeOfRecovery = TimeOfRecovery - 2 * luckimpact;
+            end
+            if player:HasTrait("Unlucky") then
+                TimeOfRecovery = TimeOfRecovery + 2 * luckimpact;
+            end
+            if TimeOfRecovery < 10 then
+                --Prevent time of healing to be too short or too high
+                TimeOfRecovery = 10;
+            end
+            if TimeOfRecovery > 30 then
+                TimeOfRecovery = 30;
+            end
+            if playerdata.SuperImmuneHealedOnce == true then
+                --Halve the time needed once it beat the virus once, since immune system
+                TimeOfRecovery = TimeOfRecovery / 2; --will know how to beat it.
+            end
+            if playerdata.SuperImmuneActive == false then
+                playerdata.SuperImmuneActive = true;
+            end
+            playerdata.SuperImmuneRecovery = playerdata.SuperImmuneRecovery + TimeOfRecovery;
+        end
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
             if b:HasInjury() then
@@ -2376,47 +2382,47 @@ function SuperImmune(_player, _playerdata)
 end
 
 local function SuperImmuneFakeInfectionHealthLoss(player)
-	local playerdata = player:getModData();
-	local MaxHealth = 10;
-	local Health = player:getBodyDamage():getOverallBodyHealth();
-	local Stress = player:getStats():getStress();
-	local Illness = player:getBodyDamage():getFakeInfectionLevel();
-	local stop = false;
-	if player:HasTrait("superimmune") then
-		if playerdata.SuperImmuneActive then
-			if player:HasTrait("indefatigable") then
-				MaxHealth = 22;
-			end
-			if Health >= 100-Illness and Health > MaxHealth then
-				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-					local b = player:getBodyDamage():getBodyParts():get(i);
-					if Health >= (100-Illness)*1.5 then
-						b:AddDamage(0.2); --Simulate Max Health Loss
-						stop = true;
-					end
-					if stop == false then
-						if Illness < 25 then
-							b:AddDamage(0.002);
-						end
-						if Illness > 25 and Illness < 50 then
-							b:AddDamage(0.005);
-						end
-						if Illness >= 50 then
-							b:AddDamage(0.01);
-						end
-						if Illness >= 50 and Health > 60 then
-							b:AddDamage(0.1); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
-						end
-					end
-				end                     
-			end
-			if Illness>10 then
-				if internalTick >= 25 and Stress <= Illness * 3 then
-					player:getStats():setStress(Stress+0.001);
-				end
-			end
-		end
-	end
+    local playerdata = player:getModData();
+    local MaxHealth = 10;
+    local Health = player:getBodyDamage():getOverallBodyHealth();
+    local Stress = player:getStats():getStress();
+    local Illness = player:getBodyDamage():getFakeInfectionLevel();
+    local stop = false;
+    if player:HasTrait("superimmune") then
+        if playerdata.SuperImmuneActive then
+            if player:HasTrait("indefatigable") then
+                MaxHealth = 22;
+            end
+            if Health >= 100 - Illness and Health > MaxHealth then
+                for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+                    local b = player:getBodyDamage():getBodyParts():get(i);
+                    if Health >= (100 - Illness) * 1.5 then
+                        b:AddDamage(0.2); --Simulate Max Health Loss
+                        stop = true;
+                    end
+                    if stop == false then
+                        if Illness < 25 then
+                            b:AddDamage(0.002);
+                        end
+                        if Illness > 25 and Illness < 50 then
+                            b:AddDamage(0.005);
+                        end
+                        if Illness >= 50 then
+                            b:AddDamage(0.01);
+                        end
+                        if Illness >= 50 and Health > 60 then
+                            b:AddDamage(0.1); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
+                        end
+                    end
+                end
+            end
+            if Illness > 10 then
+                if internalTick >= 25 and Stress <= Illness * 3 then
+                    player:getStats():setStress(Stress + 0.001);
+                end
+            end
+        end
+    end
 end
 
 function Immunocompromised(_player, _playerdata)
@@ -3310,12 +3316,12 @@ function clothingUpdate(_player)
 end
 
 local function FixSpecialization(player, perk)
-	if player:HasTrait("specaid") or player:HasTrait("speccrafting") or player:HasTrait("specfood") or player:HasTrait("specguns") or player:HasTrait("specmove") or player:HasTrait("specweapons") then
-		if player:getXp():getXP(perk) < 0 then
-			local xp = player:getXp():getXP(perk);
-			player:getXp():AddXPNoMultiplier(perk, 0-xp); --Xp will be negative, so subtracting 0 by xp will return a positive number
-		end
-	end
+    if player:HasTrait("specaid") or player:HasTrait("speccrafting") or player:HasTrait("specfood") or player:HasTrait("specguns") or player:HasTrait("specmove") or player:HasTrait("specweapons") then
+        if player:getXp():getXP(perk) < 0 then
+            local xp = player:getXp():getXP(perk);
+            player:getXp():AddXPNoMultiplier(perk, 0 - xp); --Xp will be negative, so subtracting 0 by xp will return a positive number
+        end
+    end
 end
 
 local function CheckInjuredHeal()
@@ -3330,246 +3336,248 @@ local function CheckInjuredHeal()
 end
 
 local function NoodleLegs(_player)
-	if _player:HasTrait("noodlelegs") then
-	local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
-	local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
-	local N_Chance = 100;
-	local ChanceToTrip = 500001;
-	N_Chance = N_Chance - (((NimbleLvl*4)+(SprintingLvl*4))/2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
-	if _player:HasTrait("Graceful") then
-		N_Chance = N_Chance - 20;
-		end	
-	if _player:HasTrait("Clumsy") then
-		N_Chance = N_Chance + 20;
-		end
-	if _player:HasTrait("Lucky") then
-		N_Chance = N_Chance - 5 * luckimpact;
-		end
-	if _player:HasTrait("Unlucky") then
-		N_Chance = N_Chance + 5 * luckimpact;
-		end
-	if N_Chance <= 0 then
-		N_Chance = 1;
-		end
-	if _player:IsRunning() == true then
-		local Roll = ZombRand(0, ChanceToTrip);
-			if Roll <= N_Chance then
-		local type = nil;
-		local random = ZombRand(2);
-
-        if random == 0 then
-            type = "left"
-        else
-            type = "right"
+    if _player:HasTrait("noodlelegs") then
+        local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
+        local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
+        local N_Chance = 100;
+        local ChanceToTrip = 500001;
+        N_Chance = N_Chance - (((NimbleLvl * 4) + (SprintingLvl * 4)) / 2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
+        if _player:HasTrait("Graceful") then
+            N_Chance = N_Chance - 20;
         end
-			_player:setBumpFallType("FallForward");
-			_player:setBumpType(type);
-			_player:setBumpDone(false);
-			_player:setBumpFall(true);
-			_player:reportEvent("wasBumped");
-			end
-		end
-	if _player:isSprinting() == true then
-		N_Chance = N_Chance * 2;
-		local Roll = ZombRand(0, ChanceToTrip);
-			if Roll <= N_Chance then
-		local type = nil;
-		local random = ZombRand(2);
-
-        if random == 0 then
-            type = "left"
-        else
-            type = "right"
+        if _player:HasTrait("Clumsy") then
+            N_Chance = N_Chance + 20;
         end
-			_player:setBumpFallType("FallForward");
-			_player:setBumpType(type);
-			_player:setBumpDone(false);
-			_player:setBumpFall(true);
-			_player:reportEvent("wasBumped");
-			end
-		end	
-	end 
+        if _player:HasTrait("Lucky") then
+            N_Chance = N_Chance - 5 * luckimpact;
+        end
+        if _player:HasTrait("Unlucky") then
+            N_Chance = N_Chance + 5 * luckimpact;
+        end
+        if N_Chance <= 0 then
+            N_Chance = 1;
+        end
+        if _player:IsRunning() == true then
+            local Roll = ZombRand(0, ChanceToTrip);
+            if Roll <= N_Chance then
+                local type = nil;
+                local random = ZombRand(2);
+
+                if random == 0 then
+                    type = "left"
+                else
+                    type = "right"
+                end
+                _player:setBumpFallType("FallForward");
+                _player:setBumpType(type);
+                _player:setBumpDone(false);
+                _player:setBumpFall(true);
+                _player:reportEvent("wasBumped");
+            end
+        end
+        if _player:isSprinting() == true then
+            N_Chance = N_Chance * 2;
+            local Roll = ZombRand(0, ChanceToTrip);
+            if Roll <= N_Chance then
+                local type = nil;
+                local random = ZombRand(2);
+
+                if random == 0 then
+                    type = "left"
+                else
+                    type = "right"
+                end
+                _player:setBumpFallType("FallForward");
+                _player:setBumpType(type);
+                _player:setBumpDone(false);
+                _player:setBumpFall(true);
+                _player:reportEvent("wasBumped");
+            end
+        end
+    end
 end
 
 local function SecondWind(player)
-	local zombiesnearplayer = 0;
-	local playerdata = player:getModData();
-	local enemies = player:getSpottedList();
-	local playerstats = player:getStats();
-	if player:HasTrait("secondwind") then
-		if playerstats:getEndurance() < 0.5 or playerstats:getFatigue() > 0.8 then
-			if playerdata.secondwinddisabled == false then
-			if enemies:size() > 2 then
+    local zombiesnearplayer = 0;
+    local playerdata = player:getModData();
+    local enemies = player:getSpottedList();
+    local playerstats = player:getStats();
+    if player:HasTrait("secondwind") then
+        if playerstats:getEndurance() < 0.5 or playerstats:getFatigue() > 0.8 then
+            if playerdata.secondwinddisabled == false then
+                if enemies:size() > 2 then
                     for i = 0, enemies:size() - 1 do
                         if enemies:get(i):isZombie() then
                             if enemies:get(i):DistTo(player) <= 5 then
-				zombiesnearplayer = zombiesnearplayer + 1;
+                                zombiesnearplayer = zombiesnearplayer + 1;
                             end
                         end
                     end
-	if zombiesnearplayer > 2 then
-		playerstats:setEndurance(1);
-		if playerstats:getFatigue() > 0.6 then
-			playerdata.secondwindrecoveredfatigue = true;
-		end
-		if playerstats:getFatigue() > 0.4 then
-			playerstats:setFatigue(0.4);
-		end
-		playerdata.secondwindcooldown = 0;
-		secondwinddisabled = true;
-		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
-		end
+                    if zombiesnearplayer > 2 then
+                        playerstats:setEndurance(1);
+                        if playerstats:getFatigue() > 0.6 then
+                            playerdata.secondwindrecoveredfatigue = true;
+                        end
+                        if playerstats:getFatigue() > 0.4 then
+                            playerstats:setFatigue(0.4);
+                        end
+                        playerdata.secondwindcooldown = 0;
+                        secondwinddisabled = true;
+                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
+                    end
+                end
             end
-	 end	
-      end
-   end
+        end
+    end
 end
 
 local function SecondWindRecharge()
-	local player = getPlayer();
+    local player = getPlayer();
     local playerdata = player:getModData();
     local recharge = 14 * 12;
-	if player:HasTrait("secondwind") then
-	if SandboxVars.MoreTraits.SecondWindCooldown then
-        recharge = SandboxVars.MoreTraits.SecondWindCooldown * 12;
-		end
-	if playerdata.secondwindrecoveredfatigue == true then
-	recharge = recharge * 2;
-	end
-		if playerdata.secondwinddisabled == true then
+    if player:HasTrait("secondwind") then
+        if SandboxVars.MoreTraits.SecondWindCooldown then
+            recharge = SandboxVars.MoreTraits.SecondWindCooldown * 12;
+        end
+        if playerdata.secondwindrecoveredfatigue == true then
+            recharge = recharge * 2;
+        end
+        if playerdata.secondwinddisabled == true then
             if playerdata.secondwindcooldown >= recharge then
                 playerdata.secondwindcooldown = 0;
                 playerdata.secondwinddisabled = false;
-		playerdata.secondwindrecoveredfatigue = false;
+                playerdata.secondwindrecoveredfatigue = false;
                 player:Say(getText("UI_trait_secondwindcooldown"));
             else
                 playerdata.secondwindcooldown = playerdata.secondwindcooldown + 1;
-	    end
+            end
         end
     end
 end
 
 local function MotionSickness(player)
-	local playerdata = player:getModData();
-	local playerstats = player:getBodyDamage();
-	local Sickness = playerstats:getFakeInfectionLevel();
-	if playerdata.MotionActive == nil then
-		playerdata.MotionActive = false;
-	end
-	if player:HasTrait("motionsickness") then
-	if player:isDriving() == true and Sickness < 98 then
-		local vehicle = player:getVehicle();
-		if not vehicle then return end
-		if playerdata.MotionActive == false then
-			playerdata.MotionActive = true;
-		end
-		if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 and Sickness < 26 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.01);
-		end
-		if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 and Sickness < 51 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.05);
-		end
-		if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 and Sickness < 51 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.1);
-		end
-		if vehicle:getCurrentSpeedKmHour() >= 45 and vehicle:getCurrentSpeedKmHour() < 60 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.2);
-		end
-		if vehicle:getCurrentSpeedKmHour() >= 60 and vehicle:getCurrentSpeedKmHour() < 90 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.5);
-		end
-		if vehicle:getCurrentSpeedKmHour() >= 90 then
-		playerstats:setFakeInfectionLevel(Sickness + 1);
-		end
-		
-		--This section is for reversed driving, because positive values are when you drive forward, and negative when you drive back--
-		
-		if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 and Sickness < 26 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.01);
-		end
-		if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 and Sickness < 51 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.05);
-		end
-		if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 and Sickness < 51 then
-		playerstats:setFakeInfectionLevel(sickness + 0.1);
-		end
-		if vehicle:getCurrentSpeedKmHour() <= -45 and vehicle:getCurrentSpeedKmHour() > -60 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.2);
-		end
-		if vehicle:getCurrentSpeedKmHour() <= -60 and vehicle:getCurrentSpeedKmHour() > -90 then
-		playerstats:setFakeInfectionLevel(Sickness + 0.5);
-		end
-		if vehicle:getCurrentSpeedKmHour() <= -90 then
-		playerstats:setFakeInfectionLevel(Sickness + 1);
-		end
-	end
-	if not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then
-		if playerdata.MotionActive == true then
-			playerdata.MotionActive = false;
-		end
-		playerstats:setFakeInfectionLevel(Sickness - 0.1);
-	end
-	end
+    local playerdata = player:getModData();
+    local playerstats = player:getBodyDamage();
+    local Sickness = playerstats:getFakeInfectionLevel();
+    if playerdata.MotionActive == nil then
+        playerdata.MotionActive = false;
+    end
+    if player:HasTrait("motionsickness") then
+        if player:isDriving() == true and Sickness < 98 then
+            local vehicle = player:getVehicle();
+            if not vehicle then
+                return
+            end
+            if playerdata.MotionActive == false then
+                playerdata.MotionActive = true;
+            end
+            if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 and Sickness < 26 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.01);
+            end
+            if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 and Sickness < 51 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.05);
+            end
+            if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 and Sickness < 51 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.1);
+            end
+            if vehicle:getCurrentSpeedKmHour() >= 45 and vehicle:getCurrentSpeedKmHour() < 60 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.2);
+            end
+            if vehicle:getCurrentSpeedKmHour() >= 60 and vehicle:getCurrentSpeedKmHour() < 90 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.5);
+            end
+            if vehicle:getCurrentSpeedKmHour() >= 90 then
+                playerstats:setFakeInfectionLevel(Sickness + 1);
+            end
+
+            --This section is for reversed driving, because positive values are when you drive forward, and negative when you drive back--
+
+            if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 and Sickness < 26 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.01);
+            end
+            if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 and Sickness < 51 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.05);
+            end
+            if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 and Sickness < 51 then
+                playerstats:setFakeInfectionLevel(sickness + 0.1);
+            end
+            if vehicle:getCurrentSpeedKmHour() <= -45 and vehicle:getCurrentSpeedKmHour() > -60 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.2);
+            end
+            if vehicle:getCurrentSpeedKmHour() <= -60 and vehicle:getCurrentSpeedKmHour() > -90 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.5);
+            end
+            if vehicle:getCurrentSpeedKmHour() <= -90 then
+                playerstats:setFakeInfectionLevel(Sickness + 1);
+            end
+        end
+        if not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then
+            if playerdata.MotionActive == true then
+                playerdata.MotionActive = false;
+            end
+            playerstats:setFakeInfectionLevel(Sickness - 0.1);
+        end
+    end
 end
 
 local function MotionSicknessHealthLoss(player)
-	local playerdata = player:getModData();
-	local MaxHealth = 10;
-	local Health = player:getBodyDamage():getOverallBodyHealth();
-	local Sickness = player:getBodyDamage():getFakeInfectionLevel();
-	if playerdata.MotionActive == nil then
-		playerdata.MotionActive = false;
-	end
-	if player:HasTrait("Indefatigable") then
-		MaxHealth = 16;
-	end
-	if player:HasTrait("MotionSickness") and playerdata.MotionActive == true then
-		if Health >= 100-Sickness and Health > MaxHealth then
-			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-				local b = player:getBodyDamage():getBodyParts():get(i);
-				if Sickness > 10 and Sickness < 25 then
-					b:AddDamage(0.001);
-				elseif Sickness >= 25 and Sickness < 50 then
-					b:AddDamage(0.002);
-				elseif Sickness <= 50 then
-					b:AddDamage(0.005);
-				end
-			end
-		end
-	end
+    local playerdata = player:getModData();
+    local MaxHealth = 10;
+    local Health = player:getBodyDamage():getOverallBodyHealth();
+    local Sickness = player:getBodyDamage():getFakeInfectionLevel();
+    if playerdata.MotionActive == nil then
+        playerdata.MotionActive = false;
+    end
+    if player:HasTrait("Indefatigable") then
+        MaxHealth = 16;
+    end
+    if player:HasTrait("MotionSickness") and playerdata.MotionActive == true then
+        if Health >= 100 - Sickness and Health > MaxHealth then
+            for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+                local b = player:getBodyDamage():getBodyParts():get(i);
+                if Sickness > 10 and Sickness < 25 then
+                    b:AddDamage(0.001);
+                elseif Sickness >= 25 and Sickness < 50 then
+                    b:AddDamage(0.002);
+                elseif Sickness <= 50 then
+                    b:AddDamage(0.005);
+                end
+            end
+        end
+    end
 end
 
 local function RestfulSleeper()
-	local player = getPlayer();
-	local Multiplier = 1;
-	local Fatigue = player:getStats():getFatigue();
-	if player:HasTrait("restfulsleeper") and player:isAsleep() then
-		if player:HasTrait("NeedsLessSleep") then
-			Multiplier = 0.5;
-		elseif player:HasTrait("NeedsMoreSleep") then
-			Multiplier = 1.25;
-		end
-		if Fatigue >= 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.1*Multiplier));
-		end
-		if Fatigue >= 0.2 and Fatigue < 0.6 then
-			player:getStats():setFatigue(Fatigue-(0.05*Multiplier));
-		end
-	end
+    local player = getPlayer();
+    local Multiplier = 1;
+    local Fatigue = player:getStats():getFatigue();
+    if player:HasTrait("restfulsleeper") and player:isAsleep() then
+        if player:HasTrait("NeedsLessSleep") then
+            Multiplier = 0.5;
+        elseif player:HasTrait("NeedsMoreSleep") then
+            Multiplier = 1.25;
+        end
+        if Fatigue >= 0.6 then
+            player:getStats():setFatigue(Fatigue - (0.1 * Multiplier));
+        end
+        if Fatigue >= 0.2 and Fatigue < 0.6 then
+            player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
+        end
+    end
 end
 
 local function HungerCheck(player)
-	if player:HasTrait("SuperImmune") then
-		local stats = player:getStats();
-		local hunger = stats:getHunger();
-		local SuperImmuneMinutesWellFed = player:getModData().SuperImmuneMinutesWellFed;
-		if player:getModData().SuperImmuneMinutesWellFed == nil then
-			player:getModData().SuperImmuneMinutesWellFed = 0;
-		end
-		if hunger == 0 and player:getModData().SuperImmuneActive == true then
-			player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
-		end
-	end
+    if player:HasTrait("SuperImmune") then
+        local stats = player:getStats();
+        local hunger = stats:getHunger();
+        local SuperImmuneMinutesWellFed = player:getModData().SuperImmuneMinutesWellFed;
+        if player:getModData().SuperImmuneMinutesWellFed == nil then
+            player:getModData().SuperImmuneMinutesWellFed = 0;
+        end
+        if hunger == 0 and player:getModData().SuperImmuneActive == true then
+            player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
+        end
+    end
 end
 
 function MainPlayerUpdate(_player)
@@ -3593,7 +3601,7 @@ function MainPlayerUpdate(_player)
         Immunocompromised(player, playerdata);
     end
     MotionSickness(player);
-	MotionSicknessHealthLoss(player);
+    MotionSicknessHealthLoss(player);
     SecondWind(player);
     indefatigable(player, playerdata);
     anemic(player);
@@ -3624,7 +3632,7 @@ function EveryOneMinute()
     UnHighlightScrounger(player, playerdata);
     LeadFoot(player);
     GymGoerUpdate(player);
-	HungerCheck(player);
+    HungerCheck(player);
 end
 function OnLoad()
     --reset any worn clothing to default state.
