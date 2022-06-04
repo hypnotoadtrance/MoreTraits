@@ -111,7 +111,7 @@ local function addXPNoMultiplier(_player, _perk, _amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
-function initToadTraitsItems(_playerindex, _player)
+function initToadTraitsItems(_player)
     local player = _player;
     local inv = player:getInventory();
     if player:HasTrait("preparedfood") then
@@ -332,7 +332,7 @@ function initToadTraitsItems(_playerindex, _player)
     end
 end
 
-function initToadTraitsPerks(_playerindex, _player)
+function initToadTraitsPerks(_player)
     local player = _player;
     local playerdata = player:getModData();
     local damage = 20;
@@ -3677,8 +3677,8 @@ Events.EveryTenMinutes.Add(checkWeight);
 Events.EveryHours.Add(RestfulSleeper);
 Events.EveryHours.Add(ToadTraitDepressive);
 Events.EveryHours.Add(SuperImmuneRecoveryProcess);
-Events.OnCreatePlayer.Add(initToadTraitsPerks);
-Events.OnCreatePlayer.Add(initToadTraitsItems);
+Events.OnNewGame.Add(initToadTraitsPerks);
+Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnLoad.Add(OnLoad);
 Events.LevelPerk.Add(FixSpecialization);
