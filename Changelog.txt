@@ -5,3 +5,4 @@ Motion Sickness and Super Immune traits are now exclusive with each other, as th
 Motion Sickness now damages you while driving, relative to sickness level.
 Noodle legs is now much rarer than previously, removed sandbox setting.
 Fix bug that prevent proper initialization of traits when creating a new player on the same save.
+Convert all Translation files to UTF-8 format for compatibility.

@@ -1,4 +1,4 @@
-UI_TR = {
+﻿UI_TR = {
     UI_trait_gunspecialist = "Silah Uzmanı",
     UI_trait_gunspecialistdesc = "Oyuna Silahlar hakkında bilgiyle başlarsın<br>+2 Nişan Alma<br>+2 Doldurma",
     UI_trait_preparedfood = "Hazırlıklı: Yemek",

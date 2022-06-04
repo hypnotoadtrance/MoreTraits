@@ -1,4 +1,4 @@
-UI_EN = {
+﻿UI_EN = {
     UI_trait_gunspecialist = "Gun Specialist",
     UI_trait_gunspecialistdesc = "Begin the game with advanced knowledge of guns.<br>+2 Aiming<br>+2 Reloading",
     UI_trait_preparedfood = "Prepared: Food",

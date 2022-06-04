@@ -1,4 +1,4 @@
-UI_PTBR = {
+﻿UI_PTBR = {
     UI_trait_gunspecialist = "Especialista em Armas",
     UI_trait_gunspecialistdesc = "Comece o jogo com conhecimento avançado de armas.<br>+2 Pontaria<br>+2 Recarga",
     UI_trait_preparedfood = "Preparado: Comida",

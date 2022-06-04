@@ -1,4 +1,4 @@
-Tooltip_CN = {
+﻿Tooltip_CN = {
     Tooltip_MoreTraits_AntiqueAxe = "一个稀有、加固的石斧，<br>非常强力且耐久，但是无法修复。",
     Tooltip_MoreTraits_Thumper = "一个稀有的石锤，<br>可以一挥击倒一大片人。<br>十分强力，但是也很沉！",
     Tooltip_MoreTraits_ObsidianBlade = "一个稀有的古代祭祀匕首，<br>十分强力，但是易碎。",

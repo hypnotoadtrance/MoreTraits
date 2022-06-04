@@ -1,4 +1,4 @@
-Sandbox_CN = {
+﻿Sandbox_CN = {
     Sandbox_MoreTraits = "More Traits",
     Sandbox_MoreTraits_PreparedMedicalBandageAmount = "绷带数量",
     Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "充分准备：药物特质开局提供的绷带数量。",

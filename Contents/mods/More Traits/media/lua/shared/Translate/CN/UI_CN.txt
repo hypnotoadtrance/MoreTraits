@@ -1,4 +1,4 @@
-UI_CN = {
+﻿UI_CN = {
     UI_trait_gunspecialist = "枪械专家",
     UI_trait_gunspecialistdesc = "游戏开始时拥有关于枪械的深入了解。<br>+2瞄准<br>+2装弹",
     UI_trait_preparedfood = "充分准备：食物",

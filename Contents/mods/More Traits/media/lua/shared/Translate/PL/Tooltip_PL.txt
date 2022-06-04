@@ -1,4 +1,4 @@
-Tooltip_PL = {
+﻿Tooltip_PL = {
     Tooltip_MoreTraits_AntiqueAxe = "Rzadka, utwardzona kamienna siekiera.<br>Bardzo silna i wytrzymała, lecz nie można jej naprawić.",
     Tooltip_MoreTraits_Thumper = "Rzadka kamienna pałka.<br>Potrafi powalić całe tłumy za jednym zamachem.<br>Niezwykle potężna, ale i niezwykle ciężka!",
     Tooltip_MoreTraits_ObsidianBlade = "Rzadki antyczny sztylet ofiarny.<br>Bardzo mocny, ale kruchy.",

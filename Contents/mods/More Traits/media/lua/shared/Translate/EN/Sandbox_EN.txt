@@ -1,4 +1,4 @@
-Sandbox_EN = {
+﻿Sandbox_EN = {
 	Sandbox_MoreTraits = "More Traits",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Bandage amount",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "The amount of bandages given by the Prepare Medical trait.",

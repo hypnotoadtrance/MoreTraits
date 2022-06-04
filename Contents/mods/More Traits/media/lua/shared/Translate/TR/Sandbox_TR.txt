@@ -1,4 +1,4 @@
-Sandbox_TR = {
+﻿Sandbox_TR = {
 	Sandbox_MoreTraits = "Daha fazla Özellik ",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Bandaj Miktarı",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "Tıbbi Hazırlıktan gelen andaj sayısı.",

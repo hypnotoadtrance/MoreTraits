@@ -1,4 +1,4 @@
-Tooltip_TR = {
+﻿Tooltip_TR = {
     Tooltip_MoreTraits_AntiqueAxe = "Nadir Sertleştirilmiş Taş Balta.<br>Çok güçlü ve dayanıklı olsa da ne yazık ki tamir edilebilir değil.",
     Tooltip_MoreTraits_Thumper = "Nadir taştan Balyoz.<br>Tüm kalabalığı tek vuruşta devirebilir.<br>İnanılmaz derecede güçlü ama aynı zamanda son derece ağır!",
     Tooltip_MoreTraits_ObsidianBlade = "Nadir bir antika kurban hançeri.<br>Çok güçlü ama kırılgan.",
