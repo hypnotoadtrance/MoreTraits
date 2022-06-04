@@ -4,3 +4,4 @@ Super Immune takes being well fed into account, and now speeds up recovery phase
 Motion Sickness and Super Immune traits are now exclusive with each other, as they both use the same value.
 Motion Sickness now damages you while driving, relative to sickness level.
 Noodle legs is now much rarer than previously, removed sandbox setting.
+Fix bug that prevent proper initialization of traits when creating a new player on the same save.
