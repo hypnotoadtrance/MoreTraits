@@ -1,4 +1,4 @@
-﻿Tooltip_EN = {
+Tooltip_EN = {
     Tooltip_MoreTraits_AntiqueAxe = "A rare, hardened stone axe.<br>Very strong and durable, but unrepairable.",
     Tooltip_MoreTraits_Thumper = "A rare stone maul.<br>Capable of knocking down entire crowds in one swing.<br>Incredibly powerful, but also extremely heavy!",
     Tooltip_MoreTraits_ObsidianBlade = "A rare antique sacrificial dagger.<br>Very powerful, but brittle.",

@@ -1,4 +1,4 @@
-﻿Sandbox_PL = {
+Sandbox_PL = {
 	Sandbox_MoreTraits = "Więcej Cech",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Ilość Bandaży",
 	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "Ilość bandaży którą otrzyma gracz z cechą Przygotowany: Medycyna.",

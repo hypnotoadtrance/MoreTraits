@@ -1,4 +1,4 @@
-﻿UI_PL = {
+UI_PL = {
     UI_trait_gunspecialist = "Znawca Broni",
     UI_trait_gunspecialistdesc = "Rozpocznij grę z zaawansowaną znajomością broni.<br>+2 Celowanie<br>+2 Przeładowanie",
     UI_trait_preparedfood = "Przygotowany: Żywność",
