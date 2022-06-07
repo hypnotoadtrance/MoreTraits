@@ -1,2 +1,3 @@
 Changelog Notes:
-Emergency hotfix for OnCreatePlayer activating every time game loads, not just on character creation.
+Revert Translation files
+Make exception for individual nails when using Scrounger.

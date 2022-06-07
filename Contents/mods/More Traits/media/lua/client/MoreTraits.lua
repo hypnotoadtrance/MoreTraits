@@ -801,8 +801,8 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                         local count = container:getNumberOfItem(item:getFullType());
                                         local n = 1;
                                         local rolled = false;
-                                        --Add a Special Case for Cigarettes since they inherently create 20 when added.
-                                        if item:getFullType() == "Base.Cigarettes" then
+                                        --Add a Special Case for Cigarettes and Nails since they inherently create 20 when added.
+                                        if item:getFullType() == "Base.Cigarettes" or item:getFullType() == "Base.Nails" then
                                             count = math.floor(count / 20);
                                         end
                                         local bchance = 10;
