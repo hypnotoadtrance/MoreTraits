@@ -618,7 +618,7 @@ function ToadTraitEvasive(_player, _playerdata)
                         end
                         if i:scratched() == true and b[2] == false then
                             print("Scratch Detected On: " .. tostring(i:getType()));
-                            if ZombRand(100) <= basechance and nearbyzombies == true then
+                            if ZombRand(1, 101) <= basechance and nearbyzombies == true then
                                 i:RestoreToFullHealth();
                                 i:setScratched(false, false);
                                 i:SetInfected(false);
@@ -633,7 +633,7 @@ function ToadTraitEvasive(_player, _playerdata)
                             end
                         elseif i:bitten() == true and b[3] == false then
                             print("Bite Detected On: " .. tostring(i:getType()));
-                            if ZombRand(100) <= basechance and nearbyzombies == true then
+                            if ZombRand(1, 101) <= basechance and nearbyzombies == true then
                                 i:RestoreToFullHealth();
                                 i:SetBitten(false, false);
                                 i:SetInfected(false);
@@ -648,7 +648,7 @@ function ToadTraitEvasive(_player, _playerdata)
                             end
                         elseif i:isCut() == true and b[4] == false then
                             print("Laceration Detected On: " .. tostring(i:getType()));
-                            if ZombRand(100) <= basechance and nearbyzombies == true then
+                            if ZombRand(1, 101) <= basechance and nearbyzombies == true then
                                 i:RestoreToFullHealth();
                                 i:setCut(false, false);
                                 i:SetInfected(false);
