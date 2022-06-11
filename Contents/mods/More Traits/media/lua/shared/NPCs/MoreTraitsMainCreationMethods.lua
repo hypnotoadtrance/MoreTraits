@@ -351,6 +351,13 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("burned", "injured");
 	TraitFactory.setMutualExclusive("restfulsleeper", "Insomniac");
 	TraitFactory.setMutualExclusive("motionsickness", "superimmune");
+	TraitFactory.setMutualExclusive("hardy", "Asthmatic");
+	TraitFactory.setMutualExclusive("hardy", "Unfit");
+	TraitFactory.setMutualExclusive("hardy", "Out of Shape");
+	TraitFactory.setMutualExclusive("hardy", "Very Underweight");
+	TraitFactory.setMutualExclusive("hardy", "Underweight");
+	TraitFactory.setMutualExclusive("hardy", "Overweight");
+	TraitFactory.setMutualExclusive("hardy", "Obese");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();
