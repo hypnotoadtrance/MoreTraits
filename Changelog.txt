@@ -1,2 +1,3 @@
 Changelog Notes:
-Re-worked Hardy. Instead of faster endurance regen, it now gives you extra endurance to use before you get tired.
+Re-worked Hardy. Instead of faster endurance regen, it now gives you extra endurance to use before you get tired, the higher your fitness level, the more endurance.
+Hardy is no longer exclusive with negative fitness traits.
