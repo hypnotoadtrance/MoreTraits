@@ -55,11 +55,6 @@ option MoreTraits.BouncerCooldown
 	type = integer, min = 1, max = 240, default = 60,
 	page = MoreTraits, translation = MoreTraits_BouncerCooldown,
 }
-option MoreTraits.HardyRegeneration
-{
-	type = integer, min = 1, max = 1000, default = 100,
-	page = MoreTraits, translation = MoreTraits_HardyRegeneration,
-}
 option MoreTraits.GymGoerPercent
 {
 	type = integer, min = 100, max = 1000, default = 200,
