@@ -1465,7 +1465,7 @@ function hardytrait(_player, _playerdata)
     local stats = player:getStats();
     if player:HasTrait("hardy") then
 		local modendurance = playerdata.iHardyEndurance;
-        	local endurance = stats:getEndurance();
+      		local endurance = stats:getEndurance();
 		local interval = playerdata.iHardyInterval;
 		local maxendurance = playerdata.iHardyMaxEndurance;
 		if playerdata.modendurance == nil then
@@ -1491,6 +1491,22 @@ function hardytrait(_player, _playerdata)
 				playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
 				playerdata.iHardyInterval = 1000;
 			else
+				if player:isSitOnGround() == true then
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 1;
+					else
+						playerdata.iHardyInterval = interval - 2;
+					end
+				else
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 0.25;
+					else
+						playerdata.iHardyInterval = interval - 0.5;
+					end
+				end
+			end
+		else
+			if interval > 0 and endurance == 1 then
 				if player:isSitOnGround() == true then
 					if player:HasTrait("Asthmatic") then
 						playerdata.iHardyInterval = interval - 1;
