@@ -1,3 +1,5 @@
 Changelog Notes:
 Revert Translation files
 Make exception for individual nails when using Scrounger.
+Fix Evasive ZombRand
+Hardy now mutually-exclusive with negative fitness traits.
