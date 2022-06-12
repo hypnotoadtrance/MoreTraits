@@ -16,8 +16,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_BouncerEffectiveness_tooltip = "The percent chance that a player who has the Bouncer trait will trigger its effect.<br>This is rolled every tick, so 60 times/second for as long as the player has at least two or more zombies near them.<br>Increasing this value by even a small amount can dramatically overpower Bouncer.",
     Sandbox_MoreTraits_BouncerCooldown = "Bouncer Cooldown",
     Sandbox_MoreTraits_BouncerCooldown_tooltip = "How many ticks between Bouncer shoves.<br>60 ticks = 1 second<br>Reducing this value can dramatically overpower Bouncer.",
-    Sandbox_MoreTraits_HardyRegeneration = "Hardy Regeneration Rate",
-    Sandbox_MoreTraits_HardyRegeneration_tooltip = "A percent point value representing how rapidly players regenerate Endurance per tick when they have the Hardy trait.<br>Setting this value too high (>300%) will make players regenerate endurance faster than they can lose it.",
     Sandbox_MoreTraits_WeightPackMule = "Weight: Pack Mule",
     Sandbox_MoreTraits_WeightPackMule_tooltip = "Defines the base inventory carry capacity for those who take the Pack Mule trait.<br>This is the base value before applying bonuses from Strength.",
     Sandbox_MoreTraits_WeightPackMouse = "Weight: Pack Mouse",
