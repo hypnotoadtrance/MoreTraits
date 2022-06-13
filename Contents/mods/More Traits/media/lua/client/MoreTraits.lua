@@ -357,7 +357,9 @@ function initToadTraitsPerks(_player)
     playerdata.iTimesCannibal = 0;
     playerdata.fPreviousHealthFromFoodTimer = 1000;
     playerdata.bWasInfected = false;
-    playerdata.iHardyInterval = 10;
+    playerdata.iHardyEndurance = nil;
+    playerdata.iHardyMaxEndurance = 0;
+    playerdata.iHardyInterval = 1000;
     playerdata.iWithdrawalCooldown = 24;
     playerdata.iParanoiaCooldown = 10;
     playerdata.SuperImmuneRecovery = 0;
@@ -1462,31 +1464,64 @@ function hardytrait(_player, _playerdata)
     local playerdata = _playerdata;
     local stats = player:getStats();
     if player:HasTrait("hardy") then
-        local endurance = stats:getEndurance();
-        local regenerationrate = 0.01;
-        if playerdata.iHardyInterval == nil then
-            playerdata.iHardyInterval = 0;
-        end
-        local interval = playerdata.iHardyInterval;
-        if SandboxVars.MoreTraits.HardyRegeneration then
-            regenerationrate = regenerationrate * (SandboxVars.MoreTraits.HardyRegeneration * 0.01);
-        end
-        if interval <= 0 then
-            stats:setEndurance(endurance + regenerationrate);
-            playerdata.iHardyInterval = 1000;
-        else
-            if player:isSprinting() == true then
-                playerdata.iHardyInterval = interval - 2;
-            elseif player:IsRunning() == true then
-                playerdata.iHardyInterval = interval - 5;
-            elseif player:getCurrentState() == FitnessState.instance() then
-                playerdata.iHardyInterval = interval - 10;
-            elseif player:isSitOnGround() == true then
-                playerdata.iHardyInterval = interval - 50;
-            else
-                playerdata.iHardyInterval = interval - 20;
-            end
-        end
+		local modendurance = playerdata.iHardyEndurance;
+      		local endurance = stats:getEndurance();
+		local interval = playerdata.iHardyInterval;
+		local maxendurance = playerdata.iHardyMaxEndurance;
+		if playerdata.iHardyEndurance == nil then
+			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
+		end
+		if playerdata.iHardyInterval == nil then
+			playerdata.iHardyInterval = 1000;
+		end
+		if playerdata.iHardyMaxEndurance == nil then
+			playerdata.iHardyMaxEndurance = 0;
+		end
+		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
+			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
+		end
+		if endurance < 0.9 then
+			if modendurance >= 1 then
+				stats:setEndurance(endurance + 0.05);
+				playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
+			end
+		end
+		if modendurance < maxendurance and endurance == 1 then
+			if interval <= 0 then
+				playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
+				playerdata.iHardyInterval = 1000;
+			else
+				if player:isSitOnGround() == true then
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 1;
+					else
+						playerdata.iHardyInterval = interval - 2;
+					end
+				else
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 0.25;
+					else
+						playerdata.iHardyInterval = interval - 0.5;
+					end
+				end
+			end
+		else
+			if interval > 0 and endurance == 1 then
+				if player:isSitOnGround() == true then
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 1;
+					else
+						playerdata.iHardyInterval = interval - 2;
+					end
+				else
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 0.25;
+					else
+						playerdata.iHardyInterval = interval - 0.5;
+					end
+				end
+			end
+		end
     end
 end
 
