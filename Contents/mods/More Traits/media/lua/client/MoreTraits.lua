@@ -2342,7 +2342,6 @@ local function SuperImmuneRecoveryProcess()
                     else
                         Illness = Illness - 1; --1 to 3.7 days
                     end
-                    playerdata.SuperImmuneHoursPassed = 0;
                     player:getBodyDamage():setFakeInfectionLevel(Illness);
                 else
                     --Once illness fully recovers
