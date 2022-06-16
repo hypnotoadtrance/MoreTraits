@@ -3601,6 +3601,7 @@ local function RestfulSleeper()
 end
 
 local function HungerCheck(player)
+    local player = getPlayer();
     if player:HasTrait("SuperImmune") and player:getModData().SuperImmuneActive == true then
         local stats = player:getStats();
         local hunger = stats:getHunger();
@@ -3612,13 +3613,14 @@ local function HungerCheck(player)
             player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
         end
 		if player:isGodMod() == true then
+			local bodydamage = player:getBodyDamage();
 			playerdata.SuperImmuneTextSaid = false;
 			playerdata.SuperImmuneActive = false;
 			playerdata.SuperImmuneHoursPassed = 0;
 			playerdata.SuperImmuneRecovery = 0;
 			playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 			playerdata.SuperImmuneMinutesWellFed = 0;
-			player:getBodyDamage():setFakeInfectionLevel(0);
+			bodydamage:setFakeInfectionLevel(0);
 		end
     end
 end
