@@ -3602,6 +3602,7 @@ end
 
 local function HungerCheck(player)
     local player = getPlayer();
+	local playerdata = player:getModData();
     if player:HasTrait("SuperImmune") and player:getModData().SuperImmuneActive == true then
         local stats = player:getStats();
         local hunger = stats:getHunger();
