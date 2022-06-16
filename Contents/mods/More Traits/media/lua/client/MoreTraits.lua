@@ -2296,7 +2296,7 @@ local function SuperImmuneRecoveryProcess()
                     playerdata.SuperImmuneTextSaid = false;
                 end
                 if TimeElapsed > 6 then
-                    if (Recovery * HoursPerDay) / 2 <= TimeElapsed then
+                    if (Recovery * HoursPerDay) / 2 >= TimeElapsed then
                         Illness = Illness - (2 - ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
                     else
                         --Once half the required time passes, your immunity system starts gaining victory
