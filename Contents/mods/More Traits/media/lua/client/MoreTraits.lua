@@ -2962,7 +2962,7 @@ function GymGoer(_player, _perk, _amount)
 end
 function GymGoerUpdate(_player)
     local player = _player;
-    if player:HasTrait("gymgoer") then
+    if player:HasTrait("gymgoer") and SandboxVars.MoreTraits.GymGoerNoExerciseFatigue == true then
         local bodydamage = player:getBodyDamage();
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
