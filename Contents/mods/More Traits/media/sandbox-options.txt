@@ -200,3 +200,8 @@ option MoreTraits.SecondWindCooldown
 	type = integer, min = 1, max = 30, default = 14,
 	page = MoreTraits, translation = MoreTraits_SecondWindCooldown,
 }
+option MoreTraits.GymGoerExerciseFatigue
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_GymGoerExerciseFatigue,
+}
