@@ -81,4 +81,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Players who take the alcoholic trait can never die from alcohol poisoning, but will still suffer periodic withdrawal.",
     Sandbox_MoreTraits_SecondWindCooldown = "Second Wind Recharge",
     Sandbox_MoreTraits_SecondWindCooldown_tooltip = "After how much days should Second Wind recharge?",
+	Sandbox_MoreTraits_GymGoerNoExerciseFatigue = "Gym Goer Removes Exercise Fatigue",
+	Sandbox_MoreTraits_GymGoerNoExerciseFatigue_tooltip = "Should Gym Goer eliminate exercise fatigue?<br>If this option is un-checked, players with Gym Goer will suffer from exercise fatigue as normal.",
 }
