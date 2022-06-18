@@ -1,5 +1,2 @@
 Changelog Notes:
-Re-worked Hardy. Instead of faster endurance regen, it now gives you extra endurance to use before you get tired, the higher your fitness level, the more endurance.
-Hardy is no longer exclusive with negative fitness traits.
-Super Immune turns off if player is in god mode
-Fixed Super Immune being infinite.
+Added Sandbox Setting for Gym Goer Removing Exercise Fatigue
