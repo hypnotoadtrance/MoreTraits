@@ -3,8 +3,9 @@ If you perform any kind of work within the project, please add yourself to this 
 in the mod description on Steam Workshop.
 
 Authors:
-Creator:
+Creators:
 HypnoToadTrance
+Fajdek
 
 Additional Coding:
 SteadySpring
@@ -12,7 +13,6 @@ Xenu47
 Aristrofl
 Vaikke
 Domestos
-Fajdek
 
 Translations:
 Simplified Chinese, by EndsM
