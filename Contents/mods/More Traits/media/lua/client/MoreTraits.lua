@@ -357,7 +357,7 @@ function initToadTraitsPerks(_player)
     playerdata.iTimesCannibal = 0;
     playerdata.fPreviousHealthFromFoodTimer = 1000;
     playerdata.bWasInfected = false;
-    playerdata.iHardyEndurance = nil;
+    playerdata.iHardyEndurance = 0;
     playerdata.iHardyMaxEndurance = 0;
     playerdata.iHardyInterval = 1000;
     playerdata.iWithdrawalCooldown = 24;
@@ -370,6 +370,9 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneMinutesWellFed = 0;
     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
     playerdata.MotionActive = false;
+	playerdata.HasSlept = false;
+	playerdata.FatigueWhenSleeping = 0;
+	playerdata.NeckHadPain = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -1460,25 +1463,26 @@ function badteethtrait(_player, _playerdata)
 end
 
 function hardytrait(_player, _playerdata)
-    local player = _player;
-    local playerdata = _playerdata;
+    local player = getPlayer();
+    local playerdata = player:getModData();
     local stats = player:getStats();
     if player:HasTrait("hardy") then
 		local modendurance = playerdata.iHardyEndurance;
-      		local endurance = stats:getEndurance();
+      	local endurance = stats:getEndurance();
 		local interval = playerdata.iHardyInterval;
 		local maxendurance = playerdata.iHardyMaxEndurance;
-		if playerdata.iHardyEndurance == nil then
-			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
-		end
 		if playerdata.iHardyInterval == nil then
 			playerdata.iHardyInterval = 1000;
 		end
 		if playerdata.iHardyMaxEndurance == nil then
 			playerdata.iHardyMaxEndurance = 0;
 		end
-		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
-			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
+		if playerdata.iHardyEndurance == nil then
+			playerdata.iHardyEndurance = 0;
+		end
+		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) + 1 then
+			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness) + 1;
+			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness) + 1;
 		end
 		if endurance < 0.9 then
 			if modendurance >= 1 then
@@ -1497,6 +1501,12 @@ function hardytrait(_player, _playerdata)
 					else
 						playerdata.iHardyInterval = interval - 2;
 					end
+				elseif player:isAsleep() == true and endurance == 1 then
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 25;
+					else
+						playerdata.iHardyInterval = interval - 50;
+					end
 				else
 					if player:HasTrait("Asthmatic") then
 						playerdata.iHardyInterval = interval - 0.25;
@@ -1505,20 +1515,24 @@ function hardytrait(_player, _playerdata)
 					end
 				end
 			end
-		else
-			if interval > 0 and endurance == 1 then
-				if player:isSitOnGround() == true then
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 1;
-					else
-						playerdata.iHardyInterval = interval - 2;
-					end
+		elseif interval > 0 and endurance == 1 then
+			if player:isSitOnGround() == true then
+				if player:HasTrait("Asthmatic") then
+					playerdata.iHardyInterval = interval - 1;
 				else
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 0.25;
-					else
-						playerdata.iHardyInterval = interval - 0.5;
-					end
+					playerdata.iHardyInterval = interval - 2;
+				end
+			elseif player:isAsleep() == true and endurance == 1 then
+				if player:HasTrait("Asthmatic") then
+					playerdata.iHardyInterval = interval - 25;
+				else
+					playerdata.iHardyInterval = interval - 50;
+				end
+			else
+				if player:HasTrait("Asthmatic") then
+					playerdata.iHardyInterval = interval - 0.25;
+				else
+					playerdata.iHardyInterval = interval - 0.5;
 				end
 			end
 		end
@@ -3350,12 +3364,10 @@ function clothingUpdate(_player)
 end
 
 local function FixSpecialization(player, perk)
-    if player:HasTrait("specaid") or player:HasTrait("speccrafting") or player:HasTrait("specfood") or player:HasTrait("specguns") or player:HasTrait("specmove") or player:HasTrait("specweapons") then
-        if player:getXp():getXP(perk) < 0 then
-            local xp = player:getXp():getXP(perk);
-            player:getXp():AddXPNoMultiplier(perk, 0 - xp); --Xp will be negative, so subtracting 0 by xp will return a positive number
-        end
-    end
+	if player:getXp():getXP(perk) < 0 then
+		local xp = player:getXp():getXP(perk);
+		player:getXp():AddXPNoMultiplier(perk, 0 - xp); --Xp will be negative, so subtracting 0 by xp will return a positive number
+	end
 end
 
 local function CheckInjuredHeal()
@@ -3375,21 +3387,18 @@ local function NoodleLegs(_player)
         local NimbleLvl = _player:getPerkLevel(Perks.Nimble);
         local N_Chance = 100;
         local ChanceToTrip = 500001;
-        N_Chance = N_Chance - (((NimbleLvl * 4) + (SprintingLvl * 4)) / 2); --Decreases odds by 2 for every level in nimble or sprinting, for a total of -40 with nimble and sprinting at lvl 10
+        ChanceToTrip = ChanceToTrip + (NimbleLvl * 12500) + (SprintingLvl * 12500);
         if _player:HasTrait("Graceful") then
-            N_Chance = N_Chance - 20;
+            ChanceToTrip = ChanceToTrip * 1.2;
         end
         if _player:HasTrait("Clumsy") then
-            N_Chance = N_Chance + 20;
+            ChanceToTrip = ChanceToTrip * 0.8;
         end
         if _player:HasTrait("Lucky") then
-            N_Chance = N_Chance - 5 * luckimpact;
+            ChanceToTrip = ChanceToTrip * (1.05 * luckimpact);
         end
         if _player:HasTrait("Unlucky") then
-            N_Chance = N_Chance + 5 * luckimpact;
-        end
-        if N_Chance <= 0 then
-            N_Chance = 1;
+            ChanceToTrip = ChanceToTrip * (0.95 * luckimpact);
         end
         if _player:IsRunning() == true then
             local Roll = ZombRand(0, ChanceToTrip);
@@ -3410,7 +3419,7 @@ local function NoodleLegs(_player)
             end
         end
         if _player:isSprinting() == true then
-            N_Chance = N_Chance * 2;
+            ChanceToTrip = ChanceToTrip * 0.6;
             local Roll = ZombRand(0, ChanceToTrip);
             if Roll <= N_Chance then
                 local type = nil;
@@ -3583,20 +3592,37 @@ end
 
 local function RestfulSleeper()
     local player = getPlayer();
+	local playerdata = player:getModData();
     local Multiplier = 1;
     local Fatigue = player:getStats():getFatigue();
+	local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
     if player:HasTrait("restfulsleeper") and player:isAsleep() then
-        if player:HasTrait("NeedsLessSleep") then
-            Multiplier = 0.5;
-        elseif player:HasTrait("NeedsMoreSleep") then
-            Multiplier = 1.25;
-        end
+		playerdata.HasSlept = true;
+		if Neck:getAdditionalPain() > 0 then
+			playerdata.NeckHadPain = true;
+		else
+			playerdata.NeckHadPain = false;
+		end
         if Fatigue >= 0.6 then
+            player:getStats():setFatigue(Fatigue - (0.2 * Multiplier));
+        elseif Fatigue >= 0.2 and Fatigue < 0.6 then
             player:getStats():setFatigue(Fatigue - (0.1 * Multiplier));
+		elseif Fatigue < 0.2 then
+			player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
         end
-        if Fatigue >= 0.2 and Fatigue < 0.6 then
-            player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
-        end
+		playerdata.FatigueWhenSleeping = Fatigue;
+		if Fatigue <= 0 then
+			player:forceAwake();
+		end
+	elseif player:HasTrait("restfulsleeper") and playerdata.HasSlept == true then
+		if Fatigue > playerdata.FatigueWhenSleeping then
+			player:getStats():setFatigue(playerdata.FatigueWhenSleeping);
+		end
+		playerdata.HasSlept = false;
+		playerdata.FatigueWhenSleeping = 0;
+		if playerdata.NeckHadPain == false and Neck:getAdditionalPain() > 0 then
+			Neck:setAdditionalPain(0);
+		end
     end
 end
 
