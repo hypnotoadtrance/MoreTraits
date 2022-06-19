@@ -7,3 +7,4 @@ Hardy internal regeneration is affected by game speed.
 Fixed Hardy Errors
 Noodle Legs' system has been reworked, making traits and sprinting/nimble levels more useful.
 Fixed negative exp with no exp multiplier traits.
+Fixed grave robber sometimes rolling a non-existent item and erroring as a result.
