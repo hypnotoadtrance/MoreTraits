@@ -375,6 +375,7 @@ function initToadTraitsPerks(_player)
 	playerdata.NeckHadPain = false;
 	playerdata.VagabondIllegal = false;
 	playerdata.ScroungerIllegal = false;
+	playerdata.ImmunoActivated = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -2506,7 +2507,6 @@ function Immunocompromised(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
-    local chance = 15;
     if player:HasTrait("immunocompromised") then
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
@@ -3394,8 +3394,7 @@ end
 
 local function FixSpecialization(player, perk)
 	if player:getXp():getXP(perk) < 0 then
-		local xp = player:getXp():getXP(perk);
-		player:getXp():AddXPNoMultiplier(perk, 0 - xp); --Xp will be negative, so subtracting 0 by xp will return a positive number
+		player:getXp():setXPToLevel(Perks.perk, player:getPerkLevel(perk));
 	end
 end
 
@@ -3689,6 +3688,40 @@ local function HungerCheck(player)
     end
 end
 
+local function ImmunocompromisedInfection(player, playerdata)
+	local bodydamage = player:getBodyDamage();
+	local isinfected = bodydamage:isInfected();
+	local activated = playerdata.ImmunoActivated;
+	local chance = 25;
+	local checked = false;
+	if SandboxVars.MoreTraits.ImmunoChance then
+		chance = SandboxVars.MoreTraits.ImmunoChance;
+	end
+	if activated == true then
+		if player:getCurrentState() == IdleState.instance() then
+			playerdata.ImmunoActivated = false;
+		end
+	end
+	if player:HasTrait("Immunocompromised") then
+		if player:getCurrentState() == PlayerHitReactionState.instance() and activated == false then
+			playerdata.ImmunoActivated = true;
+			for i = 0, bodydamage:getBodyParts():size() - 1 do
+				local b = bodydamage:getBodyParts():get(i);
+				if b:HasInjury() and b:getBleedingTime() ~= 0 and checked == false and bodydamage:isInfected() == false then --Bleeding time to check if an injury was caught, because tailoring or thick skinned might not get injury
+					checked = true;
+					if ZombRand(1, 101) <= chance then
+						bodydamage:setInfected(true);
+					end
+				end
+				if b:bitten() == true then
+					checked = true;
+					bodydamage:setInfected(true);
+				end
+			end
+		end
+	end
+end
+
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -3726,6 +3759,7 @@ function MainPlayerUpdate(_player)
     QuickWorker(player);
     SlowWorker(player);
     SuperImmuneFakeInfectionHealthLoss(player);
+	ImmunocompromisedInfection(player, playerdata);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
         GlassBody(player, playerdata);

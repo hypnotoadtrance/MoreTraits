@@ -1,11 +1,4 @@
 Changelog Notes:
-Added Sandbox Setting for Gym Goer Removing Exercise Fatigue
-Restful Sleeper has increased fatigue loss, fatigue loss is no longer influenced by player having wakeful / sleepyhead.
-Restful Sleeper cancels fatigue gain and prevents neck pain after waking up.
-Restful Sleeper automatically wakes you up once you reach 0 fatigue.
-Hardy internal regeneration is affected by game speed.
-Noodle Legs' system has been reworked, making traits and sprinting/nimble levels more useful.
-Fixed negative exp with no exp multiplier traits.
-Fixed Scrounger and Vagabond traits activating when the player places down a container.
-Fixed ZombRand's in loot traits (Antique Collector, Grave Robber, Vagabond) preventing few items from spawning.
-Fixed Hardy Errors
+Immunocompromised now works as intended.
+Added Immunocompromised chance sandbox setting.
+Added Hardy Sandbox Setting

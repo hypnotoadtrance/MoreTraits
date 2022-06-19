@@ -28,8 +28,6 @@ Sandbox_PL = {
     Sandbox_MoreTraits_WeightGlobalMod_tooltip = "Daje dodatkowy udźwig każdemu z graczy.<br>Można również ustawić wartość ujemną aby zmniejszyć udźwig każdego gracza.",
     Sandbox_MoreTraits_GymGoerPercent = "Bonusowe XP dla Pakera",
     Sandbox_MoreTraits_GymGoerPercent_tooltip = "Procentowa wartość z jaką gracz z cechą Paker otrzymuje XP ćwicząć.<br>Ustawienie tego na 100% oznacza brak dodatkowego XP.",
-    Sandbox_MoreTraits_SuperImmunePercent = "Efektywność Superodporności",
-    Sandbox_MoreTraits_SuperImmunePercent_tooltip = "Procentowa szansa, że gracz który ma cechę Superodporny przeżyje zombifikację.<br>Ustawienie tego na 100% sprawi że gracz będzie w pełni odporny.<br>Uwaga: Nawet jeśli gracz obroni się przed zombifikacją, wciąż jest szansa że będą cierpieć na 'Fałszywą' infekcję.",
     Sandbox_MoreTraits_GraveRobberChance = "Hiena Cmentarna: Szansa na przedmioty",
     Sandbox_MoreTraits_GraveRobberChance_tooltip = "Szansa, że gracz z cechą Hiena Cmentarna znajdzie dodatkowe przedmioty na zwłokach zombie.<br>Ustawienie tego na 1000 sprawi, że każdy zabity zombie będzie miał dodatkowe przedmioty.",
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot = "Hiena Cmentarna: Gwarantowane Dodatkowe Przedmioty",
@@ -87,4 +85,6 @@ Sandbox_PL = {
     Sandbox_MoreTraits_NoodleLegsChance_tooltip = "Szansa w X aby się przewrócić, gdy masz cechę Cienkie nogi<br>Bazowa szansa to 100, zmniejszając ją sprawisz że częściej będziesz się przewracać",
 	Sandbox_MoreTraits_HardyEndurance = "Wytrzymałość Wytrzymałego.",
 	Sandbox_MoreTraits_HardyEndurance_tooltip = "Ile Wytrzymały zwiększa wytrzymałość?<br>Liczba która tutaj jest wpisana to ilość dodatkowej Wytrzymałości na 10 poziomie Kondycji.",
+	Sandbox_MoreTraits_ImmunoChance = "Szansa Niskiej Odporności",
+	Sandbox_MoreTraits_ImmunoChance_tooltip = "Szansa dla gracza z Niską Odpornością na bycie zombifikowanym po ataku zombie.<br>Ustawienie tej wartości na 100 sprawi, że każdy atak da zombifikację.",
 }

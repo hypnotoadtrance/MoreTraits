@@ -26,8 +26,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_WeightGlobalMod_tooltip = "Gives bonus inventory carry capacity to all players.<br>You can set a negative value to reduce all player inventory capacity globally as well.",
     Sandbox_MoreTraits_GymGoerPercent = "Gym Goer XP Boost",
     Sandbox_MoreTraits_GymGoerPercent_tooltip = "The percent amount extra Fitness/Strength XP a player receives from working out if they have the Gym Goer trait.<br>Setting this to 100% means no extra XP is gained.",
-    Sandbox_MoreTraits_SuperImmunePercent = "Superimmune Effectiveness",
-    Sandbox_MoreTraits_SuperImmunePercent_tooltip = "The percent chance that a player who has the SuperImmune trait will fight-off zombification.<br>Setting this to 100% would make the player immune to zombification.<br>Note: Even if a player's immune system fights off zombification, there is still a chance they will suffer a 'Fake' Infection.",
     Sandbox_MoreTraits_GraveRobberChance = "Grave Robber: Loot Chance",
     Sandbox_MoreTraits_GraveRobberChance_tooltip = "The chance that a player with the Grave Robber trait will find extra loot on a zombie corpse.<br>Setting this to 1000 will make every zombie killed by the player have extra loot.",
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot = "Grave Robber: Guaranteed Extra Loot",
@@ -85,4 +83,6 @@ Sandbox_EN = {
 	Sandbox_MoreTraits_GymGoerNoExerciseFatigue_tooltip = "Should Gym Goer eliminate exercise fatigue?<br>If this option is un-checked, players with Gym Goer will suffer from exercise fatigue as normal.",
 	Sandbox_MoreTraits_HardyEndurance = "Hardy Endurance",
 	Sandbox_MoreTraits_HardyEndurance_tooltip = "How much extra endurance should hardy give?<br>Keep in mind, this value is the amount you get when reaching fitness 10.",
+	Sandbox_MoreTraits_ImmunoChance = "Immunocompromised Chance",
+	Sandbox_MoreTraits_ImmunoChance_tooltip = "Chance for a player with Immunocompromised to get infected by a zombie attack.<br>Setting this value to 100 will make every zombie attack infectious.",
 }
