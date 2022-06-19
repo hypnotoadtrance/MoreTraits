@@ -3,7 +3,6 @@ Added Sandbox Setting for Gym Goer Removing Exercise Fatigue
 Restful Sleeper has increased fatigue loss, fatigue loss is no longer influenced by player having wakeful / sleepyhead.
 Restful Sleeper cancels fatigue gain and prevents neck pain after waking up.
 Restful Sleeper automatically wakes you up once you reach 0 fatigue.
-Hardy trait now properly gives you the amount of uses equal to your fitness level
 Hardy now speeds up while sleeping.
 Fixed Hardy Errors
 Noodle Legs' system has been reworked, making traits and sprinting/nimble levels more useful.

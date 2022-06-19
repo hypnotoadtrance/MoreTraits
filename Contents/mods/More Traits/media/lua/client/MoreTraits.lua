@@ -1480,9 +1480,9 @@ function hardytrait(_player, _playerdata)
 		if playerdata.iHardyEndurance == nil then
 			playerdata.iHardyEndurance = 0;
 		end
-		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) + 1 then
-			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness) + 1;
-			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness) + 1;
+		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
+			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
+			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
 		end
 		if endurance < 0.9 then
 			if modendurance >= 1 then
