@@ -3706,6 +3706,20 @@ function EveryOneMinute()
     GymGoerUpdate(player);
     HungerCheck(player);
 end
+
+function EveryHours()
+	local player = getPlayer();
+	local playerdata = player:getModData();
+	drinkerpoison();
+	drinkertick();
+	SecondWindRecharge();
+	indefatigablecounter();
+	CheckInjuredHeal();
+	RestfulSleeper();
+	ToadTraitDepressive();
+	SuperImmuneRecoveryProcess();
+end
+
 function OnLoad()
     --reset any worn clothing to default state.
     local player = getPlayer();
@@ -3736,19 +3750,12 @@ Events.OnWeaponHitCharacter.Add(mundane);
 Events.OnWeaponHitCharacter.Add(tavernbrawler);
 Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
-Events.EveryHours.Add(drinkerpoison);
-Events.EveryHours.Add(drinkertick);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
-Events.EveryHours.Add(SecondWindRecharge);
-Events.EveryHours.Add(indefatigablecounter);
-Events.EveryHours.Add(CheckInjuredHeal);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(checkWeight);
-Events.EveryHours.Add(RestfulSleeper);
-Events.EveryHours.Add(ToadTraitDepressive);
-Events.EveryHours.Add(SuperImmuneRecoveryProcess);
+Events.EveryHours.Add(EveryHours);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
