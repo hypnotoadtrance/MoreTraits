@@ -1466,6 +1466,17 @@ function hardytrait(_player, _playerdata)
     local player = getPlayer();
     local playerdata = player:getModData();
     local stats = player:getStats();
+	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
+	local multiplier = 1;
+	if gamespeed == 1 then
+		multiplier = 1;
+	elseif gamespeed == 2 then
+		multilpier = 5;
+	elseif gamespeed == 3 then
+		multiplier = 20;
+	elseif gamespeed == 4 then
+		multiplier = 40;
+	end
     if player:HasTrait("hardy") then
 		local modendurance = playerdata.iHardyEndurance;
       	local endurance = stats:getEndurance();
@@ -1497,42 +1508,30 @@ function hardytrait(_player, _playerdata)
 			else
 				if player:isSitOnGround() == true then
 					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 1;
+						playerdata.iHardyInterval = interval - (1 * multiplier);
 					else
-						playerdata.iHardyInterval = interval - 2;
-					end
-				elseif player:isAsleep() == true and endurance == 1 then
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 25;
-					else
-						playerdata.iHardyInterval = interval - 50;
+						playerdata.iHardyInterval = interval - (2 * multiplier);
 					end
 				else
 					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 0.25;
+						playerdata.iHardyInterval = interval - (0.25 * multiplier);
 					else
-						playerdata.iHardyInterval = interval - 0.5;
+						playerdata.iHardyInterval = interval - (0.5 * multiplier);
 					end
 				end
 			end
 		elseif interval > 0 and endurance == 1 then
 			if player:isSitOnGround() == true then
 				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - 1;
+					playerdata.iHardyInterval = interval - (1 * multiplier);
 				else
-					playerdata.iHardyInterval = interval - 2;
-				end
-			elseif player:isAsleep() == true and endurance == 1 then
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - 25;
-				else
-					playerdata.iHardyInterval = interval - 50;
+					playerdata.iHardyInterval = interval - (2 * multiplier);
 				end
 			else
 				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - 0.25;
+					playerdata.iHardyInterval = interval - (0.25 * multiplier);
 				else
-					playerdata.iHardyInterval = interval - 0.5;
+					playerdata.iHardyInterval = interval - (0.5 * multiplier);
 				end
 			end
 		end
