@@ -210,7 +210,11 @@ option MoreTraits.HardyEndurance
 	type = integer, min = 10, max = 100, default = 50,
 	page = MoreTraits, translation = MoreTraits_HardyEndurance,
 }
-
+option MoreTraits.SuperImmuneWeakness
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneWeakness,
+}
 option MoreTraits.ImmunoChance
 {
 	type = integer, min = 0, max = 100, default = 25,

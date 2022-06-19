@@ -87,4 +87,6 @@ Sandbox_PL = {
 	Sandbox_MoreTraits_HardyEndurance_tooltip = "Ile Wytrzymały zwiększa wytrzymałość?<br>Liczba która tutaj jest wpisana to ilość dodatkowej Wytrzymałości na 10 poziomie Kondycji.",
 	Sandbox_MoreTraits_ImmunoChance = "Szansa Niskiej Odporności",
 	Sandbox_MoreTraits_ImmunoChance_tooltip = "Szansa dla gracza z Niską Odpornością na bycie zombifikowanym po ataku zombie.<br>Ustawienie tej wartości na 100 sprawi, że każdy atak da zombifikację.",
+	Sandbox_MoreTraits_SuperImmuneWeakness = "Słabość Super Odporności",
+	Sandbox_MoreTraits_SuperImmuneWeakness_tooltip = "Jeśli to ustawienie jest włączone, Super Odporność nie ochroni cię jeśli złapałeś kilka infekcji.",
 }

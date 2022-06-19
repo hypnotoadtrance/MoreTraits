@@ -85,4 +85,6 @@ Sandbox_EN = {
 	Sandbox_MoreTraits_HardyEndurance_tooltip = "How much extra endurance should hardy give?<br>Keep in mind, this value is the amount you get when reaching fitness 10.",
 	Sandbox_MoreTraits_ImmunoChance = "Immunocompromised Chance",
 	Sandbox_MoreTraits_ImmunoChance_tooltip = "Chance for a player with Immunocompromised to get infected by a zombie attack.<br>Setting this value to 100 will make every zombie attack infectious.",
+	Sandbox_MoreTraits_SuperImmuneWeakness = "Super Immune Weakness",
+	Sandbox_MoreTraits_SuperImmuneWeakness_tooltip = "If this setting is on, Super Immune will not be able to defend your body if it caught several infections.",
 }

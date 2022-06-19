@@ -2,3 +2,4 @@ Changelog Notes:
 Immunocompromised now works as intended.
 Added Immunocompromised chance sandbox setting.
 Added Hardy Sandbox Setting
+Added Super Immune Sandbox Setting

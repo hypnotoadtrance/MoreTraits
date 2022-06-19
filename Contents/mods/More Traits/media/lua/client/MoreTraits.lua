@@ -369,6 +369,7 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneHealedOnce = false;
     playerdata.SuperImmuneMinutesWellFed = 0;
     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+	playerdata.SuperImmuneInfections = 0;
     playerdata.MotionActive = false;
 	playerdata.HasSlept = false;
 	playerdata.FatigueWhenSleeping = 0;
@@ -2387,6 +2388,7 @@ local function SuperImmuneRecoveryProcess()
                         Illness = Illness - 1; --1 to 3.7 days
                     end
                     player:getBodyDamage():setFakeInfectionLevel(Illness);
+					playerdata.SuperImmuneInfections = 0;
                 else
                     --Once illness fully recovers
                     if MoreTraits.settings.SuperImmuneAnnounce == true then
@@ -2398,6 +2400,7 @@ local function SuperImmuneRecoveryProcess()
                     playerdata.SuperImmuneRecovery = 0;
                     playerdata.SuperImmuneHealedOnce = true;
                     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+					playerdata.SuperImmuneInfections = 0;
                 end
                 if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
@@ -2446,6 +2449,9 @@ function SuperImmune(_player, _playerdata)
                 playerdata.SuperImmuneActive = true;
             end
             playerdata.SuperImmuneRecovery = playerdata.SuperImmuneRecovery + TimeOfRecovery;
+			if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
+				playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
+			end
         end
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
@@ -2471,6 +2477,14 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
             if player:HasTrait("indefatigable") then
                 MaxHealth = 22;
             end
+			if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
+				local limit = 4;
+				if playerdata.SuperImmuneHealedOnce == true then
+					limit = 5;
+				end
+				if player:HasTrait("FastHealer") then limit = limit + 1; elseif player:HasTrait("SlowHealer") then limit = limit - 1; end
+				if playerdata.SuperImmuneInfections >= limit then MaxHealth = 0; end
+			end
             if Health >= 100 - Illness and Health > MaxHealth then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
@@ -3683,6 +3697,7 @@ local function HungerCheck(player)
 			playerdata.SuperImmuneRecovery = 0;
 			playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 			playerdata.SuperImmuneMinutesWellFed = 0;
+			playerdata.SuperImmuneInfections = 0;
 			bodydamage:setFakeInfectionLevel(0);
 		end
     end
