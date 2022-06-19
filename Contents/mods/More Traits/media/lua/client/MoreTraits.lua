@@ -373,6 +373,8 @@ function initToadTraitsPerks(_player)
 	playerdata.HasSlept = false;
 	playerdata.FatigueWhenSleeping = 0;
 	playerdata.NeckHadPain = false;
+	playerdata.VagabondIllegal = false;
+	playerdata.ScroungerIllegal = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -788,12 +790,25 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
             basechance = basechance - 5 * luckimpact;
             modifier = modifier - 0.1 * luckimpact;
         end
+	if playerData.ScroungerIllegal == nil then
+		playerData.ScroungerIllegal = false;
+	end
+	if player:isPerformingAnAction() == true then
+		playerData.ScroungerIllegal = true;
+	end
+	if playerData.ScroungerIllegal == true and player:isPlayerMoving() == true then
+		playerData.ScroungerIllegal = false;
+	end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
                 if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
+					if playerData.ScroungerIllegal == true then
+						playerData.ScroungerIllegal = false;
+						return
+					end
                     if ZombRand(100) <= basechance then
                         local tempcontainer = {};
                         container = containerObj:getContainer();
@@ -1032,10 +1047,7 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
                     if ZombRand(roll) <= basechance then
-                        local i = ZombRand(length);
-                        if i == 0 then
-                            i = 1;
-                        end
+                        local i = ZombRand(length) + 1;
                         container:addItemOnServer(container:AddItem(items[i]));
                     end
                 end
@@ -1081,8 +1093,18 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
         length = length + 1;
     end
     local player = _player;
+	local playerdata = player:getModData();
     local containerObj;
     local container;
+	if playerdata.VagabondIllegal == nil then
+		playerdata.VagabondIllegal = false;
+	end
+	if player:isPerformingAnAction() == true then
+		playerdata.VagabondIllegal = true;
+	end
+	if playerdata.VagabondIllegal == true and player:isPlayerMoving() == true then
+		playerdata.VagabondIllegal = false;
+	end
     if player:HasTrait("vagabond") then
         local basechance = 33;
         if SandboxVars.MoreTraits.VagabondChance then
@@ -1099,7 +1121,11 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                 containerObj = v.inventory:getParent();
                 if not containerObj:getModData().bVagbondRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bVagbondRolled = true;
-                    containerObj:transmitModData();
+					containerObj:transmitModData();
+					if playerdata.VagabondIllegal == true then
+						playerdata.VagabondIllegal = false;
+						return
+					end
                     container = containerObj:getContainer();
                     if container:getType() == ("bin") then
                         local extra = 1;
@@ -1109,7 +1135,7 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                         local itterations = ZombRand(0, 2) + extra;
                         for itt = 0, itterations do
                             itt = itt + 1;
-                            local x = ZombRand(length);
+                            local x = ZombRand(length) + 1;
                             if x == 0 then
                                 x = 1;
                             end

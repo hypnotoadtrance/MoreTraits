@@ -4,7 +4,8 @@ Restful Sleeper has increased fatigue loss, fatigue loss is no longer influenced
 Restful Sleeper cancels fatigue gain and prevents neck pain after waking up.
 Restful Sleeper automatically wakes you up once you reach 0 fatigue.
 Hardy internal regeneration is affected by game speed.
-Fixed Hardy Errors
 Noodle Legs' system has been reworked, making traits and sprinting/nimble levels more useful.
 Fixed negative exp with no exp multiplier traits.
-Fixed grave robber sometimes rolling a non-existent item and erroring as a result.
+Fixed Scrounger and Vagabond traits activating when the player places down a container.
+Fixed ZombRand's in loot traits (Antique Collector, Grave Robber, Vagabond) preventing few items from spawning.
+Fixed Hardy Errors
