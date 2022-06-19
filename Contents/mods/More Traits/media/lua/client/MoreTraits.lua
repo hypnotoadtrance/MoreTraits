@@ -3611,9 +3611,17 @@ local function RestfulSleeper()
 			player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
         end
 		playerdata.FatigueWhenSleeping = Fatigue;
-		if Fatigue <= 0 then
-			player:forceAwake();
-		end
+    end
+end
+
+local function RestfulSleeperWakeUp(player, playerdata)
+	local Fatigue = player:getStats():getFatigue();
+	local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
+	if player:HasTrait("restfulsleeper") and Fatigue <= 0 and player:isAsleep() == true then
+		player:forceAwake();
+		playerdata.FatigueWhenSleeping = 0;
+	elseif player:HasTrait("restfulsleeper") and player:isAsleep() == true then
+		playerdata.FatigueWhenSleeping = Fatigue;
 	elseif player:HasTrait("restfulsleeper") and playerdata.HasSlept == true then
 		if Fatigue > playerdata.FatigueWhenSleeping then
 			player:getStats():setFatigue(playerdata.FatigueWhenSleeping);
@@ -3623,7 +3631,7 @@ local function RestfulSleeper()
 		if playerdata.NeckHadPain == false and Neck:getAdditionalPain() > 0 then
 			Neck:setAdditionalPain(0);
 		end
-    end
+	end
 end
 
 local function HungerCheck(player)
@@ -3705,6 +3713,7 @@ function EveryOneMinute()
     LeadFoot(player);
     GymGoerUpdate(player);
     HungerCheck(player);
+	RestfulSleeperWakeUp(player, playerdata);
 end
 
 function EveryHours()
