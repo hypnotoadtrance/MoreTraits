@@ -1508,6 +1508,10 @@ function hardytrait(_player, _playerdata)
       	local endurance = stats:getEndurance();
 		local interval = playerdata.iHardyInterval;
 		local maxendurance = playerdata.iHardyMaxEndurance;
+		local AmountOfEnduranceRegenerated = 0.05;
+		if SandboxVars.MoreTraits.HardyEndurance then
+			AmountOfEnduranceRegenerated = SandboxVars.MoreTraits.HardyEndurance / 1000;
+		end
 		if playerdata.iHardyInterval == nil then
 			playerdata.iHardyInterval = 1000;
 		end
@@ -1523,7 +1527,7 @@ function hardytrait(_player, _playerdata)
 		end
 		if endurance < 0.9 then
 			if modendurance >= 1 then
-				stats:setEndurance(endurance + 0.05);
+				stats:setEndurance(endurance + AmountOfEnduranceRegenerated);
 				playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
 			end
 		end

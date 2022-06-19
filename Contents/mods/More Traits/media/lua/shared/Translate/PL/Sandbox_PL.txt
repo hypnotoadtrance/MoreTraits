@@ -85,4 +85,6 @@ Sandbox_PL = {
     Sandbox_MoreTraits_SecondWindCooldown_tooltip = "Po ilu dniach umiejętność Drugiego Wiatru powinna się odnowić?",
     Sandbox_MoreTraits_NoodleLegsChance = "Szansa na cienkie nogi",
     Sandbox_MoreTraits_NoodleLegsChance_tooltip = "Szansa w X aby się przewrócić, gdy masz cechę Cienkie nogi<br>Bazowa szansa to 100, zmniejszając ją sprawisz że częściej będziesz się przewracać",
+	Sandbox_MoreTraits_HardyEndurance = "Wytrzymałość Wytrzymałego.",
+	Sandbox_MoreTraits_HardyEndurance_tooltip = "Ile Wytrzymały zwiększa wytrzymałość?<br>Liczba która tutaj jest wpisana to ilość dodatkowej Wytrzymałości na 10 poziomie Kondycji.",
 }

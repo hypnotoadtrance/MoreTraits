@@ -83,4 +83,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_SecondWindCooldown_tooltip = "After how much days should Second Wind recharge?",
 	Sandbox_MoreTraits_GymGoerNoExerciseFatigue = "Gym Goer Removes Exercise Fatigue",
 	Sandbox_MoreTraits_GymGoerNoExerciseFatigue_tooltip = "Should Gym Goer eliminate exercise fatigue?<br>If this option is un-checked, players with Gym Goer will suffer from exercise fatigue as normal.",
+	Sandbox_MoreTraits_HardyEndurance = "Hardy Endurance",
+	Sandbox_MoreTraits_HardyEndurance_tooltip = "How much extra endurance should hardy give?<br>Keep in mind, this value is the amount you get when reaching fitness 10.",
 }
