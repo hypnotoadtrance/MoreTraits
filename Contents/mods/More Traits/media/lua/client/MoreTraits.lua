@@ -370,6 +370,7 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneMinutesWellFed = 0;
     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 	playerdata.SuperImmuneInfections = 0;
+	playerdata.SuperImmuneLethal = false;
     playerdata.MotionActive = false;
 	playerdata.HasSlept = false;
 	playerdata.FatigueWhenSleeping = 0;
@@ -2372,7 +2373,7 @@ local function SuperImmuneRecoveryProcess()
                     --Prevent illness from going too low or too high
                     Illness = Illness + 10;
                 end
-                if Illness > 91 then
+                if Illness > 91 and playerdata.SuperImmuneLethal == false then
                     Illness = Illness - 20;
                 end
                 if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
@@ -2413,6 +2414,7 @@ local function SuperImmuneRecoveryProcess()
                     playerdata.SuperImmuneHealedOnce = true;
                     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 					playerdata.SuperImmuneInfections = 0;
+					playerdata.SuperImmuneLethal = false;
                 end
                 if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
@@ -2496,6 +2498,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 				end
 				if player:HasTrait("FastHealer") then limit = limit + 1; elseif player:HasTrait("SlowHealer") then limit = limit - 1; end
 				if playerdata.SuperImmuneInfections >= limit then MaxHealth = 0; end
+				playerdata.SuperImmuneLethal = true;
 			end
             if Health >= 100 - Illness and Health > MaxHealth then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
@@ -3710,6 +3713,7 @@ local function HungerCheck(player)
 			playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 			playerdata.SuperImmuneMinutesWellFed = 0;
 			playerdata.SuperImmuneInfections = 0;
+			playerdata.SuperImmuneLethal = false;
 			bodydamage:setFakeInfectionLevel(0);
 		end
     end
