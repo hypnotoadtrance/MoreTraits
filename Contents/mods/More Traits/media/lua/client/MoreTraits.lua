@@ -378,6 +378,7 @@ function initToadTraitsPerks(_player)
 	playerdata.VagabondIllegal = false;
 	playerdata.ScroungerIllegal = false;
 	playerdata.ImmunoActivated = false;
+	playerdata.ImmunoEvasiveTimer = 0;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -3723,10 +3724,14 @@ local function ImmunocompromisedInfection(player, playerdata)
 	local bodydamage = player:getBodyDamage();
 	local isinfected = bodydamage:isInfected();
 	local activated = playerdata.ImmunoActivated;
+	local evasivecheck = playerdata.ImmunoPart;
 	local chance = 25;
 	local checked = false;
 	if SandboxVars.MoreTraits.ImmunoChance then
 		chance = SandboxVars.MoreTraits.ImmunoChance;
+	end
+	if evasivecheck == nil then
+		playerdata.ImmunoPart = {};
 	end
 	if activated == true then
 		if player:getCurrentState() == IdleState.instance() then
@@ -3742,11 +3747,29 @@ local function ImmunocompromisedInfection(player, playerdata)
 					checked = true;
 					if ZombRand(1, 101) <= chance then
 						bodydamage:setInfected(true);
+						table.insert(evasivecheck, b);
+						playerdata.ImmunoEvasiveTimer = 100;
 					end
 				end
 				if b:bitten() == true then
 					checked = true;
 					bodydamage:setInfected(true);
+					table.insert(evasivecheck, b);
+					playerdata.ImmunoEvasiveTimer = 100;
+				end
+			end
+		end
+		if playerdata.ImmunoEvasiveTimer > 0 then
+			playerdata.ImmunoEvasiveTimer = playerdata.ImmunoEvasiveTimer - 1;
+			if playerdata.ImmunoEvasiveTimer == 0 then
+				for i, b in pairs(evasivecheck) do
+					if b ~= nil then
+						if b:HasInjury() == false then
+							bodydamage:setInfected(false);
+						end
+					end
+					table.remove(evasivecheck, i, v);
+					i = i - 1;
 				end
 			end
 		end
