@@ -1,5 +1,6 @@
 Changelog Notes:
 Immunocompromised now works as intended.
+Hardy endurance regeneration speeds up while sleeping.
 Added Immunocompromised chance sandbox setting.
 Added Hardy Sandbox Setting
 Added Super Immune Sandbox Setting

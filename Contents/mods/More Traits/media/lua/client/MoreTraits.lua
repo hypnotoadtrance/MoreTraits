@@ -795,7 +795,7 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
 	if playerData.ScroungerIllegal == nil then
 		playerData.ScroungerIllegal = false;
 	end
-	if player:isPerformingAnAction() == true then
+	if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
 		playerData.ScroungerIllegal = true;
 	end
 	if playerData.ScroungerIllegal == true and player:isPlayerMoving() == true then
@@ -1101,7 +1101,7 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
 	if playerdata.VagabondIllegal == nil then
 		playerdata.VagabondIllegal = false;
 	end
-	if player:isPerformingAnAction() == true then
+	if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
 		playerdata.VagabondIllegal = true;
 	end
 	if playerdata.VagabondIllegal == true and player:isPlayerMoving() == true then
@@ -1544,6 +1544,12 @@ function hardytrait(_player, _playerdata)
 					else
 						playerdata.iHardyInterval = interval - (2 * multiplier);
 					end
+				elseif player:isAsleep() == true then
+					if player:HasTrait("Asthmatic") then
+						playerdata.iHardyInterval = interval - 25;
+					else
+						playerdata.iHardyInterval = interval - 50;
+					end
 				else
 					if player:HasTrait("Asthmatic") then
 						playerdata.iHardyInterval = interval - (0.25 * multiplier);
@@ -1558,6 +1564,12 @@ function hardytrait(_player, _playerdata)
 					playerdata.iHardyInterval = interval - (1 * multiplier);
 				else
 					playerdata.iHardyInterval = interval - (2 * multiplier);
+				end
+			elseif player:isAsleep() == true then
+				if player:HasTrait("Asthmatic") then
+					playerdata.iHardyInterval = interval - 25;
+				else
+					playerdata.iHardyInterval = interval - 50;
 				end
 			else
 				if player:HasTrait("Asthmatic") then
