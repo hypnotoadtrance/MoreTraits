@@ -594,7 +594,7 @@ function ToadTraitEvasive(_player, _playerdata)
                 end
             end
         end
-        if lastinfected == null then
+        if lastinfected == nil then
             playerdata.bisInfected = bodydamage:IsInfected();
             lastinfected = playerdata.bisInfected;
         end
