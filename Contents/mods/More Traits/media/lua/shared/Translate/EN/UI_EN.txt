@@ -89,6 +89,7 @@ UI_EN = {
     UI_trait_badteethdesc = "You never took much care of your dental health.<br>When consuming food, you may experience pain. Larger portions cause more pain.",
     UI_trait_hardy = "Hardy",
     UI_trait_hardydesc = "Whether by force of will or physical fitness, you're not one to tire after long hours working.<br>Your maximum endurance has been increased, scales with fitness level.<br>+1 Fitness",
+	UI_trait_hardyendurance = "Hardy Endurance Left",
     UI_trait_drinker = "Alcoholic",
     UI_trait_drinkerdesc = "You have a dependence on alcohol. If you go too long without alcohol, you'll begin to feel stressed, then pain, and eventually withdrawal.<br>If you go through withdrawal, you will grow progressively more sick until you drink again or die. <br>You begin the game with one bottle of whiskey - better find more booze soon.",
     UI_trait_problunt = "Prowess: Blunt",
@@ -214,4 +215,6 @@ UI_EN = {
     UI_MoreTraits_Options_MartialDamage_ToolTip = "If you have the Martial Artist trait, a popup will display the damage you are dealing.",
     UI_MoreTraits_Options_VagabondAnnounce = "Announce Vagabond Finds",
     UI_MoreTraits_Options_VagabondAnnounce_ToolTip = "If you have the Vagabond trait, you will be notified when you find food in the trash.",
+	UI_MoreTraits_Options_HardyNotifier = "Hardy Notifies Left Endurance",
+	UI_MoreTraits_Options_HardyNotifier_ToolTip = "If you have the Hardy trait, you will be notified how much modded endurance you have left.",
 }

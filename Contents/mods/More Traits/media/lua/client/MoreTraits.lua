@@ -1533,11 +1533,17 @@ function hardytrait(_player, _playerdata)
 			if modendurance >= 1 then
 				stats:setEndurance(endurance + AmountOfEnduranceRegenerated);
 				playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
+				if MoreTraits.settings.HardyNotifier == true then
+					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance - 1, false, HaloTextHelper.getColorRed());
+				end
 			end
 		end
 		if modendurance < maxendurance and endurance == 1 then
 			if interval <= 0 then
 				playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
+				if MoreTraits.settings.HardyNotifier == true then
+					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
+				end
 				playerdata.iHardyInterval = 1000;
 			else
 				if player:isSitOnGround() == true then

@@ -89,6 +89,7 @@ UI_PL = {
     UI_trait_badteethdesc = "Nigdy nie dbałeś zbytnio o zdrowie swoich zębów.<br>Podczas spożywania posiłków możesz odczuwać ból. Większe porcje powodują większy ból.",
     UI_trait_hardy = "Wytrzymały",
     UI_trait_hardydesc = "Czy to dzięki sile woli, czy sprawności fizycznej, nie jesteś osobą, która męczy się po długich godzinach pracy.<br>Twoja Maksymalna Wytrzymałość została zwiększona, zależnie od poziomu Kondycji.<br>+1 Kondycja",
+	UI_trait_hardyendurance = "Dodatkowa Wytrzymałość",
     UI_trait_drinker = "Alkoholik",
     UI_trait_drinkerdesc = "Jest się uzależnionym od alkoholu. Jeśli zbyt długo nie pijesz alkoholu, zaczynasz odczuwać stres, potem ból, a w końcu odstawienie.<br>Jeśli przejdziesz przez odstawienie, będziesz coraz bardziej chory, aż do momentu ponownego wypicia lub śmierci. <br>Rozpoczynasz grę z jedną butelką whisky - lepiej szybko znajdź więcej trunku.",
     UI_trait_problunt = "Zdolność: Obuchy",
@@ -214,4 +215,6 @@ UI_PL = {
     UI_MoreTraits_Options_MartialDamage_ToolTip = "Jeśli masz cechę Mistrza Sztuk Walki, wyskoczy powiadomienie ile obrażeń zadajesz.",
     UI_MoreTraits_Options_VagabondAnnounce = "Ogłoś znalezienie przedmiotów przez Włóczęgę",
     UI_MoreTraits_Options_VagabondAnnounce_ToolTip = "Jeśli masz cechę Włóczęgi, zostaniesz powiadomiony kiedy znajdziesz jedzenie w śmieciach.",
+	UI_MoreTraits_Options_HardyNotifier = "Wytrzymały informuje ile zostało Wytrzymałości",
+	UI_MoreTraits_Options_HardyNotifier_ToolTip = "Jeśli masz cechę Wytrzymałego, będziesz informowany ile zostało ci dodatkowej wytrzymałości.",
 }

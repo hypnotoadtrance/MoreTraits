@@ -10,6 +10,7 @@ MoreTraits.settings.GourmandAnnounce = false;
 MoreTraits.settings.AlbinoAnnounce = true;
 MoreTraits.settings.MartialDamage = false;
 MoreTraits.settings.VagabondAnnounce = false;
+MoreTraits.settings.HardyNotifier = false;
 
 if ModOptions and ModOptions.getInstance then
     local function onModOptionsApply(optionValues)
@@ -22,6 +23,7 @@ if ModOptions and ModOptions.getInstance then
         MoreTraits.settings.AlbinoAnnounce = optionValues.settings.options.AlbinoAnnounce;
         MoreTraits.settings.MartialDamage = optionValues.settings.options.MartialDamage;
         MoreTraits.settings.VagabondAnnounce = optionValues.settings.options.VagabondAnnounce;
+		MoreTraits.settings.HardyNotifier = optionValues.settings.options.HardyNotifier;
     end
     local SETTINGS = {
         options_data = {
@@ -89,6 +91,13 @@ if ModOptions and ModOptions.getInstance then
                 OnApplyMainMenu = onModOptionsApply,
                 OnApplyInGame = onModOptionsApply,
             },
+			HardyNotifier = {
+				name = "UI_MoreTraits_Options_HardyNotifier",
+				tooltip = "UI_MoreTraits_Options_HardyNotifier_ToolTip",
+				default = true,
+				OnApplyMainMenu = onModOptionsApply,
+				OnApplyInGame = onModOptionsApply,
+			},
         },
         mod_id = 'ToadTraits',
         mod_shortname = 'More Traits',

@@ -3,4 +3,5 @@ Immunocompromised now works as intended.
 Hardy endurance regeneration speeds up while sleeping.
 Added Immunocompromised chance sandbox setting.
 Added Hardy Sandbox Setting
+Added Hardy Mod Option to show you how much endurance from hardy you have left.
 Added Super Immune Sandbox Setting
