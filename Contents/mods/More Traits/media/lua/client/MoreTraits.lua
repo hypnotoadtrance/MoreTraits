@@ -379,6 +379,7 @@ function initToadTraitsPerks(_player)
 	playerdata.ScroungerIllegal = false;
 	playerdata.ImmunoActivated = false;
 	playerdata.ImmunoEvasiveTimer = 0;
+	playerdata.AlbinoTimeSpentOutside = 0;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -2029,6 +2030,11 @@ end
 function albino(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
+	local pain = playerdata.AlbinoTimeSpentOutside;
+	if pain == nil then
+		playerdata.AlbinoTimeSpentOutside = 0;
+	end
+	local umbrella = false;
     if player:HasTrait("albino") then
         local time = getGameTime();
         if playerdata.bisAlbinoOutside == nil then
@@ -2036,7 +2042,7 @@ function albino(_player, _playerdata)
         end
         if player:isOutside() then
             local tod = time:getTimeOfDay();
-            if tod > 10 and tod < 16 then
+            if tod > 8 and tod < 17 then
                 local stats = player:getStats();
                 local pain = stats:getPain();
                 if pain < 25 then
@@ -2046,13 +2052,67 @@ function albino(_player, _playerdata)
                         end
                         playerdata.bisAlbinoOutside = true;
                     end
-                    stats:setPain(20);
                 end
+				if player:getPrimaryHandItem() ~= nil then
+					if player:getPrimaryHandItem():getType() == "UmbrellaRed" or  player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then   
+						umbrella = true;
+					end
+				end
+				if player:getSecondaryHandItem() ~= nil then
+					if player:getSecondaryHandItem():getType() == "UmbrellaRed" or player:getSecondaryHandItem():getType() == "UmbrellaBlue" or player:getSecondaryHandItem():getType() == "UmbrellaWhite" or player:getSecondaryHandItem():getType() == "UmbrellaBlack" then  
+						umbrella = true;
+					end
+				end
+				if umbrella == false then
+					stats:setPain(pain);
+				else
+					stats:setPain(pain / 1.5);
+				end
+			else
+				if pain > 0 then
+					stats:setPain(pain / 2);
+				end
             end
         else
             playerdata.bisAlbinoOutside = false;
+			if pain > 0 then
+				stats:setPain(pain / 4);
+			end
         end
     end
+end
+
+local function AlbinoTimer(player, playerdata)
+	local umbrella = false;
+	if player:HasTrait("albino") then
+		local time = getGameTime();
+		if player:isOutside() then
+			local tod = time:getTimeOfDay();
+			if tod > 8 and tod < 17 then
+				if playerdata.AlbinoTimeSpentOutside < 60 then
+					if player:getPrimaryHandItem() ~= nil then
+						if player:getPrimaryHandItem():getType() == "UmbrellaRed" or  player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then   
+							umbrella = true;
+						end
+					end
+					if player:getSecondaryHandItem() ~= nil then
+						if player:getSecondaryHandItem():getType() == "UmbrellaRed" or player:getSecondaryHandItem():getType() == "UmbrellaBlue" or player:getSecondaryHandItem():getType() == "UmbrellaWhite" or player:getSecondaryHandItem():getType() == "UmbrellaBlack" then  
+							umbrella = true;
+						end
+					end
+					if umbrella == true then
+						playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + 0.5;
+					else
+						playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + 1;
+					end
+				end
+			elseif playerdata.AlbinoTimeSpentOutside >= 1 then
+				playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside - 1;
+			end
+		elseif playerdata.AlbinoTimeSpentOutside >= 1 then
+			playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside - 2;
+		end
+	end
 end
 
 function amputee(_player, justGotInfected)
@@ -3837,6 +3897,7 @@ function EveryOneMinute()
     GymGoerUpdate(player);
     HungerCheck(player);
 	RestfulSleeperWakeUp(player, playerdata);
+	AlbinoTimer(player, playerdata);
 end
 
 function EveryHours()
