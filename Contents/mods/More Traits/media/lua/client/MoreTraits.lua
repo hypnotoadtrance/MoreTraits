@@ -2089,7 +2089,7 @@ local function AlbinoTimer(player, playerdata)
 		if player:isOutside() then
 			local tod = time:getTimeOfDay();
 			if tod > 8 and tod < 17 then
-				if playerdata.AlbinoTimeSpentOutside < 60 then
+				if playerdata.AlbinoTimeSpentOutside < 40 then
 					if player:getPrimaryHandItem() ~= nil then
 						if player:getPrimaryHandItem():getType() == "UmbrellaRed" or  player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then   
 							umbrella = true;

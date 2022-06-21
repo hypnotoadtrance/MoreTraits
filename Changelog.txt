@@ -7,4 +7,3 @@ Added Hardy Mod Option to show you how much endurance from hardy you have left.
 Added Super Immune Sandbox Setting
 Increased Severity of Sun Sensitive
 Sun Sensitive now increases pain the more time you spend outside, and decreases when inside.
-Sun Sensitive now gives 3 points (from 5)
