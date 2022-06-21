@@ -379,6 +379,7 @@ function initToadTraitsPerks(_player)
 	playerdata.ScroungerIllegal = false;
 	playerdata.ImmunoActivated = false;
 	playerdata.ImmunoEvasiveTimer = 0;
+	playerdata.ImmunoFinal = false;
 	playerdata.AlbinoTimeSpentOutside = 0;
 
     if player:HasTrait("Lucky") then
@@ -3830,8 +3831,10 @@ local function ImmunocompromisedInfection(player, playerdata)
 			if playerdata.ImmunoEvasiveTimer == 0 then
 				for i, b in pairs(evasivecheck) do
 					if b ~= nil then
-						if b:HasInjury() == false then
+						if b:HasInjury() == false and playerdata.ImmunoFinal == false then
 							bodydamage:setInfected(false);
+						else
+							playerdata.ImmunoFinal = true;
 						end
 					end
 					table.remove(evasivecheck, i, v);
