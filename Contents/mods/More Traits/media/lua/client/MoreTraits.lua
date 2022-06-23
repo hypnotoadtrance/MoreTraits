@@ -1208,12 +1208,23 @@ function CheckSelfHarm(_player)
     if player:HasTrait("depressive") then
         modifier = modifier - 1;
     end
+	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
+	local multiplier = 1;
+	if gamespeed == 1 then
+		multiplier = 1;
+	elseif gamespeed == 2 then
+		multilpier = 5;
+	elseif gamespeed == 3 then
+		multiplier = 20;
+	elseif gamespeed == 4 then
+		multiplier = 40;
+	end
     if player:HasTrait("selfdestructive") then
         if player:getBodyDamage():getUnhappynessLevel() >= 25 then
             if player:getBodyDamage():getOverallBodyHealth() >= (100 - player:getBodyDamage():getUnhappynessLevel() / modifier) then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
-                    b:AddDamage(0.001);
+                    b:AddDamage(0.001 * multiplier);
                 end
             end
         end
@@ -2031,8 +2042,8 @@ end
 function albino(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
-	local pain = playerdata.AlbinoTimeSpentOutside;
-	if pain == nil then
+	local modpain = playerdata.AlbinoTimeSpentOutside;
+	if modpain == nil then
 		playerdata.AlbinoTimeSpentOutside = 0;
 	end
 	local umbrella = false;
@@ -2065,25 +2076,27 @@ function albino(_player, _playerdata)
 					end
 				end
 				if umbrella == false then
-					stats:setPain(pain);
+					stats:setPain(modpain);
 				else
-					stats:setPain(pain / 1.5);
+					stats:setPain(modpain / 1.5);
 				end
 			else
-				if pain > 0 then
-					stats:setPain(pain / 2);
+				if modpain > 0 then
+					stats:setPain(modpain / 2);
 				end
             end
         else
             playerdata.bisAlbinoOutside = false;
-			if pain > 0 then
-				stats:setPain(pain / 4);
+			if modpain > 0 then
+				stats:setPain(modpain / 4);
 			end
         end
     end
 end
 
-local function AlbinoTimer(player, playerdata)
+local function AlbinoTimer(_player, _playerdata)
+	local player = _player;
+	local playerdata = _playerdata;
 	local umbrella = false;
 	if player:HasTrait("albino") then
 		local time = getGameTime();

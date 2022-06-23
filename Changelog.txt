@@ -1,9 +1,10 @@
 Changelog Notes:
 Immunocompromised now works as intended.
-Hardy endurance regeneration speeds up while sleeping.
+Hardy endurance regeneration speeds up massively while sleeping.
 Added Immunocompromised chance sandbox setting.
 Added Hardy Sandbox Setting
 Added Hardy Mod Option to show you how much endurance from hardy you have left.
 Added Super Immune Sandbox Setting
 Increased Severity of Sun Sensitive
 Sun Sensitive now increases pain the more time you spend outside, and decreases when inside.
+Self Destructive now speeds up accordingly if game is sped up, to avoid healing.
