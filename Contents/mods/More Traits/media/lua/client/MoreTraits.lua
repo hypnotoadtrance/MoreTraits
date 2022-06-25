@@ -1541,6 +1541,7 @@ function hardytrait(_player, _playerdata)
 		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
 			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
 			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
+			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. player:getPerkLevel(Perks.Fitness), true, HaloTextHelper.getColorGreen());
 		end
 		if endurance < 0.9 then
 			if modendurance >= 1 then
@@ -3603,7 +3604,7 @@ local function SecondWind(player)
                             playerstats:setFatigue(0.4);
                         end
                         playerdata.secondwindcooldown = 0;
-                        secondwinddisabled = true;
+                        playerdata.secondwinddisabled = true;
                         HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
                     end
                 end
