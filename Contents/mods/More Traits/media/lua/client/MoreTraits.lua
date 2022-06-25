@@ -2420,6 +2420,12 @@ local function SuperImmuneRecoveryProcess()
     if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
         playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
     end
+	if playerdata.SuperImmuneInfections == nil then
+		playerdata.SuperImmuneInfections = 0;
+	end
+	if playerdata.SuperImmuneLethal == nil then
+		playerdata.SuperImmuneLethal = false;
+	end
     local HoursPerDay = 24;
     if player:HasTrait("superimmune") then
         if playerdata.SuperImmuneActive == true then
