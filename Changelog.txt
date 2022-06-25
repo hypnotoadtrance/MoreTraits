@@ -8,3 +8,4 @@ Added Super Immune Sandbox Setting
 Increased Severity of Sun Sensitive
 Sun Sensitive now increases pain the more time you spend outside, and decreases when inside.
 Self Destructive now speeds up accordingly if game is sped up, to avoid healing.
+Fixed Second Wind having no cooldown.
