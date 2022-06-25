@@ -2082,6 +2082,7 @@ function albino(_player, _playerdata)
 					stats:setPain(modpain / 1.5);
 				end
 			else
+				local stats = player:getStats();
 				if modpain > 0 then
 					stats:setPain(modpain / 2);
 				end
