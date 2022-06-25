@@ -3826,6 +3826,9 @@ local function ImmunocompromisedInfection(player, playerdata)
 	if playerdata.ImmunoFinal == nil then
 		playerdata.ImmunoFinal = false;
 	end
+	if playerdata.ImmunoEvasiveTimer == nil then
+		playerdata.ImmunoEvasiveTimer = 0;
+	end
 	if activated == true then
 		if player:getCurrentState() == IdleState.instance() then
 			playerdata.ImmunoActivated = false;
