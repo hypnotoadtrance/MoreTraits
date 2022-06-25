@@ -2087,6 +2087,7 @@ function albino(_player, _playerdata)
 				end
             end
         else
+			local stats = player:getStats();
             playerdata.bisAlbinoOutside = false;
 			if modpain > 0 then
 				stats:setPain(modpain / 4);
