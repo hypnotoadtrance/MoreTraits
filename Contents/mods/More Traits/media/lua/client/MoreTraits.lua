@@ -3819,6 +3819,9 @@ local function ImmunocompromisedInfection(player, playerdata)
 			playerdata.ImmunoActivated = false;
 		end
 	end
+	if playerdata.ImmunoFinal == true and isinfected == false then
+		playerdata.ImmunoFinal = false;
+	end
 	if player:HasTrait("Immunocompromised") then
 		if player:getCurrentState() == PlayerHitReactionState.instance() and activated == false then
 			playerdata.ImmunoActivated = true;
