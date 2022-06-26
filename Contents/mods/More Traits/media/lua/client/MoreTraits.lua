@@ -2047,6 +2047,8 @@ function albino(_player, _playerdata)
 	if modpain == nil then
 		playerdata.AlbinoTimeSpentOutside = 0;
 	end
+	local stats = player:getStats();
+    local pain = stats:getPain();
 	local umbrella = false;
     if player:HasTrait("albino") then
         local time = getGameTime();
@@ -2056,8 +2058,6 @@ function albino(_player, _playerdata)
         if player:isOutside() then
             local tod = time:getTimeOfDay();
             if tod > 8 and tod < 17 then
-                local stats = player:getStats();
-                local pain = stats:getPain();
                 if pain < 25 then
                     if playerdata.bisAlbinoOutside == false then
                         if MoreTraits.settings.AlbinoAnnounce == true then
@@ -2082,13 +2082,11 @@ function albino(_player, _playerdata)
 					stats:setPain(modpain / 1.5);
 				end
 			else
-				local stats = player:getStats();
 				if modpain > 0 then
 					stats:setPain(modpain / 2);
 				end
             end
         else
-			local stats = player:getStats();
             playerdata.bisAlbinoOutside = false;
 			if modpain > 0 then
 				stats:setPain(modpain / 4);
