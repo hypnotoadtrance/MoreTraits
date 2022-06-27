@@ -2585,8 +2585,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 					limit = 5;
 				end
 				if player:HasTrait("FastHealer") then limit = limit + 1; elseif player:HasTrait("SlowHealer") then limit = limit - 1; end
-				if playerdata.SuperImmuneInfections >= limit then MaxHealth = 0; end
-				playerdata.SuperImmuneLethal = true;
+				if playerdata.SuperImmuneInfections >= limit then MaxHealth = 0; playerdata.SuperImmuneLethal = true; else playerdata.SuperImmuneLethal = false; end
 			end
             if Health >= 100 - Illness and Health > MaxHealth then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
