@@ -2467,10 +2467,11 @@ local function SuperImmuneRecoveryProcess()
                 if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
                     Illness = Illness + 2; --Prevent the injured moodle from being spammed
                 end
-                player:getBodyDamage():setFakeInfectionLevel(Illness);
                 playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
                 playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
+				Illness = Illness + (playerdata.SuperImmuneMinutesWellFed / 50);
                 playerdata.SuperImmuneMinutesWellFed = 0;
+				player:getBodyDamage():setFakeInfectionLevel(Illness);
                 if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
                     playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
                     playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
