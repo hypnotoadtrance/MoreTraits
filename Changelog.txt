@@ -1,1 +1,2 @@
 Changelog Notes:
+Super Immune now decreases sickness if well fed, allowing for survival even with sandbox setting on.
