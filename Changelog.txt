@@ -1,2 +1,3 @@
 Changelog Notes:
 Super Immune now decreases sickness if well fed, allowing for survival even with sandbox setting on.
+Fixed duplicate alcoholic trait showing up when More Simple Traits mod is enabled.
