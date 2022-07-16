@@ -1396,7 +1396,9 @@ function Gordanite(_player)
                     crowbar:setDoorDamage(8);
                     crowbar:setCriticalChance(35);
                     crowbar:setSwingTime(3);
+					if getActivatedMods():contains("VorpalWeapons") == false then
                     crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
+					end
                     crowbar:setWeaponLength(0.4);
                     crowbar:setMinimumSwingTime(3);
                     crowbar:setTreeDamage(0);
@@ -3603,6 +3605,7 @@ local function SecondWind(player)
                     end
                     if zombiesnearplayer > 2 then
                         playerstats:setEndurance(1);
+						playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
                         if playerstats:getFatigue() > 0.6 then
                             playerdata.secondwindrecoveredfatigue = true;
                         end
@@ -3877,6 +3880,37 @@ local function ImmunocompromisedInfection(player, playerdata)
 	end
 end
 
+--[[local function TerminatorGun(player, playerdata)
+	local state = "Normal";
+	if player:HasTrait("Terminator") then
+		state = "Terminator";
+	end
+	if player:getPrimaryHandItem() ~= nil then
+		if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
+			local weapon = player:getPrimaryHandItem();
+			local weapondata = weapon:getModData();
+			if weapondata.state == nil then
+				weapondata.ogAiming = weapon:getAimingTime();
+				weapondata.ogDamage = weapon:getDamage();
+			end
+			if state == "Normal" and weapon:getAimingTime() ~= weapondata.ogAiming or weapon:getDamage() ~= weapondata.ogDamage then
+			
+			end
+			if state == "Terminator" and weapon:getAimingTime() ~= weapondata.ogAiming / 2 or weapon:getDamage() ~= weapondata.ogDamage * 1.25 then
+			
+			end
+			if state == "Normal" then
+				weapon:setAimingTime(weapondata.ogAiming);
+				weapon:setDamage(weapondata.ogDamage);
+				weapondata.state = "Normal";
+			end
+			if state == "Terminator" then
+			
+			end
+		end
+	end
+end--]]
+
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -3915,6 +3949,7 @@ function MainPlayerUpdate(_player)
     SlowWorker(player);
     SuperImmuneFakeInfectionHealthLoss(player);
 	ImmunocompromisedInfection(player, playerdata);
+	--TerminatorGun(player, playerdata);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
         GlassBody(player, playerdata);

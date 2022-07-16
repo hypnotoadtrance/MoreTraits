@@ -205,9 +205,11 @@ local function initToadTraits()
     local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
     local packmouse = TraitFactory.addTrait("packmouse", getText("UI_trait_packmouse"), -7, getText("UI_trait_packmousedesc"), false, false);
     local injured = TraitFactory.addTrait("injured", getText("UI_trait_injured"), -4, getText("UI_trait_injureddesc"), false, false);
-    if getActivatedMods():contains("DynamicTraits") == false then
-        --Use DynamicTraits' Alcoholic trait if it exists.
-        local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -14, getText("UI_trait_drinkerdesc"), false, false);
+    if getActivatedMods():contains("DynamicTraits") == false and getActivatedMods():contains("MoreSimpleTraits") == false then
+        --Use DynamicTraits' or MoreSimpleTraits' Alcoholic trait if it exists.
+		if getActivatedMods():contains("MoreSimpleTraitsVanilla") == false then
+			local drinker = TraitFactory.addTrait("drinker", getText("UI_trait_drinker"), -14, getText("UI_trait_drinkerdesc"), false, false);
+		end
     end
     local broke = TraitFactory.addTrait("broke", getText("UI_trait_broke"), -8, getText("UI_trait_brokedesc"), false, false);
     local butterfingers = TraitFactory.addTrait("butterfingers", getText("UI_trait_butterfingers"), -12, getText("UI_trait_butterfingersdesc"), false, false);
