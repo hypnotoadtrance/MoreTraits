@@ -369,18 +369,18 @@ function initToadTraitsPerks(_player)
     playerdata.SuperImmuneHealedOnce = false;
     playerdata.SuperImmuneMinutesWellFed = 0;
     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-	playerdata.SuperImmuneInfections = 0;
-	playerdata.SuperImmuneLethal = false;
+    playerdata.SuperImmuneInfections = 0;
+    playerdata.SuperImmuneLethal = false;
     playerdata.MotionActive = false;
-	playerdata.HasSlept = false;
-	playerdata.FatigueWhenSleeping = 0;
-	playerdata.NeckHadPain = false;
-	playerdata.VagabondIllegal = false;
-	playerdata.ScroungerIllegal = false;
-	playerdata.ImmunoActivated = false;
-	playerdata.ImmunoEvasiveTimer = 0;
-	playerdata.ImmunoFinal = false;
-	playerdata.AlbinoTimeSpentOutside = 0;
+    playerdata.HasSlept = false;
+    playerdata.FatigueWhenSleeping = 0;
+    playerdata.NeckHadPain = false;
+    playerdata.VagabondIllegal = false;
+    playerdata.ScroungerIllegal = false;
+    playerdata.ImmunoActivated = false;
+    playerdata.ImmunoEvasiveTimer = 0;
+    playerdata.ImmunoFinal = false;
+    playerdata.AlbinoTimeSpentOutside = 0;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -796,25 +796,25 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
             basechance = basechance - 5 * luckimpact;
             modifier = modifier - 0.1 * luckimpact;
         end
-	if playerData.ScroungerIllegal == nil then
-		playerData.ScroungerIllegal = false;
-	end
-	if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-		playerData.ScroungerIllegal = true;
-	end
-	if playerData.ScroungerIllegal == true and player:isPlayerMoving() == true then
-		playerData.ScroungerIllegal = false;
-	end
+        if playerData.ScroungerIllegal == nil then
+            playerData.ScroungerIllegal = false;
+        end
+        if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
+            playerData.ScroungerIllegal = true;
+        end
+        if playerData.ScroungerIllegal == true and player:isPlayerMoving() == true then
+            playerData.ScroungerIllegal = false;
+        end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
                 containerObj = v.inventory:getParent();
                 if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
-					if playerData.ScroungerIllegal == true then
-						playerData.ScroungerIllegal = false;
-						return
-					end
+                    if playerData.ScroungerIllegal == true then
+                        playerData.ScroungerIllegal = false;
+                        return
+                    end
                     if ZombRand(100) <= basechance then
                         local tempcontainer = {};
                         container = containerObj:getContainer();
@@ -1099,18 +1099,18 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
         length = length + 1;
     end
     local player = _player;
-	local playerdata = player:getModData();
+    local playerdata = player:getModData();
     local containerObj;
     local container;
-	if playerdata.VagabondIllegal == nil then
-		playerdata.VagabondIllegal = false;
-	end
-	if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-		playerdata.VagabondIllegal = true;
-	end
-	if playerdata.VagabondIllegal == true and player:isPlayerMoving() == true then
-		playerdata.VagabondIllegal = false;
-	end
+    if playerdata.VagabondIllegal == nil then
+        playerdata.VagabondIllegal = false;
+    end
+    if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
+        playerdata.VagabondIllegal = true;
+    end
+    if playerdata.VagabondIllegal == true and player:isPlayerMoving() == true then
+        playerdata.VagabondIllegal = false;
+    end
     if player:HasTrait("vagabond") then
         local basechance = 33;
         if SandboxVars.MoreTraits.VagabondChance then
@@ -1127,11 +1127,11 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                 containerObj = v.inventory:getParent();
                 if not containerObj:getModData().bVagbondRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bVagbondRolled = true;
-					containerObj:transmitModData();
-					if playerdata.VagabondIllegal == true then
-						playerdata.VagabondIllegal = false;
-						return
-					end
+                    containerObj:transmitModData();
+                    if playerdata.VagabondIllegal == true then
+                        playerdata.VagabondIllegal = false;
+                        return
+                    end
                     container = containerObj:getContainer();
                     if container:getType() == ("bin") then
                         local extra = 1;
@@ -1146,7 +1146,8 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                                 x = 1;
                             end
                             if ZombRand(100) <= basechance then
-                                container:addItemOnServer(container:AddItem(items[x]));
+                                local item = container:AddItem(items[x]);
+                                container:addItemOnServer(item);
                                 if MoreTraits.settings.VagabondAnnounce == true then
                                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
                                 end
@@ -1208,17 +1209,17 @@ function CheckSelfHarm(_player)
     if player:HasTrait("depressive") then
         modifier = modifier - 1;
     end
-	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
-	local multiplier = 1;
-	if gamespeed == 1 then
-		multiplier = 1;
-	elseif gamespeed == 2 then
-		multilpier = 5;
-	elseif gamespeed == 3 then
-		multiplier = 20;
-	elseif gamespeed == 4 then
-		multiplier = 40;
-	end
+    local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
+    local multiplier = 1;
+    if gamespeed == 1 then
+        multiplier = 1;
+    elseif gamespeed == 2 then
+        multilpier = 5;
+    elseif gamespeed == 3 then
+        multiplier = 20;
+    elseif gamespeed == 4 then
+        multiplier = 40;
+    end
     if player:HasTrait("selfdestructive") then
         if player:getBodyDamage():getUnhappynessLevel() >= 25 then
             if player:getBodyDamage():getOverallBodyHealth() >= (100 - player:getBodyDamage():getUnhappynessLevel() / modifier) then
@@ -1396,9 +1397,9 @@ function Gordanite(_player)
                     crowbar:setDoorDamage(8);
                     crowbar:setCriticalChance(35);
                     crowbar:setSwingTime(3);
-					if getActivatedMods():contains("VorpalWeapons") == false then
-                    crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
-					end
+                    if getActivatedMods():contains("VorpalWeapons") == false then
+                        crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
+                    end
                     crowbar:setWeaponLength(0.4);
                     crowbar:setMinimumSwingTime(3);
                     crowbar:setTreeDamage(0);
@@ -1511,98 +1512,98 @@ function hardytrait(_player, _playerdata)
     local player = getPlayer();
     local playerdata = player:getModData();
     local stats = player:getStats();
-	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
-	local multiplier = 1;
-	if gamespeed == 1 then
-		multiplier = 1;
-	elseif gamespeed == 2 then
-		multilpier = 5;
-	elseif gamespeed == 3 then
-		multiplier = 20;
-	elseif gamespeed == 4 then
-		multiplier = 40;
-	end
+    local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
+    local multiplier = 1;
+    if gamespeed == 1 then
+        multiplier = 1;
+    elseif gamespeed == 2 then
+        multilpier = 5;
+    elseif gamespeed == 3 then
+        multiplier = 20;
+    elseif gamespeed == 4 then
+        multiplier = 40;
+    end
     if player:HasTrait("hardy") then
-		local modendurance = playerdata.iHardyEndurance;
-      	local endurance = stats:getEndurance();
-		local interval = playerdata.iHardyInterval;
-		local maxendurance = playerdata.iHardyMaxEndurance;
-		local AmountOfEnduranceRegenerated = 0.05;
-		if SandboxVars.MoreTraits.HardyEndurance then
-			AmountOfEnduranceRegenerated = SandboxVars.MoreTraits.HardyEndurance / 1000;
-		end
-		if playerdata.iHardyInterval == nil then
-			playerdata.iHardyInterval = 1000;
-		end
-		if playerdata.iHardyMaxEndurance == nil then
-			playerdata.iHardyMaxEndurance = 0;
-		end
-		if playerdata.iHardyEndurance == nil then
-			playerdata.iHardyEndurance = 0;
-		end
-		if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
-			playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
-			playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
-			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. player:getPerkLevel(Perks.Fitness), true, HaloTextHelper.getColorGreen());
-		end
-		if endurance < 0.9 then
-			if modendurance >= 1 then
-				stats:setEndurance(endurance + AmountOfEnduranceRegenerated);
-				playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
-				if MoreTraits.settings.HardyNotifier == true then
-					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance - 1, false, HaloTextHelper.getColorRed());
-				end
-			end
-		end
-		if modendurance < maxendurance and endurance == 1 then
-			if interval <= 0 then
-				playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
-				if MoreTraits.settings.HardyNotifier == true then
-					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
-				end
-				playerdata.iHardyInterval = 1000;
-			else
-				if player:isSitOnGround() == true then
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - (1 * multiplier);
-					else
-						playerdata.iHardyInterval = interval - (2 * multiplier);
-					end
-				elseif player:isAsleep() == true then
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 25;
-					else
-						playerdata.iHardyInterval = interval - 50;
-					end
-				else
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - (0.25 * multiplier);
-					else
-						playerdata.iHardyInterval = interval - (0.5 * multiplier);
-					end
-				end
-			end
-		elseif interval > 0 and endurance == 1 then
-			if player:isSitOnGround() == true then
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - (1 * multiplier);
-				else
-					playerdata.iHardyInterval = interval - (2 * multiplier);
-				end
-			elseif player:isAsleep() == true then
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - 25;
-				else
-					playerdata.iHardyInterval = interval - 50;
-				end
-			else
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - (0.25 * multiplier);
-				else
-					playerdata.iHardyInterval = interval - (0.5 * multiplier);
-				end
-			end
-		end
+        local modendurance = playerdata.iHardyEndurance;
+        local endurance = stats:getEndurance();
+        local interval = playerdata.iHardyInterval;
+        local maxendurance = playerdata.iHardyMaxEndurance;
+        local AmountOfEnduranceRegenerated = 0.05;
+        if SandboxVars.MoreTraits.HardyEndurance then
+            AmountOfEnduranceRegenerated = SandboxVars.MoreTraits.HardyEndurance / 1000;
+        end
+        if playerdata.iHardyInterval == nil then
+            playerdata.iHardyInterval = 1000;
+        end
+        if playerdata.iHardyMaxEndurance == nil then
+            playerdata.iHardyMaxEndurance = 0;
+        end
+        if playerdata.iHardyEndurance == nil then
+            playerdata.iHardyEndurance = 0;
+        end
+        if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
+            playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
+            playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. player:getPerkLevel(Perks.Fitness), true, HaloTextHelper.getColorGreen());
+        end
+        if endurance < 0.9 then
+            if modendurance >= 1 then
+                stats:setEndurance(endurance + AmountOfEnduranceRegenerated);
+                playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
+                if MoreTraits.settings.HardyNotifier == true then
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance - 1, false, HaloTextHelper.getColorRed());
+                end
+            end
+        end
+        if modendurance < maxendurance and endurance == 1 then
+            if interval <= 0 then
+                playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
+                if MoreTraits.settings.HardyNotifier == true then
+                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
+                end
+                playerdata.iHardyInterval = 1000;
+            else
+                if player:isSitOnGround() == true then
+                    if player:HasTrait("Asthmatic") then
+                        playerdata.iHardyInterval = interval - (1 * multiplier);
+                    else
+                        playerdata.iHardyInterval = interval - (2 * multiplier);
+                    end
+                elseif player:isAsleep() == true then
+                    if player:HasTrait("Asthmatic") then
+                        playerdata.iHardyInterval = interval - 25;
+                    else
+                        playerdata.iHardyInterval = interval - 50;
+                    end
+                else
+                    if player:HasTrait("Asthmatic") then
+                        playerdata.iHardyInterval = interval - (0.25 * multiplier);
+                    else
+                        playerdata.iHardyInterval = interval - (0.5 * multiplier);
+                    end
+                end
+            end
+        elseif interval > 0 and endurance == 1 then
+            if player:isSitOnGround() == true then
+                if player:HasTrait("Asthmatic") then
+                    playerdata.iHardyInterval = interval - (1 * multiplier);
+                else
+                    playerdata.iHardyInterval = interval - (2 * multiplier);
+                end
+            elseif player:isAsleep() == true then
+                if player:HasTrait("Asthmatic") then
+                    playerdata.iHardyInterval = interval - 25;
+                else
+                    playerdata.iHardyInterval = interval - 50;
+                end
+            else
+                if player:HasTrait("Asthmatic") then
+                    playerdata.iHardyInterval = interval - (0.25 * multiplier);
+                else
+                    playerdata.iHardyInterval = interval - (0.5 * multiplier);
+                end
+            end
+        end
     end
 end
 
@@ -2045,13 +2046,13 @@ end
 function albino(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
-	local modpain = playerdata.AlbinoTimeSpentOutside;
-	if modpain == nil then
-		playerdata.AlbinoTimeSpentOutside = 0;
-	end
-	local stats = player:getStats();
+    local modpain = playerdata.AlbinoTimeSpentOutside;
+    if modpain == nil then
+        playerdata.AlbinoTimeSpentOutside = 0;
+    end
+    local stats = player:getStats();
     local pain = stats:getPain();
-	local umbrella = false;
+    local umbrella = false;
     if player:HasTrait("albino") then
         local time = getGameTime();
         if playerdata.bisAlbinoOutside == nil then
@@ -2068,68 +2069,68 @@ function albino(_player, _playerdata)
                         playerdata.bisAlbinoOutside = true;
                     end
                 end
-				if player:getPrimaryHandItem() ~= nil then
-					if player:getPrimaryHandItem():getType() == "UmbrellaRed" or  player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then   
-						umbrella = true;
-					end
-				end
-				if player:getSecondaryHandItem() ~= nil then
-					if player:getSecondaryHandItem():getType() == "UmbrellaRed" or player:getSecondaryHandItem():getType() == "UmbrellaBlue" or player:getSecondaryHandItem():getType() == "UmbrellaWhite" or player:getSecondaryHandItem():getType() == "UmbrellaBlack" then  
-						umbrella = true;
-					end
-				end
-				if umbrella == false then
-					stats:setPain(modpain);
-				else
-					stats:setPain(modpain / 1.5);
-				end
-			else
-				if modpain > 0 then
-					stats:setPain(modpain / 2);
-				end
+                if player:getPrimaryHandItem() ~= nil then
+                    if player:getPrimaryHandItem():getType() == "UmbrellaRed" or player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then
+                        umbrella = true;
+                    end
+                end
+                if player:getSecondaryHandItem() ~= nil then
+                    if player:getSecondaryHandItem():getType() == "UmbrellaRed" or player:getSecondaryHandItem():getType() == "UmbrellaBlue" or player:getSecondaryHandItem():getType() == "UmbrellaWhite" or player:getSecondaryHandItem():getType() == "UmbrellaBlack" then
+                        umbrella = true;
+                    end
+                end
+                if umbrella == false then
+                    stats:setPain(modpain);
+                else
+                    stats:setPain(modpain / 1.5);
+                end
+            else
+                if modpain > 0 then
+                    stats:setPain(modpain / 2);
+                end
             end
         else
             playerdata.bisAlbinoOutside = false;
-			if modpain > 0 then
-				stats:setPain(modpain / 4);
-			end
+            if modpain > 0 then
+                stats:setPain(modpain / 4);
+            end
         end
     end
 end
 
 local function AlbinoTimer(_player, _playerdata)
-	local player = _player;
-	local playerdata = _playerdata;
-	local umbrella = false;
-	if player:HasTrait("albino") then
-		local time = getGameTime();
-		if player:isOutside() then
-			local tod = time:getTimeOfDay();
-			if tod > 8 and tod < 17 then
-				if playerdata.AlbinoTimeSpentOutside < 40 then
-					if player:getPrimaryHandItem() ~= nil then
-						if player:getPrimaryHandItem():getType() == "UmbrellaRed" or  player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then   
-							umbrella = true;
-						end
-					end
-					if player:getSecondaryHandItem() ~= nil then
-						if player:getSecondaryHandItem():getType() == "UmbrellaRed" or player:getSecondaryHandItem():getType() == "UmbrellaBlue" or player:getSecondaryHandItem():getType() == "UmbrellaWhite" or player:getSecondaryHandItem():getType() == "UmbrellaBlack" then  
-							umbrella = true;
-						end
-					end
-					if umbrella == true then
-						playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + 0.5;
-					else
-						playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + 1;
-					end
-				end
-			elseif playerdata.AlbinoTimeSpentOutside >= 1 then
-				playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside - 1;
-			end
-		elseif playerdata.AlbinoTimeSpentOutside >= 1 then
-			playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside - 2;
-		end
-	end
+    local player = _player;
+    local playerdata = _playerdata;
+    local umbrella = false;
+    if player:HasTrait("albino") then
+        local time = getGameTime();
+        if player:isOutside() then
+            local tod = time:getTimeOfDay();
+            if tod > 8 and tod < 17 then
+                if playerdata.AlbinoTimeSpentOutside < 40 then
+                    if player:getPrimaryHandItem() ~= nil then
+                        if player:getPrimaryHandItem():getType() == "UmbrellaRed" or player:getPrimaryHandItem():getType() == "UmbrellaBlue" or player:getPrimaryHandItem():getType() == "UmbrellaWhite" or player:getPrimaryHandItem():getType() == "UmbrellaBlack" then
+                            umbrella = true;
+                        end
+                    end
+                    if player:getSecondaryHandItem() ~= nil then
+                        if player:getSecondaryHandItem():getType() == "UmbrellaRed" or player:getSecondaryHandItem():getType() == "UmbrellaBlue" or player:getSecondaryHandItem():getType() == "UmbrellaWhite" or player:getSecondaryHandItem():getType() == "UmbrellaBlack" then
+                            umbrella = true;
+                        end
+                    end
+                    if umbrella == true then
+                        playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + 0.5;
+                    else
+                        playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + 1;
+                    end
+                end
+            elseif playerdata.AlbinoTimeSpentOutside >= 1 then
+                playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside - 1;
+            end
+        elseif playerdata.AlbinoTimeSpentOutside >= 1 then
+            playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside - 2;
+        end
+    end
 end
 
 function amputee(_player, justGotInfected)
@@ -2422,12 +2423,12 @@ local function SuperImmuneRecoveryProcess()
     if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
         playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
     end
-	if playerdata.SuperImmuneInfections == nil then
-		playerdata.SuperImmuneInfections = 0;
-	end
-	if playerdata.SuperImmuneLethal == nil then
-		playerdata.SuperImmuneLethal = false;
-	end
+    if playerdata.SuperImmuneInfections == nil then
+        playerdata.SuperImmuneInfections = 0;
+    end
+    if playerdata.SuperImmuneLethal == nil then
+        playerdata.SuperImmuneLethal = false;
+    end
     local HoursPerDay = 24;
     if player:HasTrait("superimmune") then
         if playerdata.SuperImmuneActive == true then
@@ -2471,9 +2472,9 @@ local function SuperImmuneRecoveryProcess()
                 end
                 playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
                 playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
-				Illness = Illness + (playerdata.SuperImmuneMinutesWellFed / 50);
+                Illness = Illness + (playerdata.SuperImmuneMinutesWellFed / 50);
                 playerdata.SuperImmuneMinutesWellFed = 0;
-				player:getBodyDamage():setFakeInfectionLevel(Illness);
+                player:getBodyDamage():setFakeInfectionLevel(Illness);
                 if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
                     playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
                     playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
@@ -2492,7 +2493,7 @@ local function SuperImmuneRecoveryProcess()
                         Illness = Illness - 1; --1 to 3.7 days
                     end
                     player:getBodyDamage():setFakeInfectionLevel(Illness);
-					playerdata.SuperImmuneInfections = 0;
+                    playerdata.SuperImmuneInfections = 0;
                 else
                     --Once illness fully recovers
                     if MoreTraits.settings.SuperImmuneAnnounce == true then
@@ -2504,8 +2505,8 @@ local function SuperImmuneRecoveryProcess()
                     playerdata.SuperImmuneRecovery = 0;
                     playerdata.SuperImmuneHealedOnce = true;
                     playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-					playerdata.SuperImmuneInfections = 0;
-					playerdata.SuperImmuneLethal = false;
+                    playerdata.SuperImmuneInfections = 0;
+                    playerdata.SuperImmuneLethal = false;
                 end
                 if MoreTraits.settings.SuperImmuneAnnounce == true and playerdata.SuperImmuneTextSaid == false then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
@@ -2554,9 +2555,9 @@ function SuperImmune(_player, _playerdata)
                 playerdata.SuperImmuneActive = true;
             end
             playerdata.SuperImmuneRecovery = playerdata.SuperImmuneRecovery + TimeOfRecovery;
-			if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
-				playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
-			end
+            if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
+                playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
+            end
         end
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
@@ -2582,14 +2583,23 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
             if player:HasTrait("indefatigable") then
                 MaxHealth = 22;
             end
-			if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
-				local limit = 4;
-				if playerdata.SuperImmuneHealedOnce == true then
-					limit = 5;
-				end
-				if player:HasTrait("FastHealer") then limit = limit + 1; elseif player:HasTrait("SlowHealer") then limit = limit - 1; end
-				if playerdata.SuperImmuneInfections >= limit then MaxHealth = 0; playerdata.SuperImmuneLethal = true; else playerdata.SuperImmuneLethal = false; end
-			end
+            if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
+                local limit = 4;
+                if playerdata.SuperImmuneHealedOnce == true then
+                    limit = 5;
+                end
+                if player:HasTrait("FastHealer") then
+                    limit = limit + 1;
+                elseif player:HasTrait("SlowHealer") then
+                    limit = limit - 1;
+                end
+                if playerdata.SuperImmuneInfections >= limit then
+                    MaxHealth = 0;
+                    playerdata.SuperImmuneLethal = true;
+                else
+                    playerdata.SuperImmuneLethal = false;
+                end
+            end
             if Health >= 100 - Illness and Health > MaxHealth then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
@@ -3512,9 +3522,9 @@ function clothingUpdate(_player)
 end
 
 local function FixSpecialization(player, perk)
-	if player:getXp():getXP(perk) < 0 then
-		player:getXp():setXPToLevel(Perks.perk, player:getPerkLevel(perk));
-	end
+    if player:getXp():getXP(perk) < 0 then
+        player:getXp():setXPToLevel(Perks.perk, player:getPerkLevel(perk));
+    end
 end
 
 local function CheckInjuredHeal()
@@ -3605,7 +3615,7 @@ local function SecondWind(player)
                     end
                     if zombiesnearplayer > 2 then
                         playerstats:setEndurance(1);
-						playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
+                        playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
                         if playerstats:getFatigue() > 0.6 then
                             playerdata.secondwindrecoveredfatigue = true;
                         end
@@ -3740,51 +3750,51 @@ end
 
 local function RestfulSleeper()
     local player = getPlayer();
-	local playerdata = player:getModData();
+    local playerdata = player:getModData();
     local Multiplier = 1;
     local Fatigue = player:getStats():getFatigue();
-	local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
+    local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
     if player:HasTrait("restfulsleeper") and player:isAsleep() then
-		playerdata.HasSlept = true;
-		if Neck:getAdditionalPain() > 0 then
-			playerdata.NeckHadPain = true;
-		else
-			playerdata.NeckHadPain = false;
-		end
+        playerdata.HasSlept = true;
+        if Neck:getAdditionalPain() > 0 then
+            playerdata.NeckHadPain = true;
+        else
+            playerdata.NeckHadPain = false;
+        end
         if Fatigue >= 0.6 then
             player:getStats():setFatigue(Fatigue - (0.2 * Multiplier));
         elseif Fatigue >= 0.2 and Fatigue < 0.6 then
             player:getStats():setFatigue(Fatigue - (0.1 * Multiplier));
-		elseif Fatigue < 0.2 then
-			player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
+        elseif Fatigue < 0.2 then
+            player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
         end
-		playerdata.FatigueWhenSleeping = Fatigue;
+        playerdata.FatigueWhenSleeping = Fatigue;
     end
 end
 
 local function RestfulSleeperWakeUp(player, playerdata)
-	local Fatigue = player:getStats():getFatigue();
-	local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
-	if player:HasTrait("restfulsleeper") and Fatigue <= 0 and player:isAsleep() == true then
-		player:forceAwake();
-		playerdata.FatigueWhenSleeping = 0;
-	elseif player:HasTrait("restfulsleeper") and player:isAsleep() == true then
-		playerdata.FatigueWhenSleeping = Fatigue;
-	elseif player:HasTrait("restfulsleeper") and playerdata.HasSlept == true then
-		if Fatigue > playerdata.FatigueWhenSleeping then
-			player:getStats():setFatigue(playerdata.FatigueWhenSleeping);
-		end
-		playerdata.HasSlept = false;
-		playerdata.FatigueWhenSleeping = 0;
-		if playerdata.NeckHadPain == false and Neck:getAdditionalPain() > 0 then
-			Neck:setAdditionalPain(0);
-		end
-	end
+    local Fatigue = player:getStats():getFatigue();
+    local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
+    if player:HasTrait("restfulsleeper") and Fatigue <= 0 and player:isAsleep() == true then
+        player:forceAwake();
+        playerdata.FatigueWhenSleeping = 0;
+    elseif player:HasTrait("restfulsleeper") and player:isAsleep() == true then
+        playerdata.FatigueWhenSleeping = Fatigue;
+    elseif player:HasTrait("restfulsleeper") and playerdata.HasSlept == true then
+        if Fatigue > playerdata.FatigueWhenSleeping then
+            player:getStats():setFatigue(playerdata.FatigueWhenSleeping);
+        end
+        playerdata.HasSlept = false;
+        playerdata.FatigueWhenSleeping = 0;
+        if playerdata.NeckHadPain == false and Neck:getAdditionalPain() > 0 then
+            Neck:setAdditionalPain(0);
+        end
+    end
 end
 
 local function HungerCheck(player)
     local player = getPlayer();
-	local playerdata = player:getModData();
+    local playerdata = player:getModData();
     if player:HasTrait("SuperImmune") and player:getModData().SuperImmuneActive == true then
         local stats = player:getStats();
         local hunger = stats:getHunger();
@@ -3795,89 +3805,90 @@ local function HungerCheck(player)
         if hunger == 0 then
             player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
         end
-		if player:isGodMod() == true then
-			local bodydamage = player:getBodyDamage();
-			playerdata.SuperImmuneTextSaid = false;
-			playerdata.SuperImmuneActive = false;
-			playerdata.SuperImmuneHoursPassed = 0;
-			playerdata.SuperImmuneRecovery = 0;
-			playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-			playerdata.SuperImmuneMinutesWellFed = 0;
-			playerdata.SuperImmuneInfections = 0;
-			playerdata.SuperImmuneLethal = false;
-			bodydamage:setFakeInfectionLevel(0);
-		end
+        if player:isGodMod() == true then
+            local bodydamage = player:getBodyDamage();
+            playerdata.SuperImmuneTextSaid = false;
+            playerdata.SuperImmuneActive = false;
+            playerdata.SuperImmuneHoursPassed = 0;
+            playerdata.SuperImmuneRecovery = 0;
+            playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+            playerdata.SuperImmuneMinutesWellFed = 0;
+            playerdata.SuperImmuneInfections = 0;
+            playerdata.SuperImmuneLethal = false;
+            bodydamage:setFakeInfectionLevel(0);
+        end
     end
 end
 
 local function ImmunocompromisedInfection(player, playerdata)
-	local bodydamage = player:getBodyDamage();
-	local isinfected = bodydamage:isInfected();
-	local activated = playerdata.ImmunoActivated;
-	local evasivecheck = playerdata.ImmunoPart;
-	local chance = 25;
-	local checked = false;
-	if SandboxVars.MoreTraits.ImmunoChance then
-		chance = SandboxVars.MoreTraits.ImmunoChance;
-	end
-	if evasivecheck == nil then
-		playerdata.ImmunoPart = {};
-	end
-	if activated == nil then
-		playerdata.ImmunoActivated = false;
-	end
-	if playerdata.ImmunoFinal == nil then
-		playerdata.ImmunoFinal = false;
-	end
-	if playerdata.ImmunoEvasiveTimer == nil then
-		playerdata.ImmunoEvasiveTimer = 0;
-	end
-	if activated == true then
-		if player:getCurrentState() == IdleState.instance() then
-			playerdata.ImmunoActivated = false;
-		end
-	end
-	if playerdata.ImmunoFinal == true and isinfected == false then
-		playerdata.ImmunoFinal = false;
-	end
-	if player:HasTrait("Immunocompromised") then
-		if player:getCurrentState() == PlayerHitReactionState.instance() and activated == false then
-			playerdata.ImmunoActivated = true;
-			for i = 0, bodydamage:getBodyParts():size() - 1 do
-				local b = bodydamage:getBodyParts():get(i);
-				if b:HasInjury() and b:getBleedingTime() ~= 0 and checked == false and bodydamage:isInfected() == false then --Bleeding time to check if an injury was caught, because tailoring or thick skinned might not get injury
-					checked = true;
-					if ZombRand(1, 101) <= chance then
-						bodydamage:setInfected(true);
-						table.insert(evasivecheck, b);
-						playerdata.ImmunoEvasiveTimer = 100;
-					end
-				end
-				if b:bitten() == true then
-					checked = true;
-					bodydamage:setInfected(true);
-					table.insert(evasivecheck, b);
-					playerdata.ImmunoEvasiveTimer = 100;
-				end
-			end
-		end
-		if playerdata.ImmunoEvasiveTimer > 0 then
-			playerdata.ImmunoEvasiveTimer = playerdata.ImmunoEvasiveTimer - 1;
-			if playerdata.ImmunoEvasiveTimer == 0 then
-				for i, b in pairs(evasivecheck) do
-					if b ~= nil then
-						if b:HasInjury() == false and playerdata.ImmunoFinal == false then
-							bodydamage:setInfected(false);
-						else
-							playerdata.ImmunoFinal = true;
-						end
-					end
-					table.remove(evasivecheck, i, v);
-					i = i - 1;
-				end
-			end
-		end
-	end
+    local bodydamage = player:getBodyDamage();
+    local isinfected = bodydamage:isInfected();
+    local activated = playerdata.ImmunoActivated;
+    local evasivecheck = playerdata.ImmunoPart;
+    local chance = 25;
+    local checked = false;
+    if SandboxVars.MoreTraits.ImmunoChance then
+        chance = SandboxVars.MoreTraits.ImmunoChance;
+    end
+    if evasivecheck == nil then
+        playerdata.ImmunoPart = {};
+    end
+    if activated == nil then
+        playerdata.ImmunoActivated = false;
+    end
+    if playerdata.ImmunoFinal == nil then
+        playerdata.ImmunoFinal = false;
+    end
+    if playerdata.ImmunoEvasiveTimer == nil then
+        playerdata.ImmunoEvasiveTimer = 0;
+    end
+    if activated == true then
+        if player:getCurrentState() == IdleState.instance() then
+            playerdata.ImmunoActivated = false;
+        end
+    end
+    if playerdata.ImmunoFinal == true and isinfected == false then
+        playerdata.ImmunoFinal = false;
+    end
+    if player:HasTrait("Immunocompromised") then
+        if player:getCurrentState() == PlayerHitReactionState.instance() and activated == false then
+            playerdata.ImmunoActivated = true;
+            for i = 0, bodydamage:getBodyParts():size() - 1 do
+                local b = bodydamage:getBodyParts():get(i);
+                if b:HasInjury() and b:getBleedingTime() ~= 0 and checked == false and bodydamage:isInfected() == false then
+                    --Bleeding time to check if an injury was caught, because tailoring or thick skinned might not get injury
+                    checked = true;
+                    if ZombRand(1, 101) <= chance then
+                        bodydamage:setInfected(true);
+                        table.insert(evasivecheck, b);
+                        playerdata.ImmunoEvasiveTimer = 100;
+                    end
+                end
+                if b:bitten() == true then
+                    checked = true;
+                    bodydamage:setInfected(true);
+                    table.insert(evasivecheck, b);
+                    playerdata.ImmunoEvasiveTimer = 100;
+                end
+            end
+        end
+        if playerdata.ImmunoEvasiveTimer > 0 then
+            playerdata.ImmunoEvasiveTimer = playerdata.ImmunoEvasiveTimer - 1;
+            if playerdata.ImmunoEvasiveTimer == 0 then
+                for i, b in pairs(evasivecheck) do
+                    if b ~= nil then
+                        if b:HasInjury() == false and playerdata.ImmunoFinal == false then
+                            bodydamage:setInfected(false);
+                        else
+                            playerdata.ImmunoFinal = true;
+                        end
+                    end
+                    table.remove(evasivecheck, i, v);
+                    i = i - 1;
+                end
+            end
+        end
+    end
 end
 
 --[[local function TerminatorGun(player, playerdata)
@@ -3948,8 +3959,8 @@ function MainPlayerUpdate(_player)
     QuickWorker(player);
     SlowWorker(player);
     SuperImmuneFakeInfectionHealthLoss(player);
-	ImmunocompromisedInfection(player, playerdata);
-	--TerminatorGun(player, playerdata);
+    ImmunocompromisedInfection(player, playerdata);
+    --TerminatorGun(player, playerdata);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
         GlassBody(player, playerdata);
@@ -3966,21 +3977,21 @@ function EveryOneMinute()
     LeadFoot(player);
     GymGoerUpdate(player);
     HungerCheck(player);
-	RestfulSleeperWakeUp(player, playerdata);
-	AlbinoTimer(player, playerdata);
+    RestfulSleeperWakeUp(player, playerdata);
+    AlbinoTimer(player, playerdata);
 end
 
 function EveryHours()
-	local player = getPlayer();
-	local playerdata = player:getModData();
-	drinkerpoison();
-	drinkertick();
-	SecondWindRecharge();
-	indefatigablecounter();
-	CheckInjuredHeal();
-	RestfulSleeper();
-	ToadTraitDepressive();
-	SuperImmuneRecoveryProcess();
+    local player = getPlayer();
+    local playerdata = player:getModData();
+    drinkerpoison();
+    drinkertick();
+    SecondWindRecharge();
+    indefatigablecounter();
+    CheckInjuredHeal();
+    RestfulSleeper();
+    ToadTraitDepressive();
+    SuperImmuneRecoveryProcess();
 end
 
 function OnLoad()
