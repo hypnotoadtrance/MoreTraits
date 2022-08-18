@@ -1639,6 +1639,7 @@ function drinkerupdate(_player, _playerdata)
         elseif hoursthreshold <= 20 then
             divider = 1;
         end
+        local divcalc = playerdata.iHoursSinceDrink / divider;
         if drunkness >= 10 then
             if playerdata.bSatedDrink == false then
                 playerdata.bSatedDrink = true;
@@ -1655,11 +1656,15 @@ function drinkerupdate(_player, _playerdata)
         end
         if playerdata.bSatedDrink == false then
             if playerdata.iHoursSinceDrink > hoursthreshold then
-                stats:setPain(playerdata.iHoursSinceDrink / divider);
+                stats:setPain(divcalc);
             end
             if internalTick == 30 then
-                stats:setAnger(anger + 0.01);
-                stats:setStress(stress + 0.01);
+                if anger < 0.05 + (divcalc * 0.1) / 3 then
+                    stats:setAnger(anger + 0.01);
+                end
+                if stress < 0.15 + (divcalc * 0.1) / 2 then
+                    stats:setStress(stress + 0.01);
+                end
             end
         end
     end
