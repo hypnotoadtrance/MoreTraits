@@ -5,3 +5,5 @@ Add Italian Translation, by Lore11.
 Fix null pointer exception when Announce Vagabond finds setting is enabled.
 Reduce maximum distance out to which Bouncer will trigger.
 Add sandbox option to adjust distance for Bouncer.
+Fix bug in Prepared: Ammo that prevented shotgunshellsbox from spawning
+Adjust Prepared Ammo to give a Gun Case containing more varied types of ammunition.

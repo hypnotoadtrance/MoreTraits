@@ -140,8 +140,18 @@ function initToadTraitsItems(_player)
         end
     end
     if player:HasTrait("preparedammo") then
-        inv:addItemOnServer(inv:AddItems("Base.Bullets9mmBox", 3));
-        inv:addItemOnServer(inv:AddItems("Base.ShotgunShellsBox", 2));
+        local case = inv:AddItem("Base.PistolCase1");
+        local baginv = case:getInventory();
+        baginv:AddItems("Base.Bullets9mmBox", 1);
+        baginv:AddItems("Base.ShotgunShellsBox", 1);
+        baginv:AddItems("Base.223Box", 1);
+        baginv:AddItems("Base.308Box", 1);
+        baginv:AddItems("Base.556Box", 1);
+        baginv:AddItems("Base.Bullets38Box", 1);
+        baginv:AddItems("Base.Bullets44Box", 1);
+        baginv:AddItems("Base.Bullets45Box", 1);
+        inv:addItemOnServer(case);
+        player:setSecondaryHandItem(case);
     end
     if player:HasTrait("preparedweapon") then
         inv:addItemOnServer(inv:AddItem("Base.BaseballBatNails"));
