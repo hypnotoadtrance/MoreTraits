@@ -1657,9 +1657,9 @@ function drinkerupdate(_player, _playerdata)
             if playerdata.iHoursSinceDrink > hoursthreshold then
                 stats:setPain(playerdata.iHoursSinceDrink / divider);
             end
-            if internalTick >= 29 then
-                stats:setAnger(anger + 0.001);
-                stats:setStress(stress + 0.001);
+            if internalTick == 30 then
+                stats:setAnger(anger + 0.01);
+                stats:setStress(stress + 0.01);
             end
         end
     end
@@ -1701,6 +1701,8 @@ function drinkertick()
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicneed"), false, HaloTextHelper.getColorRed());
                 end
             end
+        elseif MoreTraits.settings.DrinkNotifier == true then
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicneed"), false, HaloTextHelper.getColorRed());
         end
     end
 end
@@ -3949,8 +3951,6 @@ function MainPlayerUpdate(_player)
         Gordanite(player);
         BatteringRamUpdate(player, playerdata);
         clothingUpdate(player);
-        --Reset internalTick every 30 ticks
-        internalTick = 0;
     elseif internalTick == 20 then
         FearfulUpdate(player);
     elseif internalTick == 10 then
@@ -3981,6 +3981,10 @@ function MainPlayerUpdate(_player)
         GlassBody(player, playerdata);
     end
     internalTick = internalTick + 1;
+    if internalTick > 30 then
+        --Reset internalTick every 30 ticks
+        internalTick = 0;
+    end
 end
 
 function EveryOneMinute()

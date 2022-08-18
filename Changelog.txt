@@ -7,3 +7,5 @@ Reduce maximum distance out to which Bouncer will trigger.
 Add sandbox option to adjust distance for Bouncer.
 Fix bug in Prepared: Ammo that prevented shotgunshellsbox from spawning
 Adjust Prepared Ammo to give a Gun Case containing more varied types of ammunition.
+Add Mod Option to track Alcoholism more closely.
+Fix timing issue with InternalTick value never actually reaching 30 before being reset.

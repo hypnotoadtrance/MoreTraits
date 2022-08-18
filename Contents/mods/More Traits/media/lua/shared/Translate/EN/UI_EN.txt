@@ -217,4 +217,6 @@ UI_EN = {
     UI_MoreTraits_Options_VagabondAnnounce_ToolTip = "If you have the Vagabond trait, you will be notified when you find food in the trash.",
 	UI_MoreTraits_Options_HardyNotifier = "Hardy Notifies Left Endurance",
 	UI_MoreTraits_Options_HardyNotifier_ToolTip = "If you have the Hardy trait, you will be notified how much modded endurance you have left.",
+	UI_MoreTraits_Options_DrinkNotifier = "Alcoholism Reminder",
+    UI_MoreTraits_Options_DrinkNotifier_ToolTip = "If you have the Alcoholic trait, and currently need alcohol, you will be reminded every in-game hour.",
 }
