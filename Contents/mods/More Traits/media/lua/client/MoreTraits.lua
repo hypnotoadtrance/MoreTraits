@@ -1744,6 +1744,7 @@ function bouncerupdate(_player, _playerdata)
     local cooldown = 60;
     local enemies = player:getSpottedList();
     local enemy = nil;
+    local distance = 1.75;
     local closeenemies = {};
     if player:HasTrait("bouncer") then
         if SandboxVars.MoreTraits.BouncerEffectiveness then
@@ -1751,6 +1752,9 @@ function bouncerupdate(_player, _playerdata)
         end
         if SandboxVars.MoreTraits.BouncerCooldown then
             cooldown = SandboxVars.MoreTraits.BouncerCooldown;
+        end
+        if SandboxVars.MoreTraits.BouncerDistance then
+            distance = SandboxVars.MoreTraits.BouncerDistance;
         end
         if player:HasTrait("Lucky") then
             chance = chance + 1 * luckimpact;
@@ -1764,11 +1768,12 @@ function bouncerupdate(_player, _playerdata)
         if playerdata.iBouncercooldown > 0 then
             playerdata.iBouncercooldown = playerdata.iBouncercooldown - 1;
         end
+
         if playerdata.iBouncercooldown <= 0 then
             if enemies:size() >= 3 then
                 for i = 0, enemies:size() - 1 do
                     enemy = enemies:get(i);
-                    if enemy:DistTo(player) <= 2.0 then
+                    if enemy:DistTo(player) <= distance then
                         if enemy:isZombie() then
                             table.insert(closeenemies, i);
                         end

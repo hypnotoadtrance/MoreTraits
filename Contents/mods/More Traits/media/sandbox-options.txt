@@ -55,6 +55,11 @@ option MoreTraits.BouncerCooldown
 	type = integer, min = 1, max = 240, default = 60,
 	page = MoreTraits, translation = MoreTraits_BouncerCooldown,
 }
+option MoreTraits.BouncerDistance
+{
+	type = double, min = 0.25, max = 5.0, default = 1.75,
+	page = MoreTraits, translation = MoreTraits_BouncerDistance,
+}
 option MoreTraits.GymGoerPercent
 {
 	type = integer, min = 100, max = 1000, default = 200,
