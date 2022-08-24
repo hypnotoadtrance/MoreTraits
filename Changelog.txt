@@ -10,3 +10,5 @@ Adjust Prepared Ammo to give a Gun Case containing more varied types of ammuniti
 Add Mod Option to track Alcoholism more closely.
 Fix timing issue with InternalTick value never actually reaching 30 before being reset.
 Limit how much anger/stress can be gained from alcohol withdrawal.
+New Trait - Terminator
+Antique Collector now only spawns items in crates and metal shelves (Can be disabled with sandbox setting)

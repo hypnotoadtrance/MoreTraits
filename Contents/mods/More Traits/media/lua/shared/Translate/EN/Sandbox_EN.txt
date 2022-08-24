@@ -89,4 +89,6 @@ Sandbox_EN = {
 	Sandbox_MoreTraits_SuperImmuneWeakness_tooltip = "If this setting is on, Super Immune will not be able to defend your body if it caught several infections.",
 	Sandbox_MoreTraits_BouncerDistance = "Bouncer Distance",
     Sandbox_MoreTraits_BouncerDistance_tooltip = "The distance (in tile squares) from the player out to which Bouncer begins attempting to shove enemies away. <br>Lower values means Bouncer will take effect only at closer ranges to the player.",
+	Sandbox_MoreTraits_AntiqueAnywhere = "Antique Collector Anywhere",
+	Sandbox_MoreTraits_AntiqueAnywhere_tooltip = "If true, Antique Collector trait will be able to find antique items anywhere, instead of only in crates and metal shelves.",
 }

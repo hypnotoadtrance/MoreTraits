@@ -1096,10 +1096,17 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
                     containerObj:getModData().bAntiqueRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
-                    if ZombRand(roll) <= basechance then
-                        local i = ZombRand(length) + 1;
-                        container:addItemOnServer(container:AddItem(items[i]));
-                    end
+					local allow = false;
+					if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
+						allow = true;
+					end
+					if SandboxVars.MoreTraits.AntiqueAnywhere == true then
+						allow = true;
+					end
+					if ZombRand(roll) <= basechance and allow == true then
+						local i = ZombRand(length) + 1;
+						container:addItemOnServer(container:AddItem(items[i]));
+					end
                 end
             end
         end
