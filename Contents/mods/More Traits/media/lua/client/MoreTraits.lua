@@ -585,6 +585,40 @@ function initToadTraitsPerks(_player)
             player:getXp():setXPToLevel(Perks.Lightfoot, PerkLevel2 + 1);
         end
     end
+	if player:HasTrait("Terminator") then
+		local PerkLevel1 = player:getPerkLevel(Perks.Aiming);
+		local PerkLevel2 = player:getPerkLevel(Perks.Reloading)
+		local PerkLevel3 = player:getPerkLevel(Perks.Nimble)
+		if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 and PerkLevel1 ~= 8 then
+			player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 1);
+            player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 2);
+			player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 3);
+        elseif PerkLevel1 ~= 10 and PerkLevel1 ~= 9 then
+            player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 1);
+			player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 2);
+		elseif PerkLevel1 == 9 then
+			player:LevelPerk(Perks.Aiming);
+            player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 1);
+		end
+		if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
+			player:LevelPerk(Perks.Reloading);
+            player:getXp():setXPToLevel(Perks.Reloading, PerkLevel2 + 1);
+            player:LevelPerk(Perks.Reloading);
+            player:getXp():setXPToLevel(Perks.Reloading, PerkLevel2 + 2);
+		elseif PerkLevel2 == 9 then
+			player:LevelPerk(Perks.Reloading);
+            player:getXp():setXPToLevel(Perks.Reloading, PerkLevel2 + 1);
+		end
+		if PerkLevel3 ~= 10 then
+			player:LevelPerk(Perks.Nimble);
+			player:getXp():setXPToLevel(Perks.Nimble, PerkLevel3 + 1);
+		end
+	end
 end
 
 function ToadTraitEvasive(_player, _playerdata)
@@ -3913,36 +3947,51 @@ local function ImmunocompromisedInfection(player, playerdata)
     end
 end
 
---[[local function TerminatorGun(player, playerdata)
-	local state = "Normal";
-	if player:HasTrait("Terminator") then
-		state = "Terminator";
-	end
+local function TerminatorGun(player, playerdata)
 	if player:getPrimaryHandItem() ~= nil then
-		if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
-			local weapon = player:getPrimaryHandItem();
-			local weapondata = weapon:getModData();
-			if weapondata.state == nil then
-				weapondata.ogAiming = weapon:getAimingTime();
-				weapondata.ogDamage = weapon:getDamage();
-			end
-			if state == "Normal" and weapon:getAimingTime() ~= weapondata.ogAiming or weapon:getDamage() ~= weapondata.ogDamage then
-			
-			end
-			if state == "Terminator" and weapon:getAimingTime() ~= weapondata.ogAiming / 2 or weapon:getDamage() ~= weapondata.ogDamage * 1.25 then
-			
-			end
-			if state == "Normal" then
-				weapon:setAimingTime(weapondata.ogAiming);
-				weapon:setDamage(weapondata.ogDamage);
-				weapondata.state = "Normal";
-			end
-			if state == "Terminator" then
-			
+		if player:getPrimaryHandItem():getCategory() == "Weapon" then
+			if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
+				if player:HasTrait("Terminator") then
+					if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
+						player:getStats():setStress(player:getStats():getStress() - 0.01)
+						player:getStats():setPanic(player:getStats():getPanic() - 10)
+						if player:getStats():getPanic() < 0 then player:getStats():setPanic(0); end
+					end
+				end
+				local item = player:getPrimaryHandItem();
+				local itemdata = item:getModData();
+				local mindamage = item:getMinDamage();
+				local maxdamage = item:getMaxDamage();
+				local aimingtime = item:getAimingTime();
+				local range = item:getMaxRange();
+				local jamchance = item:getJamGunChance();
+				if itemdata.MTstate == nil then
+					itemdata.MTstate = "Normal";
+				end
+				if player:HasTrait("Terminator") and itemdata.MTstate ~= "Terminator" then
+					if itemdata.MTstate == "Normal" then
+						item:setAimingTime(aimingtime * 3);
+						item:setMaxRange(range + 5);
+						item:setJamGunChance(jamchance / 2);
+						item:setMinDamage(mindamage * 1.25)
+						item:setMaxDamage(maxdamage * 1.25)
+					end
+					itemdata.MTstate = "Terminator";
+				end
+				if player:HasTrait("Terminator") == false and itemdata.MTState ~= "Normal" then
+					if itemdata.MTstate == "Terminator" then
+						item:setAimingTime(aimingtime / 3);
+						item:setMaxRange(range - 5);
+						item:setJamGunChance(jamchance * 2);
+						item:setMinDamage(mindamage * 0.8)
+						item:setMaxDamage(maxdamage * 0.8)
+					end
+					itemdata.MTstate = "Normal";
+				end
 			end
 		end
 	end
-end--]]
+end
 
 function MainPlayerUpdate(_player)
     local player = _player;
@@ -3980,7 +4029,6 @@ function MainPlayerUpdate(_player)
     SlowWorker(player);
     SuperImmuneFakeInfectionHealthLoss(player);
     ImmunocompromisedInfection(player, playerdata);
-    --TerminatorGun(player, playerdata);
     if suspendevasive == false then
         ToadTraitEvasive(player, playerdata);
         GlassBody(player, playerdata);
@@ -4003,6 +4051,7 @@ function EveryOneMinute()
     HungerCheck(player);
     RestfulSleeperWakeUp(player, playerdata);
     AlbinoTimer(player, playerdata);
+	TerminatorGun(player, playerdata);
 end
 
 function EveryHours()
