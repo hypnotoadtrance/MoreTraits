@@ -12,3 +12,4 @@ Fix timing issue with InternalTick value never actually reaching 30 before being
 Limit how much anger/stress can be gained from alcohol withdrawal.
 New Trait - Terminator
 Antique Collector now only spawns items in crates and metal shelves (Can be disabled with sandbox setting)
+Martial Artist now uses endurance while attacking

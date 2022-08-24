@@ -1864,6 +1864,7 @@ function martial(_actor, _target, _weapon, _damage)
     local weapon = _weapon;
     local damage = _damage;
     local critchance = 5;
+	local endurance = player:getStats():getEndurance();
     if _actor == player and player:HasTrait("martial") then
         if player:HasTrait("Lucky") then
             critchance = critchance + 1 * luckimpact;
@@ -1909,6 +1910,7 @@ function martial(_actor, _target, _weapon, _damage)
             if _target:getHealth() <= 0 then
                 _target:update();
             end
+			player:getStats():setEndurance(endurance - 0.002)
         else
             if playerdata.itemWeaponBareHands ~= nil then
                 playerdata.itemWeaponBareHands:setDoorDamage(1);
