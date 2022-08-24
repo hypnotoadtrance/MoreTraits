@@ -354,6 +354,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("burned", "injured");
 	TraitFactory.setMutualExclusive("restfulsleeper", "Insomniac");
 	TraitFactory.setMutualExclusive("motionsickness", "superimmune");
+	TraitFactory.setMutualExclusive("badteeth", "albino");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     TraitFactory.sortList();

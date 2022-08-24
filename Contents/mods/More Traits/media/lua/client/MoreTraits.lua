@@ -2118,6 +2118,7 @@ function albino(_player, _playerdata)
     local stats = player:getStats();
     local pain = stats:getPain();
     local umbrella = false;
+	local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
     if player:HasTrait("albino") then
         local time = getGameTime();
         if playerdata.bisAlbinoOutside == nil then
@@ -2145,19 +2146,20 @@ function albino(_player, _playerdata)
                     end
                 end
                 if umbrella == false then
-                    stats:setPain(modpain);
+                    head:setAdditionalPain(modpain)
+					
                 else
-                    stats:setPain(modpain / 1.5);
+                    head:setAdditionalPain(modpain / 1.5);
                 end
             else
                 if modpain > 0 then
-                    stats:setPain(modpain / 2);
+                    head:setAdditionalPain(modpain / 2);
                 end
             end
         else
             playerdata.bisAlbinoOutside = false;
             if modpain > 0 then
-                stats:setPain(modpain / 4);
+                head:setAdditionalPain(modpain / 4);
             end
         end
     end
