@@ -385,8 +385,7 @@ function initToadTraitsPerks(_player)
     playerdata.HasSlept = false;
     playerdata.FatigueWhenSleeping = 0;
     playerdata.NeckHadPain = false;
-    playerdata.VagabondIllegal = false;
-    playerdata.ScroungerIllegal = false;
+    playerdata.ContainerTraitIllegal = false;
     playerdata.ImmunoActivated = false;
     playerdata.ImmunoEvasiveTimer = 0;
     playerdata.ImmunoFinal = false;
@@ -840,14 +839,14 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
             basechance = basechance - 5 * luckimpact;
             modifier = modifier - 0.1 * luckimpact;
         end
-        if playerData.ScroungerIllegal == nil then
-            playerData.ScroungerIllegal = false;
+        if playerData.ContainerTraitIllegal == nil then
+            playerData.ContainerTraitIllegal = false;
         end
         if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-            playerData.ScroungerIllegal = true;
+            playerData.ContainerTraitIllegal = true;
         end
-        if playerData.ScroungerIllegal == true and player:isPlayerMoving() == true then
-            playerData.ScroungerIllegal = false;
+        if playerData.ContainerTraitIllegal == true and player:isPlayerMoving() == true then
+            playerData.ContainerTraitIllegal = false;
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
@@ -855,8 +854,8 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                 if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
                     containerObj:transmitModData();
-                    if playerData.ScroungerIllegal == true then
-                        playerData.ScroungerIllegal = false;
+                    if playerData.ContainerTraitIllegal == true then
+                        playerData.ContainerTraitIllegal = false;
                         return
                     end
                     if ZombRand(100) <= basechance then
@@ -1060,9 +1059,19 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
         length = length + 1;
     end
     local player = _player;
+	local playerdata = player:getModData();
     local containerObj;
     local container;
     if player:HasTrait("antique") then
+		if playerdata.ContainerTraitIllegal == nil then
+            playerdata.ContainerTraitIllegal = false;
+        end
+        if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
+            playerdata.ContainerTraitIllegal = true;
+        end
+        if playerdata.ContainerTraitIllegal == true and player:isPlayerMoving() == true then
+            playerdata.ContainerTraitIllegal = false;
+        end
         local basechance = 10;
         local roll = 1000;
         if player:HasTrait("Lucky") then
@@ -1096,6 +1105,10 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
                     containerObj:getModData().bAntiqueRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
+					if playerdata.ContainerTraitIllegal == true then
+                        playerdata.ContainerTraitIllegal = false;
+                        return
+                    end
 					local allow = false;
 					if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
 						allow = true;
@@ -1153,14 +1166,14 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
     local playerdata = player:getModData();
     local containerObj;
     local container;
-    if playerdata.VagabondIllegal == nil then
-        playerdata.VagabondIllegal = false;
+    if playerdata.ContainerTraitIllegal == nil then
+        playerdata.ContainerTraitIllegal = false;
     end
     if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-        playerdata.VagabondIllegal = true;
+        playerdata.ContainerTraitIllegal = true;
     end
-    if playerdata.VagabondIllegal == true and player:isPlayerMoving() == true then
-        playerdata.VagabondIllegal = false;
+    if playerdata.ContainerTraitIllegal == true and player:isPlayerMoving() == true then
+        playerdata.ContainerTraitIllegal = false;
     end
     if player:HasTrait("vagabond") then
         local basechance = 33;
@@ -1179,8 +1192,8 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
                 if not containerObj:getModData().bVagbondRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bVagbondRolled = true;
                     containerObj:transmitModData();
-                    if playerdata.VagabondIllegal == true then
-                        playerdata.VagabondIllegal = false;
+                    if playerdata.ContainerTraitIllegal == true then
+                        playerdata.ContainerTraitIllegal = false;
                         return
                     end
                     container = containerObj:getContainer();

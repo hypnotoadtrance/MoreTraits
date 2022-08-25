@@ -14,3 +14,4 @@ New Trait - Terminator
 Antique Collector now only spawns items in crates and metal shelves (Can be disabled with sandbox setting)
 Martial Artist now uses endurance while attacking
 Changed Sun Sensitive to give pain to head instead of applying pain globally
+Fixed Antique Collector spawning items in a placed container
