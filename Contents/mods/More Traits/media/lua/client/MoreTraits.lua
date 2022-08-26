@@ -1073,7 +1073,7 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
             playerdata.ContainerTraitIllegal = false;
         end
         local basechance = 10;
-        local roll = 1000;
+        local roll = 1500;
         if player:HasTrait("Lucky") then
             basechance = basechance + 1 * luckimpact;
         end
@@ -1118,6 +1118,7 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
 					end
 					if ZombRand(roll) <= basechance and allow == true then
 						local i = ZombRand(length) + 1;
+						print("Found antique item! " .. tostring(items[i]:getName()));
 						container:addItemOnServer(container:AddItem(items[i]));
 					end
                 end

@@ -15,3 +15,5 @@ Antique Collector now only spawns items in crates and metal shelves (Can be disa
 Martial Artist now uses endurance while attacking
 Changed Sun Sensitive to give pain to head instead of applying pain globally
 Fixed Antique Collector spawning items in a placed container
+Increased Antique Collector cost 4 -> 6
+Decreased Antique Collector drop rate 1000 -> 1500

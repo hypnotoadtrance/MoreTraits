@@ -105,7 +105,7 @@ local function initToadTraits()
     blunttwirl:addXPBoost(Perks.SmallBlunt, 1);
     blunttwirl:addXPBoost(Perks.Blunt, 1);
     local scrounger = TraitFactory.addTrait("scrounger", getText("UI_trait_scrounger"), 5, getText("UI_trait_scroungerdesc"), false, false);
-    local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 4, getText("UI_trait_antiquedesc"), false, false);
+    local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 6, getText("UI_trait_antiquedesc"), false, false);
     local evasive = TraitFactory.addTrait("evasive", getText("UI_trait_evasive"), 8, getText("UI_trait_evasivedesc"), false, false);
     evasive:addXPBoost(Perks.Nimble, 1);
     local blissful = TraitFactory.addTrait("blissful", getText("UI_trait_blissful"), 3, getText("UI_trait_blissfuldesc"), false, false);

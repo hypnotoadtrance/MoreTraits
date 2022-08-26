@@ -192,7 +192,7 @@ option MoreTraits.MartialWeapons
 }
 option MoreTraits.AntiqueChance
 {
-	type = integer, min = 100, max = 10000, default = 1000,
+	type = integer, min = 100, max = 10000, default = 1500,
 	page = MoreTraits, translation = MoreTraits_AntiqueChance,
 }
 option MoreTraits.AntiqueAnywhere
