@@ -96,7 +96,7 @@ if ModOptions and ModOptions.getInstance then
             HardyNotifier = {
                 name = "UI_MoreTraits_Options_HardyNotifier",
                 tooltip = "UI_MoreTraits_Options_HardyNotifier_ToolTip",
-                default = true,
+                default = false,
                 OnApplyMainMenu = onModOptionsApply,
                 OnApplyInGame = onModOptionsApply,
             },

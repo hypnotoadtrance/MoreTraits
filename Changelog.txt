@@ -17,3 +17,4 @@ Changed Sun Sensitive to give pain to head instead of applying pain globally
 Fixed Antique Collector spawning items in a placed container
 Increased Antique Collector cost 4 -> 6
 Decreased Antique Collector drop rate 1000 -> 1500
+Changed default hardy mod option setting On -> Off
