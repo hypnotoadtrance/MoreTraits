@@ -1118,8 +1118,9 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
 					end
 					if ZombRand(roll) <= basechance and allow == true then
 						local i = ZombRand(length) + 1;
-						print("Found antique item! " .. tostring(items[i]:getName()));
-						container:addItemOnServer(container:AddItem(items[i]));
+						local item = container:AddItem(items[i])
+						container:addItemOnServer(item);
+						print("Found antique item! " .. tostring(item:getName()));
 					end
                 end
             end
@@ -3754,43 +3755,43 @@ local function MotionSickness(player)
                 playerdata.MotionActive = true;
             end
             if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 and Sickness < 26 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.01);
+                playerstats:setFakeInfectionLevel(Sickness + 0.001);
             end
             if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 and Sickness < 51 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.05);
+                playerstats:setFakeInfectionLevel(Sickness + 0.005);
             end
             if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 and Sickness < 51 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.1);
+                playerstats:setFakeInfectionLevel(Sickness + 0.01);
             end
             if vehicle:getCurrentSpeedKmHour() >= 45 and vehicle:getCurrentSpeedKmHour() < 60 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.2);
+                playerstats:setFakeInfectionLevel(Sickness + 0.02);
             end
             if vehicle:getCurrentSpeedKmHour() >= 60 and vehicle:getCurrentSpeedKmHour() < 90 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.5);
+                playerstats:setFakeInfectionLevel(Sickness + 0.05);
             end
             if vehicle:getCurrentSpeedKmHour() >= 90 then
-                playerstats:setFakeInfectionLevel(Sickness + 1);
+                playerstats:setFakeInfectionLevel(Sickness + 0.1);
             end
 
             --This section is for reversed driving, because positive values are when you drive forward, and negative when you drive back--
 
             if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 and Sickness < 26 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.01);
+                playerstats:setFakeInfectionLevel(Sickness + 0.001);
             end
             if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 and Sickness < 51 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.05);
+                playerstats:setFakeInfectionLevel(Sickness + 0.005);
             end
             if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 and Sickness < 51 then
-                playerstats:setFakeInfectionLevel(sickness + 0.1);
+                playerstats:setFakeInfectionLevel(sickness + 0.01);
             end
             if vehicle:getCurrentSpeedKmHour() <= -45 and vehicle:getCurrentSpeedKmHour() > -60 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.2);
+                playerstats:setFakeInfectionLevel(Sickness + 0.02);
             end
             if vehicle:getCurrentSpeedKmHour() <= -60 and vehicle:getCurrentSpeedKmHour() > -90 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.5);
+                playerstats:setFakeInfectionLevel(Sickness + 0.05);
             end
             if vehicle:getCurrentSpeedKmHour() <= -90 then
-                playerstats:setFakeInfectionLevel(Sickness + 1);
+                playerstats:setFakeInfectionLevel(Sickness + 0.1);
             end
         end
         if not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then

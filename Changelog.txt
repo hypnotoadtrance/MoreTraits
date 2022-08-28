@@ -1,20 +1,3 @@
 Changelog Notes:
-Super Immune now decreases sickness if well fed, allowing for survival even with sandbox setting on.
-Fixed duplicate alcoholic trait showing up when More Simple Traits mod is enabled.
-Add Italian Translation, by Lore11.
-Fix null pointer exception when Announce Vagabond finds setting is enabled.
-Reduce maximum distance out to which Bouncer will trigger.
-Add sandbox option to adjust distance for Bouncer.
-Fix bug in Prepared: Ammo that prevented shotgunshellsbox from spawning
-Adjust Prepared Ammo to give a Gun Case containing more varied types of ammunition.
-Add Mod Option to track Alcoholism more closely.
-Fix timing issue with InternalTick value never actually reaching 30 before being reset.
-Limit how much anger/stress can be gained from alcohol withdrawal.
-New Trait - Terminator
-Antique Collector now only spawns items in crates and metal shelves (Can be disabled with sandbox setting)
-Martial Artist now uses endurance while attacking
-Changed Sun Sensitive to give pain to head instead of applying pain globally
-Fixed Antique Collector spawning items in a placed container
-Increased Antique Collector cost 4 -> 6
-Decreased Antique Collector drop rate 1000 -> 1500
-Changed default hardy mod option setting On -> Off
+Fixed Antique Collector giving an error and not spawning items.
+Motion Sickness gives sickness at a slower rate.
