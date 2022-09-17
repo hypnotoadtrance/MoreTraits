@@ -3746,7 +3746,7 @@ local function MotionSickness(player)
         playerdata.MotionActive = false;
     end
     if player:HasTrait("motionsickness") then
-        if player:isDriving() == true and Sickness < 98 then
+        if player:isDriving() == true and Sickness < 90.0 then
             local vehicle = player:getVehicle();
             if not vehicle then
                 return
@@ -3754,47 +3754,25 @@ local function MotionSickness(player)
             if playerdata.MotionActive == false then
                 playerdata.MotionActive = true;
             end
-            if vehicle:getCurrentSpeedKmHour() > 0 and vehicle:getCurrentSpeedKmHour() < 15 and Sickness < 26 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.001);
-            end
-            if vehicle:getCurrentSpeedKmHour() >= 15 and vehicle:getCurrentSpeedKmHour() < 30 and Sickness < 51 then
+            local Speed = math.abs(vehicle:getCurrentSpeedKmHour())
+            if Speed < 16.0 then
+                return
+            elseif Speed >= 16.0 and Speed < 31.0 and Sickness < 21.0 then
                 playerstats:setFakeInfectionLevel(Sickness + 0.005);
-            end
-            if vehicle:getCurrentSpeedKmHour() >= 30 and vehicle:getCurrentSpeedKmHour() < 45 and Sickness < 51 then
+            elseif Speed >= 31.0 and Speed < 41.0 and Sickness < 26.0 then
                 playerstats:setFakeInfectionLevel(Sickness + 0.01);
-            end
-            if vehicle:getCurrentSpeedKmHour() >= 45 and vehicle:getCurrentSpeedKmHour() < 60 then
+            elseif Speed >= 41.0 and Speed < 51.0 and Sickness < 38.0 then
                 playerstats:setFakeInfectionLevel(Sickness + 0.02);
-            end
-            if vehicle:getCurrentSpeedKmHour() >= 60 and vehicle:getCurrentSpeedKmHour() < 90 then
+            elseif Speed >= 51.0 and Speed < 56.0 and Sickness < 48.0 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.03);
+            elseif Speed >= 56.0 and Speed < 61.0 and Sickness < 73.0 then
+                playerstats:setFakeInfectionLevel(Sickness + 0.04);
+            elseif Speed >= 61.0 and Speed < 91.0 and Sickness < 80.0 then
                 playerstats:setFakeInfectionLevel(Sickness + 0.05);
-            end
-            if vehicle:getCurrentSpeedKmHour() >= 90 then
+            elseif Speed >= 91.0 then
                 playerstats:setFakeInfectionLevel(Sickness + 0.1);
             end
-
-            --This section is for reversed driving, because positive values are when you drive forward, and negative when you drive back--
-
-            if vehicle:getCurrentSpeedKmHour() < 0 and vehicle:getCurrentSpeedKmHour() > -15 and Sickness < 26 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.001);
-            end
-            if vehicle:getCurrentSpeedKmHour() <= -15 and vehicle:getCurrentSpeedKmHour() > -30 and Sickness < 51 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.005);
-            end
-            if vehicle:getCurrentSpeedKmHour() <= -30 and vehicle:getCurrentSpeedKmHour() > -45 and Sickness < 51 then
-                playerstats:setFakeInfectionLevel(sickness + 0.01);
-            end
-            if vehicle:getCurrentSpeedKmHour() <= -45 and vehicle:getCurrentSpeedKmHour() > -60 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.02);
-            end
-            if vehicle:getCurrentSpeedKmHour() <= -60 and vehicle:getCurrentSpeedKmHour() > -90 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.05);
-            end
-            if vehicle:getCurrentSpeedKmHour() <= -90 then
-                playerstats:setFakeInfectionLevel(Sickness + 0.1);
-            end
-        end
-        if not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then
+        elseif not player:isDriving() and not playerstats:IsFakeInfected() and Sickness ~= 0 then
             if playerdata.MotionActive == true then
                 playerdata.MotionActive = false;
             end
@@ -3805,24 +3783,23 @@ end
 
 local function MotionSicknessHealthLoss(player)
     local playerdata = player:getModData();
-    local MaxHealth = 10;
+    local MaxHealth = 60.0;
     local Health = player:getBodyDamage():getOverallBodyHealth();
     local Sickness = player:getBodyDamage():getFakeInfectionLevel();
     if playerdata.MotionActive == nil then
         playerdata.MotionActive = false;
     end
-    if player:HasTrait("Indefatigable") then
-        MaxHealth = 16;
-    end
     if player:HasTrait("MotionSickness") and playerdata.MotionActive == true then
         if Health >= 100 - Sickness and Health > MaxHealth then
             for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                 local b = player:getBodyDamage():getBodyParts():get(i);
-                if Sickness > 10 and Sickness < 25 then
+                if Sickness < 40.0 then
+                    return
+                elseif Sickness >= 40.0 and Sickness < 50.0 and Health > 90.0 then
                     b:AddDamage(0.001);
-                elseif Sickness >= 25 and Sickness < 50 then
+                elseif Sickness >= 50.0 and Sickness < 75.0 and Health > 75.0 then
                     b:AddDamage(0.002);
-                elseif Sickness <= 50 then
+                elseif Sickness >= 75.0 then
                     b:AddDamage(0.005);
                 end
             end
