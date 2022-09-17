@@ -3783,7 +3783,7 @@ end
 
 local function MotionSicknessHealthLoss(player)
     local playerdata = player:getModData();
-    local MaxHealth = 60.0;
+    local MaxHealth = 35.0;
     local Health = player:getBodyDamage():getOverallBodyHealth();
     local Sickness = player:getBodyDamage():getFakeInfectionLevel();
     if playerdata.MotionActive == nil then

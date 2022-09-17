@@ -1,3 +1,2 @@
 Changelog Notes:
-Fixed Antique Collector giving an error and not spawning items.
-Motion Sickness gives sickness at a slower rate.
+Motion Sickness Rework (Credit: Spring)
