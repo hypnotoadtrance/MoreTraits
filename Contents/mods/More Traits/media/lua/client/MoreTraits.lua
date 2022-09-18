@@ -1,6 +1,10 @@
 require('NPCs/MainCreationMethods');
 require("Items/Distributions");
 require("Items/ProceduralDistributions");
+if getActivatedMods():contains("MoodleFramework") == true then
+    require("MF_ISMoodle");
+    MF.createMoodle("MTAlcoholism");
+end
 --[[
 TODO Figure out what is causing stat synchronization issues
 When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subtracting stats doesn't
@@ -584,40 +588,40 @@ function initToadTraitsPerks(_player)
             player:getXp():setXPToLevel(Perks.Lightfoot, PerkLevel2 + 1);
         end
     end
-	if player:HasTrait("Terminator") then
-		local PerkLevel1 = player:getPerkLevel(Perks.Aiming);
-		local PerkLevel2 = player:getPerkLevel(Perks.Reloading)
-		local PerkLevel3 = player:getPerkLevel(Perks.Nimble)
-		if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 and PerkLevel1 ~= 8 then
-			player:LevelPerk(Perks.Aiming);
+    if player:HasTrait("Terminator") then
+        local PerkLevel1 = player:getPerkLevel(Perks.Aiming);
+        local PerkLevel2 = player:getPerkLevel(Perks.Reloading)
+        local PerkLevel3 = player:getPerkLevel(Perks.Nimble)
+        if PerkLevel1 ~= 10 and PerkLevel1 ~= 9 and PerkLevel1 ~= 8 then
+            player:LevelPerk(Perks.Aiming);
             player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 1);
             player:LevelPerk(Perks.Aiming);
             player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 2);
-			player:LevelPerk(Perks.Aiming);
+            player:LevelPerk(Perks.Aiming);
             player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 3);
         elseif PerkLevel1 ~= 10 and PerkLevel1 ~= 9 then
             player:LevelPerk(Perks.Aiming);
             player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 1);
-			player:LevelPerk(Perks.Aiming);
+            player:LevelPerk(Perks.Aiming);
             player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 2);
-		elseif PerkLevel1 == 9 then
-			player:LevelPerk(Perks.Aiming);
+        elseif PerkLevel1 == 9 then
+            player:LevelPerk(Perks.Aiming);
             player:getXp():setXPToLevel(Perks.Aiming, PerkLevel1 + 1);
-		end
-		if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
-			player:LevelPerk(Perks.Reloading);
+        end
+        if PerkLevel2 ~= 10 and PerkLevel2 ~= 9 then
+            player:LevelPerk(Perks.Reloading);
             player:getXp():setXPToLevel(Perks.Reloading, PerkLevel2 + 1);
             player:LevelPerk(Perks.Reloading);
             player:getXp():setXPToLevel(Perks.Reloading, PerkLevel2 + 2);
-		elseif PerkLevel2 == 9 then
-			player:LevelPerk(Perks.Reloading);
+        elseif PerkLevel2 == 9 then
+            player:LevelPerk(Perks.Reloading);
             player:getXp():setXPToLevel(Perks.Reloading, PerkLevel2 + 1);
-		end
-		if PerkLevel3 ~= 10 then
-			player:LevelPerk(Perks.Nimble);
-			player:getXp():setXPToLevel(Perks.Nimble, PerkLevel3 + 1);
-		end
-	end
+        end
+        if PerkLevel3 ~= 10 then
+            player:LevelPerk(Perks.Nimble);
+            player:getXp():setXPToLevel(Perks.Nimble, PerkLevel3 + 1);
+        end
+    end
 end
 
 function ToadTraitEvasive(_player, _playerdata)
@@ -1059,11 +1063,11 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
         length = length + 1;
     end
     local player = _player;
-	local playerdata = player:getModData();
+    local playerdata = player:getModData();
     local containerObj;
     local container;
     if player:HasTrait("antique") then
-		if playerdata.ContainerTraitIllegal == nil then
+        if playerdata.ContainerTraitIllegal == nil then
             playerdata.ContainerTraitIllegal = false;
         end
         if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
@@ -1105,23 +1109,23 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
                     containerObj:getModData().bAntiqueRolled = true;
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
-					if playerdata.ContainerTraitIllegal == true then
+                    if playerdata.ContainerTraitIllegal == true then
                         playerdata.ContainerTraitIllegal = false;
                         return
                     end
-					local allow = false;
-					if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
-						allow = true;
-					end
-					if SandboxVars.MoreTraits.AntiqueAnywhere == true then
-						allow = true;
-					end
-					if ZombRand(roll) <= basechance and allow == true then
-						local i = ZombRand(length) + 1;
-						local item = container:AddItem(items[i])
-						container:addItemOnServer(item);
-						print("Found antique item! " .. tostring(item:getName()));
-					end
+                    local allow = false;
+                    if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
+                        allow = true;
+                    end
+                    if SandboxVars.MoreTraits.AntiqueAnywhere == true then
+                        allow = true;
+                    end
+                    if ZombRand(roll) <= basechance and allow == true then
+                        local i = ZombRand(length) + 1;
+                        local item = container:AddItem(items[i])
+                        container:addItemOnServer(item);
+                        print("Found antique item! " .. tostring(item:getName()));
+                    end
                 end
             end
         end
@@ -1796,17 +1800,31 @@ function drinkerpoison()
         elseif hoursthreshold <= 48 then
             divider = 5;
         end
-        if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false and cooldown <= 0 then
-            print("Player is suffering from alcohol withdrawal.");
-            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
-            if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
-                player:getBodyDamage():setPoisonLevel(20);
-            else
-                player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+        if getActivatedMods():contains("MoodleFramework") == true then
+            if MF.getMoodle("MTAlcoholism"):getValue() <= 0.1 and cooldown <= 0 then
+                print("Player is suffering from alcohol withdrawal.");
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
+                if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
+                    player:getBodyDamage():setPoisonLevel(20);
+                else
+                    player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+                end
+                playerdata.iWithdrawalCooldown = ZombRand(12, 24);
             end
-            playerdata.iWithdrawalCooldown = ZombRand(12, 24);
+            playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown - 1;
+        else
+            if playerdata.iHoursSinceDrink > hoursthreshold and playerdata.bSatedDrink == false and cooldown <= 0 then
+                print("Player is suffering from alcohol withdrawal.");
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
+                if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
+                    player:getBodyDamage():setPoisonLevel(20);
+                else
+                    player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+                end
+                playerdata.iWithdrawalCooldown = ZombRand(12, 24);
+            end
+            playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown - 1;
         end
-        playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown - 1;
     end
 end
 
@@ -1879,7 +1897,7 @@ function martial(_actor, _target, _weapon, _damage)
     local weapon = _weapon;
     local damage = _damage;
     local critchance = 5;
-	local endurance = player:getStats():getEndurance();
+    local endurance = player:getStats():getEndurance();
     if _actor == player and player:HasTrait("martial") then
         if player:HasTrait("Lucky") then
             critchance = critchance + 1 * luckimpact;
@@ -1925,7 +1943,7 @@ function martial(_actor, _target, _weapon, _damage)
             if _target:getHealth() <= 0 then
                 _target:update();
             end
-			player:getStats():setEndurance(endurance - 0.002)
+            player:getStats():setEndurance(endurance - 0.002)
         else
             if playerdata.itemWeaponBareHands ~= nil then
                 playerdata.itemWeaponBareHands:setDoorDamage(1);
@@ -2133,7 +2151,7 @@ function albino(_player, _playerdata)
     local stats = player:getStats();
     local pain = stats:getPain();
     local umbrella = false;
-	local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
+    local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
     if player:HasTrait("albino") then
         local time = getGameTime();
         if playerdata.bisAlbinoOutside == nil then
@@ -2162,7 +2180,7 @@ function albino(_player, _playerdata)
                 end
                 if umbrella == false then
                     head:setAdditionalPain(modpain)
-					
+
                 else
                     head:setAdditionalPain(modpain / 1.5);
                 end
@@ -3951,51 +3969,136 @@ local function ImmunocompromisedInfection(player, playerdata)
 end
 
 local function TerminatorGun(player, playerdata)
-	if player:getPrimaryHandItem() ~= nil then
-		if player:getPrimaryHandItem():getCategory() == "Weapon" then
-			if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
-				if player:HasTrait("Terminator") then
-					if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-						player:getStats():setStress(player:getStats():getStress() - 0.01)
-						player:getStats():setPanic(player:getStats():getPanic() - 10)
-						if player:getStats():getPanic() < 0 then player:getStats():setPanic(0); end
-					end
-				end
-				local item = player:getPrimaryHandItem();
-				local itemdata = item:getModData();
-				local mindamage = item:getMinDamage();
-				local maxdamage = item:getMaxDamage();
-				local aimingtime = item:getAimingTime();
-				local range = item:getMaxRange();
-				local jamchance = item:getJamGunChance();
-				if itemdata.MTstate == nil then
-					itemdata.MTstate = "Normal";
-				end
-				if player:HasTrait("Terminator") and itemdata.MTstate ~= "Terminator" then
-					if itemdata.MTstate == "Normal" then
-						item:setAimingTime(aimingtime * 3);
-						item:setMaxRange(range + 5);
-						item:setJamGunChance(jamchance / 2);
-						item:setMinDamage(mindamage * 1.25)
-						item:setMaxDamage(maxdamage * 1.25)
-					end
-					itemdata.MTstate = "Terminator";
-				end
-				if player:HasTrait("Terminator") == false and itemdata.MTState ~= "Normal" then
-					if itemdata.MTstate == "Terminator" then
-						item:setAimingTime(aimingtime / 3);
-						item:setMaxRange(range - 5);
-						item:setJamGunChance(jamchance * 2);
-						item:setMinDamage(mindamage * 0.8)
-						item:setMaxDamage(maxdamage * 0.8)
-					end
-					itemdata.MTstate = "Normal";
-				end
-			end
-		end
-	end
+    if player:getPrimaryHandItem() ~= nil then
+        if player:getPrimaryHandItem():getCategory() == "Weapon" then
+            if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
+                if player:HasTrait("Terminator") then
+                    if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
+                        player:getStats():setStress(player:getStats():getStress() - 0.01)
+                        player:getStats():setPanic(player:getStats():getPanic() - 10)
+                        if player:getStats():getPanic() < 0 then
+                            player:getStats():setPanic(0);
+                        end
+                    end
+                end
+                local item = player:getPrimaryHandItem();
+                local itemdata = item:getModData();
+                local mindamage = item:getMinDamage();
+                local maxdamage = item:getMaxDamage();
+                local aimingtime = item:getAimingTime();
+                local range = item:getMaxRange();
+                local jamchance = item:getJamGunChance();
+                if itemdata.MTstate == nil then
+                    itemdata.MTstate = "Normal";
+                end
+                if player:HasTrait("Terminator") and itemdata.MTstate ~= "Terminator" then
+                    if itemdata.MTstate == "Normal" then
+                        item:setAimingTime(aimingtime * 3);
+                        item:setMaxRange(range + 5);
+                        item:setJamGunChance(jamchance / 2);
+                        item:setMinDamage(mindamage * 1.25)
+                        item:setMaxDamage(maxdamage * 1.25)
+                    end
+                    itemdata.MTstate = "Terminator";
+                end
+                if player:HasTrait("Terminator") == false and itemdata.MTState ~= "Normal" then
+                    if itemdata.MTstate == "Terminator" then
+                        item:setAimingTime(aimingtime / 3);
+                        item:setMaxRange(range - 5);
+                        item:setJamGunChance(jamchance * 2);
+                        item:setMinDamage(mindamage * 0.8)
+                        item:setMaxDamage(maxdamage * 0.8)
+                    end
+                    itemdata.MTstate = "Normal";
+                end
+            end
+        end
+    end
 end
-
+function MTAlcoholismMoodle(_player, _playerdata)
+    --Experimental MoodleFramework Support
+    local player = _player;
+    local playerdata = _playerdata;
+    if player:HasTrait("drinker") then
+        local stats = player:getStats();
+        local drunkness = stats:getDrunkenness();
+        local anger = stats:getAnger();
+        local stress = stats:getStress();
+        local hoursthreshold = 36;
+        local divider = 5;
+        local mf = MF;
+        local Alcoholism = MF.getMoodle("MTAlcoholism"):getValue();
+        if SandboxVars.MoreTraits.AlcoholicFrequency then
+            hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency * 1.5;
+        end
+        if hoursthreshold <= 2 then
+            divider = 0.1;
+        elseif hoursthreshold <= 5 then
+            divider = 0.2;
+        elseif hoursthreshold <= 10 then
+            divider = 0.5;
+        elseif hoursthreshold <= 20 then
+            divider = 1;
+        end
+        local divcalc = playerdata.iHoursSinceDrink / divider
+        if Alcoholism > 1.0 then
+            MF.getMoodle("MTAlcoholism"):setValue(1);
+        end
+        if Alcoholism < 0.0 then
+            MF.getMoodle("MTAlcoholism"):setValue(0);
+        end
+        if internalTick >= 29 then
+            if drunkness >= 20 then
+                MF.getMoodle("MTAlcoholism"):setChevronCount(3);
+                MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.01);
+            elseif drunkness >= 10 then
+                MF.getMoodle("MTAlcoholism"):setChevronCount(2);
+                MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.005);
+            elseif drunkness > 0 then
+                stats:setFatigue(stats:getFatigue() - 0.001);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.001);
+                MF.getMoodle("MTAlcoholism"):setChevronCount(1);
+                MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
+                playerdata.iHoursSinceDrink = 0;
+            else
+                MF.getMoodle("MTAlcoholism"):setChevronCount(0);
+                MF.getMoodle("MTAlcoholism"):setChevronIsUp(false);
+                if Alcoholism > 0.5 and internaltick >= 30 then
+                    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - 0.001);
+                end
+            end
+        end
+        if internalTick == 30 then
+            if Alcoholism <= 0.2 then
+                if anger < 0.05 + (divcalc * 0.1) / 3 then
+                    stats:setAnger(anger + 0.01);
+                end
+                if Alcoholism <= 0.3 then
+                    if stress < 0.15 + (divcalc * 0.1) / 2 then
+                        stats:setStress(stress + 0.01);
+                    end
+                end
+            end
+        end
+    end
+end
+function MTAlcoholismMoodleTracker(_player, _playerdata)
+    --Experimental MoodleFramework Support
+    local player = _player;
+    local playerdata = _playerdata;
+    if player:HasTrait("drinker") then
+        local hoursthreshold = 24;
+        local Alcoholism = MF.getMoodle("MTAlcoholism"):getValue();
+        if SandboxVars.MoreTraits.AlcoholicFrequency then
+            hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency;
+        end
+        playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
+        local percent = playerdata.iHoursSinceDrink / hoursthreshold;
+        MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
+    end
+end
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
@@ -4024,7 +4127,11 @@ function MainPlayerUpdate(_player)
     CheckSelfHarm(player);
     Blissful(player);
     hardytrait(player, playerdata);
-    drinkerupdate(player, playerdata);
+    if getActivatedMods():contains("MoodleFramework") == false then
+        drinkerupdate(player, playerdata);
+    else
+        MTAlcoholismMoodle(player, playerdata);
+    end
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
     albino(player, playerdata);
@@ -4054,14 +4161,18 @@ function EveryOneMinute()
     HungerCheck(player);
     RestfulSleeperWakeUp(player, playerdata);
     AlbinoTimer(player, playerdata);
-	TerminatorGun(player, playerdata);
+    TerminatorGun(player, playerdata);
 end
 
 function EveryHours()
     local player = getPlayer();
     local playerdata = player:getModData();
+    if getActivatedMods():contains("MoodleFramework") == false then
+        drinkertick();
+    else
+        MTAlcoholismMoodleTracker(player, playerdata);
+    end
     drinkerpoison();
-    drinkertick();
     SecondWindRecharge();
     indefatigablecounter();
     CheckInjuredHeal();
