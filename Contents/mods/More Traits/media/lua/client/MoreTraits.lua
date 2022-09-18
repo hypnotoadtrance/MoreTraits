@@ -4051,11 +4051,13 @@ function MTAlcoholismMoodle(_player, _playerdata)
             if drunkness >= 20 then
                 MF.getMoodle("MTAlcoholism"):setChevronCount(3);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.01);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.005);
+                playerdata.iHoursSinceDrink = 0;
             elseif drunkness >= 10 then
                 MF.getMoodle("MTAlcoholism"):setChevronCount(2);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.005);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.002);
+                playerdata.iHoursSinceDrink = 0;
             elseif drunkness > 0 then
                 stats:setFatigue(stats:getFatigue() - 0.001);
                 MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.001);
@@ -4089,13 +4091,14 @@ function MTAlcoholismMoodleTracker(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("drinker") then
-        local hoursthreshold = 24;
+        local hoursthreshold = 72;
         local Alcoholism = MF.getMoodle("MTAlcoholism"):getValue();
-        if SandboxVars.MoreTraits.AlcoholicFrequency then
-            hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency;
+        if SandboxVars.MoreTraits.AlcoholicWithdrawal then
+            hoursthreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal;
         end
         playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
-        local percent = playerdata.iHoursSinceDrink / hoursthreshold;
+        local hours = playerdata.iHoursSinceDrink;
+        local percent = (playerdata.iHoursSinceDrink / hoursthreshold) * 0.1;
         MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
     end
 end
