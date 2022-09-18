@@ -1,3 +1,4 @@
 Changelog Notes:
 Motion Sickness Rework (Credit: Spring)
 Update Russian Translation (Credit: Hea)
+Add in support for MoodleFramework with Alcoholism
