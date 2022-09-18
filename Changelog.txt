@@ -1,2 +1,3 @@
 Changelog Notes:
 Motion Sickness Rework (Credit: Spring)
+Update Russian Translation (Credit: Hea)

@@ -1,5 +1,4 @@
 Sandbox_RU = {
-
     Sandbox_MoreTraits = "More Traits",
     Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Подготовленный: Медикаменты - бинты:",
     Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "Количество бинтов у персонажа",
@@ -21,8 +20,6 @@ Sandbox_RU = {
     Sandbox_MoreTraits_BouncerEffectiveness_tooltip = "Вероятность того, что Вышибала вызовет его эффект.<br>Шанс проверяется тиков в секунду, пока персонажа окружают три или более зомби.<br>Рекомендуем не превышать изначальное значение - 60.",
     Sandbox_MoreTraits_BouncerCooldown = "Вышибала - восстановление:",
     Sandbox_MoreTraits_BouncerCooldown_tooltip = "Сколько тиков между попытками персонажа применить навык Вышибалы.<br>60 тиков = 1 секунда<br>Уменьшение данного значения может чересчур пересилить Вышибалу!",
-    Sandbox_MoreTraits_HardyRegeneration = "Выносливый - сила регенерации выносливости:",
-    Sandbox_MoreTraits_HardyRegeneration_tooltip = "Процентное значение, обозначающее насколько быстро Выносливый восстанавливает выносливость за тик.<br>Установив это значение слишком высоким (>300%), персонаж будет восстанавливать выносливость с бешенной скоростью,<br>делая достижение усталого состояния невозможным.",
     Sandbox_MoreTraits_WeightPackMule = "Вьючный мул - влияние на грузоподъемность:",
     Sandbox_MoreTraits_WeightPackMule_tooltip = "Определяет базовую грузоподъемность инвентаря Вьючного мула до применения бонусов от Силы.",
     Sandbox_MoreTraits_WeightPackMouse = "Вьючная мышь - влияние на грузоподъемность:",
@@ -33,8 +30,6 @@ Sandbox_RU = {
     Sandbox_MoreTraits_WeightGlobalMod_tooltip = "Дает бонусную грузоподъемность всем персонажам.<br>Отрицательное значение уменьшит базовую грузоподъемность всех персонажей в мире.",
     Sandbox_MoreTraits_GymGoerPercent = "Завсегдатай спортзала - бонус к опыту:",
     Sandbox_MoreTraits_GymGoerPercent_tooltip = "Процентное значение опыта Силы/Фитнеса от тренировок.<br>Установите 100, чтобы перестать получать бонусный опыт.",
-    Sandbox_MoreTraits_SuperImmunePercent = "Супериммунный - эффективность:",
-    Sandbox_MoreTraits_SuperImmunePercent_tooltip = "Шанс побороть зомбификацию.<br>Установив 100, персонаж станет невосприимчив к зомбификации.<br>Примечание: даже если иммунная система персонажа поборола зомбификацию,<br>есть шанс, что он заразится поддельной инфекцией.",
     Sandbox_MoreTraits_GraveRobberChance = "Расхититель могил - шанс дополнительной добычи:",
     Sandbox_MoreTraits_GraveRobberChance_tooltip = "Шанс найти дополнительную добычу на трупах зомби.<br>Установив 100, дополнительная добыча будет на каждом трупе убитого персонажем зомби.",
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot = "Расхититель могил - количество добычи:",
@@ -54,7 +49,6 @@ Sandbox_RU = {
     Sandbox_MoreTraits_MartialScaling_tooltip = "Урон, который наносит Мастер боевых искусств.<br>Установив 50, наносимый урон уменьшится в два раза.",
     Sandbox_MoreTraits_ButterfingersChance = "Растяпы - шанс (не процент):",
     Sandbox_MoreTraits_ButterfingersChance_tooltip = "Шанс выронить предмет из рук.<br>Каждую игровую минуту бросается кубик - значение/2000.<br>Уменьшая значение, предметы могут начать вываливаться из рук на каждом шагу.",
-
     Sandbox_MoreTraits_ScroungerChance = "Ищейка - шанс:",
     Sandbox_MoreTraits_ScroungerChance_tooltip = "Процентное значение, что персонаж найдет дополнительную добычу в контейнере.<br>100 означает, что в каждом контейнере будет дополнительная добыча.",
     Sandbox_MoreTraits_ScroungerLootModifier = "Ищейка - модификатор добычи:",
@@ -83,8 +77,18 @@ Sandbox_RU = {
     Sandbox_MoreTraits_ForgivingDeprived_tooltip = "Персонаж будет разрешено сохранить пояс.<br>Пояс обычно очень трудно найти в обычной игре без убийства других игроков или модов, которые добавляют их в таблицы добычи.",
     Sandbox_MoreTraits_NonlethalAlcoholic = "Алкоголизм - летальность:",
     Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "Алкоголик никогда не умрет от отравления алкоголем, но все равно будут периодически страдать от абстиненции.",
-
-
-
-
+    Sandbox_MoreTraits_SecondWindCooldown = "Второе дыхание - перезарядка:",
+    Sandbox_MoreTraits_SecondWindCooldown_tooltip = "Сколько дней будет перезаряжаться Второе дыхание?",
+	Sandbox_MoreTraits_GymGoerNoExerciseFatigue = "Завсегдатай спортзала - усталость от упражнений",
+	Sandbox_MoreTraits_GymGoerNoExerciseFatigue_tooltip = "Должен ли Завсегдатай спортзала иметь защиту от усталости после упражнений?<br>Если отключено, то игроки с перком Завсегдатай спортзала будет страдать от усталости после упражнений.",
+	Sandbox_MoreTraits_HardyEndurance = "Выносливый - выносливость:",
+	Sandbox_MoreTraits_HardyEndurance_tooltip = "Сколько дополнительной выносливости должен иметь Выносливый?<br>Имейте в виду, что это значение является суммой, которую вы получаете при достижении 10 фитнеса.",
+	Sandbox_MoreTraits_ImmunoChance = "Иммунодефицит - шанс:",
+	Sandbox_MoreTraits_ImmunoChance_tooltip = "Шанс заразиться вирусом после успешной атаки зомби для игроков с перком Иммунодефицит.<br>Установка этого значения на 100 сделает каждую атаку зомби заразной.",
+	Sandbox_MoreTraits_SuperImmuneWeakness = "Супериммунный - слабость:",
+	Sandbox_MoreTraits_SuperImmuneWeakness_tooltip = "Если эта настройка включена, то перк Супериммунный не сможет защитить ваш организм, если он заразился несколькими инфекциями.",
+	Sandbox_MoreTraits_BouncerDistance = "Вышибала - расстояние:",
+    Sandbox_MoreTraits_BouncerDistance_tooltip = "Расстояние (в клетках)от игрока с перком Вышибала на котором зобми будут отталкиваться.<br>Малое значение - меньшая дистанция. Большее значение - большая дистанция.",
+	Sandbox_MoreTraits_AntiqueAnywhere = "Антикварщик - предметы везде:",
+	Sandbox_MoreTraits_AntiqueAnywhere_tooltip = "Если включено, то перк Антикварщик позволит находить антиквариат везде, а не только в ящиках и металлических полках.",
 }
