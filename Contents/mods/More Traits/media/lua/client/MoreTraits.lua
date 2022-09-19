@@ -394,6 +394,9 @@ function initToadTraitsPerks(_player)
     playerdata.ImmunoEvasiveTimer = 0;
     playerdata.ImmunoFinal = false;
     playerdata.AlbinoTimeSpentOutside = 0;
+    if getActivatedMods():contains("MoodleFramework") == true then
+        MF.getMoodle("MTAlcoholism"):setValue(0.5);
+    end
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
