@@ -4080,10 +4080,10 @@ function MTAlcoholismMoodle(_player, _playerdata)
                 if anger < 0.05 + (divcalc * 0.1) / 2 then
                     stats:setAnger(anger + 0.01);
                 end
-                if Alcoholism <= 0.3 then
-                    if stress < 0.15 + (divcalc * 0.1) / 2 then
-                        stats:setStress(stress + 0.01);
-                    end
+            end
+            if Alcoholism <= 0.3 then
+                if stress < 0.15 + (divcalc * 0.1) / 2 then
+                    stats:setStress(stress + 0.01);
                 end
             end
         end
