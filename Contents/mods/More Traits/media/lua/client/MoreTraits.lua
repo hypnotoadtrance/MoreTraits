@@ -22,6 +22,7 @@ internalTick = 0;
 luckimpact = 1.0;
 MTVersion = getCore():getGameVersion();
 BodyDamagedFromTrait = {};
+isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 
 local function tableContains(t, e)
     for _, value in pairs(t) do
@@ -1803,8 +1804,8 @@ function drinkerpoison()
         elseif hoursthreshold <= 48 then
             divider = 5;
         end
-        if getActivatedMods():contains("MoodleFramework") == true then
-            if MF.getMoodle("MTAlcoholism"):getValue() <= 0.1 and cooldown <= 0 then
+        if isMoodleFrameWorkEnabled == true then
+            if MF.getMoodle("MTAlcoholism"):getValue() <= 0.05 and cooldown <= 0 then
                 print("Player is suffering from alcohol withdrawal.");
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
                 if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
@@ -3310,6 +3311,7 @@ function QuickWorker(_player)
             local action = actions:get(0);
             local type = action:getMetaType();
             local delta = action:getJobDelta();
+            local multiplier = getGameTime():getMultiplier();
             --Don't modify the action if it is in the Blacklist or if it has not yet started (is valid)
             if tableContains(blacklist, type) == false and delta > 0 then
                 local modifier = 0.5;
@@ -3340,7 +3342,7 @@ function QuickWorker(_player)
                 end
                 if delta < 0.99 - (modifier * 0.01) then
                     --Don't overshoot it.
-                    action:setCurrentTime(action:getCurrentTime() + modifier);
+                    action:setCurrentTime((action:getCurrentTime() + modifier * multiplier));
                 end
             end
         end
@@ -4050,20 +4052,29 @@ function MTAlcoholismMoodle(_player, _playerdata)
         if Alcoholism < 0.0 then
             MF.getMoodle("MTAlcoholism"):setValue(0);
         end
+        if Alcoholism >= 0.7 then
+            stats:setAnger(0);
+            stats:setStress(0);
+            stats:setBoredom(0);
+            stats:setPanic(0);
+            stats:setPain(0);
+            stats:setIdleboredom(0);
+            player:getBodyDamage():setUnhappynessLevel(0);
+        end
         if internalTick >= 29 then
             if drunkness >= 20 then
                 MF.getMoodle("MTAlcoholism"):setChevronCount(3);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.005);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.004);
                 playerdata.iHoursSinceDrink = 0;
             elseif drunkness >= 10 then
                 MF.getMoodle("MTAlcoholism"):setChevronCount(2);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.002);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.003);
                 playerdata.iHoursSinceDrink = 0;
             elseif drunkness > 0 then
                 stats:setFatigue(stats:getFatigue() - 0.001);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.001);
+                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.002);
                 MF.getMoodle("MTAlcoholism"):setChevronCount(1);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
                 playerdata.iHoursSinceDrink = 0;
@@ -4071,19 +4082,19 @@ function MTAlcoholismMoodle(_player, _playerdata)
                 MF.getMoodle("MTAlcoholism"):setChevronCount(0);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(false);
                 if Alcoholism > 0.5 and internalTick >= 30 then
-                    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - 0.001);
+                    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - 0.0001);
                 end
             end
         end
         if internalTick == 30 then
-            if Alcoholism <= 0.2 then
-                if anger < 0.05 + (divcalc * 0.1) / 3 then
+            if Alcoholism <= 0.3 then
+                if anger < 0.05 + (divcalc * 0.1) / 2 then
                     stats:setAnger(anger + 0.01);
                 end
-                if Alcoholism <= 0.3 then
-                    if stress < 0.15 + (divcalc * 0.1) / 2 then
-                        stats:setStress(stress + 0.01);
-                    end
+            end
+            if Alcoholism <= 0.2 then
+                if stress < 0.15 + (divcalc * 0.1) / 2 then
+                    stats:setStress(stress + 0.01);
                 end
             end
         end
@@ -4101,7 +4112,7 @@ function MTAlcoholismMoodleTracker(_player, _playerdata)
         end
         playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
         local hours = playerdata.iHoursSinceDrink;
-        local percent = (playerdata.iHoursSinceDrink / hoursthreshold) * 0.1;
+        local percent = (hours / hoursthreshold) * 0.05;
         MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
     end
 end
@@ -4133,7 +4144,7 @@ function MainPlayerUpdate(_player)
     CheckSelfHarm(player);
     Blissful(player);
     hardytrait(player, playerdata);
-    if getActivatedMods():contains("MoodleFramework") == false then
+    if isMoodleFrameWorkEnabled == false then
         drinkerupdate(player, playerdata);
     else
         MTAlcoholismMoodle(player, playerdata);
@@ -4173,7 +4184,7 @@ end
 function EveryHours()
     local player = getPlayer();
     local playerdata = player:getModData();
-    if getActivatedMods():contains("MoodleFramework") == false then
+    if isMoodleFrameWorkEnabled == false then
         drinkertick();
     else
         MTAlcoholismMoodleTracker(player, playerdata);
