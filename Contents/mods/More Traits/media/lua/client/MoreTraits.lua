@@ -4078,12 +4078,12 @@ function MTAlcoholismMoodle(_player, _playerdata)
             end
         end
         if internalTick == 30 then
-            if Alcoholism <= 0.2 then
+            if Alcoholism <= 0.3 then
                 if anger < 0.05 + (divcalc * 0.1) / 2 then
                     stats:setAnger(anger + 0.01);
                 end
             end
-            if Alcoholism <= 0.3 then
+            if Alcoholism <= 0.2 then
                 if stress < 0.15 + (divcalc * 0.1) / 2 then
                     stats:setStress(stress + 0.01);
                 end
