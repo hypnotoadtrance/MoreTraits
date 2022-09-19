@@ -4052,6 +4052,15 @@ function MTAlcoholismMoodle(_player, _playerdata)
         if Alcoholism < 0.0 then
             MF.getMoodle("MTAlcoholism"):setValue(0);
         end
+        if Alcoholism >= 0.7 then
+            stats:setAnger(0);
+            stats:setStress(0);
+            stats:setBoredom(0);
+            stats:setPanic(0);
+            stats:setPain(0);
+            stats:setIdleboredom(0);
+            player:getBodyDamage():setUnhappynessLevel(0);
+        end
         if internalTick >= 29 then
             if drunkness >= 20 then
                 MF.getMoodle("MTAlcoholism"):setChevronCount(3);
@@ -4073,7 +4082,7 @@ function MTAlcoholismMoodle(_player, _playerdata)
                 MF.getMoodle("MTAlcoholism"):setChevronCount(0);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(false);
                 if Alcoholism > 0.5 and internalTick >= 30 then
-                    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - 0.001);
+                    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - 0.0001);
                 end
             end
         end
