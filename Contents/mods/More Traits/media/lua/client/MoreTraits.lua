@@ -22,6 +22,7 @@ internalTick = 0;
 luckimpact = 1.0;
 MTVersion = getCore():getGameVersion();
 BodyDamagedFromTrait = {};
+isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 
 local function tableContains(t, e)
     for _, value in pairs(t) do
@@ -1803,7 +1804,7 @@ function drinkerpoison()
         elseif hoursthreshold <= 48 then
             divider = 5;
         end
-        if getActivatedMods():contains("MoodleFramework") == true then
+        if isMoodleFrameWorkEnabled == true then
             if MF.getMoodle("MTAlcoholism"):getValue() <= 0.05 and cooldown <= 0 then
                 print("Player is suffering from alcohol withdrawal.");
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
@@ -4134,7 +4135,7 @@ function MainPlayerUpdate(_player)
     CheckSelfHarm(player);
     Blissful(player);
     hardytrait(player, playerdata);
-    if getActivatedMods():contains("MoodleFramework") == false then
+    if isMoodleFrameWorkEnabled == false then
         drinkerupdate(player, playerdata);
     else
         MTAlcoholismMoodle(player, playerdata);
@@ -4174,7 +4175,7 @@ end
 function EveryHours()
     local player = getPlayer();
     local playerdata = player:getModData();
-    if getActivatedMods():contains("MoodleFramework") == false then
+    if isMoodleFrameWorkEnabled == false then
         drinkertick();
     else
         MTAlcoholismMoodleTracker(player, playerdata);
