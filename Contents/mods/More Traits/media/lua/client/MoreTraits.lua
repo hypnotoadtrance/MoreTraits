@@ -3342,7 +3342,7 @@ function QuickWorker(_player)
                 end
                 if delta < 0.99 - (modifier * 0.01) then
                     --Don't overshoot it.
-                    action:setCurrentTime((action:getCurrentTime() + modifier) * multiplier);
+                    action:setCurrentTime((action:getCurrentTime() + modifier * multiplier));
                 end
             end
         end
