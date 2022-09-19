@@ -3310,6 +3310,7 @@ function QuickWorker(_player)
             local action = actions:get(0);
             local type = action:getMetaType();
             local delta = action:getJobDelta();
+            local multiplier = getGameTime():getMultiplier();
             --Don't modify the action if it is in the Blacklist or if it has not yet started (is valid)
             if tableContains(blacklist, type) == false and delta > 0 then
                 local modifier = 0.5;
@@ -3340,7 +3341,7 @@ function QuickWorker(_player)
                 end
                 if delta < 0.99 - (modifier * 0.01) then
                     --Don't overshoot it.
-                    action:setCurrentTime(action:getCurrentTime() + modifier);
+                    action:setCurrentTime((action:getCurrentTime() + modifier) * multiplier);
                 end
             end
         end
