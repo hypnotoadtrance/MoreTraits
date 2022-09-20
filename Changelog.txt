@@ -1,5 +1,2 @@
 Changelog Notes:
-Motion Sickness Rework (Credit: Spring)
-Update Russian Translation (Credit: Hea)
-Add in support for MoodleFramework with Alcoholism
-Quick Worker now accounts for Game Speed Time Multiplier in Singleplayer
+Hotfix for MTAlcoholism setValue being called before MoodleFramework is ready.

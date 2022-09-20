@@ -395,9 +395,7 @@ function initToadTraitsPerks(_player)
     playerdata.ImmunoEvasiveTimer = 0;
     playerdata.ImmunoFinal = false;
     playerdata.AlbinoTimeSpentOutside = 0;
-    if getActivatedMods():contains("MoodleFramework") == true then
-        MF.getMoodle("MTAlcoholism"):setValue(0.5);
-    end
+    playerdata.isMTAlcoholismInitialized = false;
 
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
@@ -4046,6 +4044,9 @@ function MTAlcoholismMoodle(_player, _playerdata)
             divider = 1;
         end
         local divcalc = playerdata.iHoursSinceDrink / divider
+        if playerdata.isMTAlcoholismInitialized == nil or playerdata.isMTAlcoholismInitialized == false then
+            MF.getMoodle("MTAlcoholism"):setValue(0.5);
+        end
         if Alcoholism > 1.0 then
             MF.getMoodle("MTAlcoholism"):setValue(1);
         end
