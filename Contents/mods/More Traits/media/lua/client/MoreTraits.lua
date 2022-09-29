@@ -2574,7 +2574,7 @@ local function SuperImmuneRecoveryProcess()
                 end
                 playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
                 playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
-                Illness = Illness + (playerdata.SuperImmuneMinutesWellFed / 50);
+                Illness = Illness - (playerdata.SuperImmuneMinutesWellFed / 50);
                 playerdata.SuperImmuneMinutesWellFed = 0;
                 player:getBodyDamage():setFakeInfectionLevel(Illness);
                 if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
