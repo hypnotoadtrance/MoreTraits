@@ -98,6 +98,7 @@ UI_EN = {
     UI_trait_probladedesc = "You are especially good at wielding Blade weapons.<br>While wielding these types of weapons, they degrade more slowly, deal 20% more damage,<br>and have a higher critical chance, which increases based on your skill.<br>+1 Short Blade<br>+1 Long Blade<br>+1 Axe",
     UI_trait_progun = "Prowess: Guns",
     UI_trait_progundesc = "You are especially good at wielding firearms.<br>While wielding these types of weapons, they degrade more slowly, and have a chance to not consume ammunition when fired.<br>Chance is based on your skill level.<br>+1 Aiming<br>+1 Reloading",
+	UI_progunammo = "Prowess prevented you from using your ammunition!",
     UI_trait_prospear = "Prowess: Spear",
     UI_trait_prospeardesc = "You are especially good at wielding Spear weapons.<br>While wielding these types of weapons, they degrade more slowly, deal 20% more damage,<br>and have a higher critical chance, which increases based on your skill.<br>+2 Spear",
     UI_trait_albino = "Sun Sensitivity",
@@ -221,5 +222,7 @@ UI_EN = {
 	UI_MoreTraits_Options_HardyNotifier_ToolTip = "If you have the Hardy trait, you will be notified how much modded endurance you have left.",
 	UI_MoreTraits_Options_DrinkNotifier = "Alcoholism Reminder",
     UI_MoreTraits_Options_DrinkNotifier_ToolTip = "If you have the Alcoholic trait, and currently need alcohol, you will be reminded every in-game hour.",
+	UI_MoreTraits_Options_ProwessGunsAmmo = "Announce Prowess Guns Saving Ammo",
+	UI_MoreTraits_Options_ProwessGunsAmmo_ToolTip = "If you have the Prowess: Guns trait, a notification will pop up when the trait prevents you from using ammunition.",
 }
 

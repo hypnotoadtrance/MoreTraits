@@ -107,6 +107,13 @@ if ModOptions and ModOptions.getInstance then
                 OnApplyMainMenu = onModOptionsApply,
                 OnApplyInGame = onModOptionsApply,
             },
+			ProwessGunsAmmo = {
+				name = "UI_MoreTraits_Options_ProwessGunsAmmo",
+				tooltip = "UI_MoreTraits_Options_ProwessGunsAmmo_ToolTip",
+				default = true,
+				OnApplyMainMenu = onModOptionsApply,
+				OnApplyInGame = onModOptionsApply,
+			},
         },
         mod_id = 'ToadTraits',
         mod_shortname = 'More Traits',

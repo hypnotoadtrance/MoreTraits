@@ -1,2 +1,2 @@
 Changelog Notes:
-Hotfix for MTAlcoholism setValue being called before MoodleFramework is ready.
+New Mod Option setting to let you know when Prowess: Guns prevents you from using ammunition.
