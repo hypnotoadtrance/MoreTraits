@@ -3,3 +3,4 @@ New Mod Option setting to let you know when Prowess: Guns prevents you from usin
 Updated Immunocompromised trait description.
 Fixed Evasive being able to heal injuries by unbandaging wounds.
 Hardy no longer scales with fitness
+Martial Artist deals less damage when tired

@@ -1946,10 +1946,19 @@ function martial(_actor, _target, _weapon, _damage)
             playerdata.itemWeaponBareHands:setMinDamage(minimumdmg);
             playerdata.itemWeaponBareHands:setMaxDamage(maximumdmg);
             playerdata.itemWeaponBareHands:setCriticalChance(critchance);
+			local damageloss = 1;
+			if endurance >= 0.5 and endurance < 0.75 then
+				damageloss = 0.75;
+			elseif endurance >= 0.25 and endurance < 0.5 then
+				damageloss = 0.5;
+			elseif endurance <= 0.25 then
+				damageloss = 0.25;
+			end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 4;
             end
             damage = damage * 0.1;
+			damage = damage * damageloss;
             if MoreTraits.settings.MartialDamage == true then
                 HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), HaloTextHelper.getColorGreen());
             end
