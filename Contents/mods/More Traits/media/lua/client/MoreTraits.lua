@@ -676,7 +676,13 @@ function ToadTraitEvasive(_player, _playerdata)
                 for _, b in pairs(modbodydamage) do
                     if i:getType() == b[1] then
                         if i:scratched() == false and b[2] == true or i:bitten() == false and b[3] == true or i:isCut() == false and b[4] == true then
+							if i:bandaged() == true then
+								if i:getScratchTime() == 0 and b[2] == true or i:getBiteTime() == 0 and b[3] == true or i:getCutTime() == 0 and b[4] == true then
+									bMarkForUpdate = true;
+								end
+							else
                             bMarkForUpdate = true;
+							end
                         end
                         if i:scratched() == true and b[2] == false then
                             print("Scratch Detected On: " .. tostring(i:getType()));
@@ -734,6 +740,17 @@ function ToadTraitEvasive(_player, _playerdata)
             for i = 0, bodydamage:getBodyParts():size() - 1 do
                 local b = bodydamage:getBodyParts():get(i);
                 local temptable = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
+				if b:bandaged() == true then
+					if b:getScratchTime() ~= 0 then
+						temptable[2] = true;
+					end
+					if b:getBiteTime() ~= 0 then
+						temptable[3] = true;
+					end
+					if b:getCutTime() ~= 0 then
+						temptable[4] = true;
+					end
+				end
                 table.insert(modbodydamage, temptable);
             end
             playerdata.ToadTraitBodyDamage = modbodydamage;
