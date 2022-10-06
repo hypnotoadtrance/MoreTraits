@@ -373,7 +373,7 @@ function initToadTraitsPerks(_player)
     playerdata.fPreviousHealthFromFoodTimer = 1000;
     playerdata.bWasInfected = false;
     playerdata.iHardyEndurance = 0;
-    playerdata.iHardyMaxEndurance = 0;
+    playerdata.iHardyMaxEndurance = 5;
     playerdata.iHardyInterval = 1000;
     playerdata.iWithdrawalCooldown = 24;
     playerdata.iParanoiaCooldown = 10;
@@ -1624,16 +1624,11 @@ function hardytrait(_player, _playerdata)
         if playerdata.iHardyInterval == nil then
             playerdata.iHardyInterval = 1000;
         end
-        if playerdata.iHardyMaxEndurance == nil then
-            playerdata.iHardyMaxEndurance = 0;
+        if playerdata.iHardyMaxEndurance == nil or playerdata.iHardyMaxEndurance ~= 5 then
+            playerdata.iHardyMaxEndurance = 5;
         end
         if playerdata.iHardyEndurance == nil then
             playerdata.iHardyEndurance = 0;
-        end
-        if playerdata.iHardyMaxEndurance ~= player:getPerkLevel(Perks.Fitness) then
-            playerdata.iHardyMaxEndurance = player:getPerkLevel(Perks.Fitness);
-            playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
-            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. player:getPerkLevel(Perks.Fitness), true, HaloTextHelper.getColorGreen());
         end
         if endurance < 0.9 then
             if modendurance >= 1 then

@@ -2,3 +2,4 @@ Changelog Notes:
 New Mod Option setting to let you know when Prowess: Guns prevents you from using ammunition.
 Updated Immunocompromised trait description.
 Fixed Evasive being able to heal injuries by unbandaging wounds.
+Hardy no longer scales with fitness
