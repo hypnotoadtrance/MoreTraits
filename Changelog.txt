@@ -4,3 +4,4 @@ Updated Immunocompromised trait description.
 Fixed Evasive being able to heal injuries by unbandaging wounds.
 Hardy no longer scales with fitness
 Martial Artist deals less damage when tired
+Antique Collector is now affected by Loot Respawn sandbox setting

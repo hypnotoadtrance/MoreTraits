@@ -1076,7 +1076,21 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
     table.insert(items, "MoreTraits.AntiqueSpear");
     table.insert(items, "MoreTraits.AntiqueHammer");
     table.insert(items, "MoreTraits.AntiqueKatana");
-
+	local LootRespawn = SandboxVars.World.LootRespawn;
+	local HoursForLootRespawn = 0;
+	local AllowRespawn = true;
+	--NO SWITCH CASE XDDDDDDDDDDDDDDD
+	if LootRespawn == 1 then
+		AllowRespawn = false;
+	elseif LootRespawn == 2 then
+		HoursForLootRespawn = 24;
+	elseif LootRespawn == 3 then
+		HoursForLootRespawn = 168;
+	elseif LootRespawn == 4 then
+		HoursForLootRespawn = 720;
+	elseif LootRespawn == 5 then
+		HoursForLootRespawn = 1440;
+	end
     local length = 0
     for k, v in pairs(items) do
         length = length + 1;
@@ -1126,6 +1140,7 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
                 containerObj = v.inventory:getParent();
                 if not containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                     containerObj:getModData().bAntiqueRolled = true;
+					containerObj:getModData().bHoursWhenChecked = GameTime:getInstance():getWorldAgeHours();
                     containerObj:transmitModData();
                     container = containerObj:getContainer();
                     if playerdata.ContainerTraitIllegal == true then
@@ -1145,6 +1160,29 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
                         container:addItemOnServer(item);
                         print("Found antique item! " .. tostring(item:getName()));
                     end
+				elseif AllowRespawn == true and containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+					if (containerObj:getModData().bHoursWhenChecked + HoursForLootRespawn) <= GameTime:getInstance():getWorldAgeHours() then
+						containerObj:getModData().bHoursWhenChecked = GameTime:getInstance():getWorldAgeHours();
+						containerObj:transmitModData();
+						container = containerObj:getContainer();
+						if playerdata.ContainerTraitIllegal == true then
+							playerdata.ContainerTraitIllegal = false;
+							return
+						end
+						local allow = false;
+						if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
+							allow = true;
+						end
+						if SandboxVars.MoreTraits.AntiqueAnywhere == true then
+							allow = true;
+						end
+						if ZombRand(roll) <= basechance and allow == true then
+							local i = ZombRand(length) + 1;
+							local item = container:AddItem(items[i])
+							container:addItemOnServer(item);
+							print("Found antique item! " .. tostring(item:getName()));
+						end
+					end
                 end
             end
         end
