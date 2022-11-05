@@ -1,7 +1,7 @@
 Sandbox_FR = {
-	Sandbox_MoreTraits = "More Traits",
-	Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Quantité de bandage",
-	Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "La quantité de bandages donnés par le trait préparation médical.",
+    Sandbox_MoreTraits = "More Traits",
+    Sandbox_MoreTraits_PreparedMedicalBandageAmount = "Quantité de bandage",
+    Sandbox_MoreTraits_PreparedMedicalBandageAmount_tooltip = "La quantité de bandages donnés par le trait préparation médical.",
     Sandbox_MoreTraits_PreparedCarGasToggle = "Préparé: Bidon d’essence",
     Sandbox_MoreTraits_PreparedCarGasToggle_tooltip = "Les joueurs qui choisissent le trait Préparé: Voiture commencent avec un bidon d’essence.",
     Sandbox_MoreTraits_InjuredBurns = "Brûlures blessées",
@@ -44,7 +44,7 @@ Sandbox_FR = {
     Sandbox_MoreTraits_AlcoholicFrequency_tooltip = "Combien d'heures (en moyenne) un alcoolique doit-il boire pour assouvir son besoin?<br>Des valeurs plus faibles signifient que les alcooliques doivent boire fréquemment pour éviter le manque.",
     Sandbox_MoreTraits_AlcoholicWithdrawal = "Le sevrage alcoolique",
     Sandbox_MoreTraits_AlcoholicWithdrawal_tooltip = "Après combien d'heures sans alcool un alcoolique doit-il commencer à souffrir de symptômes de manque?<br>Cette valeur doit être supérieure à la fréquence d’ingestion d’alcool.",
-	Sandbox_MoreTraits_SmokerStart = "Les fumeurs commencent par fumer.",
+    Sandbox_MoreTraits_SmokerStart = "Les fumeurs commencent par fumer.",
     Sandbox_MoreTraits_MartialScaling = "Mise à l'échelle des art martiaux",
     Sandbox_MoreTraits_MartialScaling_tooltip = "Une valeur en pourcentage représentant l'importance de l'augmentation des dégâts pour l'art martial.<br>Si l'on fixe cette valeur à 50 %, tous les dommages seront réduits de moitié.",
     Sandbox_MoreTraits_ButterfingersChance = "Maladroit chance en X",
@@ -72,6 +72,6 @@ Sandbox_FR = {
     Sandbox_MoreTraits_SlowWorkerScaler_tooltip = "Combien de temps il faut pour effectuer les temps d'actions (actions temporisées).<br>Plus les valeurs sont élevées, plus les temps d'actions sont lent.<br>Un réglage trop élevé peut rendre l'exécution de n'importe quelle action atrocement lente, notamment la lecture de livres.",
     Sandbox_MoreTraits_MartialWeapons = "Les art martiaux autorisent les coups d'armes",
     Sandbox_MoreTraits_MartialWeapons_tooltip = "Par défaut, Art martiaux n'inflige des dégâts que si le joueur n'est pas armé.<br>Si cette option est activée, les bousculades des joueurs continueront à faire des dégâts même s'ils brandissent une arme.<br>Si cette option est désactivée, vous pouvez toujours bénéficier de l'art martial avec un objet dans votre emplacement secondaire (lampe de poche, sac, etc.). Elle ne vérifie que si le slot primaire est équipé.",
-    Sandbox_MoreTraits_AntiqueChance = "Chane en X d’Anticaire",
+    Sandbox_MoreTraits_AntiqueChance = "Chance en X d’Anticaire",
     Sandbox_MoreTraits_AntiqueChance_tooltip = "La rareté des objets de collection anciens.<br>Cette valeur est représentative de 1 sur X.<br>Des valeurs plus élevées signifient que les obtentions sont moins fréquentes.",
 }
