@@ -672,6 +672,7 @@ function ToadTraitEvasive(_player, _playerdata)
                 local distance = enemy:DistTo(player)
                 if distance <= 3 then
                     nearbyzombies = true;
+                    break;
                 end
             end
         end
