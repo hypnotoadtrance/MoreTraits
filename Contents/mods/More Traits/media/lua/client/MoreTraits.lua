@@ -627,6 +627,35 @@ function initToadTraitsPerks(_player)
 end
 
 function ToadTraitEvasive(_player, _playerdata)
+    function updateBodyDamage(bodydamage, playerdata)
+        -- This function handles updating the saved state of the player's body damage
+        -- We save the body part as a string indiced table for efficient lookups
+        modbodydamage = {};
+        for i = 0, bodydamage:getBodyParts():size() - 1 do
+            local b = bodydamage:getBodyParts():get(i);
+            if b:bandaged() == true then
+                modbodydamage[b:getType()] = {b:getScratchTime() ~= 0, b:getBiteTime() ~= 0, b:getCutTime() ~= 0};
+            else
+                modbodydamage[b:getType()] = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
+            end
+        end
+        playerdata.ToadTraitBodyDamage = modbodydamage;
+        return modbodydamage;
+    end
+
+    function evade(i, lastinfected, bodydamage, player)
+        -- We rolled to evade an attack, do the logic for it
+        i:RestoreToFullHealth();
+        i:setScratched(false, false);
+        i:SetInfected(false);
+        if lastinfected == false and bodydamage:IsInfected() == true then
+            bodydamage:setInfected(false);
+            bodydamage:setInfectionLevel(0);
+            print("Infection from Dodged Attack Removed");
+        end
+        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
+    end
+
     local player = _player;
     local playerdata = _playerdata;
     if player:HasTrait("evasive") then
@@ -643,6 +672,7 @@ function ToadTraitEvasive(_player, _playerdata)
                 local distance = enemy:DistTo(player)
                 if distance <= 3 then
                     nearbyzombies = true;
+                    break;
                 end
             end
         end
@@ -659,101 +689,49 @@ function ToadTraitEvasive(_player, _playerdata)
         if player:HasTrait("Unlucky") then
             basechance = basechance - 3 * luckimpact;
         end
-        if modbodydamage == nil then
-            modbodydamage = {};
-            --Initialize the Body Part Reference Table
+        if modbodydamage == nil or lastinfected == nil then
             print("Initializing Body Damage");
-            for i = 0, bodydamage:getBodyParts():size() - 1 do
-                local b = bodydamage:getBodyParts():get(i);
-                local temptable = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
-                table.insert(modbodydamage, temptable);
-            end
-            playerdata.ToadTraitBodyDamage = modbodydamage;
+            modbodydamage = updateBodyDamage(bodydamage, playerdata)
             print("Body Damage Initialized");
         else
             for n = 0, bodydamage:getBodyParts():size() - 1 do
                 local i = bodydamage:getBodyParts():get(n);
-                for _, b in pairs(modbodydamage) do
-                    if i:getType() == b[1] then
-                        if i:scratched() == false and b[2] == true or i:bitten() == false and b[3] == true or i:isCut() == false and b[4] == true then
-							if i:bandaged() == true then
-								if i:getScratchTime() == 0 and b[2] == true or i:getBiteTime() == 0 and b[3] == true or i:getCutTime() == 0 and b[4] == true then
-									bMarkForUpdate = true;
-								end
-							else
+                local b = modbodydamage[i:getType()];
+                if i:scratched() == false and b[2] == true or i:bitten() == false and b[3] == true or i:isCut() == false and b[4] == true then
+                    if i:bandaged() == true then
+                        if i:getScratchTime() == 0 and b[2] == true or i:getBiteTime() == 0 and b[3] == true or i:getCutTime() == 0 and b[4] == true then
                             bMarkForUpdate = true;
-							end
                         end
-                        if i:scratched() == true and b[2] == false then
-                            print("Scratch Detected On: " .. tostring(i:getType()));
-                            if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-                                i:RestoreToFullHealth();
-                                i:setScratched(false, false);
-                                i:SetInfected(false);
-                                if lastinfected == false and bodydamage:IsInfected() == true then
-                                    bodydamage:setInfected(false);
-                                    bodydamage:setInfectionLevel(0);
-                                    print("Infection from Dodged Attack Removed");
-                                end
-                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
-                            else
-                                bMarkForUpdate = true;
-                            end
-                        elseif i:bitten() == true and b[3] == false then
-                            print("Bite Detected On: " .. tostring(i:getType()));
-                            if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-                                i:RestoreToFullHealth();
-                                i:SetBitten(false, false);
-                                i:SetInfected(false);
-                                if lastinfected == false and bodydamage:IsInfected() == true then
-                                    bodydamage:setInfected(false);
-                                    bodydamage:setInfectionLevel(0);
-                                    print("Infection from Dodged Attack Removed");
-                                end
-                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
-                            else
-                                bMarkForUpdate = true;
-                            end
-                        elseif i:isCut() == true and b[4] == false then
-                            print("Laceration Detected On: " .. tostring(i:getType()));
-                            if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-                                i:RestoreToFullHealth();
-                                i:setCut(false, false);
-                                i:SetInfected(false);
-                                if lastinfected == false and bodydamage:IsInfected() == true then
-                                    bodydamage:setInfected(false);
-                                    bodydamage:setInfectionLevel(0);
-                                    print("Infection from Dodged Attack Removed");
-                                end
-                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
-                            else
-                                bMarkForUpdate = true;
-                            end
-                        end
+                    else
+                    bMarkForUpdate = true;
+                    end
+                end
+                if i:scratched() == true and b[2] == false then
+                    print("Scratch Detected On: " .. tostring(i:getType()));
+                    if ZombRand(1, 101) <= basechance and nearbyzombies == true then
+                        evade(i, lastinfected, bodydamage, player)
+                    else
+                        bMarkForUpdate = true;
+                    end
+                elseif i:bitten() == true and b[3] == false then
+                    print("Bite Detected On: " .. tostring(i:getType()));
+                    if ZombRand(1, 101) <= basechance and nearbyzombies == true then
+                        evade(i, lastinfected, bodydamage, player)
+                    else
+                        bMarkForUpdate = true;
+                    end
+                elseif i:isCut() == true and b[4] == false then
+                    print("Laceration Detected On: " .. tostring(i:getType()));
+                    if ZombRand(1, 101) <= basechance and nearbyzombies == true then
+                        evade(i, lastinfected, bodydamage, player)
+                    else
+                        bMarkForUpdate = true;
                     end
                 end
             end
         end
         if bMarkForUpdate == true then
-            modbodydamage = {};
-            --Initialize the Body Part Reference Table
-            for i = 0, bodydamage:getBodyParts():size() - 1 do
-                local b = bodydamage:getBodyParts():get(i);
-                local temptable = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
-				if b:bandaged() == true then
-					if b:getScratchTime() ~= 0 then
-						temptable[2] = true;
-					end
-					if b:getBiteTime() ~= 0 then
-						temptable[3] = true;
-					end
-					if b:getCutTime() ~= 0 then
-						temptable[4] = true;
-					end
-				end
-                table.insert(modbodydamage, temptable);
-            end
-            playerdata.ToadTraitBodyDamage = modbodydamage;
+            playerdata.ToadTraitBodyDamage = updateBodyDamage(bodydamage, playerdata);
             playerdata.bisInfected = bodydamage:IsInfected();
         end
     end
