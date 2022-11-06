@@ -3,8 +3,9 @@ If you perform any kind of work within the project, please add yourself to this 
 in the mod description on Steam Workshop.
 
 Authors:
-Creator:
+Creators:
 HypnoToadTrance
+Fajdek
 
 Additional Coding:
 SteadySpring
@@ -12,16 +13,18 @@ Xenu47
 Aristrofl
 Vaikke
 Domestos
-Fajdek
+Spring
+[url=https://steamcommunity.com/profiles/76561198152820942]MusicManiac - dynamic traits[/url
 
 Translations:
 Simplified Chinese, by EndsM
 Traditional Chinese, by 紅茶老師
-Russian, by Xenu47
+Russian, by Xenu47, Hea
 German, by Marcv0dka
 Portuguese , by Cinissh
 Korean, by teray
 French, by MonsterKillers1973
-Turkish, by Sariserpito
+Turkish, by Sariserpito, Atlantic
 Spanish, by franz
 Polish, by Tony
+Italian, by Lore11
