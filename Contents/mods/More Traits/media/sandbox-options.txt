@@ -444,7 +444,7 @@ option MoreTraitsDynamic.ProwessSpearDynamic
 	type = boolean,
 	default = true,
 	page = MoreTraitsDynamic, 
-	translation = MoreTraitsDynamic_ProwessSpear
+	translation = MoreTraitsDynamic_ProwessSpear,
 	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.WildsmanDynamic
