@@ -1,0 +1,12 @@
+ItemName_CN = {
+    ItemName_MoreTraits.PackerBag = "步行者包",
+    ItemName_MoreTraits.Bag_SmallHikingBag = "小登山包",
+    ItemName_MoreTraits.AntiqueAxe = "古代斧头",
+    ItemName_MoreTraits.Thumper = "大槌", 
+    ItemName_MoreTraits.ObsidianBlade = "黑曜石匕首",
+
+    ItemName_MoreTraits.AntiqueSpear = "古代长矛",
+    ItemName_MoreTraits.AntiqueHammer = "古代锻造锤",
+    ItemName_MoreTraits.AntiqueKatana = "古代武士刀",
+
+}

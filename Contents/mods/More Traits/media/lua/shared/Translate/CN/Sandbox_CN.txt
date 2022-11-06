@@ -36,6 +36,10 @@ Sandbox_CN = {
     Sandbox_MoreTraits_GraveRobberGuaranteedLoot_tooltip = "决定盗墓贼可以找到多少确定的额外战利品。<br>默认情况下，一个随机数值会被确定，增加这个数值会在计算时决定额外战利品。",
     Sandbox_MoreTraits_IndefatigableRecharge = "不死鸟冷却",
     Sandbox_MoreTraits_IndefatigableRecharge_tooltip = "不死鸟特质的能力冷却需要的天数。",
+    Sandbox_MoreTraits_IndefatigableCuresInfection = "Indefatigable Cures Infection",
+    Sandbox_MoreTraits_IndefatigableCuresInfection_tooltip = "Should Indefatigable cure infection upon being used?<br>By default, Indefatigable does not cure zombification.<br>Note: Curing infection with Indefatigable will put it on twice the cooldown than normal.",
+    Sandbox_MoreTraits_IndefatigableTurnsOffAfterCuringInfection = "Indefatigable Turns Off After Curing Infection",
+    Sandbox_MoreTraits_IndefatigableTurnsOffAfterCuringInfection_tooltip = "Should Indefatigable no longer be usable if it cured infection?<br>This setting only works if "Indefatigable Cures Infection" is turned on.",
     Sandbox_MoreTraits_GordaniteEffectiveness = "戈登效果",
     Sandbox_MoreTraits_GordaniteEffectiveness_tooltip = "代表拥有戈登特质的玩家使用撬棍的效果的百分比。<br>设置为200%会使戈登特质效果翻倍。",
     Sandbox_MoreTraits_EvasiveChance = "闪避特质几率",
@@ -79,4 +83,6 @@ Sandbox_CN = {
     Sandbox_MoreTraits_NonlethalAlcoholic_tooltip = "选取酗酒特质的玩家将不会死于酒精中毒，但是仍然会受周期性戒断反应困扰。",
     Sandbox_MoreTraits_SecondWindCooldown = "Second Wind Recharge",
     Sandbox_MoreTraits_SecondWindCooldown_tooltip = "After how much days should Second Wind recharge?",
+    Sandbox_MoreTraits_NoodleLegsChance = "Noodle Legs Chance in X",
+    Sandbox_MoreTraits_NoodleLegsChance_tooltip = "The chance in X for you to trip with Noodle Legs<br>Base chance is 100, decreasing this will make you far more likely to trip",
 }
