@@ -1,0 +1,5 @@
+name=More Traits - Dynamic Traits
+poster=generic.png
+versionMin=41.0
+description= If this submod is enabled, Dynamic perks will be enabled. More Traits must also be enabled for this to function.
+id=ToadTraitsDynamic
