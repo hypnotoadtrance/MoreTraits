@@ -627,7 +627,7 @@ function initToadTraitsPerks(_player)
 end
 
 function ToadTraitEvasive(_player, _playerdata)
-    function updateBodyDamage(bodydamage)
+    function updateBodyDamage(bodydamage, playerdata)
         -- This function handles updating the saved state of the player's body damage
         -- We save the body part as a string indiced table for efficient lookups
         modbodydamage = {};
@@ -691,7 +691,7 @@ function ToadTraitEvasive(_player, _playerdata)
         end
         if modbodydamage == nil or lastinfected == nil then
             print("Initializing Body Damage");
-            modbodydamage = updateBodyDamage(bodydamage)
+            modbodydamage = updateBodyDamage(bodydamage, playerdata)
             print("Body Damage Initialized");
         else
             for n = 0, bodydamage:getBodyParts():size() - 1 do
@@ -731,7 +731,7 @@ function ToadTraitEvasive(_player, _playerdata)
             end
         end
         if bMarkForUpdate == true then
-            playerdata.ToadTraitBodyDamage = updateBodyDamage(bodydamage);
+            playerdata.ToadTraitBodyDamage = updateBodyDamage(bodydamage, playerdata);
             playerdata.bisInfected = bodydamage:IsInfected();
         end
     end
