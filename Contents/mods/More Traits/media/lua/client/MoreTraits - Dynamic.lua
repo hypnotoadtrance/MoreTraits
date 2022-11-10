@@ -180,7 +180,7 @@ function MTDtraitsGainsByLevel(player, perk, perkLevel)
 	-- Agility
 		-- Sprinting
 			-- Olympian
-				if perk == Perks.Sprinting or player:getPerkLevel(Perks.Fitness) then
+				if perk == Perks.Sprinting or perk == Perks.Fitness then
 					if SandboxVars.MoreTraitsDynamic.OlympianDynamic == true and not player:HasTrait("olympian") and player:getPerkLevel(Perks.Sprinting) >= 5 and player:getPerkLevel(Perks.Fitness) >= 6 then
 						player:getTraits():add("olympian");
 						MTDapplyXPBoost(player, Perks.Sprinting, 1);
