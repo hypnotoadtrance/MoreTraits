@@ -7,13 +7,13 @@ function MTDLevelPerkMain(player, perk)
  end
  
  function MTDapplyXPBoost(player, perk, boostLevel)
-    local currentXPBoost = player:getXp():getPerkBoost(perk);
-    local newBoost = currentXPBoost + boostLevel;
-    if newBoost > 3 then
-        player:getXp():setPerkBoost(perk, 3);
-    else
-        player:getXp():setPerkBoost(perk, newBoost);
-    end
+	local currentXPBoost = player:getXp():getPerkBoost(perk);
+	local newBoost = currentXPBoost + boostLevel;
+	if newBoost > 3 then
+		player:getXp():setPerkBoost(perk, 3);
+	else
+		player:getXp():setPerkBoost(perk, newBoost);
+	end
 end
 
 Events.LevelPerk.Add(MTDLevelPerkMain);
