@@ -3,7 +3,7 @@ function MTDLevelPerkMain(player, perk)
 	-- CALL TO OTHER METHODS THAT RUNS BASED ON THE LevelPerk EVENT
 	if getActivatedMods():contains("ToadTraitsDynamic") then
 		MTDtraitsGainsByLevel(player, perk);
-	end   
+	end
  end
  
  function MTDapplyXPBoost(player, perk, boostLevel)
@@ -487,11 +487,10 @@ function MTDtraitsGainsByLevel(player, perk)
 			end
 end
 
-
 function MTDAddMissingPerks(player)
 	if getActivatedMods():contains("ToadTraitsDynamic") then
 		MTDtraitsGainsByLevel(player, "newCharacterInitialization");	
-	end   
+	end
 end
 
 Events.OnNewGame.Add(MTDAddMissingPerks)
