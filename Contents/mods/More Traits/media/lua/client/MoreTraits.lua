@@ -634,7 +634,7 @@ function ToadTraitEvasive(_player, _playerdata)
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
             if b:bandaged() == true then
-                modbodydamage[b:getType()] = {b:getScratchTime() ~= 0, b:getBiteTime() ~= 0, b:getCutTime() ~= 0};
+                modbodydamage[b:getType()] = {b:getType(), b:getScratchTime() ~= 0, b:getBiteTime() ~= 0, b:getCutTime() ~= 0};
             else
                 modbodydamage[b:getType()] = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
             end
