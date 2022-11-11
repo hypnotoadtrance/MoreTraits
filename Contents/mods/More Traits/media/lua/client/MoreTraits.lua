@@ -1054,7 +1054,7 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
     table.insert(items, "MoreTraits.AntiqueSpear");
     table.insert(items, "MoreTraits.AntiqueHammer");
     table.insert(items, "MoreTraits.AntiqueKatana");
-	local LootRespawn = SandboxVars.World.LootRespawn;
+	local LootRespawn = SandboxVars.LootRespawn;
 	local HoursForLootRespawn = 0;
 	local AllowRespawn = true;
 	--NO SWITCH CASE XDDDDDDDDDDDDDDD
