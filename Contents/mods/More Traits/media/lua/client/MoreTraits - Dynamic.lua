@@ -1,8 +1,8 @@
-function MTDLevelPerkMain(player, perk, perkLevel, addBuffer)
+function MTDLevelPerkMain(player, perk)
 
 	-- CALL TO OTHER METHODS THAT RUNS BASED ON THE LevelPerk EVENT
 	if getActivatedMods():contains("ToadTraitsDynamic") then
-		MTDtraitsGainsByLevel(player, perk, perkLevel);
+		MTDtraitsGainsByLevel(player, perk);
 	end   
  end
  
@@ -18,7 +18,7 @@ end
 
 Events.LevelPerk.Add(MTDLevelPerkMain);
 
-function MTDtraitsGainsByLevel(player, perk, perkLevel)
+function MTDtraitsGainsByLevel(player, perk)
 
 
 -- Passive
@@ -180,7 +180,7 @@ function MTDtraitsGainsByLevel(player, perk, perkLevel)
 	-- Agility
 		-- Sprinting
 			-- Olympian
-				if perk == Perks.Sprinting or perk == Perks.Fitness then
+				if perk == Perks.Sprinting or player:getPerkLevel(Perks.Fitness) then
 					if SandboxVars.MoreTraitsDynamic.OlympianDynamic == true and not player:HasTrait("olympian") and player:getPerkLevel(Perks.Sprinting) >= 5 and player:getPerkLevel(Perks.Fitness) >= 6 then
 						player:getTraits():add("olympian");
 						MTDapplyXPBoost(player, Perks.Sprinting, 1);
@@ -486,5 +486,35 @@ function MTDtraitsGainsByLevel(player, perk, perkLevel)
 				end	
 			end
 end
-	
-	
+
+
+function MTDAddMissingPerks(player)
+	if getActivatedMods():contains("ToadTraitsDynamic") then
+		MTDtraitsGainsByLevel(player, Perks.Strength);
+		MTDtraitsGainsByLevel(player, Perks.Fitness);
+		MTDtraitsGainsByLevel(player, Perks.Sprinting);
+		MTDtraitsGainsByLevel(player, Perks.Lightfoot);
+		MTDtraitsGainsByLevel(player, Perks.Nimble);
+		MTDtraitsGainsByLevel(player, Perks.Sneak);
+		MTDtraitsGainsByLevel(player, Perks.Axe);
+		MTDtraitsGainsByLevel(player, Perks.Blunt);
+		MTDtraitsGainsByLevel(player, Perks.SmallBlunt);
+		MTDtraitsGainsByLevel(player, Perks.LongBlade);
+		MTDtraitsGainsByLevel(player, Perks.SmallBlade);
+		MTDtraitsGainsByLevel(player, Perks.Spear);
+		MTDtraitsGainsByLevel(player, Perks.Maintenance);
+		MTDtraitsGainsByLevel(player, Perks.Woodwork);
+		MTDtraitsGainsByLevel(player, Perks.Cooking);
+		MTDtraitsGainsByLevel(player, Perks.Electricity);
+		MTDtraitsGainsByLevel(player, Perks.Aiming);
+		MTDtraitsGainsByLevel(player, Perks.Reloading);
+		if getActivatedMods():contains("DrivingSkill") then
+			MTDtraitsGainsByLevel(player, Perks.DrivingSkill);
+		end
+		if getActivatedMods():contains("ScavengingSkill") then
+			MTDtraitsGainsByLevel(player, Perks.Scavenging);
+		end
+	end   
+end
+
+Events.OnNewGame.Add(MTDAddMissingPerks)
