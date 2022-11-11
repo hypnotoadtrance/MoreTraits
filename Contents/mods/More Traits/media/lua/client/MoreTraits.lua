@@ -643,10 +643,15 @@ function ToadTraitEvasive(_player, _playerdata)
         return modbodydamage;
     end
 
-    function evade(i, lastinfected, bodydamage, player)
+    function evade(i, lastinfected, bodydamage, player, injurytype)
         -- We rolled to evade an attack, do the logic for it
-        i:RestoreToFullHealth();
-        i:setScratched(false, false);
+        if injurytype == 1 then
+			i:setScratched(false, false);
+		elseif injurytype == 2 then
+			i:setBitten(false, false);
+		elseif injurytype == 3 then
+			i:setCut(false, false)
+		end
         i:SetInfected(false);
         if lastinfected == false and bodydamage:IsInfected() == true then
             bodydamage:setInfected(false);
@@ -709,21 +714,21 @@ function ToadTraitEvasive(_player, _playerdata)
                 if i:scratched() == true and b[2] == false then
                     print("Scratch Detected On: " .. tostring(i:getType()));
                     if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-                        evade(i, lastinfected, bodydamage, player)
+                        evade(i, lastinfected, bodydamage, player, 1)
                     else
                         bMarkForUpdate = true;
                     end
                 elseif i:bitten() == true and b[3] == false then
                     print("Bite Detected On: " .. tostring(i:getType()));
                     if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-                        evade(i, lastinfected, bodydamage, player)
+                        evade(i, lastinfected, bodydamage, player, 2)
                     else
                         bMarkForUpdate = true;
                     end
                 elseif i:isCut() == true and b[4] == false then
                     print("Laceration Detected On: " .. tostring(i:getType()));
                     if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-                        evade(i, lastinfected, bodydamage, player)
+                        evade(i, lastinfected, bodydamage, player, 3)
                     else
                         bMarkForUpdate = true;
                     end
