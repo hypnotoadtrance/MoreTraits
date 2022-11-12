@@ -91,8 +91,10 @@ Sandbox_EN = {
     Sandbox_MoreTraits_BouncerDistance_tooltip = "The distance (in tile squares) from the player out to which Bouncer begins attempting to shove enemies away. <br>Lower values means Bouncer will take effect only at closer ranges to the player.",
 	Sandbox_MoreTraits_AntiqueAnywhere = "Antique Collector Anywhere",
 	Sandbox_MoreTraits_AntiqueAnywhere_tooltip = "If true, Antique Collector trait will be able to find antique items anywhere, instead of only in crates and metal shelves.",
+	Sandbox_MoreTraits_HoarderCompatibility = "Hoarder trait stacking",
+	Sandbox_MoreTraits_HoarderCompatibility_tooltip = "If you run both More Traits and Expended Traits, they both have perks that update carry weight.<br>If this is checked on, Hoarder (from Expended Traits) and carry weight from this mod (Pack Mule/Mouse) will stack. Which means that whatever carry weight you get with Pack Mule/Pack Mouse will be multiplied by 1.25.<br>If this is checked off, and you have both perks (Hoarder and Pack Mule/Mouse) either Hoarder or Pack Mouse/Mule will run its code first meaing I honestly don't know if your max weight will be calculated by Hoarder code or Pack Mule code",
 	
-		Sandbox_MoreTraitsDynamic = "More Traits - Dynamic",
+	Sandbox_MoreTraitsDynamic = "More Traits - Dynamic",
 	Sandbox_MoreTraitsDynamic_PackMouse = "Pack Mouse",
 	Sandbox_MoreTraitsDynamic_PackMule = "Pack Mule",
 	Sandbox_MoreTraitsDynamic_LeadFoot = "Lead Foot",
@@ -137,5 +139,4 @@ Sandbox_EN = {
 	Sandbox_MoreTraitsDynamic_Scrounger = "Scrounger - requires scavenging skill mod, otherwise always static",
 	Sandbox_MoreTraitsDynamic_Incomprehensive = "Incomprehensive - requires scavenging skill mod, otherwise always static",
 	Sandbox_MoreTraitsDynamic_AntiqueCollector = "Antique Collector - requires scavenging skill mod, otherwise always static",
-	Sandbox_MoreTraitsDynamic_DefaultTooltip = "Dynamic?",
 }
