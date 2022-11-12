@@ -32,6 +32,7 @@ description=[*] Mod Options - Allows for Client-Side settings to be adjusted. In
 description=[*] Moodle Framework - Adds in support for Alcoholic as a moodle. This is pending release to Steam Workshop and is not implemented yet. But I am adding it as a required mod preemptively now.
 description=[*] Driving skill - some traits will be auto-disabled to avoid conflicts
 description=[*] Scavenging skill - some traits will give exp boost in scavenging if mod is present
+description=[*] (Optional) Expended Traits - Hoarder can stack with this mod weight perks/settings. Enabled by default.
 description=[/list]
 description=
 description=[h1]Opening The Project Up To The Community: [/h1]
