@@ -16,7 +16,7 @@ description=so far, this includes a series of Prepared traits, which allow users
 description=
 description=The mod also attempts to add a greater variety of expense, as in there are more -1, -2, -3, -5 traits. This should help prevent the annoying feeling of having one solitary point left with nothing to spend it on.
 description=
-description=Dynamic Traits submod has been added - you can earn/loose traits by leveling skills, list of all available perks can be found [url=https://docs.google.com/spreadsheets/d/1YM0g4fTXrDiDYuvFvNkmqEjFIaTIK4_Bb0dQvmLnIvA/edit?usp=sharing]here[/url]
+description=Dynamic Traits submod has been added - you can earn/loose traits by leveling skills, list of all available perks can be found [url=https://docs.google.com/spreadsheets/d/1YM0g4fTXrDiDYuvFvNkmqEjFIaTIK4_Bb0dQvmLnIvA/edit?usp=sharing]here[/url]. Out of 91 or so available perks, 42 can be made dynamic
 description=
 description=[h1]Known Issues[/h1]
 description=[list]
