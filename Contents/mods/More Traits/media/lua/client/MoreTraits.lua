@@ -2795,6 +2795,19 @@ function Immunocompromised(_player, _playerdata)
 	end
 end
 
+local crossRefMods = {
+	["DracoExpandedTraits"]="EventHandlers",
+}
+local loadedModIDs = {}
+local activeModIDs = getActivatedMods()
+for i = 1, activeModIDs:size() do
+	local modID = activeModIDs:get(i-1)
+	if crossRefMods[modID] then
+		require (crossRefMods[modID])
+		loadedModIDs[modID] = true
+	end
+end
+
 function checkWeight()
 	local player = getPlayer();
 	local strength = player:getPerkLevel(Perks.Strength);
@@ -2822,8 +2835,13 @@ function checkWeight()
 	elseif player:HasTrait("packmouse") then
 		player:setMaxWeightBase(mouseMaxWeightbonus);
 	else
-		player:setMaxWeightBase(defaultMaxWeightbonus)
-		;
+		player:setMaxWeightBase(defaultMaxWeightbonus);
+	end
+	if getActivatedMods():contains("DracoExpandedTraits") and player:HasTrait("Hoarder") then
+		player:setMaxWeightBase(math.floor(player:getMaxWeightBase() * 1.25))
+	end
+	if player:getMaxWeightBase() > 50 then
+		player:setMaxWeightBase(50)
 	end
 end
 
@@ -4278,7 +4296,11 @@ Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
-Events.EveryTenMinutes.Add(checkWeight);
+if getActivatedMods():contains("DracoExpandedTraits") then
+	Events.EveryOneMinute.Add(checkWeight);
+else
+	Events.EveryTenMinutes.Add(checkWeight);
+end
 Events.EveryHours.Add(EveryHours);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
