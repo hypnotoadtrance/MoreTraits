@@ -231,13 +231,21 @@ option MoreTraits.ImmunoChance
 	page = MoreTraits, translation = MoreTraits_ImmunoChance,
 }
 
+option MoreTraits.HoarderCompatibility
+{
+	type = boolean,
+	default = true,
+	page = MoreTraits, 
+	translation = MoreTraits_HoarderCompatibility,
+}
+
+
 option MoreTraitsDynamic.PackMouseDynamic
 {
 	type = boolean,
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PackMouse,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.LeadFootDynamic
 {
@@ -245,7 +253,6 @@ option MoreTraitsDynamic.LeadFootDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_LeadFoot,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.PackMuleDynamic
 {
@@ -253,7 +260,6 @@ option MoreTraitsDynamic.PackMuleDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PackMule,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.IndefatigableDynamic
 {
@@ -261,7 +267,6 @@ option MoreTraitsDynamic.IndefatigableDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Indefatigable,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.GymGoerDynamic
 {
@@ -269,7 +274,6 @@ option MoreTraitsDynamic.GymGoerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GymGoer,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.SecondWindDynamic
 {
@@ -277,7 +281,6 @@ option MoreTraitsDynamic.SecondWindDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SecondWind,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.HardyDynamic
 {
@@ -285,7 +288,6 @@ option MoreTraitsDynamic.HardyDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Hardy,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.EvasiveDynamic
 {
@@ -293,7 +295,6 @@ option MoreTraitsDynamic.EvasiveDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Evasive,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.NoodleLegsDynamic
 {
@@ -301,7 +302,6 @@ option MoreTraitsDynamic.NoodleLegsDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_NoodleLegs,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.OlympianDynamic
 {
@@ -309,7 +309,6 @@ option MoreTraitsDynamic.OlympianDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Olympian,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.SlowpokeDynamic
 {
@@ -317,7 +316,6 @@ option MoreTraitsDynamic.SlowpokeDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Slowpoke,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.FastDynamic
 {
@@ -325,7 +323,6 @@ option MoreTraitsDynamic.FastDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Fast,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.SwiftDynamic
 {
@@ -333,7 +330,6 @@ option MoreTraitsDynamic.SwiftDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Swift,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.FlexibleDynamic
 {
@@ -341,7 +337,6 @@ option MoreTraitsDynamic.FlexibleDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Flexible,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.WellFittedDynamic
 {
@@ -349,7 +344,6 @@ option MoreTraitsDynamic.WellFittedDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_WellFitted,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.TerminatorDynamic
 {
@@ -357,7 +351,6 @@ option MoreTraitsDynamic.TerminatorDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Terminator,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.QuietDynamic
 {
@@ -365,7 +358,6 @@ option MoreTraitsDynamic.QuietDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Quiet,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ProwessBladeDynamic
 {
@@ -373,7 +365,6 @@ option MoreTraitsDynamic.ProwessBladeDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessBlade,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.TavernBrawlerDynamic
 {
@@ -381,7 +372,6 @@ option MoreTraitsDynamic.TavernBrawlerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_TavernBrawler,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ProwessBluntDynamic
 {
@@ -389,7 +379,6 @@ option MoreTraitsDynamic.ProwessBluntDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessBlunt,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ThuggishDynamic
 {
@@ -397,7 +386,6 @@ option MoreTraitsDynamic.ThuggishDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Thuggish,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.GordaniteDynamic
 {
@@ -405,7 +393,6 @@ option MoreTraitsDynamic.GordaniteDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Gordanite,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.BouncerDynamic
 {
@@ -413,7 +400,6 @@ option MoreTraitsDynamic.BouncerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Bouncer,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.GruntWorkerDynamic
 {
@@ -421,7 +407,6 @@ option MoreTraitsDynamic.GruntWorkerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GruntWorker,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.MartialArtistDynamic
 {
@@ -429,7 +414,6 @@ option MoreTraitsDynamic.MartialArtistDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MartialArtist,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.PracticedSwordsmanDynamic
 {
@@ -437,7 +421,6 @@ option MoreTraitsDynamic.PracticedSwordsmanDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PracticedSwordsman,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ProwessSpearDynamic
 {
@@ -445,7 +428,6 @@ option MoreTraitsDynamic.ProwessSpearDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessSpear,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.WildsmanDynamic
 {
@@ -453,7 +435,6 @@ option MoreTraitsDynamic.WildsmanDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Wildsman,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ScrapperDynamic
 {
@@ -461,7 +442,6 @@ option MoreTraitsDynamic.ScrapperDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Scrapper,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.SlowWorkerDynamic
 {
@@ -469,7 +449,6 @@ option MoreTraitsDynamic.SlowWorkerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SlowWorker,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.FastWorkerDynamic
 {
@@ -477,7 +456,6 @@ option MoreTraitsDynamic.FastWorkerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_FastWorker,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.NaturalEaterDynamic
 {
@@ -485,7 +463,6 @@ option MoreTraitsDynamic.NaturalEaterDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_NaturalEater,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.AsceticDynamic
 {
@@ -493,7 +470,6 @@ option MoreTraitsDynamic.AsceticDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Ascetic,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.GourmandDynamic
 {
@@ -501,7 +477,6 @@ option MoreTraitsDynamic.GourmandDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Gourmand,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.TinkererDynamic
 {
@@ -509,7 +484,6 @@ option MoreTraitsDynamic.TinkererDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Tinkerer,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ProwessGunsDynamic
 {
@@ -517,7 +491,6 @@ option MoreTraitsDynamic.ProwessGunsDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessGuns,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.MotionSickenssDynamic
 {
@@ -525,7 +498,6 @@ option MoreTraitsDynamic.MotionSickenssDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MotionSickenss,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.VagabondDynamic
 {
@@ -533,7 +505,6 @@ option MoreTraitsDynamic.VagabondDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Vagabond,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.GraverobberDynamic
 {
@@ -541,7 +512,6 @@ option MoreTraitsDynamic.GraverobberDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Graverobber,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.ScroungerDynamic
 {
@@ -549,7 +519,6 @@ option MoreTraitsDynamic.ScroungerDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Scrounger,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.IncomprehensiveDynamic
 {
@@ -557,7 +526,6 @@ option MoreTraitsDynamic.IncomprehensiveDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Incomprehensive,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
 option MoreTraitsDynamic.AntiqueCollectorDynamic
 {
@@ -565,5 +533,4 @@ option MoreTraitsDynamic.AntiqueCollectorDynamic
 	default = true,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_AntiqueCollector,
-	tooltip = MoreTraitsDynamic_DefaultTooltip
 }
