@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <clothingItem>
     <m_MaleModel>skinned\backpacks\m_bighikingbag</m_MaleModel>
-    <m_FemaleModel>skinned\backpacks\f_bighikingbag</m_FemaleModel>
-    <m_GUID>90c8ada9-6425-404a-9f57-2779c2850b7e</m_GUID>
-    <m_Static>false</m_Static>
-    <m_AllowRandomTint>false</m_AllowRandomTint>
-    <m_AttachBone></m_AttachBone>
-    <textureChoices>bighikingbagblue</textureChoices>
-    <textureChoices>bighikingbaggreen</textureChoices>
-    <textureChoices>bighikingbagred</textureChoices>
+	<m_FemaleModel>skinned\backpacks\f_bighikingbag</m_FemaleModel>
+	<m_GUID>90c8ada9-6425-404a-9f57-2779c2850b7e</m_GUID>
+	<m_Static>false</m_Static>
+	<m_AllowRandomTint>false</m_AllowRandomTint>
+	<m_AttachBone></m_AttachBone>
+	<textureChoices>bighikingbagblue</textureChoices>
+	<textureChoices>bighikingbaggreen</textureChoices>
+	<textureChoices>bighikingbagred</textureChoices>
 </clothingItem>

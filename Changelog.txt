@@ -2,5 +2,12 @@ Changelog Notes:
 New Mod Option setting to let you know when Prowess: Guns prevents you from using ammunition.
 Updated Immunocompromised trait description.
 Fixed Evasive being able to heal injuries by unbandaging wounds.
-Hardy no longer scales with fitness
-Martial Artist deals less damage when tired
+Hardy no longer scales with fitness.
+Martial Artist deals less damage when exhausted.
+Antique Collector is now affected by Loot Respawn sandbox setting.
+Evasive code optimizations, Credit: hi117#0001
+New Submod - Dynamic MT, enable to lose/gain traits from More Traits, Credit: MusicManiac#4225
+  - check what is dynamic here: https://docs.google.com/spreadsheets/d/1YM0g4fTXrDiDYuvFvNkmqEjFIaTIK4_Bb0dQvmLnIvA/edit?usp=sharing
+Scrounger, Antique Collector and Vagabond now give Scavenging level if Scavenging Skill mod is enabled, Credit: MusicManiac#4225
+Fixed Loot traits (antique, vagabond, scrounger) working on player built containers (again)
+
