@@ -391,6 +391,8 @@ function initToadTraitsPerks(_player)
 	playerdata.FatigueWhenSleeping = 0;
 	playerdata.NeckHadPain = false;
 	playerdata.ContainerTraitIllegal = false;
+	playerdata.ContainerTraitPlayerCurrentPositionX = 0;
+	playerdata.ContainerTraitPlayerCurrentPositionY = 0;
 	playerdata.ImmunoActivated = false;
 	playerdata.ImmunoEvasiveTimer = 0;
 	playerdata.ImmunoFinal = false;
@@ -681,10 +683,6 @@ function ToadTraitEvasive(_player, _playerdata)
 				end
 			end
 		end
-		if lastinfected == nil then
-			playerdata.bisInfected = bodydamage:IsInfected();
-			lastinfected = playerdata.bisInfected;
-		end
 		if SandboxVars.MoreTraits.EvasiveChance then
 			basechance = SandboxVars.MoreTraits.EvasiveChance;
 		end
@@ -792,9 +790,6 @@ function ToadTraitParanoia(_player, _playerdata)
 	local player = _player;
 	local playerdata = _playerdata;
 	if player:HasTrait("paranoia") then
-		if playerdata.iParanoiaCooldown == nil then
-			playerdata.iParanoiaCooldown = 0;
-		end
 		if playerdata.iParanoiaCooldown <= 0 then
 			if player:isPlayerMoving() == true then
 				local basechance = 1;
@@ -844,15 +839,6 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
 		if player:HasTrait("Unlucky") then
 			basechance = basechance - 5 * luckimpact;
 			modifier = modifier - 0.1 * luckimpact;
-		end
-		if playerData.ContainerTraitIllegal == nil then
-			playerData.ContainerTraitIllegal = false;
-		end
-		if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-			playerData.ContainerTraitIllegal = true;
-		end
-		if playerData.ContainerTraitIllegal == true and player:isPlayerMoving() == true then
-			playerData.ContainerTraitIllegal = false;
 		end
 		for i, v in ipairs(_iSInventoryPage.backpacks) do
 			if v.inventory:getParent() then
@@ -1083,15 +1069,6 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
 	local containerObj;
 	local container;
 	if player:HasTrait("antique") then
-		if playerdata.ContainerTraitIllegal == nil then
-			playerdata.ContainerTraitIllegal = false;
-		end
-		if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-			playerdata.ContainerTraitIllegal = true;
-		end
-		if playerdata.ContainerTraitIllegal == true and player:isPlayerMoving() == true then
-			playerdata.ContainerTraitIllegal = false;
-		end
 		local basechance = 10;
 		local roll = 1500;
 		if player:HasTrait("Lucky") then
@@ -1128,9 +1105,15 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
 					container = containerObj:getContainer();
 					if playerdata.ContainerTraitIllegal == true then
 						playerdata.ContainerTraitIllegal = false;
+						if AllowRespawn == true then
+							containerObj:getModData().AllowRespawn = false;
+							containerObj:transmitModData();
+						end
 						return
 					end
 					local allow = false;
+					containerObj:getModData().AllowRespawn = true;
+					containerObj:transmitModData();
 					if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
 						allow = true;
 					end
@@ -1143,7 +1126,7 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
 						container:addItemOnServer(item);
 						print("Found antique item! " .. tostring(item:getName()));
 					end
-				elseif AllowRespawn == true and containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+				elseif AllowRespawn == true and containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() and containerObj:getModData().AllowRespawn == true then
 					if (containerObj:getModData().bHoursWhenChecked + HoursForLootRespawn) <= GameTime:getInstance():getWorldAgeHours() then
 						containerObj:getModData().bHoursWhenChecked = GameTime:getInstance():getWorldAgeHours();
 						containerObj:transmitModData();
@@ -1212,15 +1195,6 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
 	local playerdata = player:getModData();
 	local containerObj;
 	local container;
-	if playerdata.ContainerTraitIllegal == nil then
-		playerdata.ContainerTraitIllegal = false;
-	end
-	if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
-		playerdata.ContainerTraitIllegal = true;
-	end
-	if playerdata.ContainerTraitIllegal == true and player:isPlayerMoving() == true then
-		playerdata.ContainerTraitIllegal = false;
-	end
 	if player:HasTrait("vagabond") then
 		local basechance = 33;
 		if SandboxVars.MoreTraits.VagabondChance then
@@ -1300,15 +1274,11 @@ function CheckDepress(_player, _playerdata)
 	local player = _player;
 	local playerdata = _playerdata;
 	local depressed = playerdata.bToadTraitDepressed;
-	if depressed == nil then
-		playerdata.bToadTraitDepressed = false;
-	else
-		if depressed == true then
-			if player:getBodyDamage():getUnhappynessLevel() < 25 then
-				playerdata.bToadTraitDepressed = false;
-			else
-				player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.001);
-			end
+	if depressed == true then
+		if player:getBodyDamage():getUnhappynessLevel() < 25 then
+			playerdata.bToadTraitDepressed = false;
+		else
+			player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.001);
 		end
 	end
 end
@@ -1602,9 +1572,6 @@ function badteethtrait(_player, _playerdata)
 	local healthtimer = player:getBodyDamage():getHealthFromFoodTimer();
 	if player:HasTrait("badteeth") then
 		if healthtimer > 1000 then
-			if playerdata.fPreviousHealthFromFoodTimer == nil then
-				playerdata.fPreviousHealthFromFoodTimer = 1000;
-			end
 			if healthtimer > playerdata.fPreviousHealthFromFoodTimer then
 				local Head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
 				local pain = (healthtimer - playerdata.fPreviousHealthFromFoodTimer) * 0.01;
@@ -1642,14 +1609,8 @@ function hardytrait(_player, _playerdata)
 		if SandboxVars.MoreTraits.HardyEndurance then
 			AmountOfEnduranceRegenerated = SandboxVars.MoreTraits.HardyEndurance / 1000;
 		end
-		if playerdata.iHardyInterval == nil then
-			playerdata.iHardyInterval = 1000;
-		end
 		if playerdata.iHardyMaxEndurance == nil or playerdata.iHardyMaxEndurance ~= 5 then
 			playerdata.iHardyMaxEndurance = 5;
-		end
-		if playerdata.iHardyEndurance == nil then
-			playerdata.iHardyEndurance = 0;
 		end
 		if endurance < 0.9 then
 			if modendurance >= 1 then
@@ -1887,9 +1848,6 @@ function bouncerupdate(_player, _playerdata)
 		end
 		if player:HasTrait("Unlucky") then
 			chance = chance - 1 * luckimpact;
-		end
-		if playerdata.iBouncercooldown == nil then
-			playerdata.iBouncercooldown = 0;
 		end
 		if playerdata.iBouncercooldown > 0 then
 			playerdata.iBouncercooldown = playerdata.iBouncercooldown - 1;
@@ -2192,18 +2150,12 @@ function albino(_player, _playerdata)
 	local player = _player;
 	local playerdata = _playerdata;
 	local modpain = playerdata.AlbinoTimeSpentOutside;
-	if modpain == nil then
-		playerdata.AlbinoTimeSpentOutside = 0;
-	end
 	local stats = player:getStats();
 	local pain = stats:getPain();
 	local umbrella = false;
 	local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
 	if player:HasTrait("albino") then
 		local time = getGameTime();
-		if playerdata.bisAlbinoOutside == nil then
-			playerdata.bisAlbinoOutside = false;
-		end
 		if player:isOutside() then
 			local tod = time:getTimeOfDay();
 			if tod > 8 and tod < 17 then
@@ -2549,33 +2501,6 @@ local function SuperImmuneRecoveryProcess()
 	local playerdata = player:getModData();
 	local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
 	local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
-	if playerdata.SuperImmuneRecovery == nil then
-		playerdata.SuperImmuneRecovery = 0;
-	end
-	if playerdata.SuperImmuneHoursPassed == nil then
-		playerdata.SuperImmuneHoursPassed = 0;
-	end
-	if playerdata.SuperImmuneActive == nil then
-		playerdata.SuperImmuneActive = false;
-	end
-	if playerdata.SuperImmuneTextSaid == nil then
-		playerdata.SuperImmuneTextSaid = false;
-	end
-	if playerdata.SuperImmuneHealedOnce == nil then
-		playerdata.SuperImmuneHealedOnce = false;
-	end
-	if playerdata.SuperImmuneMinutesWellFed == nil then
-		playerdata.SuperImmuneMinutesWellFed = 0;
-	end
-	if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
-		playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-	end
-	if playerdata.SuperImmuneInfections == nil then
-		playerdata.SuperImmuneInfections = 0;
-	end
-	if playerdata.SuperImmuneLethal == nil then
-		playerdata.SuperImmuneLethal = false;
-	end
 	local HoursPerDay = 24;
 	if player:HasTrait("superimmune") then
 		if playerdata.SuperImmuneActive == true then
@@ -3491,11 +3416,6 @@ function GlassBody(_player, _playerdata)
 			playerdata.fLastHP = 0;
 			return ;
 		end
-		if playerdata.fLastHP == nil then
-			--Initialize the hp.
-			playerdata.fLastHP = bodydamage:getOverallBodyHealth();
-			return ;
-		end
 		local lasthp = playerdata.fLastHP;
 		local currenthp = bodydamage:getOverallBodyHealth();
 		local multiplier = getGameTime():getMultiplier();
@@ -3539,9 +3459,6 @@ function BatteringRam()
 		local stats = player:getStats();
 		local endurance = stats:getEndurance();
 		local inTree = player:getCurrentSquare():Has(IsoObjectType.tree);
-		if playerdata.bWasJustSprinting == nil then
-			playerdata.bWasJustSprinting = false;
-		end
 		if player:isSprinting() then
 			local bodydamage = player:getBodyDamage();
 			if bodydamage:getBodyPart(BodyPartType.UpperLeg_L):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.UpperLeg_R):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.LowerLeg_L):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.LowerLeg_R):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.Foot_L):getFractureTime() > 1 or bodydamage:getBodyPart(BodyPartType.Foot_R):getFractureTime() > 1 then
@@ -3596,9 +3513,6 @@ function BatteringRamUpdate(_player, _playerdata)
 	local player = _player;
 	local playerdata = _playerdata;
 	if player:HasTrait("batteringram") then
-		if playerdata.bWasJustSprinting == nil then
-			playerdata.bWasJustSprinting = false;
-		end
 		if playerdata.bWasJustSprinting == true then
 			player:setGhostMode(false);
 			addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
@@ -3826,9 +3740,6 @@ local function MotionSickness(player)
 	local playerdata = player:getModData();
 	local playerstats = player:getBodyDamage();
 	local Sickness = playerstats:getFakeInfectionLevel();
-	if playerdata.MotionActive == nil then
-		playerdata.MotionActive = false;
-	end
 	if player:HasTrait("motionsickness") then
 		if player:isDriving() == true and Sickness < 90.0 then
 			local vehicle = player:getVehicle();
@@ -3870,9 +3781,6 @@ local function MotionSicknessHealthLoss(player)
 	local MaxHealth = 35.0;
 	local Health = player:getBodyDamage():getOverallBodyHealth();
 	local Sickness = player:getBodyDamage():getFakeInfectionLevel();
-	if playerdata.MotionActive == nil then
-		playerdata.MotionActive = false;
-	end
 	if player:HasTrait("MotionSickness") and playerdata.MotionActive == true then
 		if Health >= 100 - Sickness and Health > MaxHealth then
 			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
@@ -3942,9 +3850,6 @@ local function HungerCheck(player)
 		local stats = player:getStats();
 		local hunger = stats:getHunger();
 		local SuperImmuneMinutesWellFed = player:getModData().SuperImmuneMinutesWellFed;
-		if player:getModData().SuperImmuneMinutesWellFed == nil then
-			player:getModData().SuperImmuneMinutesWellFed = 0;
-		end
 		if hunger == 0 then
 			player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
 		end
@@ -3972,18 +3877,6 @@ local function ImmunocompromisedInfection(player, playerdata)
 	local checked = false;
 	if SandboxVars.MoreTraits.ImmunoChance then
 		chance = SandboxVars.MoreTraits.ImmunoChance;
-	end
-	if evasivecheck == nil then
-		playerdata.ImmunoPart = {};
-	end
-	if activated == nil then
-		playerdata.ImmunoActivated = false;
-	end
-	if playerdata.ImmunoFinal == nil then
-		playerdata.ImmunoFinal = false;
-	end
-	if playerdata.ImmunoEvasiveTimer == nil then
-		playerdata.ImmunoEvasiveTimer = 0;
 	end
 	if activated == true then
 		if player:getCurrentState() == IdleState.instance() then
@@ -4079,6 +3972,19 @@ local function TerminatorGun(player, playerdata)
 				end
 			end
 		end
+	end
+end
+
+local function CheckForPlayerBuiltContainer(player, playerdata)
+	if player:isPerformingAnAction() == true and player:isPlayerMoving() == false then
+		playerdata.ContainerTraitIllegal = true;
+		playerdata.ContainerTraitPlayerCurrentPositionX = player:getX();
+		playerdata.ContainerTraitPlayerCurrentPositionY = player:getY();
+	end
+	if playerdata.ContainerTraitIllegal == true and player:getX() ~= playerdata.ContainerTraitPlayerCurrentPositionX and player:getY() ~= playerdata.ContainerTraitPlayerCurrentPositionY then
+		playerdata.ContainerTraitIllegal = false;
+		playerdata.ContainerTraitPlayerCurrentPositionX = 0;
+		playerdata.ContainerTraitPlayerCurrentPositionY = 0;
 	end
 end
 function MTAlcoholismMoodle(_player, _playerdata)
@@ -4220,6 +4126,7 @@ function MainPlayerUpdate(_player)
 	SlowWorker(player);
 	SuperImmuneFakeInfectionHealthLoss(player);
 	ImmunocompromisedInfection(player, playerdata);
+	CheckForPlayerBuiltContainer(player, playerdata)
 	if suspendevasive == false then
 		ToadTraitEvasive(player, playerdata);
 		GlassBody(player, playerdata);
@@ -4278,6 +4185,98 @@ function OnLoad()
 	playerdata.ToadTraitBodyDamage = nil;
 	suspendevasive = false;
 	player:getBodyDamage():Update();
+	if playerdata.ContainerTraitIllegal == nil then
+		playerdata.ContainerTraitIllegal = false;
+	end
+	if playerdata.ContainerTraitPlayerCurrentPositionX == nil then
+		playerdata.ContainerTraitPlayerCurrentPositionX = 0;
+	end
+	if playerdata.ContainerTraitPlayerCurrentPositionY == nil then
+		playerdata.ContainerTraitPlayerCurrentPositionY = 0;
+	end
+	if playerdata.iParanoiaCooldown == nil then
+		playerdata.iParanoiaCooldown = 0;
+	end
+	if playerdata.iHardyInterval == nil then
+		playerdata.iHardyInterval = 1000;
+	end
+	if playerdata.fPreviousHealthFromFoodTimer == nil then
+		playerdata.fPreviousHealthFromFoodTimer = 1000;
+	end
+	if playerdata.bisInfected == nil then
+		playerdata.bisInfected = bodydamage:IsInfected();
+		lastinfected = playerdata.bisInfected;
+	end
+	if playerdata.bToadTraitDepressed == nil then
+		playerdata.bToadTraitDepressed = false;
+	end
+	if playerdata.iHardyEndurance == nil then
+		playerdata.iHardyEndurance = 0;
+	end
+	if playerdata.iBouncercooldown == nil then
+		playerdata.iBouncercooldown = 0;
+	end
+	if playerdata.AlbinoTimeSpentOutside == nil then
+		playerdata.AlbinoTimeSpentOutside = 0;
+	end
+	if playerdata.bisAlbinoOutside == nil then
+		playerdata.bisAlbinoOutside = false;
+	end
+	if playerdata.SuperImmuneRecovery == nil then
+		playerdata.SuperImmuneRecovery = 0;
+	end
+	if playerdata.SuperImmuneHoursPassed == nil then
+		playerdata.SuperImmuneHoursPassed = 0;
+	end
+	if playerdata.SuperImmuneActive == nil then
+		playerdata.SuperImmuneActive = false;
+	end
+	if playerdata.SuperImmuneTextSaid == nil then
+		playerdata.SuperImmuneTextSaid = false;
+	end
+	if playerdata.SuperImmuneHealedOnce == nil then
+		playerdata.SuperImmuneHealedOnce = false;
+	end
+	if playerdata.SuperImmuneMinutesWellFed == nil then
+		playerdata.SuperImmuneMinutesWellFed = 0;
+	end
+	if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
+		playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
+	end
+	if playerdata.SuperImmuneInfections == nil then
+		playerdata.SuperImmuneInfections = 0;
+	end
+	if playerdata.SuperImmuneLethal == nil then
+		playerdata.SuperImmuneLethal = false;
+	end
+	if playerdata.fLastHP == nil then
+		playerdata.fLastHP = bodydamage:getOverallBodyHealth();
+		return ;
+	end
+	if playerdata.bWasJustSprinting == nil then
+		playerdata.bWasJustSprinting = false;
+	end
+	if playerdata.MotionActive == nil then
+		playerdata.MotionActive = false;
+	end
+	if playerdata.MotionActive == nil then
+		playerdata.MotionActive = false;
+	end
+	if playerdata.SuperImmuneMinutesWellFed == nil then
+		playerdata.SuperImmuneMinutesWellFed = 0;
+	end
+	if playerdata.ImmunoPart == nil then
+		playerdata.ImmunoPart = {};
+	end
+	if playerdata.ImmunoActivated == nil then
+		playerdata.ImmunoActivated = false;
+	end
+	if playerdata.ImmunoFinal == nil then
+		playerdata.ImmunoFinal = false;
+	end
+	if playerdata.ImmunoEvasiveTimer == nil then
+		playerdata.ImmunoEvasiveTimer = 0;
+	end
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
