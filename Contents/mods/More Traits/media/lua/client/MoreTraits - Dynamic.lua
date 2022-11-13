@@ -126,6 +126,7 @@ function MTDtraitsGainsByLevel(player, perk)
 					end
 					-- Pack Mouse
 					if SandboxVars.MoreTraitsDynamic.PackMouseDynamic == true and player:HasTrait("packmouse") and player:getPerkLevel(Perks.Strength) >= 7 then
+						player:getTraits():remove("packmouse")
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_packmouse"), false, HaloTextHelper.getColorGreen());
 					end
 					-- Pack Mule
