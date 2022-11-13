@@ -4174,6 +4174,7 @@ function OnLoad()
 	local player = getPlayer();
 	local playerdata = player:getModData();
 	local wornItems = player:getWornItems();
+	local bodydamage = player:getBodyDamage();
 	for i = wornItems:size() - 1, 0, -1 do
 		local item = wornItems:getItemByIndex(i);
 		if item:IsClothing() then
@@ -4184,7 +4185,7 @@ function OnLoad()
 	--reset evasive on game load
 	playerdata.ToadTraitBodyDamage = nil;
 	suspendevasive = false;
-	player:getBodyDamage():Update();
+	bodydamage:Update();
 	if playerdata.ContainerTraitIllegal == nil then
 		playerdata.ContainerTraitIllegal = false;
 	end
