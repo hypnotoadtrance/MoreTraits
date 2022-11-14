@@ -427,7 +427,7 @@ function MTDtraitsGainsByLevel(player, perk)
 		-- Aiming
 			-- Prowess Guns
 				if perk == "newCharacterInitialization" or perk == Perks.Aiming or perk == Perks.Reloading then
-					if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("prospear") and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 then
+					if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 then
 						player:getTraits():add("progun");
 						MTDapplyXPBoost(player, Perks.Aiming, 1);
 						MTDapplyXPBoost(player, Perks.Reloading, 1);
