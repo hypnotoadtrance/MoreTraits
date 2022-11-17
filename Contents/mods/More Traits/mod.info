@@ -3,3 +3,5 @@ poster=generic.png
 versionMin=41.0
 description= Adds additional traits to the game to offer more balanced variety for character creation.
 id=ToadTraits
+Authors=HypnoToadTrance, Fajdek
+icon=icon.png

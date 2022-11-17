@@ -1,6 +1,7 @@
 require('NPCs/MainCreationMethods');
 
 local function initToadTraits()
+		local sleepOK = (isClient() or isServer()) and getServerOptions():getBoolean("SleepAllowed") and getServerOptions():getBoolean("SleepNeeded")
 	local gunspecialist = TraitFactory.addTrait("gunspecialist", getText("UI_trait_gunspecialist"), 8, getText("UI_trait_gunspecialistdesc"), false, false);
 	gunspecialist:addXPBoost(Perks.Aiming, 2);
 	gunspecialist:addXPBoost(Perks.Reloading, 2);
@@ -199,7 +200,7 @@ local function initToadTraits()
 	local tavernbrawler = TraitFactory.addTrait("tavernbrawler", getText("UI_trait_tavernbrawler"), 3, getText("UI_trait_tavernbrawlerdesc"), false, false);
 	local secondwind = TraitFactory.addTrait("secondwind", getText("UI_trait_secondwind"), 10, getText("UI_trait_secondwinddesc"), false, false);
 	secondwind:addXPBoost(Perks.Fitness, 1);
-	local restfulsleeper = TraitFactory.addTrait("restfulsleeper", getText("UI_trait_restfulsleeper"), 6, getText("UI_trait_restfulsleeperdesc"), false, false);
+	local restfulsleeper = TraitFactory.addTrait("restfulsleeper", getText("UI_trait_restfulsleeper"), 6, getText("UI_trait_restfulsleeperdesc"), false, false, not sleepOK);
 	local noxpshooter = TraitFactory.addTrait("noxpshooter", getText("UI_trait_noxpshooter"), 3, getText("UI_trait_noxpshooterdesc"), false, false);
 	local noxptechnician = TraitFactory.addTrait("noxptechnician", getText("UI_trait_noxptechnician"), 3, getText("UI_trait_noxptechniciandesc"), false, false);
 	local noxpaxe = TraitFactory.addTrait("noxpaxe", getText("UI_trait_noxpaxe"), 3, getText("UI_trait_noxpaxedesc"), false, false);
