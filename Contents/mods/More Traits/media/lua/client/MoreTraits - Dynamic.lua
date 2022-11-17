@@ -126,6 +126,7 @@ function MTDtraitsGainsByLevel(player, perk)
 					end
 					-- Pack Mouse
 					if SandboxVars.MoreTraitsDynamic.PackMouseDynamic == true and player:HasTrait("packmouse") and player:getPerkLevel(Perks.Strength) >= 7 then
+						player:getTraits():remove("packmouse")
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_packmouse"), false, HaloTextHelper.getColorGreen());
 					end
 					-- Pack Mule
@@ -426,7 +427,7 @@ function MTDtraitsGainsByLevel(player, perk)
 		-- Aiming
 			-- Prowess Guns
 				if perk == "newCharacterInitialization" or perk == Perks.Aiming or perk == Perks.Reloading then
-					if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("prospear") and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 then
+					if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 then
 						player:getTraits():add("progun");
 						MTDapplyXPBoost(player, Perks.Aiming, 1);
 						MTDapplyXPBoost(player, Perks.Reloading, 1);
