@@ -398,6 +398,8 @@ function initToadTraitsPerks(_player)
 	playerdata.ImmunoFinal = false;
 	playerdata.AlbinoTimeSpentOutside = 0;
 	playerdata.isMTAlcoholismInitialized = false;
+	playerdata.iBouncercooldown = 0;
+	playerdata.bisInfected = false; 
 
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -638,7 +640,7 @@ function ToadTraitEvasive(_player, _playerdata)
 			if b:bandaged() == true then
 				modbodydamage[b:getType()] = {b:getType(), b:getScratchTime() ~= 0, b:getBiteTime() ~= 0, b:getCutTime() ~= 0};
 			else
-				modbodydamage[b:getType()] = { b:getType(), b:scratched(), b:bitten(), b:isCut() };
+				modbodydamage[b:getType()] = {b:getType(), b:scratched(), b:bitten(), b:isCut() };
 			end
 		end
 		playerdata.ToadTraitBodyDamage = modbodydamage;
@@ -647,15 +649,20 @@ function ToadTraitEvasive(_player, _playerdata)
 
 	function evade(i, lastinfected, bodydamage, player, injurytype)
 		-- We rolled to evade an attack, do the logic for it
+		i:setBleedingTime(0);
+		i:setBleeding(false);
 		if injurytype == 1 then
+			i:setScratchTime(0);
 			i:setScratched(false, false);
 		elseif injurytype == 2 then
-			i:setBitten(false, false);
+			--i:setBiteTime(0) and i:setBitten(false, false) both did nothing for some reason and just spammed errors
+			i:RestoreToFullHealth();
 		elseif injurytype == 3 then
+			i:setCutTime(0);
 			i:setCut(false, false)
 		end
-		i:SetInfected(false);
 		if lastinfected == false and bodydamage:IsInfected() == true then
+			i:SetInfected(false); 
 			bodydamage:setInfected(false);
 			bodydamage:setInfectionLevel(0);
 			print("Infection from Dodged Attack Removed");
@@ -4169,9 +4176,8 @@ function EveryHours()
 	SuperImmuneRecoveryProcess();
 end
 
-function OnLoad()
+function OnCreatePlayer(_, player)
 	--reset any worn clothing to default state.
-	local player = getPlayer();
 	local playerdata = player:getModData();
 	local wornItems = player:getWornItems();
 	local bodydamage = player:getBodyDamage();
@@ -4206,7 +4212,6 @@ function OnLoad()
 	end
 	if playerdata.bisInfected == nil then
 		playerdata.bisInfected = bodydamage:IsInfected();
-		lastinfected = playerdata.bisInfected;
 	end
 	if playerdata.bToadTraitDepressed == nil then
 		playerdata.bToadTraitDepressed = false;
@@ -4252,7 +4257,6 @@ function OnLoad()
 	end
 	if playerdata.fLastHP == nil then
 		playerdata.fLastHP = bodydamage:getOverallBodyHealth();
-		return ;
 	end
 	if playerdata.bWasJustSprinting == nil then
 		playerdata.bWasJustSprinting = false;
@@ -4305,5 +4309,5 @@ Events.EveryHours.Add(EveryHours);
 Events.OnNewGame.Add(initToadTraitsPerks);
 Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
-Events.OnLoad.Add(OnLoad);
+Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
