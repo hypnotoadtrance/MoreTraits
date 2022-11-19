@@ -1614,7 +1614,7 @@ function hardytrait(_player, _playerdata)
 		local maxendurance = playerdata.iHardyMaxEndurance;
 		local AmountOfEnduranceRegenerated = 0.05;
 		if SandboxVars.MoreTraits.HardyEndurance then
-			AmountOfEnduranceRegenerated = SandboxVars.MoreTraits.HardyEndurance / 1000;
+			AmountOfEnduranceRegenerated = (SandboxVars.MoreTraits.HardyEndurance * 2) / 1000;
 		end
 		if playerdata.iHardyMaxEndurance == nil or playerdata.iHardyMaxEndurance ~= 5 then
 			playerdata.iHardyMaxEndurance = 5;

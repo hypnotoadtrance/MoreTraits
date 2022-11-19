@@ -2,3 +2,4 @@ Changelog Notes:
 New mod icons if you have Mod Manager mod.
 Fixed Evasive bugs
 Changed OnLoad to OnCreatePlayer
+Changed Hardy Endurance sandbox translation, and changed how sandbox setting affects hardy

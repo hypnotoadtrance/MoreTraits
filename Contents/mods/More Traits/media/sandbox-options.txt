@@ -217,7 +217,7 @@ option MoreTraits.SecondWindCooldown
 }
 option MoreTraits.HardyEndurance
 {
-	type = integer, min = 10, max = 100, default = 50,
+	type = integer, min = 5, max = 50, default = 25,
 	page = MoreTraits, translation = MoreTraits_HardyEndurance,
 }
 option MoreTraits.SuperImmuneWeakness
