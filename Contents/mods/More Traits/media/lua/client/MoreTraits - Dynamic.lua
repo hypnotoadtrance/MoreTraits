@@ -166,7 +166,7 @@ function MTDtraitsGainsByLevel(player, perk)
 				end
 			-- Noodle Legs / Evasive
 				if perk == "newCharacterInitialization" or perk == Perks.Fitness or perk == Perks.Sprinting or perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sneak then
-					local sumOfLevels = player:getPerkLevel(Perks.Fitness) + player:getPerkLevel(Perks.Sprinting) + player:getPerkLevel(Perks.Lightfoot) + player:getPerkLevel(Perks.Nimble)
+					local sumOfLevels = player:getPerkLevel(Perks.Fitness) + player:getPerkLevel(Perks.Sprinting) + player:getPerkLevel(Perks.Lightfoot) + player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Sneak)
 					-- Noodle Legs
 					if SandboxVars.MoreTraitsDynamic.NoodleLegsDynamic == true and player:HasTrait("noodlelegs") and sumOfLevels >= 30 then
 						player:getTraits():remove("noodlelegs");
