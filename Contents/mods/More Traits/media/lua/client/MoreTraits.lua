@@ -20,10 +20,16 @@ skipxpadd = false;
 suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
-MTVersion = getCore():getGameVersion();
 BodyDamagedFromTrait = {};
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 
+local function AddXP(player, perk, amount)
+	if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
+		player:getXp():AddXP(perk, amount, false, false, false)
+	else
+		player:getXp():AddXP(perk, amount, false, false);
+	end
+end
 local function tableContains(t, e)
 	for _, value in pairs(t) do
 		if value == e then
@@ -400,6 +406,9 @@ function initToadTraitsPerks(_player)
 	playerdata.isMTAlcoholismInitialized = false;
 	playerdata.iBouncercooldown = 0;
 	playerdata.bisInfected = false; 
+	playerdata.bisAlbinoOutside = false;
+	playerdata.bWasJustSprinting = false;
+	playerdata.ImmunoPart = {};
 
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -1421,11 +1430,7 @@ function Specialization(_player, _perk, _amount)
 					if xpforlevel >= curxp then
 						break ;
 					else
-						if MTVersion:getMajor() >= 41 and MTVersion:getMinor() >= 66 then
-							player:getXp():AddXP(perk, -1 * 0.1, false, false, false);
-						else
-							player:getXp():AddXP(perk, -1 * 0.1, false, false);
-						end
+						AddXP(player, perk, -1 * 0.1);
 					end
 				end
 			end
@@ -3221,11 +3226,7 @@ function GymGoer(_player, _perk, _amount)
 	if player:HasTrait("gymgoer") and player:getCurrentState() == FitnessState.instance() then
 		if perk == Perks.Fitness or perk == Perks.Strength then
 			amount = amount * (modifier - 1);
-			if MTVersion:getMajor() >= 41 and MTVersion:getMinor() >= 66 then
-				player:getXp():AddXP(perk, amount, false, false, false);
-			else
-				player:getXp():AddXP(perk, amount, false, false);
-			end
+			AddXP(player, perk, amount);
 		end
 	end
 end
@@ -3702,7 +3703,7 @@ local function SecondWind(player)
 					end
 					if zombiesnearplayer > 2 then
 						playerstats:setEndurance(1);
-						playerdata.iHardyEndurance = player:getPerkLevel(Perks.Fitness);
+						playerdata.iHardyEndurance = 5;
 						if playerstats:getFatigue() > 0.6 then
 							playerdata.secondwindrecoveredfatigue = true;
 						end
@@ -3959,7 +3960,7 @@ local function TerminatorGun(player, playerdata)
 				end
 				if player:HasTrait("Terminator") and itemdata.MTstate ~= "Terminator" then
 					if itemdata.MTstate == "Normal" then
-						item:setAimingTime(aimingtime * 3);
+						item:setAimingTime(aimingtime * 2);
 						item:setMaxRange(range + 5);
 						item:setJamGunChance(jamchance / 2);
 						item:setMinDamage(mindamage * 1.25)
@@ -3969,7 +3970,7 @@ local function TerminatorGun(player, playerdata)
 				end
 				if player:HasTrait("Terminator") == false and itemdata.MTState ~= "Normal" then
 					if itemdata.MTstate == "Terminator" then
-						item:setAimingTime(aimingtime / 3);
+						item:setAimingTime(aimingtime / 2);
 						item:setMaxRange(range - 5);
 						item:setJamGunChance(jamchance * 2);
 						item:setMinDamage(mindamage * 0.8)
@@ -4202,7 +4203,7 @@ function OnCreatePlayer(_, player)
 		playerdata.ContainerTraitPlayerCurrentPositionY = 0;
 	end
 	if playerdata.iParanoiaCooldown == nil then
-		playerdata.iParanoiaCooldown = 0;
+		playerdata.iParanoiaCooldown = 10;
 	end
 	if playerdata.iHardyInterval == nil then
 		playerdata.iHardyInterval = 1000;
@@ -4211,7 +4212,7 @@ function OnCreatePlayer(_, player)
 		playerdata.fPreviousHealthFromFoodTimer = 1000;
 	end
 	if playerdata.bisInfected == nil then
-		playerdata.bisInfected = bodydamage:IsInfected();
+		playerdata.bisInfected = false;
 	end
 	if playerdata.bToadTraitDepressed == nil then
 		playerdata.bToadTraitDepressed = false;
@@ -4263,12 +4264,6 @@ function OnCreatePlayer(_, player)
 	end
 	if playerdata.MotionActive == nil then
 		playerdata.MotionActive = false;
-	end
-	if playerdata.MotionActive == nil then
-		playerdata.MotionActive = false;
-	end
-	if playerdata.SuperImmuneMinutesWellFed == nil then
-		playerdata.SuperImmuneMinutesWellFed = 0;
 	end
 	if playerdata.ImmunoPart == nil then
 		playerdata.ImmunoPart = {};

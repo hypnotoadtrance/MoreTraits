@@ -1,5 +1,4 @@
 Changelog Notes:
-New mod icons if you have Mod Manager mod.
-Fixed Evasive bugs
-Changed OnLoad to OnCreatePlayer
-Changed Hardy Endurance sandbox translation, and changed how sandbox setting affects hardy
+Nerfed Terminator aim speed
+Fixed missing playerdata in initialization and incorrect values between init and oncreateplayer
+Fixed Second Wind giving you more hardy charges than you should.
