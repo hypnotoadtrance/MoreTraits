@@ -660,6 +660,9 @@ function ToadTraitEvasive(_player, _playerdata)
 
 	function evade(i, lastinfected, bodydamage, player, injurytype)
 		-- We rolled to evade an attack, do the logic for it
+		if SandboxVars.MoreTraits.EvasiveAnimation == true then
+			player:setHitReaction("");
+		end
 		i:setBleedingTime(0);
 		i:setBleeding(false);
 		if injurytype == 1 then
