@@ -3959,6 +3959,11 @@ local function TerminatorGun(player, playerdata)
 						end
 					end
 				end
+				if player:HasTrait("antigun") then
+					if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
+						player:getStats():setUnhappynessLevel(player:getStats():getUnhappynessLevel() + 0.6);
+					end
+				end
 				local item = player:getPrimaryHandItem();
 				local itemdata = item:getModData();
 				local mindamage = item:getMinDamage();
@@ -3968,25 +3973,32 @@ local function TerminatorGun(player, playerdata)
 				local jamchance = item:getJamGunChance();
 				if itemdata.MTstate == nil then
 					itemdata.MTstate = "Normal";
+					itemdata.OGrange = range;
+					itemdata.OGaimingtime = aimingtime;
+					itemdata.OGjamchance = jamchance;
+					itemdata.OGmindmg = mindamage;
+					itemdata.OGmaxdmg = maxdamage;
 				end
 				if player:HasTrait("Terminator") and itemdata.MTstate ~= "Terminator" then
-					if itemdata.MTstate == "Normal" then
-						item:setAimingTime(aimingtime * 2);
-						item:setMaxRange(range + 5);
-						item:setJamGunChance(jamchance / 2);
-						item:setMinDamage(mindamage * 1.25)
-						item:setMaxDamage(maxdamage * 1.25)
-					end
+					item:setAimingTime(itemdata.OGaimingtime * 2);
+					item:setMaxRange(itemdata.OGrange + 5);
+					item:setJamGunChance(itemdata.OGjamchance / 2);
+					item:setMinDamage(itemdata.OGmindmg * 1.25)
+					item:setMaxDamage(itemdata.OGmaxdmg * 1.25)
 					itemdata.MTstate = "Terminator";
 				end
-				if player:HasTrait("Terminator") == false and itemdata.MTState ~= "Normal" then
-					if itemdata.MTstate == "Terminator" then
-						item:setAimingTime(aimingtime / 2);
-						item:setMaxRange(range - 5);
-						item:setJamGunChance(jamchance * 2);
-						item:setMinDamage(mindamage * 0.8)
-						item:setMaxDamage(maxdamage * 0.8)
-					end
+				if player:HasTrait("antigun") and itemdata.MTstate ~= "antigun" then
+					item:setAimingTime(itemdata.OGaimingtime * 0.8);
+					item:setMaxRange(itemdata.OGrange - 5);
+					if range <= 5 then item:setMaxRange(5); end
+					itemdata.MTstate = "antigun"
+				end
+				if player:HasTrait("Terminator") == false and player:HasTrait("antigun") == false and itemdata.MTState ~= "Normal" then
+					item:setAimingTime(itemdata.OGaimingtime);
+					item:setMaxRange(itemdata.OGrange);
+					item:setJamGunChance(itemdata.OGjamchance);
+					item:setMinDamage(itemdata.OGmindmg)
+					item:setMaxDamage(itemdata.OGmaxdmg)
 					itemdata.MTstate = "Normal";
 				end
 			end
@@ -4023,6 +4035,12 @@ local function IndefatigableAntiDragDownFromFront(player, playerdata)
 		if nearbyzombies >= 3 then
 			playerdata.indefatigablezombiesproc = true
 		end
+	end
+end
+
+local function antigunxpdecrease(player, perk, amount)
+	if player:HasTrait("antigun") and perk == Perks.Aiming then
+		AddXP(player, perk, 0 - (amount * 0.25));
 	end
 end
 
@@ -4331,6 +4349,7 @@ Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
+Events.AddXP.Add(antigunxpdecrease);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 if getActivatedMods():contains("DracoExpandedTraits") then

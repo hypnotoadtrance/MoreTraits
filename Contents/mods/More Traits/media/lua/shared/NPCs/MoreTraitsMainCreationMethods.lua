@@ -211,6 +211,7 @@ local function initToadTraits()
 	--===========--
 	--Bad Traits--
 	--===========--
+	local antigun = TraitFactory.addTrait("antigun", getText("UI_trait_antigun"), -6, getText("UI_trait_antigundesc"), false, false);
 	local noodlelegs = TraitFactory.addTrait("noodlelegs", getText("UI_trait_noodlelegs"),  -6, getText("UI_trait_noodlelegsdesc"), false, false);
 	local motionsickness = TraitFactory.addTrait("motionsickness", getText("UI_trait_motionsickness"), -6, getText("UI_trait_motionsicknessdesc"), false, false);
 	local paranoia = TraitFactory.addTrait("paranoia", getText("UI_trait_paranoia"), -4, getText("UI_trait_paranoiadesc"), false, false);
@@ -365,6 +366,10 @@ local function initToadTraits()
 	TraitFactory.setMutualExclusive("restfulsleeper", "Insomniac");
 	TraitFactory.setMutualExclusive("motionsickness", "superimmune");
 	TraitFactory.setMutualExclusive("badteeth", "albino");
+	TraitFactory.setMutualExclusive("antigun", "terminator");
+	TraitFactory.setMutualExclusive("antigun", "progun");
+	TraitFactory.setMutualExclusive("antigun", "specguns");
+	TraitFactory.setMutualExclusive("antigun", "noxpshooter");
 	--TraitFactory.setMutualExclusive("gimp", "fast");
 	--TraitFactory.setMutualExclusive("blissful", "Brooding");
 	TraitFactory.sortList();
