@@ -373,6 +373,8 @@ function initToadTraitsPerks(_player)
 	playerdata.indefatigablecuredinfection = false;
 	playerdata.indefatigabledisabled = false;
 	playerdata.bindefatigable = false;
+	playerdata.IndefatigableHasBeenDraggedDown = false;
+	playerdata.indefatigablezombiesproc = false;
 	playerdata.bSatedDrink = true;
 	playerdata.iHoursSinceDrink = 0;
 	playerdata.iTimesCannibal = 0;
@@ -385,7 +387,7 @@ function initToadTraitsPerks(_player)
 	playerdata.iParanoiaCooldown = 10;
 	playerdata.SuperImmuneRecovery = 0;
 	playerdata.SuperImmuneActive = false;
-	playerdata.SuperImmuneHoursPassed = 0;
+	playerdata.SuperImmuneMinutesPassed = 0;
 	playerdata.SuperImmuneTextSaid = false;
 	playerdata.SuperImmuneHealedOnce = false;
 	playerdata.SuperImmuneMinutesWellFed = 0;
@@ -1509,47 +1511,54 @@ function indefatigable(_player, _playerdata)
 	local playerdata = _playerdata;
 	local enemies = player:getSpottedList();
 	if player:HasTrait("indefatigable") then
-		if player:getBodyDamage():getHealth() < 15 then
-			print("Health less than 15.");
-			if playerdata.bindefatigable == false then
-				print("Healed to full.");
-				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-					local b = player:getBodyDamage():getBodyParts():get(i);
-					if tableContains(BodyDamagedFromTrait, b) == false then
-						b:RestoreToFullHealth();
-					end
-				end
-				player:getBodyDamage():setOverallBodyHealth(100);
-				if SandboxVars.MoreTraits.IndefatigableCuresInfection == true then
-					if player:getBodyDamage():IsInfected() then
-						if playerdata.indefatigabledisabled == false then
-							local bodydamage = player:getBodyDamage();
-							bodydamage:setInfected(false);
-							bodydamage:setInfectionMortalityDuration(-1);
-							bodydamage:setInfectionTime(-1);
-							bodydamage:setInfectionLevel(0);
-							playerdata.indefatigablecuredinfection = true;
-							if SandboxVars.MoreTraits.IndefatigableCuresInfectionOnce == true then
-								playerdata.indefatigabledisabled = true;
-							end
-						end
-					end
-				end
-				playerdata.bindefatigable = true;
-				playerdata.indefatigablecooldown = 0;
-				if enemies:size() > 2 then
-					for i = 0, enemies:size() - 1 do
-						if enemies:get(i):isZombie() then
-							if enemies:get(i):DistTo(player) <= 2.5 then
-								enemies:get(i):setStaggerBack(true);
-								enemies:get(i):setKnockedDown(true);
-							end
-						end
-					end
-				end
-				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
-				--player:Say(getText("UI_trait_indefatigable"));
+		if( player:getBodyDamage():getHealth() < 15 or player:isDeathDragDown()) and (playerdata.bindefatigable == false or playerdata.indefatigablezombiesproc == true) then
+			if player:getBodyDamage():getHealth() < 15 then
+				print("Health less than 15.");
 			end
+			if player:isDeathDragDown() or playerdata.indefatigablezombiesproc == true then
+				print("Player soon to be dragged down, indefatigable activated");
+				playerdata.IndefatigableHasBeenDraggedDown = true;
+				player:setPlayingDeathSound(false);
+				player:setDeathDragDown(false);
+				playerdata.indefatigablezombiesproc = false;
+			end
+			print("Healed to full.");
+			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+				local b = player:getBodyDamage():getBodyParts():get(i);
+				if tableContains(BodyDamagedFromTrait, b) == false then
+					b:RestoreToFullHealth();
+				end
+			end
+			player:getBodyDamage():setOverallBodyHealth(100);
+			if SandboxVars.MoreTraits.IndefatigableCuresInfection == true then
+				if player:getBodyDamage():IsInfected() then
+					if playerdata.indefatigabledisabled == false then
+						local bodydamage = player:getBodyDamage();
+						bodydamage:setInfected(false);
+						bodydamage:setInfectionMortalityDuration(-1);
+						bodydamage:setInfectionTime(-1);
+						bodydamage:setInfectionLevel(0);
+						playerdata.indefatigablecuredinfection = true;
+						if SandboxVars.MoreTraits.IndefatigableCuresInfectionOnce == true then
+							playerdata.indefatigabledisabled = true;
+						end
+					end
+				end
+			end
+			playerdata.bindefatigable = true;
+			playerdata.indefatigablecooldown = 0;
+			if enemies:size() > 2 then
+				for i = 0, enemies:size() - 1 do
+					if enemies:get(i):isZombie() then
+						if enemies:get(i):DistTo(player) <= 2.5 then
+							enemies:get(i):setStaggerBack(true);
+							enemies:get(i):setKnockedDown(true);
+						end
+					end
+				end
+			end
+			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
+			--player:Say(getText("UI_trait_indefatigable"));
 		end
 	end
 end
@@ -1565,11 +1574,15 @@ function indefatigablecounter()
 		if playerdata.indefatigablecuredinfection == true then
 			recharge = recharge * 2;
 		end
+		if playerdata.IndefatigableHasBeenDraggedDown == true then
+			recharge = recharge * 2;
+		end
 		if playerdata.bindefatigable == true then
 			if playerdata.indefatigablecooldown >= recharge then
 				playerdata.indefatigablecooldown = 0;
 				playerdata.bindefatigable = false;
 				playerdata.indefatigablecuredinfection = false;
+				playerdata.IndefatigableHasBeenDraggedDown = false;
 				player:Say(getText("UI_trait_indefatigablecooldown"));
 			else
 				playerdata.indefatigablecooldown = playerdata.indefatigablecooldown + 1;
@@ -2513,68 +2526,63 @@ local function SuperImmuneRecoveryProcess()
 	local playerdata = player:getModData();
 	local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
 	local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
-	local HoursPerDay = 24;
+	local MinutesPerDay = 1440;
 	if player:HasTrait("superimmune") then
 		if playerdata.SuperImmuneActive == true then
 			local Illness = player:getBodyDamage():getFakeInfectionLevel();
-			local RecoveryTime = playerdata.SuperImmuneRecovery;
-			local Recovery = 0;
-			local TimeElapsed = playerdata.SuperImmuneHoursPassed;
-			if RecoveryTime > 30 then
-				RecoveryTime = 30;
+			local Recovery = playerdata.SuperImmuneRecovery;
+			local TimeElapsed = playerdata.SuperImmuneMinutesPassed;
+			if Recovery > 30 then
+				Recovery = 30;
 			end
-			Recovery = RecoveryTime;
-			if Recovery * HoursPerDay >= TimeElapsed then
+			if Recovery * MinutesPerDay >= TimeElapsed then
 				if playerdata.SuperImmuneTextSaid == true then
 					playerdata.SuperImmuneTextSaid = false;
 				end
 				if TimeElapsed > 6 then
-					if (Recovery * HoursPerDay) / 2 >= TimeElapsed then
-						Illness = Illness - (2 - ZombRand(1, 5)); --You can decrease illness up to 1 or increase it up to 2 per hour
+					if (Recovery * MinutesPerDay) / 2 >= TimeElapsed then
+						Illness = Illness - ((20 - ZombRand(10, 51)) / 600); --You can decrease illness up to 1 or increase it up to 2 per hour
 					else
 						--Once half the required time passes, your immunity system starts gaining victory
-						Illness = Illness - (4 - ZombRand(1, 6)); -- You can decrease illness up to 3 or increase it up to 1 per hour
+						Illness = Illness - ((40 - ZombRand(10, 61)) / 600); -- You can decrease illness up to 3 or increase it up to 1 per hour
 					end --The random illness reduction and gain is to simulate your immune system fighting the virus.
 				else
-					Illness = Illness + ZombRand(1, 5); --Immune system doesn't notice the virus until 6 hours in
+					Illness = Illness + (ZombRand(100, 501) / 6000); --Immune system doesn't notice the virus until 6 hours in
 				end
 				if player:HasTrait("FastHealer") then
-					Illness = Illness - 0.25;
+					Illness = Illness - (0.25 / 60);
 				end
 				if player:HasTrait("SlowHealer") then
-					Illness = Illness + 0.25;
+					Illness = Illness + (0.25 / 60);
 				end
 				if Illness < 26 then
 					--Prevent illness from going too low or too high
-					Illness = Illness + 10;
+					Illness = Illness + 0.166;
 				end
 				if Illness > 91 and playerdata.SuperImmuneLethal == false then
-					Illness = Illness - 20;
+					Illness = Illness - 0.333;
 				end
-				if Illness == 20 or Illness == 40 or Illness == 60 or Illness == 80 then
-					Illness = Illness + 2; --Prevent the injured moodle from being spammed
-				end
-				playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+				playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + 1;
 				playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
 				Illness = Illness - (playerdata.SuperImmuneMinutesWellFed / 50);
 				playerdata.SuperImmuneMinutesWellFed = 0;
 				player:getBodyDamage():setFakeInfectionLevel(Illness);
 				if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
-					playerdata.SuperImmuneHoursPassed = playerdata.SuperImmuneHoursPassed + 1;
+					playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + 1;
 					playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
 				end
-				--following is for debug purposes
-				--player:Say("My illness is: "..Illness);
-				--player:Say("Time to recovery: "..(Recovery*24-TimeElapsed).." hours");
+				if isDebugEnabled() then
+					player:Say("Time to recovery: "..(Recovery * 1440 - TimeElapsed).." minutes, or "..(Recovery * 24 - math.floor(TimeElapsed / 60)).." hours");
+				end
 			else
 				if Illness > 0 or Illness ~= 0 then
 					--Recover from illness completely over-time once recovery time ends.
 					if player:HasTrait("FastHealer") then
-						Illness = Illness - 1.5; --0.7 to 2.5 days
+						Illness = Illness - (1.5 / 60); --0.7 to 2.5 days
 					elseif player:HasTrait("SlowHealer") then
-						Illness = Illness - 0.75; --1.4 to 5 days
+						Illness = Illness - (0.75 / 60); --1.4 to 5 days
 					else
-						Illness = Illness - 1; --1 to 3.7 days
+						Illness = Illness - (1 / 60); --1 to 3.7 days
 					end
 					player:getBodyDamage():setFakeInfectionLevel(Illness);
 					playerdata.SuperImmuneInfections = 0;
@@ -2585,7 +2593,7 @@ local function SuperImmuneRecoveryProcess()
 					end
 					playerdata.SuperImmuneTextSaid = false;
 					playerdata.SuperImmuneActive = false;
-					playerdata.SuperImmuneHoursPassed = 0;
+					playerdata.SuperImmuneMinutesPassed = 0;
 					playerdata.SuperImmuneRecovery = 0;
 					playerdata.SuperImmuneHealedOnce = true;
 					playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
@@ -3865,7 +3873,7 @@ local function HungerCheck(player)
 			local bodydamage = player:getBodyDamage();
 			playerdata.SuperImmuneTextSaid = false;
 			playerdata.SuperImmuneActive = false;
-			playerdata.SuperImmuneHoursPassed = 0;
+			playerdata.SuperImmuneMinutesPassed = 0;
 			playerdata.SuperImmuneRecovery = 0;
 			playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
 			playerdata.SuperImmuneMinutesWellFed = 0;
@@ -3995,6 +4003,26 @@ local function CheckForPlayerBuiltContainer(player, playerdata)
 		playerdata.ContainerTraitPlayerCurrentPositionY = 0;
 	end
 end
+
+local function IndefatigableAntiDragDownFromFront(player, playerdata)
+	if player:HasTrait("indefatigable") and playerdata.bindefatigable == false and SandboxVars.ZombieLore.ZombiesDragDown == true then
+		local enemies = player:getSpottedList();
+		local nearbyzombies = 0;
+		for i = 0, enemies:size() - 1 do
+			local enemy = enemies:get(i);
+			if enemy:isZombie() then
+				local distance = enemy:DistTo(player)
+				if distance <= 1 then
+					nearbyzombies = nearbyzombies + 1;
+				end
+			end
+		end
+		if nearbyzombies >= 3 then
+			playerdata.indefatigablezombiesproc = true
+		end
+	end
+end
+
 function MTAlcoholismMoodle(_player, _playerdata)
 	--Experimental MoodleFramework Support
 	local player = _player;
@@ -4134,7 +4162,8 @@ function MainPlayerUpdate(_player)
 	SlowWorker(player);
 	SuperImmuneFakeInfectionHealthLoss(player);
 	ImmunocompromisedInfection(player, playerdata);
-	CheckForPlayerBuiltContainer(player, playerdata)
+	CheckForPlayerBuiltContainer(player, playerdata);
+	IndefatigableAntiDragDownFromFront(player, playerdata);
 	if suspendevasive == false then
 		ToadTraitEvasive(player, playerdata);
 		GlassBody(player, playerdata);
@@ -4158,6 +4187,7 @@ function EveryOneMinute()
 	RestfulSleeperWakeUp(player, playerdata);
 	AlbinoTimer(player, playerdata);
 	TerminatorGun(player, playerdata);
+	SuperImmuneRecoveryProcess();
 end
 
 function EveryHours()
@@ -4174,7 +4204,6 @@ function EveryHours()
 	CheckInjuredHeal();
 	RestfulSleeper();
 	ToadTraitDepressive();
-	SuperImmuneRecoveryProcess();
 end
 
 function OnCreatePlayer(_, player)
@@ -4232,8 +4261,8 @@ function OnCreatePlayer(_, player)
 	if playerdata.SuperImmuneRecovery == nil then
 		playerdata.SuperImmuneRecovery = 0;
 	end
-	if playerdata.SuperImmuneHoursPassed == nil then
-		playerdata.SuperImmuneHoursPassed = 0;
+	if playerdata.SuperImmuneMinutesPassed == nil then
+		playerdata.SuperImmuneMinutesPassed = 0;
 	end
 	if playerdata.SuperImmuneActive == nil then
 		playerdata.SuperImmuneActive = false;
@@ -4276,6 +4305,12 @@ function OnCreatePlayer(_, player)
 	end
 	if playerdata.ImmunoEvasiveTimer == nil then
 		playerdata.ImmunoEvasiveTimer = 0;
+	end
+	if playerdata.IndefatigableHasBeenDraggedDown == nil then
+		playerdata.IndefatigableHasBeenDraggedDown = false;
+	end
+	if playerdata.indefatigablezombiesproc == nil then
+		playerdata.indefatigablezombiesproc = false;
 	end
 end
 --Events.OnPlayerMove.Add(gimp);
