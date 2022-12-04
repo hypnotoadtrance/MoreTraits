@@ -1526,6 +1526,7 @@ function indefatigable(_player, _playerdata)
 				playerdata.indefatigablezombiesproc = false;
 			end
 			print("Healed to full.");
+			getSoundManager():PlaySound("indefatigabletheme", false, 0):setVolume(0.5);
 			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 				local b = player:getBodyDamage():getBodyParts():get(i);
 				if tableContains(BodyDamagedFromTrait, b) == false then
