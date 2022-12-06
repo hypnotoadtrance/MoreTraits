@@ -6,3 +6,4 @@ Indefatigable now activates when there are 3 or more zombies next to you and dra
 Super Immune reworked to be every minute instead of every hour
 Evasive now doesn't have any hit reaction when it activates, can be disabled with sandbox setting.
 New Trait: Anti-Gun Activist
+Changed a global variable to playerdata (Note from Fajdek: I didn't know pz modding all that well yet when I did it)

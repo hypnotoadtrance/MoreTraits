@@ -20,7 +20,6 @@ skipxpadd = false;
 suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
-BodyDamagedFromTrait = {};
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 
 local function AddXP(player, perk, amount)
@@ -411,6 +410,7 @@ function initToadTraitsPerks(_player)
 	playerdata.bisAlbinoOutside = false;
 	playerdata.bWasJustSprinting = false;
 	playerdata.ImmunoPart = {};
+	playerdata.BodyDamagedFromTrait = {};
 
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -430,6 +430,7 @@ function initToadTraitsPerks(_player)
 	end
 
 	if player:HasTrait("injured") then
+		local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait
 		suspendevasive = true;
 		local bodydamage = player:getBodyDamage();
 		local itterations = ZombRand(1, 4) + 1;
@@ -481,6 +482,7 @@ function initToadTraitsPerks(_player)
 		bodydamage:setInfectionLevel(0);
 	end
 	if player:HasTrait("broke") then
+		local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait
 		suspendevasive = true;
 		local bodydamage = player:getBodyDamage();
 		bodydamage:getBodyPart(BodyPartType.LowerLeg_R):AddDamage(damage);
@@ -493,6 +495,7 @@ function initToadTraitsPerks(_player)
 		table.insert(BodyDamagedFromTrait, bodydamage:getBodyPart(BodyPartType.LowerLeg_R));
 	end
 	if player:HasTrait("burned") then
+		local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait;
 		local bodydamage = player:getBodyDamage();
 		for i = 0, bodydamage:getBodyParts():size() - 1 do
 			local b = bodydamage:getBodyParts():get(i);
@@ -1528,7 +1531,7 @@ function indefatigable(_player, _playerdata)
 			print("Healed to full.");
 			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 				local b = player:getBodyDamage():getBodyParts():get(i);
-				if tableContains(BodyDamagedFromTrait, b) == false then
+				if tableContains(playerdata.BodyDamagedFromTrait, b) == false then
 					b:RestoreToFullHealth();
 				end
 			end
@@ -3626,7 +3629,8 @@ local function FixSpecialization(player, perk)
 	end
 end
 
-local function CheckInjuredHeal()
+local function CheckInjuredHeal(player, playerdata)
+	local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait;
 	if #BodyDamagedFromTrait > 0 then
 		for i, v in ipairs(BodyDamagedFromTrait) do
 			if v:HasInjury() == false then
@@ -4222,7 +4226,7 @@ function EveryHours()
 	drinkerpoison();
 	SecondWindRecharge();
 	indefatigablecounter();
-	CheckInjuredHeal();
+	CheckInjuredHeal(player, playerdata);
 	RestfulSleeper();
 	ToadTraitDepressive();
 end
