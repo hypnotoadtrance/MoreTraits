@@ -161,8 +161,7 @@ local function initToadTraits()
 	local gordanite = TraitFactory.addTrait("gordanite", getText("UI_trait_gordanite"), 6, getText("UI_trait_gordanitedesc"), false, false);
 	gordanite:addXPBoost(Perks.Blunt, 1);
 	local indefatigable = TraitFactory.addTrait("indefatigable", getText("UI_trait_indefatigable"), 10, getText("UI_trait_indefatigabledesc"), false, false);
-	local hardy = TraitFactory.addTrait("hardy", getText("UI_trait_hardy"), 5, getText("UI_trait_hardydesc"), false, false);
-	hardy:addXPBoost(Perks.Fitness, 1);
+	local hardy = TraitFactory.addTrait("hardy", getText("UI_trait_hardy"), 6, getText("UI_trait_hardydesc"), false, false);
 	local bluntperk = TraitFactory.addTrait("problunt", getText("UI_trait_problunt"), 7, getText("UI_trait_probluntdesc"), false, false);
 	bluntperk:addXPBoost(Perks.SmallBlunt, 1);
 	bluntperk:addXPBoost(Perks.Blunt, 1);
