@@ -7,6 +7,7 @@ Fixed Indefatigable not healing trait injuries.
 Super Immune reworked to be every minute instead of every hour
 Evasive now doesn't have any hit reaction when it activates, can be disabled with sandbox setting.
 Changed a global variable to playerdata (Note from Fajdek: I didn't know pz modding all that well yet when I did it)
+Added many Super Immune Sandbox Settings, including one that makes it good in multiplayer.
 Hardy Nerf - No longer gives +1 fitness and 6 points.
 New Trait: Anti-Gun Activist
 New Trait: Unwavering

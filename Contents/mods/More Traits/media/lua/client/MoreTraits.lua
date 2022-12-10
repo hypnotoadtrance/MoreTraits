@@ -29,6 +29,20 @@ local function AddXP(player, perk, amount)
 		player:getXp():AddXP(perk, amount, false, false);
 	end
 end
+local function GameSpeedMultiplier()
+	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
+    local multiplier = 1;
+    if gamespeed == 1 then
+        multiplier = 1;
+    elseif gamespeed == 2 then
+        multiplier = 5;
+    elseif gamespeed == 3 then
+        multiplier = 20;
+    elseif gamespeed == 4 then
+        multiplier = 40;
+    end
+	return multiplier;
+end
 local function tableContains(t, e)
 	for _, value in pairs(t) do
 		if value == e then
@@ -1315,23 +1329,12 @@ function CheckSelfHarm(_player)
 	if player:HasTrait("depressive") then
 		modifier = modifier - 1;
 	end
-	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
-	local multiplier = 1;
-	if gamespeed == 1 then
-		multiplier = 1;
-	elseif gamespeed == 2 then
-		multilpier = 5;
-	elseif gamespeed == 3 then
-		multiplier = 20;
-	elseif gamespeed == 4 then
-		multiplier = 40;
-	end
 	if player:HasTrait("selfdestructive") then
 		if player:getBodyDamage():getUnhappynessLevel() >= 25 then
 			if player:getBodyDamage():getOverallBodyHealth() >= (100 - player:getBodyDamage():getUnhappynessLevel() / modifier) then
 				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 					local b = player:getBodyDamage():getBodyParts():get(i);
-					b:AddDamage(0.001 * multiplier);
+					b:AddDamage(0.001 * GameSpeedMultiplier());
 				end
 			end
 		end
@@ -2542,43 +2545,51 @@ local function SuperImmuneRecoveryProcess()
 			local Illness = player:getBodyDamage():getFakeInfectionLevel();
 			local Recovery = playerdata.SuperImmuneRecovery;
 			local TimeElapsed = playerdata.SuperImmuneMinutesPassed;
-			if Recovery > 30 then
-				Recovery = 30;
+			local maximum = 30;
+			if SandboxVars.MoreTraits.SuperImmuneMaxDays then
+				maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays
+			end
+			if Recovery > maximum then
+				Recovery = maximum;
+			end
+			local SpeedrunTime = 1;
+			if SandboxVars.MoreTraits.QuickSuperImmune == true then
+				SpeedrunTime = 6;
 			end
 			if Recovery * MinutesPerDay >= TimeElapsed then
 				if playerdata.SuperImmuneTextSaid == true then
 					playerdata.SuperImmuneTextSaid = false;
 				end
-				if TimeElapsed > 6 then
+				if TimeElapsed > 360 then
 					if (Recovery * MinutesPerDay) / 2 >= TimeElapsed then
-						Illness = Illness - ((20 - ZombRand(10, 51)) / 600); --You can decrease illness up to 1 or increase it up to 2 per hour
+						Illness = Illness - (((25 - ZombRand(10, 46)) / 600) * SpeedrunTime); --You can decrease illness up to 1.5 or increase it up to 2 per hour
 					else
 						--Once half the required time passes, your immunity system starts gaining victory
-						Illness = Illness - ((40 - ZombRand(10, 61)) / 600); -- You can decrease illness up to 3 or increase it up to 1 per hour
+						Illness = Illness - (((25 - ZombRand(5, 36)) / 600) * SpeedrunTime); -- You can decrease illness up to 2 or increase it up to 1 per hour
 					end --The random illness reduction and gain is to simulate your immune system fighting the virus.
 				else
-					Illness = Illness + (ZombRand(100, 501) / 6000); --Immune system doesn't notice the virus until 6 hours in
+					Illness = Illness + ((ZombRand(100, 501) / 6000) * SpeedrunTime); --Immune system doesn't notice the virus until 6 hours in
 				end
 				if player:HasTrait("FastHealer") then
-					Illness = Illness - (0.25 / 60);
+					Illness = Illness - ((0.25 / 60) * SpeedrunTime);
 				end
 				if player:HasTrait("SlowHealer") then
-					Illness = Illness + (0.25 / 60);
+					Illness = Illness + ((0.25 / 60) * SpeedrunTime);
 				end
 				if Illness < 26 then
 					--Prevent illness from going too low or too high
-					Illness = Illness + 0.166;
+					Illness = Illness + (0.166 * SpeedrunTime);
 				end
-				if Illness > 91 and playerdata.SuperImmuneLethal == false then
-					Illness = Illness - 0.333;
+				if Illness > 95 and playerdata.SuperImmuneLethal == false then
+					Illness = Illness - (0.333 * SpeedrunTime);
 				end
-				playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + 1;
+				playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + (1 * SpeedrunTime);
 				playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
 				Illness = Illness - (playerdata.SuperImmuneMinutesWellFed / 50);
 				playerdata.SuperImmuneMinutesWellFed = 0;
 				player:getBodyDamage():setFakeInfectionLevel(Illness);
 				if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
-					playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + 1;
+					playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + (1 * SpeedrunTime);
 					playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
 				end
 				if isDebugEnabled() then
@@ -2629,7 +2640,26 @@ function SuperImmune(_player, _playerdata)
 			bodydamage:setInfectionMortalityDuration(-1);
 			bodydamage:setInfectionTime(-1);
 			bodydamage:setInfectionLevel(0);
-			local TimeOfRecovery = ZombRand(10, 31);
+			local minimum = 10;
+			local maximum = 30;
+			if SandboxVars.MoreTraits.SuperImmuneMinDays then
+				minimum = SandboxVars.MoreTraits.SuperImmuneMinDays
+			end
+			if SandboxVars.MoreTraits.SuperImmuneMaxDays then
+				maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays
+			end
+			if minimum > maximum then
+				local value1 = minimum;
+				local value2 = maximum;
+				minimum = value2;
+				maximum = value1;
+			end
+			local TimeOfRecovery = 0;
+			if minimum == maximum + 1 then
+				TimeOfRecovery = minimum;
+			else
+				TimeOfRecovery = ZombRand(minimum, maximum + 1);
+			end
 			if player:HasTrait("FastHealer") then
 				TimeOfRecovery = TimeOfRecovery - 5;
 			end
@@ -2642,14 +2672,13 @@ function SuperImmune(_player, _playerdata)
 			if player:HasTrait("Unlucky") then
 				TimeOfRecovery = TimeOfRecovery + 2 * luckimpact;
 			end
-			if TimeOfRecovery < 10 then
-				--Prevent time of healing to be too short or too high
-				TimeOfRecovery = 10;
+			if TimeOfRecovery < minimum then
+				TimeOfRecovery = minimum;
 			end
-			if TimeOfRecovery > 30 then
-				TimeOfRecovery = 30;
+			if TimeOfRecovery > maximum then
+				TimeOfRecovery = maximum;
 			end
-			if playerdata.SuperImmuneHealedOnce == true then
+			if playerdata.SuperImmuneHealedOnce == true and playerdata.SuperImmuneFirstInfectionBonus == true then
 				--Halve the time needed once it beat the virus once, since immune system
 				TimeOfRecovery = TimeOfRecovery / 2; --will know how to beat it.
 			end
@@ -2706,28 +2735,28 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
 				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 					local b = player:getBodyDamage():getBodyParts():get(i);
 					if Health >= (100 - Illness) * 1.5 then
-						b:AddDamage(0.2); --Simulate Max Health Loss
+						b:AddDamage(0.2 * GameSpeedMultiplier()); --Simulate Max Health Loss
 						stop = true;
 					end
 					if stop == false then
 						if Illness < 25 then
-							b:AddDamage(0.002);
+							b:AddDamage(0.002 * GameSpeedMultiplier());
 						end
 						if Illness > 25 and Illness < 50 then
-							b:AddDamage(0.005);
+							b:AddDamage(0.005 * GameSpeedMultiplier());
 						end
 						if Illness >= 50 then
-							b:AddDamage(0.01);
+							b:AddDamage(0.01 * GameSpeedMultiplier());
 						end
 						if Illness >= 50 and Health > 60 then
-							b:AddDamage(0.1); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
+							b:AddDamage(0.1 * GameSpeedMultiplier()); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
 						end
 					end
 				end
 			end
 			if Illness > 10 then
 				if internalTick >= 25 and Stress <= Illness * 3 then
-					player:getStats():setStress(Stress + 0.001);
+					player:getStats():setStress(Stress + 0.001 * GameSpeedMultiplier());
 				end
 			end
 		end
@@ -3815,11 +3844,11 @@ local function MotionSicknessHealthLoss(player)
 				if Sickness < 40.0 then
 					return
 				elseif Sickness >= 40.0 and Sickness < 50.0 and Health > 90.0 then
-					b:AddDamage(0.001);
+					b:AddDamage(0.001 * GameSpeedMultiplier());
 				elseif Sickness >= 50.0 and Sickness < 75.0 and Health > 75.0 then
-					b:AddDamage(0.002);
+					b:AddDamage(0.002 * GameSpeedMultiplier());
 				elseif Sickness >= 75.0 then
-					b:AddDamage(0.005);
+					b:AddDamage(0.005 * GameSpeedMultiplier());
 				end
 			end
 		end
@@ -4035,25 +4064,27 @@ end
 
 local function UnwaveringPreventAttack(player, playerdata)
 	if player:HasTrait("unwavering") and player:getCurrentState() == PlayerHitReactionState.instance() and playerdata.UnwaveringCooldown == 0 then
-		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
 		local enemies = player:getSpottedList();
-		playerdata.UnwaveringActivated = true;
-		for i = 0, enemies:size() - 1 do
-			local enemy = enemies:get(i);
-			if enemy:isZombie() then
-				local distance = enemy:DistTo(player)
-				if distance <= 1.25 then
-					enemy:setStaggerBack(true); 
-					enemy:setHitReaction("");
-					enemy:setPlayerAttackPosition("FRONT");
-					enemy:setHitForce(2.0);
+		if (enemies:size() - 1) > 1 then
+			for i = 0, enemies:size() - 1 do
+				local enemy = enemies:get(i);
+				if enemy:isZombie() then
+					local distance = enemy:DistTo(player)
+					if distance <= 1.25 then
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
+						playerdata.UnwaveringActivated = true;
+						enemy:setStaggerBack(true); 
+						enemy:setHitReaction("");
+						enemy:setPlayerAttackPosition("FRONT");
+						enemy:setHitForce(2.0);
+					end
 				end
 			end
 		end
 	end
 	if playerdata.UnwaveringActivated == true and player:getCurrentState() ~= PlayerHitReactionState.instance() then
 		playerdata.UnwaveringActivated = false;
-		playerdata.UnwaveringCooldown = 60;
+		playerdata.UnwaveringCooldown = 1440;
 	end
 end
 

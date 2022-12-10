@@ -225,10 +225,30 @@ option MoreTraits.HardyEndurance
 	type = integer, min = 5, max = 50, default = 25,
 	page = MoreTraits, translation = MoreTraits_HardyEndurance,
 }
+option MoreTraits.SuperImmuneMinDays
+{
+	type = integer, min = 5, max = 60, default = 10,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneMinimum,
+}
+option MoreTraits.SuperImmuneMaxDays
+{
+	type = integer, min = 5, max = 60, default = 30,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneMaximum,
+}
+option MoreTraits.SuperImmuneFirstInfectionBonus 
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneFirstInfectionBonus,
+}
 option MoreTraits.SuperImmuneWeakness
 {
 	type = boolean, default = false,
 	page = MoreTraits, translation = MoreTraits_SuperImmuneWeakness,
+}
+option MoreTraits.QuickSuperImmune
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_QuickSuperImmune,
 }
 option MoreTraits.ImmunoChance
 {
