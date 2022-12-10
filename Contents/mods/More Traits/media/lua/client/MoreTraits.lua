@@ -5,7 +5,6 @@ if getActivatedMods():contains("MoodleFramework") == true then
 	require("MF_ISMoodle");
 	MF.createMoodle("MTAlcoholism");
 end
-ISRestAction = ISBaseTimedAction:derive("ISRestAction");
 --[[
 TODO Figure out what is causing stat synchronization issues
 When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subtracting stats doesn't
@@ -4108,8 +4107,8 @@ end
 
 local function QuickRest(player, playerdata)
 	if player:HasTrait("quickrest") and player:isSitOnGround() == true then
-		if player:getStats():getEndurance() < 1 then
-			ISTimedActionQueue.add(ISRestAction:new(player))
+		if player:getStats():getEndurance() < 1 and internalTick >= 25 then
+			player:getStats():setEndurance(player:getStats():getEndurance() + (0.001 * math.ceil(GameSpeedMultiplier() / 2)));
 		end
 	end
 end
