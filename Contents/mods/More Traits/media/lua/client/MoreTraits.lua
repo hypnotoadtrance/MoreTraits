@@ -427,6 +427,7 @@ function initToadTraitsPerks(_player)
 	playerdata.UnwaveringActivated = false;
 	playerdata.UnwaveringCooldown = 0;
 	playerdata.UnwaveringInjurySpeedChanged = false;
+	playerdata.OldCalories = (player:getNutrition():getCalories()) or 0;
 	
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -4088,6 +4089,29 @@ local function UnwaveringPreventAttack(player, playerdata)
 	end
 end
 
+local function IdealWeight(player, playerdata)
+	if player:HasTrait("idealweight") then
+		local calories = player:getNutrition():getCalories()
+		local weight = player:getNutrition():getWeight()
+		local oldcalories = playerdata.OldCalories
+		if oldcalories == nil then
+			playerdata.OldCalories = player:getNutrition():getCalories() or 0;
+		end
+		playerdata.OldCalories = player:getNutrition():getCalories() + 10;
+		if oldcalories < calories then
+			local calorieschange = calories - oldcalories;
+			if weight <= 78 then
+				player:getNutrition():setCalories(calories + calorieschange * 0.5)
+				playerdata.OldCalories = player:getNutrition():getCalories()
+			end
+			if weight >= 82 then
+				player:getNutrition():setCalories(calories - calorieschange * 0.25)
+				playerdata.OldCalories = player:getNutrition():getCalories()
+			end
+		end
+	end
+end
+
 function MTAlcoholismMoodle(_player, _playerdata)
 	--Experimental MoodleFramework Support
 	local player = _player;
@@ -4233,6 +4257,7 @@ function MainPlayerUpdate(_player)
 		ToadTraitEvasive(player, playerdata);
 		GlassBody(player, playerdata);
 	end
+	IdealWeight(player, playerdata);
 	internalTick = internalTick + 1;
 	if internalTick > 30 then
 		--Reset internalTick every 30 ticks
@@ -4402,6 +4427,9 @@ function OnCreatePlayer(_, player)
 	end
 	if playerdata.UnwaveringInjurySpeedChanged == nil then
 		playerdata.UnwaveringInjurySpeedChanged = false;
+	end
+	if playerdata.OldCalories == nil then
+		playerdata.OldCalories = (player:getNutrition():getCalories() - 10) or 0;
 	end
 end
 --Events.OnPlayerMove.Add(gimp);

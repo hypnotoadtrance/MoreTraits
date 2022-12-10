@@ -11,3 +11,4 @@ Added many Super Immune Sandbox Settings, including one that makes it good in mu
 Hardy Nerf - No longer gives +1 fitness and 6 points.
 New Trait: Anti-Gun Activist
 New Trait: Unwavering
+New Trait: Ideal Weight

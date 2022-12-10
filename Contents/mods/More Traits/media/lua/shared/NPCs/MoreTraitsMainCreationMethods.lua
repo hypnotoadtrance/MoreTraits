@@ -208,6 +208,7 @@ local function initToadTraits()
 	local noxpsneaky = TraitFactory.addTrait("noxpsneaky", getText("UI_trait_noxpsneaky"), 3, getText("UI_trait_noxpsneakydesc"), false, false);
 	local terminator = TraitFactory.addTrait("terminator", getText("UI_trait_terminator"), 14, getText("UI_trait_terminatordesc"), false, false);
 	local unwavering = TraitFactory.addTrait("unwavering", getText("UI_trait_unwavering"), 6, getText("UI_trait_unwaveringdesc"), false, false);
+	local idealweight = TraitFactory.addTrait("idealweight", getText("UI_trait_idealweight"), 4, getText("UI_trait_idealweightdesc"), false, false);
 	--===========--
 	--Bad Traits--
 	--===========--
@@ -370,6 +371,11 @@ local function initToadTraits()
 	TraitFactory.setMutualExclusive("antigun", "progun");
 	TraitFactory.setMutualExclusive("antigun", "specguns");
 	TraitFactory.setMutualExclusive("antigun", "noxpshooter");
+	TraitFactory.setMutualExclusive("idealweight", "Overweight");
+	TraitFactory.setMutualExclusive("idealweight", "Underweight");
+	TraitFactory.setMutualExclusive("idealweight", "Very Underweight");
+	TraitFactory.setMutualExclusive("idealweight", "Obese");
+	TraitFactory.setMutualExclusive("idealweight", "Emaciated");
 	--TraitFactory.setMutualExclusive("gimp", "fast");
 	--TraitFactory.setMutualExclusive("blissful", "Brooding");
 	TraitFactory.sortList();
