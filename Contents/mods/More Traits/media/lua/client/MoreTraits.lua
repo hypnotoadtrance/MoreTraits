@@ -1545,6 +1545,8 @@ function indefatigable(_player, _playerdata)
 				local b = player:getBodyDamage():getBodyParts():get(i);
 				if tableContains(playerdata.BodyDamagedFromTrait, b) == false then
 					b:RestoreToFullHealth();
+				else
+					b:AddHealth(100);
 				end
 			end
 			player:getBodyDamage():setOverallBodyHealth(100);
