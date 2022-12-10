@@ -508,16 +508,6 @@ function initToadTraitsPerks(_player)
 			table.insert(BodyDamagedFromTrait, b); --i forgor to add in the thing for burned, but i think this should work fine
 		end
 	end
-	if player:HasTrait("unwavering") then
-		playerdata.UnwaveringInjurySpeedChanged = true;
-		for n = 0, bodydamage:getBodyParts():size() - 1 do
-		local i = bodydamage:getBodyParts():get(n);
-			i:setScratchSpeedModifier(i:getScratchSpeedModifier() + 30);
-			i:setCutSpeedModifier(i:getCutSpeedModifier() + 30);
-			i:setDeepWoundSpeedModifier(i:getDeepWoundSpeedModifier() + 60);
-			i:setBurnSpeedModifier(i:getBurnSpeedModifier() + 60);
-		end
-	end
 	playerdata.ToadTraitBodyDamage = nil;
 	suspendevasive = false;
 	player:getBodyDamage():Update();
@@ -4251,11 +4241,6 @@ function EveryHours()
 	CheckInjuredHeal(player, playerdata);
 	RestfulSleeper();
 	ToadTraitDepressive();
-end
-
-local function EveryDay()
-	local player = getPlayer();
-	local playerdata = player:getModData();
 	
 	if playerdata.UnwaveringInjurySpeedChanged == false and player:HasTrait("unwavering") then
 		playerdata.UnwaveringInjurySpeedChanged = true;
@@ -4267,6 +4252,12 @@ local function EveryDay()
 			i:setBurnSpeedModifier(i:getBurnSpeedModifier() + 60);
 		end
 	end
+end
+
+local function EveryDay()
+	local player = getPlayer();
+	local playerdata = player:getModData();
+	
 end
 
 function OnCreatePlayer(_, player)
