@@ -412,6 +412,7 @@ function initToadTraitsPerks(_player)
 	playerdata.BodyDamagedFromTrait = {};
 	playerdata.UnwaveringActivated = false;
 	playerdata.UnwaveringCooldown = 0;
+	playerdata.UnwaveringInjurySpeedChanged = false;
 	
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -505,6 +506,16 @@ function initToadTraitsPerks(_player)
 			b:setNeedBurnWash(false);
 			b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
 			table.insert(BodyDamagedFromTrait, b); --i forgor to add in the thing for burned, but i think this should work fine
+		end
+	end
+	if player:HasTrait("unwavering") then
+		playerdata.UnwaveringInjurySpeedChanged = true;
+		for n = 0, bodydamage:getBodyParts():size() - 1 do
+		local i = bodydamage:getBodyParts():get(n);
+			i:setScratchSpeedModifier(i:getScratchSpeedModifier() + 30);
+			i:setCutSpeedModifier(i:getCutSpeedModifier() + 30);
+			i:setDeepWoundSpeedModifier(i:getDeepWoundSpeedModifier() + 60);
+			i:setBurnSpeedModifier(i:getBurnSpeedModifier() + 60);
 		end
 	end
 	playerdata.ToadTraitBodyDamage = nil;
@@ -4030,64 +4041,6 @@ local function antigunxpdecrease(player, perk, amount)
 	end
 end
 
-local function UnwaveringSpeed(player, _, __)
-	--For the 2nd number in table
-	--0 is no injury
-	--1 is scratch
-	--2 is laceration
-	--3 is deep wound
-	--4 is burn
-	if not player == getPlayer() then return end
-	local playerdata = player:getModData();
-	local unwaveringtable = playerdata.UnwaveringSpeedTable;
-	local bodydamage = player:getBodyDamage();
-	if unwaveringtable == nil then
-		unwaveringtable = {};
-		for i = 0, bodydamage:getBodyParts():size() - 1 do
-			unwaveringtable[i] = { false, 0};
-		end
-		playerdata.UnwaveringSpeedTable = unwaveringtable;
-	end
-	if player:HasTrait("unwavering") then
-	for n = 0, bodydamage:getBodyParts():size() - 1 do
-		local i = bodydamage:getBodyParts():get(n);
-		local b = unwaveringtable[n];
-		if b[1] == false then
-			if i:scratched() == true then
-				local scratchmodifier = i:getScratchSpeedModifier();
-				b[1] = true;
-				b[2] = 1;
-				i:setScratchSpeedModifier(scratchmodifier + 30);
-			end
-			if i:isCut() == true then
-				local cutmodifier = i:getCutSpeedModifier();
-				b[1] = true;
-				b[2] = 2;
-				i:setCutSpeedModifier(cutmodifier + 30);
-			end
-			if i:deepWounded() == true then
-				local deepwoundmodifier = i:getDeepWoundSpeedModifier();
-				b[1] = true;
-				b[2] = 3;
-				i:setDeepWoundSpeedModifier(deepwoundmodifier + 60);
-			end
-			if i:isBurnt() == true then
-				local burnmodifier = i:getBurnSpeedModifier();
-				b[1] = true;
-				b[2] = 4;
-				i:setBurnSpeedModifier(burnmodifier + 60);
-			end
-		else
-			local number = b[2]
-			if number == 1 and i:scratched() == false or number == 2 and i:isCut() == false or number == 3 and i:deepWounded() == false or number == 4 and i:isBurnt() == false then
-				b[1] = false;
-				b[2] = 0;
-			end
-		end
-	end
-	end
-end
-
 local function UnwaveringPreventAttack(player, playerdata)
 	if player:HasTrait("unwavering") and player:getCurrentState() == PlayerHitReactionState.instance() and playerdata.UnwaveringCooldown == 0 then
 		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
@@ -4298,6 +4251,22 @@ function EveryHours()
 	ToadTraitDepressive();
 end
 
+local function EveryDay()
+	local player = getPlayer();
+	local playerdata = player:getModData();
+	
+	if playerdata.UnwaveringInjurySpeedChanged == false and player:HasTrait("unwavering") then
+		playerdata.UnwaveringInjurySpeedChanged = true;
+		for n = 0, bodydamage:getBodyParts():size() - 1 do
+		local i = bodydamage:getBodyParts():get(n);
+			i:setScratchSpeedModifier(i:getScratchSpeedModifier() + 30);
+			i:setCutSpeedModifier(i:getCutSpeedModifier() + 30);
+			i:setDeepWoundSpeedModifier(i:getDeepWoundSpeedModifier() + 60);
+			i:setBurnSpeedModifier(i:getBurnSpeedModifier() + 60);
+		end
+	end
+end
+
 function OnCreatePlayer(_, player)
 	--reset any worn clothing to default state.
 	local playerdata = player:getModData();
@@ -4407,6 +4376,9 @@ function OnCreatePlayer(_, player)
 	if playerdata.UnwaveringActivated == nil then
 		playerdata.UnwaveringActivated = false;
 	end
+	if playerdata.UnwaveringInjurySpeedChanged == nil then
+		playerdata.UnwaveringInjurySpeedChanged = false;
+	end
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
@@ -4437,4 +4409,4 @@ Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
-Events.OnPlayerGetDamage.Add(UnwaveringSpeed)
+Events.EveryDay.Add(EveryDay);
