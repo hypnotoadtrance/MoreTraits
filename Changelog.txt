@@ -12,3 +12,4 @@ Hardy Nerf - No longer gives +1 fitness and 6 points.
 New Trait: Anti-Gun Activist
 New Trait: Unwavering
 New Trait: Ideal Weight
+New Trait: Quick Rest

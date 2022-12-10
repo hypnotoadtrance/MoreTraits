@@ -5,6 +5,7 @@ if getActivatedMods():contains("MoodleFramework") == true then
 	require("MF_ISMoodle");
 	MF.createMoodle("MTAlcoholism");
 end
+ISRestAction = ISBaseTimedAction:derive("ISRestAction");
 --[[
 TODO Figure out what is causing stat synchronization issues
 When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subtracting stats doesn't
@@ -1628,17 +1629,6 @@ function hardytrait(_player, _playerdata)
 	local player = getPlayer();
 	local playerdata = player:getModData();
 	local stats = player:getStats();
-	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
-	local multiplier = 1;
-	if gamespeed == 1 then
-		multiplier = 1;
-	elseif gamespeed == 2 then
-		multilpier = 5;
-	elseif gamespeed == 3 then
-		multiplier = 20;
-	elseif gamespeed == 4 then
-		multiplier = 40;
-	end
 	if player:HasTrait("hardy") then
 		local modendurance = playerdata.iHardyEndurance;
 		local endurance = stats:getEndurance();
@@ -1668,7 +1658,9 @@ function hardytrait(_player, _playerdata)
 				end
 				playerdata.iHardyInterval = 1000;
 			else
+				local multiplier = GameSpeedMultiplier()
 				if player:isSitOnGround() == true then
+					if player:HasTrait("quickrest") then multiplier = multiplier * 2; end
 					if player:HasTrait("Asthmatic") then
 						playerdata.iHardyInterval = interval - (1 * multiplier);
 					else
@@ -1689,7 +1681,9 @@ function hardytrait(_player, _playerdata)
 				end
 			end
 		elseif interval > 0 and endurance == 1 then
+			local multiplier = GameSpeedMultiplier()
 			if player:isSitOnGround() == true then
+				if player:HasTrait("quickrest") then multiplier = multiplier * 2; end
 				if player:HasTrait("Asthmatic") then
 					playerdata.iHardyInterval = interval - (1 * multiplier);
 				else
@@ -4112,6 +4106,14 @@ local function IdealWeight(player, playerdata)
 	end
 end
 
+local function QuickRest(player, playerdata)
+	if player:HasTrait("quickrest") and player:isSitOnGround() == true then
+		if player:getStats():getEndurance() < 1 then
+			ISTimedActionQueue.add(ISRestAction:new(player))
+		end
+	end
+end
+
 function MTAlcoholismMoodle(_player, _playerdata)
 	--Experimental MoodleFramework Support
 	local player = _player;
@@ -4258,6 +4260,7 @@ function MainPlayerUpdate(_player)
 		GlassBody(player, playerdata);
 	end
 	IdealWeight(player, playerdata);
+	QuickRest(player, playerdata);
 	internalTick = internalTick + 1;
 	if internalTick > 30 then
 		--Reset internalTick every 30 ticks

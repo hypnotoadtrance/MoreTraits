@@ -209,6 +209,7 @@ local function initToadTraits()
 	local terminator = TraitFactory.addTrait("terminator", getText("UI_trait_terminator"), 14, getText("UI_trait_terminatordesc"), false, false);
 	local unwavering = TraitFactory.addTrait("unwavering", getText("UI_trait_unwavering"), 6, getText("UI_trait_unwaveringdesc"), false, false);
 	local idealweight = TraitFactory.addTrait("idealweight", getText("UI_trait_idealweight"), 4, getText("UI_trait_idealweightdesc"), false, false);
+	local quickrest = TraitFactory.addTrait("quickrest", getText("UI_trait_quickrest"), 3, getText("UI_trait_quickrestdesc"), false, false);
 	--===========--
 	--Bad Traits--
 	--===========--
