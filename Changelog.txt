@@ -1,7 +1,7 @@
 Changelog Notes:
 Nerfed Terminator aim speed
 Fixed missing playerdata in initialization and incorrect values between init and oncreateplayer
-Fixed Second Wind giving you more hardy charges than you should.
+Fixed Second Wind giving you more hardy charges than it should.
 Indefatigable now activates when you are dragged down, doubled timer if it happens.
 Fixed Indefatigable not healing trait injuries.
 Super Immune reworked to be every minute instead of every hour
