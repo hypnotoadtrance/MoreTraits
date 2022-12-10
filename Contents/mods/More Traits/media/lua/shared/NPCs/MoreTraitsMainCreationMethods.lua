@@ -207,6 +207,7 @@ local function initToadTraits()
 	local noxpmaintenance = TraitFactory.addTrait("noxpmaintenance", getText("UI_trait_noxpmaintenance"), 3, getText("UI_trait_noxpmaintenancedesc"), false, false);
 	local noxpsneaky = TraitFactory.addTrait("noxpsneaky", getText("UI_trait_noxpsneaky"), 3, getText("UI_trait_noxpsneakydesc"), false, false);
 	local terminator = TraitFactory.addTrait("terminator", getText("UI_trait_terminator"), 14, getText("UI_trait_terminatordesc"), false, false);
+	local unwavering = TraitFactory.addTrait("unwavering", getText("UI_trait_unwavering"), 6, getText("UI_trait_unwaveringdesc"), false, false);
 	--===========--
 	--Bad Traits--
 	--===========--

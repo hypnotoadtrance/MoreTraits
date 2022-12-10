@@ -411,7 +411,9 @@ function initToadTraitsPerks(_player)
 	playerdata.bWasJustSprinting = false;
 	playerdata.ImmunoPart = {};
 	playerdata.BodyDamagedFromTrait = {};
-
+	playerdata.UnwaveringActivated = false;
+	playerdata.UnwaveringCooldown = 0;
+	
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
 		bandagestrength = bandagestrength + 2 * luckimpact;
@@ -4048,6 +4050,88 @@ local function antigunxpdecrease(player, perk, amount)
 	end
 end
 
+local function UnwaveringSpeed(player, _, __)
+	--For the 2nd number in table
+	--0 is no injury
+	--1 is scratch
+	--2 is laceration
+	--3 is deep wound
+	--4 is burn
+	if not player == getPlayer() then return end
+	local playerdata = player:getModData();
+	local unwaveringtable = playerdata.UnwaveringSpeedTable;
+	local bodydamage = player:getBodyDamage();
+	if unwaveringtable == nil then
+		unwaveringtable = {};
+		for i = 0, bodydamage:getBodyParts():size() - 1 do
+			unwaveringtable[i] = { false, 0};
+		end
+		playerdata.UnwaveringSpeedTable = unwaveringtable;
+	end
+	if player:HasTrait("unwavering") then
+	for n = 0, bodydamage:getBodyParts():size() - 1 do
+		local i = bodydamage:getBodyParts():get(n);
+		local b = unwaveringtable[n];
+		if b[1] == false then
+			if i:scratched() == true then
+				local scratchmodifier = i:getScratchSpeedModifier();
+				b[1] = true;
+				b[2] = 1;
+				i:setScratchSpeedModifier(scratchmodifier + 30);
+			end
+			if i:isCut() == true then
+				local cutmodifier = i:getCutSpeedModifier();
+				b[1] = true;
+				b[2] = 2;
+				i:setCutSpeedModifier(cutmodifier + 30);
+			end
+			if i:deepWounded() == true then
+				local deepwoundmodifier = i:getDeepWoundSpeedModifier();
+				b[1] = true;
+				b[2] = 3;
+				i:setDeepWoundSpeedModifier(deepwoundmodifier + 60);
+			end
+			if i:isBurnt() == true then
+				local burnmodifier = i:getBurnSpeedModifier();
+				b[1] = true;
+				b[2] = 4;
+				i:setBurnSpeedModifier(burnmodifier + 60);
+			end
+		else
+			local number = b[2]
+			if number == 1 and i:scratched() == false or number == 2 and i:isCut() == false or number == 3 and i:deepWounded() == false or number == 4 and i:isBurnt() == false then
+				b[1] = false;
+				b[2] = 0;
+			end
+		end
+	end
+	end
+end
+
+local function UnwaveringPreventAttack(player, playerdata)
+	if player:HasTrait("unwavering") and player:getCurrentState() == PlayerHitReactionState.instance() and playerdata.UnwaveringCooldown == 0 then
+		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
+		local enemies = player:getSpottedList();
+		playerdata.UnwaveringActivated = true;
+		for i = 0, enemies:size() - 1 do
+			local enemy = enemies:get(i);
+			if enemy:isZombie() then
+				local distance = enemy:DistTo(player)
+				if distance <= 1.25 then
+					enemy:setStaggerBack(true); 
+					enemy:setHitReaction("");
+					enemy:setPlayerAttackPosition("FRONT");
+					enemy:setHitForce(2.0);
+				end
+			end
+		end
+	end
+	if playerdata.UnwaveringActivated == true and player:getCurrentState() ~= PlayerHitReactionState.instance() then
+		playerdata.UnwaveringActivated = false;
+		playerdata.UnwaveringCooldown = 60;
+	end
+end
+
 function MTAlcoholismMoodle(_player, _playerdata)
 	--Experimental MoodleFramework Support
 	local player = _player;
@@ -4189,6 +4273,7 @@ function MainPlayerUpdate(_player)
 	ImmunocompromisedInfection(player, playerdata);
 	CheckForPlayerBuiltContainer(player, playerdata);
 	IndefatigableAntiDragDownFromFront(player, playerdata);
+	UnwaveringPreventAttack(player, playerdata);
 	if suspendevasive == false then
 		ToadTraitEvasive(player, playerdata);
 		GlassBody(player, playerdata);
@@ -4213,6 +4298,9 @@ function EveryOneMinute()
 	AlbinoTimer(player, playerdata);
 	TerminatorGun(player, playerdata);
 	SuperImmuneRecoveryProcess();
+	if playerdata.UnwaveringCooldown ~= 0 then
+		playerdata.UnwaveringCooldown = playerdata.UnwaveringCooldown - 1;
+	end
 end
 
 function EveryHours()
@@ -4337,6 +4425,12 @@ function OnCreatePlayer(_, player)
 	if playerdata.indefatigablezombiesproc == nil then
 		playerdata.indefatigablezombiesproc = false;
 	end
+	if playerdata.UnwaveringCooldown == nil then
+		playerdata.UnwaveringCooldown = 0;
+	end
+	if playerdata.UnwaveringActivated == nil then
+		playerdata.UnwaveringActivated = false;
+	end
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
@@ -4367,3 +4461,4 @@ Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
+Events.OnPlayerGetDamage.Add(UnwaveringSpeed)
