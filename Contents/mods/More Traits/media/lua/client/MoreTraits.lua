@@ -3998,8 +3998,8 @@ local function TerminatorGun(player, playerdata)
 				if player:HasTrait("antigun") and itemdata.MTstate ~= "antigun" then
 					item:setAimingTime(itemdata.OGaimingtime * 0.8);
 					item:setMaxRange(itemdata.OGrange - 5);
-					if range <= 5 then item:setMaxRange(5); end
-					itemdata.MTstate = "antigun"
+					if item:getMaxRange() <= 5 then item:setMaxRange(5); end
+					itemdata.MTstate = "antigun";
 				end
 				if player:HasTrait("Terminator") == false and player:HasTrait("antigun") == false and itemdata.MTState ~= "Normal" then
 					item:setAimingTime(itemdata.OGaimingtime);
@@ -4402,4 +4402,4 @@ Events.OnNewGame.Add(initToadTraitsItems);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
-Events.EveryDay.Add(EveryDay);
+Events.EveryDays.Add(EveryDay);
