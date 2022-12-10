@@ -373,7 +373,6 @@ function initToadTraitsPerks(_player)
 	playerdata.indefatigabledisabled = false;
 	playerdata.bindefatigable = false;
 	playerdata.IndefatigableHasBeenDraggedDown = false;
-	playerdata.indefatigablezombiesproc = false;
 	playerdata.bSatedDrink = true;
 	playerdata.iHoursSinceDrink = 0;
 	playerdata.iTimesCannibal = 0;
@@ -1519,16 +1518,16 @@ function indefatigable(_player, _playerdata)
 	local playerdata = _playerdata;
 	local enemies = player:getSpottedList();
 	if player:HasTrait("indefatigable") then
-		if( player:getBodyDamage():getHealth() < 15 or player:isDeathDragDown()) and (playerdata.bindefatigable == false or playerdata.indefatigablezombiesproc == true) then
+		if (player:getBodyDamage():getHealth() < 15 or player:isDeathDragDown()) and playerdata.bindefatigable == false then
 			if player:getBodyDamage():getHealth() < 15 then
-				print("Health less than 15.");
+				print("Health less than 15, indefatigable activated");
 			end
-			if player:isDeathDragDown() or playerdata.indefatigablezombiesproc == true then
-				print("Player soon to be dragged down, indefatigable activated");
+			if player:isDeathDragDown() then
+				print("Player dragged down, indefatigable activated");
 				playerdata.IndefatigableHasBeenDraggedDown = true;
 				player:setPlayingDeathSound(false);
 				player:setDeathDragDown(false);
-				playerdata.indefatigablezombiesproc = false;
+				player:setHitReaction("Bob_HitReact_01");
 			end
 			print("Healed to full.");
 			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
@@ -4025,25 +4024,6 @@ local function CheckForPlayerBuiltContainer(player, playerdata)
 	end
 end
 
-local function IndefatigableAntiDragDownFromFront(player, playerdata)
-	if player:HasTrait("indefatigable") and playerdata.bindefatigable == false and SandboxVars.ZombieLore.ZombiesDragDown == true then
-		local enemies = player:getSpottedList();
-		local nearbyzombies = 0;
-		for i = 0, enemies:size() - 1 do
-			local enemy = enemies:get(i);
-			if enemy:isZombie() then
-				local distance = enemy:DistTo(player)
-				if distance <= 1 then
-					nearbyzombies = nearbyzombies + 1;
-				end
-			end
-		end
-		if nearbyzombies >= 3 then
-			playerdata.indefatigablezombiesproc = true
-		end
-	end
-end
-
 local function antigunxpdecrease(player, perk, amount)
 	if player:HasTrait("antigun") and perk == Perks.Aiming then
 		AddXP(player, perk, 0 - (amount * 0.25));
@@ -4272,7 +4252,6 @@ function MainPlayerUpdate(_player)
 	SuperImmuneFakeInfectionHealthLoss(player);
 	ImmunocompromisedInfection(player, playerdata);
 	CheckForPlayerBuiltContainer(player, playerdata);
-	IndefatigableAntiDragDownFromFront(player, playerdata);
 	UnwaveringPreventAttack(player, playerdata);
 	if suspendevasive == false then
 		ToadTraitEvasive(player, playerdata);
@@ -4421,9 +4400,6 @@ function OnCreatePlayer(_, player)
 	end
 	if playerdata.IndefatigableHasBeenDraggedDown == nil then
 		playerdata.IndefatigableHasBeenDraggedDown = false;
-	end
-	if playerdata.indefatigablezombiesproc == nil then
-		playerdata.indefatigablezombiesproc = false;
 	end
 	if playerdata.UnwaveringCooldown == nil then
 		playerdata.UnwaveringCooldown = 0;
