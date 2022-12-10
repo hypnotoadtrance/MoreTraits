@@ -427,7 +427,7 @@ function initToadTraitsPerks(_player)
 	playerdata.UnwaveringActivated = false;
 	playerdata.UnwaveringCooldown = 0;
 	playerdata.UnwaveringInjurySpeedChanged = false;
-	playerdata.OldCalories = (player:getNutrition():getCalories()) or 0;
+	playerdata.OldCalories = 810;
 	
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -4095,7 +4095,7 @@ local function IdealWeight(player, playerdata)
 		local weight = player:getNutrition():getWeight()
 		local oldcalories = playerdata.OldCalories
 		if oldcalories == nil then
-			playerdata.OldCalories = player:getNutrition():getCalories() or 0;
+			playerdata.OldCalories = 810;
 		end
 		playerdata.OldCalories = player:getNutrition():getCalories() + 10;
 		if oldcalories < calories then
@@ -4429,7 +4429,7 @@ function OnCreatePlayer(_, player)
 		playerdata.UnwaveringInjurySpeedChanged = false;
 	end
 	if playerdata.OldCalories == nil then
-		playerdata.OldCalories = (player:getNutrition():getCalories() - 10) or 0;
+		playerdata.OldCalories = 810;
 	end
 end
 --Events.OnPlayerMove.Add(gimp);
