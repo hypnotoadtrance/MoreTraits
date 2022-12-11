@@ -4009,6 +4009,13 @@ local function TerminatorGun(player, playerdata)
 					itemdata.OGmindmg = mindamage;
 					itemdata.OGmaxdmg = maxdamage;
 				end
+				if itemdata.OGrange == nil then
+					itemdata.OGrange = range;
+					itemdata.OGaimingtime = aimingtime;
+					itemdata.OGjamchance = jamchance;
+					itemdata.OGmindmg = mindamage;
+					itemdata.OGmaxdmg = maxdamage;
+				end
 				if player:HasTrait("Terminator") and itemdata.MTstate ~= "Terminator" then
 					item:setAimingTime(itemdata.OGaimingtime * 2);
 					item:setMaxRange(itemdata.OGrange + 5);
