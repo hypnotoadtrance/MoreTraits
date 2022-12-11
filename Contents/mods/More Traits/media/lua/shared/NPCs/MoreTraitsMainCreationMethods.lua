@@ -335,6 +335,7 @@ local function initToadTraits()
 		TraitFactory.setMutualExclusive("specguns", "specmove");
 		TraitFactory.setMutualExclusive("specguns", "specaid");
 		TraitFactory.setMutualExclusive("specfood", "specaid");
+		TraitFactory.setMutualExclusive("antigun", "specguns");
 	end
 	TraitFactory.setMutualExclusive("problunt", "problade");
 	TraitFactory.setMutualExclusive("problunt", "progun");
@@ -370,7 +371,6 @@ local function initToadTraits()
 	TraitFactory.setMutualExclusive("badteeth", "albino");
 	TraitFactory.setMutualExclusive("antigun", "terminator");
 	TraitFactory.setMutualExclusive("antigun", "progun");
-	TraitFactory.setMutualExclusive("antigun", "specguns");
 	TraitFactory.setMutualExclusive("antigun", "noxpshooter");
 	TraitFactory.setMutualExclusive("idealweight", "Overweight");
 	TraitFactory.setMutualExclusive("idealweight", "Underweight");
