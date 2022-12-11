@@ -3657,11 +3657,10 @@ local function FixSpecialization(player, perk)
 end
 
 local function CheckInjuredHeal(player, playerdata)
-	local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait;
-	if #BodyDamagedFromTrait > 0 then
-		for i, v in ipairs(BodyDamagedFromTrait) do
+	if (#playerdata.BodyDamagedFromTrait) > 0 then
+		for i, v in ipairs(playerdata.BodyDamagedFromTrait) do
 			if v:HasInjury() == false then
-				table.remove(BodyDamagedFromTrait, i, v);
+				table.remove(playerdata.BodyDamagedFromTrait, i, v);
 				i = i - 1;
 			end
 		end
