@@ -4439,6 +4439,9 @@ function OnCreatePlayer(_, player)
 	if playerdata.OldCalories == nil then
 		playerdata.OldCalories = 810;
 	end
+	if playerdata.BodyDamagedFromTrait == nil then
+		playerdata.BodyDamagedFromTrait = {};
+	end
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
