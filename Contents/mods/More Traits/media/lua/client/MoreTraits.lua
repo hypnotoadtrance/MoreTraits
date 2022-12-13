@@ -3991,7 +3991,7 @@ local function TerminatorGun(player, playerdata)
 				end
 				if player:HasTrait("antigun") then
 					if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-						player:getStats():setUnhappynessLevel(player:getStats():getUnhappynessLevel() + 0.6);
+						player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.6);
 					end
 				end
 				local item = player:getPrimaryHandItem();

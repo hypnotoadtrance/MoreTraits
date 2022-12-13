@@ -1,3 +1,2 @@
 Changelog Notes:
-Fixed no nil check
-Fixed specguns exclusivity with antigun
+Fixed Terminator sadness reduction not working properly
