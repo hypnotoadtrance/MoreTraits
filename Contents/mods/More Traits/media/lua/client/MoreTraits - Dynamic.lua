@@ -1,12 +1,37 @@
 function MTDLevelPerkMain(player, perk)
-
-	-- CALL TO OTHER METHODS THAT RUNS BASED ON THE LevelPerk EVENT
-	if getActivatedMods():contains("ToadTraitsDynamic") then
-		MTDtraitsGainsByLevel(player, perk);
-	end
+	MTDTraitsGainsByLevel(player, perk);
  end
  
- function MTDapplyXPBoost(player, perk, boostLevel)
+function MTDEveryHoursMain()
+	MTDTraitGainsByWeight();
+end
+
+function MTDKillsMainExtended(zombie)
+	MTDLeadFoot(zombie);
+	MTDTraitGainsByKillCount();
+end
+
+function MTDKillsMain(zombie)
+	MTDLeadFoot(zombie);
+end
+
+function MTDAdditionalMain(player, target, weapon, ___)
+	MTDLeadFootToggle(player, target, weapon, ___);
+end
+
+function MTDLeadFootToggle(actor, target, weapon, ___)
+    if actor == getPlayer() and target:isZombie() then
+		actor:getModData().MoreTraitsDynamic = getPlayer():getModData().MoreTraitsDynamic or {};
+		actor:getModData().MoreTraitsDynamic.AllowLeadFootCount = getPlayer():getModData().MoreTraitsDynamic.AllowLeadFootCount or false;
+        if weapon:getName() == "Bare Hands" and target:isProne() then
+            actor:getModData().MoreTraitsDynamic.AllowLeadFootCount = true;
+        else
+            actor:getModData().MoreTraitsDynamic.AllowLeadFootCount = false;
+        end
+    end
+end
+ 
+function MTDapplyXPBoost(player, perk, boostLevel)
 	local currentXPBoost = player:getXp():getPerkBoost(perk);
 	local newBoost = currentXPBoost + boostLevel;
 	if newBoost > 3 then
@@ -16,105 +41,8 @@ function MTDLevelPerkMain(player, perk)
 	end
 end
 
-Events.LevelPerk.Add(MTDLevelPerkMain);
-
-function MTDtraitsGainsByLevel(player, perk)
-
-
--- Passive
-	-- Strength
-		-- (Defined here) Lead Foot: Strength 6
-		-- (Defined here) Pack Mouse: Strength 7
-		-- (Defined here) Pack Mule: Strength 9
-		-- (Defined here) Indefatigable: SUM All Passives, All Agility, All Combat without Maintenance) 100+
-		-- (Defined here) Gym-Goer: SUM (Passives), 14+
-		-- (Defined here) Second Wind: SUM(Passives), 18+
-	-- Fitness
-		-- (Defined here) Hardy: Fitness 7
-		-- (Defined here) Noodle Legs: SUM(Fitness, Sprint, Lightfooted, Nimble, Sneaking) 30+
-		-- (Defined here) Evasive: SUM(Fitness, Sprint, Lightfooted, Nimble, Sneaking) 40+
--- Agility
-	-- Sprint
-		-- (Defined here) Olympian: Sprint 5, Fitness 6
-		-- (Defined here) Slowpoke: SUM(Agility) 20+
-		-- (Defined here) Fast: SUM(Agility) 30+
-	-- Lightfooted
-		-- (Defined here) Swift: Lightfooted 4
-	-- Nimble
-		-- (Defined here) Flexible: Nimble 4
-		-- (Defined here) Well-Fitted: Nimble 8
-		-- (Defined here) Terminator: SUM (Firearms, Nimble) 28+
-	-- Sneaking
-		-- (Defined here) Quiet: Sneaking 4
--- Combat
-	-- Axe
-		-- (Defined here) Tavern Brawler: SUM (All Combat except Maintenance) 12+
-		-- (Defined here) Prowess Blade: SUM(Axe, Long Blade, Short Blade) 24+
-	-- Longblunt
-		-- (Defined here) Gordanite: Long Blunt 6
-		-- (Defined here) Thuggish: SUM(Long Blunt, Short Blunt) 10+
-		-- (Defined here) Prowess Blunt: SUM(Long Blunt, Short Blunt) 16+
-	-- Shortblunt
-		-- (Defined here) Grunt Worker: Short Blunt 4, Carpentry 5
-		-- (Defined here) Martial Artist: Short Blunt 6, Fitness 6
-		-- (Defined here) Bouncer: Short Blunt 7, Strength 7
-		-- Thuggish: SUM(Long Blunt, Short Blunt) 10+
-		-- Prowess Blunt: SUM(Long Blunt, Short Blunt) 16+
-	-- Longblade
-		-- (Defined here) Practiced Swordsman: SUM(Long Blade Short Blade) 10+
-		-- Prowess Blade: SUM(Axe, Long Blade, Short Blade) 24+
-	-- Shortblade
-		-- Practiced Swordsman: SUM(Long Blade Short Blade) 10+
-		-- Prowess Blade: SUM(Axe, Long Blade, Short Blade) 24+
-	-- Spear
-		-- (Defined here) Wildsman: Spear 4, SUM(Fishing, Trapping, Foraging) 8+ with at least 1 lvl in each
-		-- (Defined here) Prowess Spear: Spear 8
-	-- Maintenance
-		-- (Defined here) Scrapper: Maintenance 5, Metalworking 5
--- Crafting
-	-- Carpentry
-		-- (Defined here) Slow Worker: SUM(All crafting) 30+
-		-- (Defined here) Fast worker: SUM(All crafting) 60+
-		-- Grunt Worker: Short Blunt 4, Carpentry 5
-	-- Cooking
-		-- (Defined here) Natural Eater: Cooking 2, Foraging 5
-		-- (Defined here) Ascetic: Cooking 5
-		-- (Defined here) Gourmand: Cooking 9
-	-- Farming
-	-- Firstaid
-	-- Electricity
-		-- (Defined here) Tinkerer: SUM(Electricity, Mechanics, Tailoring) 12+
-	-- Metalworking
-		-- Scrapper: Maintenance 5, Metalworking 5
-	-- Mechanics
-		-- Tinkerer: SUM(Electrical, Mechanics, Tailoring) 12+
-	-- Tailoring
-		-- Tinkerer: SUM(Electrical, Mechanics, Tailoring) 12+
--- Firearm
-	-- Aiming
-		-- (Defined here) Prowess Guns: SUM(Aiming, Reloading) 16+
-	-- Reloading
-		-- Prowess Guns: SUM(Aiming, Reloading) 16+
--- Survivalist
-	-- Fishing
-		-- Wildsman: Spear 4, SUM(Fishing, Trapping, Foraging) 8+ with at least 1 lvl in each
-	-- Trapping
-		-- Wildsman: Spear 4, SUM(Fishing, Trapping, Foraging) 8+ with at least 1 lvl in each
-	-- Foraging
-		-- Wildsman: Spear 4, SUM(Fishing, Trapping, Foraging) 8+ with at least 1 lvl in each
-		-- Natural Eater: Cooking 2, Foraging 5
--- Mod Category
-	-- Driving
-		-- (Defined here) Motion Sickenss: Driving 5
-		-- (Defined here) Student Driver: Driving 3 // disabled when Driving Skill is enabled
-		-- (Defined here) Expert Driver: Driving 8 // disabled when Driving Skill is enabled
-	-- Scavenging
-		-- (Defined here) Incomprehensive: Scavenging 4 
-		-- (Defined here) Vagabond: Scavenging 5 
-		-- (Defined here) Scrounger: Scavenging 6
-		-- (Defined here) Graverobber: Scavenging 7 
-		-- (Defined here) Antique Collector: Scavenging 9
-
+function MTDTraitsGainsByLevel(player, perk)
+	player = player or getPlayer();
 	-- Passive
 		-- Strength
 			-- Pack Mouse / Lead Foot / Pack Mule
@@ -226,11 +154,21 @@ function MTDtraitsGainsByLevel(player, perk)
 					end	
 				end
 			-- Terminator
-				if perk == "newCharacterInitialization" or perk == Perks.Nimble or perk == Perks.Aiming or perk == Perks.Reloading then
-					if SandboxVars.MoreTraitsDynamic.TerminatorDynamic == true and not player:HasTrait("terminator") and (player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 28 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Nimble or perk == Perks.Aiming or perk == Perks.Reloading then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Firearm"] then 
+							firearmKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
+							categoryKills = categoryKills + firearmKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.TerminatorDynamic == true and not player:HasTrait("terminator") and (player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 28 and categoryKills >= 1400 then
+							player:getTraits():add("terminator");
+							HaloTextHelper.addTextWithArrow(player, getText("UI_trait_terminator"), true, HaloTextHelper.getColorGreen());
+						end	
+					elseif SandboxVars.MoreTraitsDynamic.TerminatorDynamic == true and not player:HasTrait("terminator") and (player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 28 then
 						player:getTraits():add("terminator");
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_terminator"), true, HaloTextHelper.getColorGreen());
-					end		
+					end
 				end
 		-- Sneaking
 			-- Quiet
@@ -251,52 +189,127 @@ function MTDtraitsGainsByLevel(player, perk)
 					end
 				end
 			-- Prowess: Blade
-				if perk == "newCharacterInitialization" or perk == Perks.Axe or perk == Perks.LongBlade or perk == Perks.SmallBlade then
-					if SandboxVars.MoreTraitsDynamic.ProwessBladeDynamic == true and not player:HasTrait("problade") and (player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.LongBlade )+ player:getPerkLevel(Perks.SmallBlade)) >= 24 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Axe or perk == Perks.LongBlade or perk == Perks.SmallBlade then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Axe"] then
+							axeKills = player:getModData().KillCount.WeaponCategory["Axe"].count or 0;
+							categoryKills = categoryKills + axeKills;
+						end
+						if player:getModData().KillCount.WeaponCategory["LongBlade"] then
+							longBladeKills = player:getModData().KillCount.WeaponCategory["LongBlade"].count or 0;
+							categoryKills = categoryKills + longBladeKills;
+						end
+						if player:getModData().KillCount.WeaponCategory["SmallBlade"] then
+							shortBladeKills = player:getModData().KillCount.WeaponCategory["SmallBlade"].count or 0;
+							categoryKills = categoryKills + shortBladeKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.ProwessBladeDynamic == true and not player:HasTrait("problade") and (player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.LongBlade )+ player:getPerkLevel(Perks.SmallBlade)) >= 24 and categoryKills >= 1200 then
+							player:getTraits():add("problade");
+							MTDapplyXPBoost(player, Perks.Axe, 1);
+							MTDapplyXPBoost(player, Perks.LongBlade, 1);
+							MTDapplyXPBoost(player, Perks.SmallBlade, 1);
+							HaloTextHelper.addTextWithArrow(player, getText("problade"), true, HaloTextHelper.getColorGreen());
+						end
+					elseif SandboxVars.MoreTraitsDynamic.ProwessBladeDynamic == true and not player:HasTrait("problade") and (player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.LongBlade )+ player:getPerkLevel(Perks.SmallBlade)) >= 24 then
 						player:getTraits():add("problade");
 						MTDapplyXPBoost(player, Perks.Axe, 1);
 						MTDapplyXPBoost(player, Perks.LongBlade, 1);
 						MTDapplyXPBoost(player, Perks.SmallBlade, 1);
 						HaloTextHelper.addTextWithArrow(player, getText("problade"), true, HaloTextHelper.getColorGreen());
-					end						
+					end
 				end
 		-- Long Blunt
 			-- Gordanite
-				if perk == "newCharacterInitialization" or perk == Perks.Blunt then
-					if SandboxVars.MoreTraitsDynamic.GordaniteDynamic == true and not player:HasTrait("gordanite") and player:getPerkLevel(Perks.Blunt) >= 6 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Blunt then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Blunt"] then
+							longBluntKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
+							categoryKills = categoryKills + longBluntKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.GordaniteDynamic == true and not player:HasTrait("gordanite") and player:getPerkLevel(Perks.Blunt) >= 6 and categoryKills >= 5 then
+							player:getTraits():add("gordanite");
+							MTDapplyXPBoost(player, Perks.Blunt, 1);
+							HaloTextHelper.addTextWithArrow(player, getText("gordanite"), true, HaloTextHelper.getColorGreen());
+						end	
+					elseif SandboxVars.MoreTraitsDynamic.GordaniteDynamic == true and not player:HasTrait("gordanite") and player:getPerkLevel(Perks.Blunt) >= 6 then
 						player:getTraits():add("gordanite");
 						MTDapplyXPBoost(player, Perks.Blunt, 1);
 						HaloTextHelper.addTextWithArrow(player, getText("gordanite"), true, HaloTextHelper.getColorGreen());
 					end						
 				end
 			-- Thuggish / Prowess: Blunt
-				if perk == "newCharacterInitialization" or perk == Perks.Blunt or perk == Perks.SmallBlunt then
-					local sumOfLevels = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt)
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == "KillCount" or perk == Perks.Blunt or perk == Perks.SmallBlunt then
+					sumOfLevels = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt)
 					-- Thuggish
-					if SandboxVars.MoreTraitsDynamic.ThuggishDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= 10 then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Blunt"] then
+							longBluntKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
+							categoryKills = categoryKills + longBluntKills;
+						end
+						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
+							shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
+							categoryKills = categoryKills + shortBluntKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.ThuggishDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= 10 and categoryKills >= 500 then
+							player:getTraits():add("blunttwirl");
+							MTDapplyXPBoost(player, Perks.Blunt, 1);
+							MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
+							HaloTextHelper.addTextWithArrow(player, getText("blunttwirl"), true, HaloTextHelper.getColorGreen());
+						end
+					elseif SandboxVars.MoreTraitsDynamic.ThuggishDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= 10 then
 						player:getTraits():add("blunttwirl");
 						MTDapplyXPBoost(player, Perks.Blunt, 1);
 						MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
 						HaloTextHelper.addTextWithArrow(player, getText("blunttwirl"), true, HaloTextHelper.getColorGreen());
 					end	
 					-- Prowess: Blunt
-					if SandboxVars.MoreTraitsDynamic.ProwessBluntDynamic == true and not player:HasTrait("problunt") and sumOfLevels >= 16 then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Long Blunt"] then
+							longBluntKills = player:getModData().KillCount.WeaponCategory["Long Blunt"].count or 0;
+							categoryKills = categoryKills + longBluntKills;
+						end
+						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
+							shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
+							categoryKills = categoryKills + shortBluntKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.ThuggishDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= 10 and categoryKills >= 800 then
+							player:getTraits():add("problunt");
+							MTDapplyXPBoost(player, Perks.Blunt, 1);
+							MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
+							HaloTextHelper.addTextWithArrow(player, getText("problunt"), true, HaloTextHelper.getColorGreen());
+						end
+					elseif SandboxVars.MoreTraitsDynamic.ProwessBluntDynamic == true and not player:HasTrait("problunt") and sumOfLevels >= 16 then
 						player:getTraits():add("problunt");
 						MTDapplyXPBoost(player, Perks.Blunt, 1);
 						MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
 						HaloTextHelper.addTextWithArrow(player, getText("problunt"), true, HaloTextHelper.getColorGreen());
 					end						
 				end
-
 		-- Short Blunt
 			-- Grunt Worker
-				if perk == "newCharacterInitialization" or perk == Perks.SmallBlunt or perk == Perks.Woodwork then
-					if SandboxVars.MoreTraitsDynamic.GruntWorkerDynamic == true and not player:HasTrait("grunt") and player:getPerkLevel(Perks.SmallBlunt) >= 4 and player:getPerkLevel(Perks.Woodwork) >= 5 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.SmallBlunt or perk == Perks.Woodwork then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
+							shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
+							categoryKills = categoryKills + shortBluntKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.GruntWorkerDynamic == true and not player:HasTrait("grunt") and player:getPerkLevel(Perks.SmallBlunt) >= 4 and player:getPerkLevel(Perks.Woodwork) >= 5 and categoryKills >= 200 then
+							player:getTraits():add("grunt");
+							MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
+							MTDapplyXPBoost(player, Perks.Woodwork, 1);
+							HaloTextHelper.addTextWithArrow(player, getText("UI_trait_grunt"), true, HaloTextHelper.getColorGreen());
+						end
+					elseif SandboxVars.MoreTraitsDynamic.GruntWorkerDynamic == true and not player:HasTrait("grunt") and player:getPerkLevel(Perks.SmallBlunt) >= 4 and player:getPerkLevel(Perks.Woodwork) >= 5 then
 						player:getTraits():add("grunt");
 						MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
 						MTDapplyXPBoost(player, Perks.Woodwork, 1);
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_grunt"), true, HaloTextHelper.getColorGreen());
-					end					
+					end
 				end
 			-- Martial Artist
 				if perk == "newCharacterInitialization" or perk == Perks.SmallBlunt or perk == Perks.Fitness then
@@ -316,8 +329,24 @@ function MTDtraitsGainsByLevel(player, perk)
 				end
 		-- Long Blade
 			-- Practiced Swordsman
-				if perk == "newCharacterInitialization" or perk == Perks.LongBlade or perk == Perks.SmallBlade then
-					if SandboxVars.MoreTraitsDynamic.PracticedSwordsmanDynamic == true and not player:HasTrait("bladetwirl") and (player:getPerkLevel(Perks.LongBlade) + player:getPerkLevel(Perks.SmallBlade)) >= 10 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.LongBlade or perk == Perks.SmallBlade then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["SmallBlade"] then
+							shortBladeKills = player:getModData().KillCount.WeaponCategory["SmallBlade"].count or 0;
+							categoryKills = categoryKills + shortBladeKills;
+						end
+						if player:getModData().KillCount.WeaponCategory["Long Blade"] then
+							longBladeKills = player:getModData().KillCount.WeaponCategory["Long Blade"].count or 0;
+							categoryKills = categoryKills + longBladeKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.PracticedSwordsmanDynamic == true and not player:HasTrait("bladetwirl") and (player:getPerkLevel(Perks.LongBlade) + player:getPerkLevel(Perks.SmallBlade)) >= 10 and categoryKills >= 500 then
+						player:getTraits():add("bladetwirl");
+						MTDapplyXPBoost(player, Perks.LongBlade, 1);
+						MTDapplyXPBoost(player, Perks.SmallBlade, 1);
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_bladetwirl"), true, HaloTextHelper.getColorGreen());
+						end	
+					elseif SandboxVars.MoreTraitsDynamic.PracticedSwordsmanDynamic == true and not player:HasTrait("bladetwirl") and (player:getPerkLevel(Perks.LongBlade) + player:getPerkLevel(Perks.SmallBlade)) >= 10 then
 						player:getTraits():add("bladetwirl");
 						MTDapplyXPBoost(player, Perks.LongBlade, 1);
 						MTDapplyXPBoost(player, Perks.SmallBlade, 1);
@@ -326,8 +355,35 @@ function MTDtraitsGainsByLevel(player, perk)
 				end
 		-- Spear
 			-- Wildsman
-				if perk == "newCharacterInitialization" or perk == Perks.Spear or perk == Perks.Fishing or perk == Perks.Trapping or perk == Perks.PlantScavenging then
-					if SandboxVars.MoreTraitsDynamic.WildsmanDynamic == true and not player:HasTrait("wildsman") and player:getPerkLevel(Perks.Spear) >= 4 and player:getPerkLevel(Perks.Fishing) >= 1 and player:getPerkLevel(Perks.Trapping) >= 1 and player:getPerkLevel(Perks.PlantScavenging) >= 1 and (player:getPerkLevel(Perks.Fishing) + player:getPerkLevel(Perks.Trapping) + player:getPerkLevel(Perks.PlantScavenging)) >= 8 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Spear or perk == Perks.Fishing or perk == Perks.Trapping or perk == Perks.PlantScavenging then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Spear"] then
+							spearKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
+							categoryKills = categoryKills + spearKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.WildsmanDynamic == true and not player:HasTrait("wildsman") and player:getPerkLevel(Perks.Spear) >= 4 and player:getPerkLevel(Perks.Fishing) >= 1 and player:getPerkLevel(Perks.Trapping) >= 1 and player:getPerkLevel(Perks.PlantScavenging) >= 1 and (player:getPerkLevel(Perks.Fishing) + player:getPerkLevel(Perks.Trapping) + player:getPerkLevel(Perks.PlantScavenging)) >= 8 and categoryKills >= 200 then
+							player:getTraits():add("wildsman");
+							MTDapplyXPBoost(player, Perks.Spear, 1);
+							MTDapplyXPBoost(player, Perks.Fishing, 1);
+							MTDapplyXPBoost(player, Perks.Trapping, 1);
+							MTDapplyXPBoost(player, Perks.PlantScavenging, 1);
+							local playerRecipes = player:getKnownRecipes();
+							if not playerRecipes:contains("Make Stick Trap") then
+								playerRecipes:add("Make Stick Trap");
+							end
+							if not playerRecipes:contains("Make Snare Trap") then
+								playerRecipes:add("Make Snare Trap");
+							end
+							if not playerRecipes:contains("Make Fishing Rod") then
+								playerRecipes:add("Make Fishing Rod");
+							end
+							if not playerRecipes:contains("Fix Fishing Rod") then
+								playerRecipes:add("Fix Fishing Rod");
+							end
+							HaloTextHelper.addTextWithArrow(player, getText("UI_trait_wildsman"), true, HaloTextHelper.getColorGreen());
+						end
+					elseif SandboxVars.MoreTraitsDynamic.WildsmanDynamic == true and not player:HasTrait("wildsman") and player:getPerkLevel(Perks.Spear) >= 4 and player:getPerkLevel(Perks.Fishing) >= 1 and player:getPerkLevel(Perks.Trapping) >= 1 and player:getPerkLevel(Perks.PlantScavenging) >= 1 and (player:getPerkLevel(Perks.Fishing) + player:getPerkLevel(Perks.Trapping) + player:getPerkLevel(Perks.PlantScavenging)) >= 8 then
 						player:getTraits():add("wildsman");
 						MTDapplyXPBoost(player, Perks.Spear, 1);
 						MTDapplyXPBoost(player, Perks.Fishing, 1);
@@ -347,11 +403,22 @@ function MTDtraitsGainsByLevel(player, perk)
 							playerRecipes:add("Fix Fishing Rod");
 						end
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_wildsman"), true, HaloTextHelper.getColorGreen());
-					end					
+					end
 				end
 			-- Prowess: Spear
-				if perk == "newCharacterInitialization" or perk == Perks.Spear  then
-					if SandboxVars.MoreTraitsDynamic.ProwessSpearDynamic == true and not player:HasTrait("prospear") and player:getPerkLevel(Perks.Spear) >= 8 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Spear  then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Spear"] then
+							spearKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
+							categoryKills = categoryKills + spearKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.ProwessSpearDynamic == true and not player:HasTrait("prospear") and player:getPerkLevel(Perks.Spear) >= 8 and categoryKills >= 400 then
+							player:getTraits():add("prospear");
+							MTDapplyXPBoost(player, Perks.Spear, 2);
+							HaloTextHelper.addTextWithArrow(player, getText("UI_trait_prospear"), true, HaloTextHelper.getColorGreen());
+						end	
+					elseif SandboxVars.MoreTraitsDynamic.ProwessSpearDynamic == true and not player:HasTrait("prospear") and player:getPerkLevel(Perks.Spear) >= 8 then
 						player:getTraits():add("prospear");
 						MTDapplyXPBoost(player, Perks.Spear, 2);
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_prospear"), true, HaloTextHelper.getColorGreen());
@@ -425,34 +492,52 @@ function MTDtraitsGainsByLevel(player, perk)
 				end
 	-- Firearm
 		-- Aiming
+			-- Anti-Gun Activist
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Aiming then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Firearm"] then
+							firearmKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
+							categoryKills = categoryKills + firearmKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamic == true and player:HasTrait("antigun") and player:getPerkLevel(Perks.Aiming) >= 6 and categoryKills >= 600 then
+							player:getTraits():remove("antigun");
+							HaloTextHelper.addTextWithArrow(player, getText("UI_trait_antigun"), false, HaloTextHelper.getColorGreen());
+						end	
+					elseif SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamic == true and player:HasTrait("antigun") and player:getPerkLevel(Perks.Aiming) >= 6 then
+						player:getTraits():remove("antigun");
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_antigun"), false, HaloTextHelper.getColorGreen());	
+					end
+				end
 			-- Prowess Guns
-				if perk == "newCharacterInitialization" or perk == Perks.Aiming or perk == Perks.Reloading then
-					if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 then
+				if perk == "newCharacterInitialization" or perk == "KillCount" or perk == Perks.Aiming or perk == Perks.Reloading then
+					if player:getModData().KillCount then
+						categoryKills = 0;
+						if player:getModData().KillCount.WeaponCategory["Firearm"] then
+							firearmKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
+							categoryKills = categoryKills + firearmKills;
+						end
+						if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and player:getPerkLevel(Perks.Aiming) >= 8 and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 and categoryKills >= 800 then
+							player:getTraits():add("progun");
+							MTDapplyXPBoost(player, Perks.Aiming, 1);
+							MTDapplyXPBoost(player, Perks.Reloading, 1);
+							HaloTextHelper.addTextWithArrow(player, getText("UI_trait_progun"), true, HaloTextHelper.getColorGreen());
+						end
+					elseif SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and player:getPerkLevel(Perks.Aiming) >= 8 and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= 16 then
 						player:getTraits():add("progun");
 						MTDapplyXPBoost(player, Perks.Aiming, 1);
 						MTDapplyXPBoost(player, Perks.Reloading, 1);
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_progun"), true, HaloTextHelper.getColorGreen());
-					end					
+					end
 				end
-	
 	-- Mod Category
 		-- Driving
 			if getActivatedMods():contains("DrivingSkill") and ( perk == "newCharacterInitialization" or perk == Perks.Driving ) then
-				-- Student Driver // disabled when Driving Skill is enabled
-				-- if SandboxVars.MoreTraitsDynamic.StudentDriverDynamic == true and player:HasTrait("poordriver") and player:getPerkLevel(Perks.Driving) >= 3 then
-					-- player:getTraits():remove("poordriver");
-					-- HaloTextHelper.addTextWithArrow(player, getText("UI_trait_poordriver"), false, HaloTextHelper.getColorGreen());
-				-- end
 				-- Motionsickness
 				if SandboxVars.MoreTraitsDynamic.MotionSickenssDynamic == true and player:HasTrait("motionsickness") and player:getPerkLevel(Perks.Driving) >= 5 then
 					player:getTraits():remove("motionsickness");
 					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_motionsickness"), false, HaloTextHelper.getColorGreen());
-				end						
-				-- Expert Driver // disabled when Driving Skill is enabled
-				-- if SandboxVars.MoreTraitsDynamic.ExpertDriverDynamic == true and not player:HasTrait("UI_trait_expertdriver") and player:getPerkLevel(Perks.Driving) >= 8 then
-					-- player:getTraits():add("expertdriver");
-					-- HaloTextHelper.addTextWithArrow(player, getText("UI_trait_expertdriver"), true, HaloTextHelper.getColorGreen());
-				-- end						
+				end										
 			end
 		-- Scavenging
 			if getActivatedMods():contains("ScavengingSkill") and ( perk == "newCharacterInitialization" or perk == Perks.Scavenging ) then
@@ -488,10 +573,83 @@ function MTDtraitsGainsByLevel(player, perk)
 			end
 end
 
-function MTDAddMissingPerks(player)
-	if getActivatedMods():contains("ToadTraitsDynamic") then
-		MTDtraitsGainsByLevel(player, "newCharacterInitialization");	
+function MTDTraitGainsByWeight()
+	player = getPlayer()
+	player:getModData().MoreTraitsDynamic = player:getModData().MoreTraitsDynamic or {};
+	player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours or 0;
+	player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours or 0;
+	if not player:HasTrait("idealweight") then
+		if player:getNutrition():getWeight() >= 78 and player:getNutrition():getWeight() <= 82 then
+			player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 1;
+		else
+			player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours + 1;
+			if player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours >= 12 then
+				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
+				player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
+			end
+		end
+		if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= 336 then -- 14 days == 336h
+			player:getTraits():add("idealweight");
+			player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
+			player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
+			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorGreen());
+		end
+	else
+		if player:getNutrition():getWeight() >= 78 and player:getNutrition():getWeight() <= 82 then
+			player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 0.0834; -- 12h of keeping ideal weight == 1h of grace period before loosing it to max of 18h grace period
+			if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= 18 then
+				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 18;
+			end
+		else 
+			if player:getNutrition():getWeight() <= 75 or player:getNutrition():getWeight() >= 85 then
+				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours - 1;
+				if player:getModData().MoreTraitsDynamic.WeightMaintainedHours <= 0 then
+					player:getTraits():remove("idealweight");
+					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
+					player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
+					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), false, HaloTextHelper.getColorRed());
+				end
+			end
+		end
 	end
 end
 
-Events.OnNewGame.Add(MTDAddMissingPerks)
+function MTDTraitGainsByKillCount()
+	player = getPlayer();
+	MTDTraitsGainsByLevel(player, "KillCount");
+end
+
+function MTDLeadFoot(zombie)
+	player = getPlayer();
+	player:getModData().MoreTraitsDynamic = player:getModData().MoreTraitsDynamic or {};
+	player:getModData().MoreTraitsDynamic.AllowLeadFootCount = player:getModData().MoreTraitsDynamic.AllowLeadFootCount or false;
+	player:getModData().MoreTraitsDynamic.LeadFootCount = player:getModData().MoreTraitsDynamic.LeadFootCount or 0;
+	if player:getModData().MoreTraitsDynamic.AllowLeadFootCount == true then
+		if player:DistTo(zombie) <= 1 then
+			print ("Leadfoot Kill");
+			getPlayer():getModData().MoreTraitsDynamic.LeadFootCount = getPlayer():getModData().MoreTraitsDynamic.LeadFootCount + 1;
+		end
+	end
+	if player:getModData().MoreTraitsDynamic.LeadFootCount >= 200 then
+		if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not player:HasTrait("leadfoot") then
+			player:getTraits():add("leadfoot");
+			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_leadfoot"), true, HaloTextHelper.getColorGreen());
+		end
+	end
+end
+
+function MTDInitializeEvents(player)
+	if getActivatedMods():contains("ToadTraitsDynamic") then
+		Events.LevelPerk.Add(MTDLevelPerkMain);
+		Events.EveryHours.Add(MTDEveryHoursMain);
+		Events.OnWeaponHitCharacter.Add(MTDAdditionalMain);
+		MTDTraitsGainsByLevel(player, "newCharacterInitialization");
+		if getActivatedMods():contains("KillCount") then
+			Events.OnZombieDead.Add(MTDKillsMainExtended);
+		else
+			Events.OnZombieDead.Add(MTDKillsMain);
+		end
+	end
+end
+
+Events.OnGameStart.Add(MTDInitializeEvents)
