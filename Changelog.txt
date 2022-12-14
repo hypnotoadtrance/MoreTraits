@@ -1,2 +1,3 @@
 Changelog Notes:
-Fixed Terminator sadness reduction not working properly
+Fixed Terminator sadness reduction not working properly.
+Made Unwavering Trait description more specific on what it does.
