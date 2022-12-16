@@ -3224,6 +3224,7 @@ function FoodUpdate(_player)
 end
 function FearfulUpdate(_player)
 	local player = _player;
+	local playerdata = player:getModData();
 	if player:HasTrait("fearful") then
 		local stats = player:getStats();
 		local panic = stats:getPanic();
@@ -3241,16 +3242,40 @@ function FearfulUpdate(_player)
 			if ZombRand(0, 1000) <= chance then
 				if panic <= 25 then
 					player:Say(getText("UI_fearful_slightpanic"));
-					addSound(player, player:getX(), player:getY(), player:getZ(), 5, 10);
+					addSound(player, player:getX(), player:getY(), player:getZ(), 5, 10)
+					if getActivatedMods():contains("ToadTraitsDynamic") then
+						if playerdata.MTDFearfulCount == nil then
+							playerdata.MTDFearfulCount = 0;
+						end
+						playerdata.MTDFearfulCount = playerdata.MTDFearfulCount + 1;
+					end
 				elseif panic <= 50 then
 					player:Say(getText("UI_fearful_panic"));
 					addSound(player, player:getX(), player:getY(), player:getZ(), 10, 15);
+					if getActivatedMods():contains("ToadTraitsDynamic") then
+						if playerdata.MTDFearfulCount == nil then
+							playerdata.MTDFearfulCount = 0;
+						end
+						playerdata.MTDFearfulCount = playerdata.MTDFearfulCount + 1;
+					end
 				elseif panic <= 75 then
 					player:Say(getText("UI_fearful_strongpanic"));
 					addSound(player, player:getX(), player:getY(), player:getZ(), 20, 25);
+					if getActivatedMods():contains("ToadTraitsDynamic") then
+						if playerdata.MTDFearfulCount == nil then
+							playerdata.MTDFearfulCount = 0;
+						end
+						playerdata.MTDFearfulCount = playerdata.MTDFearfulCount + 1;
+					end
 				elseif panic > 75 then
 					player:Say(getText("UI_fearful_extremepanic"));
 					addSound(player, player:getX(), player:getY(), player:getZ(), 25, 50);
+					if getActivatedMods():contains("ToadTraitsDynamic") then
+						if playerdata.MTDFearfulCount == nil then
+							playerdata.MTDFearfulCount = 0;
+						end
+						playerdata.MTDFearfulCount = playerdata.MTDFearfulCount + 1;
+					end
 				end
 			end
 		end
