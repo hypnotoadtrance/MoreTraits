@@ -525,7 +525,9 @@ function initToadTraitsPerks(_player)
 	end
 	playerdata.ToadTraitBodyDamage = nil;
 	suspendevasive = false;
-	player:getBodyDamage():Update();
+	if player:getBodyDamage() ~= nil then
+		player:getBodyDamage():Update();
+	end
 	playerdata.fLastHP = nil;
 	checkWeight();
 	if player:HasTrait("ingenuitive") then
@@ -4339,7 +4341,9 @@ function OnCreatePlayer(_, player)
 	--reset evasive on game load
 	playerdata.ToadTraitBodyDamage = nil;
 	suspendevasive = false;
-	bodydamage:Update();
+	if bodydamage ~= nil then
+		bodydamage:Update();
+	end
 	if playerdata.ContainerTraitIllegal == nil then
 		playerdata.ContainerTraitIllegal = false;
 	end
