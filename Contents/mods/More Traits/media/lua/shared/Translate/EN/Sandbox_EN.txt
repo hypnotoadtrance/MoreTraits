@@ -103,4 +103,6 @@ Sandbox_EN = {
 	Sandbox_MoreTraits_SuperImmuneFirstInfectionBonus_tooltip = "If true, any infections after the first one was cured will only last half as long.<br>Note: If caught multiple infections, it can still reach maximum days.",
 	Sandbox_MoreTraits_QuickSuperImmune = "Quick Super Immune",
 	Sandbox_MoreTraits_QuickSuperImmune_tooltip = "If true, Super Immune is 6 times faster than normal.<br>Preferably used in multiplayer games where you can't fast forward time.",
+    Sandbox_MoreTraits_ProwessGunsAmmoRestore = "Prowess: Guns can restore ammo",
+	Sandbox_MoreTraits_ProwessGunsAmmoRestore_tooltip = "If true, Prowess: Guns will have a chance to not consume ammo. Not exactly lore-wise friendly, but fun.",
 }

@@ -2085,7 +2085,7 @@ function progun(_actor, _weapon)
 			end
 		end
 		weapondata.iLastWeaponCond = weapon:getCondition();
-		if ZombRand(0, 101) <= chance then
+		if SandboxVars.MoreTraits.ProwessGunsAmmoRestore == true and ZombRand(0, 101) <= chance then
 			if currentCapacity < maxCapacity and currentCapacity > 0 then
 				weapon:setCurrentAmmoCount(currentCapacity + 1);
 				if MoreTraits.settings.ProwessGunsAmmo == true then
