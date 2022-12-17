@@ -67,7 +67,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				if perk == "characterInitialization" or perk == Perks.Strength then
 					-- Pack Mouse
 					if SandboxVars.MoreTraitsDynamic.PackMouseDynamic == true and player:HasTrait("packmouse") and player:getPerkLevel(Perks.Strength) >= SandboxVars.MoreTraitsDynamic.PackMouseDynamicSkill then
-						player:getTraits():remove("packmouse")
+						player:getTraits():remove("packmouse");
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_packmouse"), false, HaloTextHelper.getColorGreen());
 					end
 					-- Pack Mule
@@ -85,7 +85,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Second Wind // Gym-Goer
 				if perk == "characterInitialization" or perk == Perks.Strength or perk == Perks.Fitness then
-					local sumOfLevels = player:getPerkLevel(Perks.Strength) + player:getPerkLevel(Perks.Fitness)
+					local sumOfLevels = player:getPerkLevel(Perks.Strength) + player:getPerkLevel(Perks.Fitness);
 					-- Gym-Goer
 					if SandboxVars.MoreTraitsDynamic.GymGoerDynamic == true and not player:HasTrait("gymgoer") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.GymGoerDynamicSkill then
 						player:getTraits():add("gymgoer");
@@ -107,7 +107,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Noodle Legs / Evasive
 				if perk == "characterInitialization" or perk == Perks.Fitness or perk == Perks.Sprinting or perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sneak then
-					local sumOfLevels = player:getPerkLevel(Perks.Fitness) + player:getPerkLevel(Perks.Sprinting) + player:getPerkLevel(Perks.Lightfoot) + player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Sneak)
+					local sumOfLevels = player:getPerkLevel(Perks.Fitness) + player:getPerkLevel(Perks.Sprinting) + player:getPerkLevel(Perks.Lightfoot) + player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Sneak);
 					-- Noodle Legs
 					if SandboxVars.MoreTraitsDynamic.NoodleLegsDynamic == true and player:HasTrait("noodlelegs") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.NoodleLegsDynamicSkill then
 						player:getTraits():remove("noodlelegs");
@@ -131,7 +131,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Slowpoke // Fast
 				if perk == "characterInitialization" or perk == Perks.Sprinting or perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sneak then
-					local sumOfLevels = player:getPerkLevel(Perks.Sprinting) + player:getPerkLevel(Perks.Lightfoot) + player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Sneak)
+					local sumOfLevels = player:getPerkLevel(Perks.Sprinting) + player:getPerkLevel(Perks.Lightfoot) + player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Sneak);
 					-- Slowpoke
 					if SandboxVars.MoreTraitsDynamic.SlowpokeDynamic == true and player:HasTrait("gimp") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.SlowpokeDynamicSkill then
 						player:getTraits():remove("gimp");
@@ -171,8 +171,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["Firearm"] then
-							local firearmKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
-							categoryKills = categoryKills + firearmKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.TerminatorDynamic == true and not player:HasTrait("terminator") and (player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= SandboxVars.MoreTraitsDynamic.TerminatorDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.TerminatorDynamicKill then
 							player:getTraits():add("terminator");
@@ -195,7 +194,7 @@ function MTDTraitsGainsByLevel(player, perk)
 	-- Combat
 		-- Axe
 			-- Tawern Brawler
-				if perk == "characterInitialization" or perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.SmallBlunt	or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Spear then
+				if perk == "characterInitialization" or perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.SmallBlunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Spear then
 					if SandboxVars.MoreTraitsDynamic.TavernBrawlerDynamic == true and not player:HasTrait("tavernbrawler") and (player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt) + player:getPerkLevel(Perks.LongBlade) + player:getPerkLevel(Perks.SmallBlade) + player:getPerkLevel(Perks.Spear)) >= SandboxVars.MoreTraitsDynamic.TavernBrawlerDynamicSkill then
 						player:getTraits():add("tavernbrawler");
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_tavernbrawler"), true, HaloTextHelper.getColorGreen());
@@ -238,8 +237,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["Blunt"] then
-							local longBluntKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
-							categoryKills = categoryKills + longBluntKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.GordaniteDynamic == true and not player:HasTrait("gordanite") and player:getPerkLevel(Perks.Blunt) >= SandboxVars.MoreTraitsDynamic.GordaniteDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.GordaniteDynamicKill then
 							player:getTraits():add("gordanite");
@@ -254,7 +252,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Thuggish / Prowess: Blunt
 				if perk == "characterInitialization" or perk == "KillCount" or perk == "KillCount" or perk == Perks.Blunt or perk == Perks.SmallBlunt then
-					local sumOfLevels = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt)
+					local sumOfLevels = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt);
 					-- Thuggish
 					if player:getModData().KillCount then
 						local categoryKills = 0;
@@ -308,8 +306,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
-							local shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
-							categoryKills = categoryKills + shortBluntKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.GruntWorkerDynamic == true and not player:HasTrait("grunt") and player:getPerkLevel(Perks.SmallBlunt) >= SandboxVars.MoreTraitsDynamic.GruntWorkerDynamicSmallBlunt and player:getPerkLevel(Perks.Woodwork) >= SandboxVars.MoreTraitsDynamic.GruntWorkerDynamicWoodwork and categoryKills >= SandboxVars.MoreTraitsDynamic.GruntWorkerDynamicKill then
 							player:getTraits():add("grunt");
@@ -372,8 +369,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["Spear"] then
-							local spearKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
-							categoryKills = categoryKills + spearKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.WildsmanDynamic == true and not player:HasTrait("wildsman") and player:getPerkLevel(Perks.Spear) >= 4 and player:getPerkLevel(Perks.Fishing) >= 1 and player:getPerkLevel(Perks.Trapping) >= 1 and player:getPerkLevel(Perks.PlantScavenging) >= 1 and (player:getPerkLevel(Perks.Fishing) + player:getPerkLevel(Perks.Trapping) + player:getPerkLevel(Perks.PlantScavenging)) >= SandboxVars.MoreTraitsDynamic.WildsmanDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.WildsmanDynamicKill then
 							player:getTraits():add("wildsman");
@@ -423,8 +419,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["Spear"] then
-							local spearKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
-							categoryKills = categoryKills + spearKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.ProwessSpearDynamic == true and not player:HasTrait("prospear") and player:getPerkLevel(Perks.Spear) >= SandboxVars.MoreTraitsDynamic.ProwessSpearDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessSpearDynamicKill then
 							player:getTraits():add("prospear");
@@ -510,8 +505,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["Firearm"] then
-							local firearmKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
-							categoryKills = categoryKills + firearmKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamic == true and player:HasTrait("antigun") and player:getPerkLevel(Perks.Aiming) >= SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamicKill then
 							player:getTraits():remove("antigun");
@@ -527,8 +521,7 @@ function MTDTraitsGainsByLevel(player, perk)
 					if player:getModData().KillCount then
 						local categoryKills = 0;
 						if player:getModData().KillCount.WeaponCategory["Firearm"] then
-							local firearmKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
-							categoryKills = categoryKills + firearmKills;
+							categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and player:getPerkLevel(Perks.Aiming) >= SandboxVars.MoreTraitsDynamic.ProwessGunsDynamicAiming and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= SandboxVars.MoreTraitsDynamic.ProwessGunsDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessGunsDynamicKill then
 							player:getTraits():add("progun");
@@ -591,40 +584,44 @@ function MTDTraitGainsByWeight()
 	player:getModData().MoreTraitsDynamic = player:getModData().MoreTraitsDynamic or {};
 	player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours or 0;
 	player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours or 0;
-	if SandboxVars.MoreTraitsDynamic.IdealWeightDynamic == true and not player:HasTrait("idealweight") then
-		if player:getNutrition():getWeight() >= 78 and player:getNutrition():getWeight() <= 82 then
-			player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 1;
-		else
-			player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours + 1;
-			if player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightObtainGracePeriod then
-				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
-				player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
-			end
-		end
-		if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightDynamicTargetDaysToObtain * 24 then
-			player:getTraits():add("idealweight");
-			player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
-			player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
-			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorGreen());
-		end
-	else
-		if player:getNutrition():getWeight() >= 78 and player:getNutrition():getWeight() <= 82 then
-			player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 0.0834 * SandboxVars.MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodMultiplier; -- earning grace hours
-			if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightLoseGracePeriodCap then -- grace hours cap
-				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = SandboxVars.MoreTraitsDynamic.IdealWeightLoseGracePeriodCap;
-			end
-		else
-			if player:getNutrition():getWeight() <= 75 or player:getNutrition():getWeight() >= 85 then
-				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours - 1;
-				if player:getModData().MoreTraitsDynamic.WeightMaintainedHours <= 0 then
-					player:getTraits():remove("idealweight");
+	if SandboxVars.MoreTraitsDynamic.IdealWeightDynamic == true then 
+		-- Gaining Idea Weight
+		local weight = player:getNutrition():getWeight();
+		if not player:HasTrait("idealweight") then
+			if weight >= 78 and weight <= 82 then
+				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 1;
+			else
+				player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours + 1;
+				if player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightObtainGracePeriod then
 					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
 					player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
-					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), false, HaloTextHelper.getColorRed());
+				end
+			end
+			if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightDynamicTargetDaysToObtain * 24 then
+				player:getTraits():add("idealweight");
+				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
+				player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
+				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorGreen());
+			end
+		else
+			-- Losing Ideal Weight
+			if weight >= 78 and weight <= 82 then
+				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 0.0834 * SandboxVars.MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodMultiplier; -- earning grace hours
+				if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightLoseGracePeriodCap then -- grace hours cap
+					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = SandboxVars.MoreTraitsDynamic.IdealWeightLoseGracePeriodCap;
+				end
+			else
+				if weight <= 75 or weight >= 85 then
+					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours - 1;
+					if player:getModData().MoreTraitsDynamic.WeightMaintainedHours <= 0 then
+						player:getTraits():remove("idealweight");
+						player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
+						player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), false, HaloTextHelper.getColorRed());
+					end
 				end
 			end
 		end
-	end
 end
 
 function MTDTraitGainsByPanic()
@@ -640,13 +637,13 @@ function MTDTraitGainsByPanic()
 			SandboxVars.MoreTraitsDynamic.ParanoiaDynamicHoursLose * 60 then
 				player:getModData().MoreTraitsDynamic.FiftyPlusStressAndPanicTime = 0
 			player:getTraits():remove("paranoia");
-			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorGreen());
+			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), false, HaloTextHelper.getColorGreen());
 		end
 		if not player:HasTrait("paranoia") and player:getModData().MoreTraitsDynamic.FiftyPlusStressAndPanicTime >=
 			SandboxVars.MoreTraitsDynamic.ParanoiaDynamicHoursGain * 60 then
 			player:getModData().MoreTraitsDynamic.FiftyPlusStressAndPanicTime = 0
-			player:getTraits():remove("paranoia");
-			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorGreen());
+			player:getTraits():add("paranoia");
+			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorRed());
 		end
 end
 
@@ -658,35 +655,36 @@ function MTDTraitGainsByInjuries()
 		if SandboxVars.MoreTraitsDynamic.UnwaveringDynamic == true and not player:HasTrait("unwavering") then
 			for n = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 				local selectedBodyPart = player:getBodyDamage():getBodyParts():get(n);
-				if selectedBodyPart:HasInjury() and ( selectedBodyPart:getType() == BodyPartType.Groin or selectedBodyPart:getType() == BodyPartType.UpperLeg_L or selectedBodyPart:getType() == BodyPartType.UpperLeg_R or selectedBodyPart:getType() == BodyPartType.LowerLeg_L or selectedBodyPart:getType() == BodyPartType.LowerLeg_R or selectedBodyPart:getType() == BodyPartType.Foot_L or selectedBodyPart:getType() == BodyPartType.Foot_R ) then
+				local selectedBodyPartType = selectedBodyPart:getType();
+				if selectedBodyPart:HasInjury() and ( selectedBodyPartType == BodyPartType.Groin or selectedBodyPartType == BodyPartType.UpperLeg_L or selectedBodyPartType == BodyPartType.UpperLeg_R or selectedBodyPartType == BodyPartType.LowerLeg_L or selectedBodyPartType == BodyPartType.LowerLeg_R or selectedBodyPartType == BodyPartType.Foot_L or selectedBodyPartType == BodyPartType.Foot_R ) then
 					local defaultOneHourFraction = 0.167; -- 0.167 every 10 min equals to 1 in 1h
 					if selectedBodyPart:getBleedingTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction / 24; -- adds 1 to counter for every 24h of bleeding
-						--print(tostring(selectedBodyPart:getType()).." is bleeding. getBleedingTime()="..tostring(selectedBodyPart:getBleedingTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." is bleeding. getBleedingTime()="..tostring(selectedBodyPart:getBleedingTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 					if selectedBodyPart:getScratchTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction / 12; -- adds 1 to counter for every 12h of having scratch
-						--print(tostring(selectedBodyPart:getType()).." is scratched. getScratchTime()="..tostring(selectedBodyPart:getScratchTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." is scratched. getScratchTime()="..tostring(selectedBodyPart:getScratchTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 					if selectedBodyPart:getCutTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction / 6; -- adds 1 to counter for every 6h of having laceration
-						--print(tostring(selectedBodyPart:getType()).." is lacerated. getCutTime()="..tostring(selectedBodyPart:getCutTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." is lacerated. getCutTime()="..tostring(selectedBodyPart:getCutTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 					if selectedBodyPart:getBurnTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction / 8; -- adds 1 to counter for every 8h of having burn
-						--print(tostring(selectedBodyPart:getType()).." is burned. getBurnTime()="..tostring(selectedBodyPart:getBurnTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." is burned. getBurnTime()="..tostring(selectedBodyPart:getBurnTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 					if selectedBodyPart:getDeepWoundTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction; -- adds 1 to counter for every 1h of having deep wound
-						--print(tostring(selectedBodyPart:getType()).." has deep wound. getDeepWoundTime()="..tostring(selectedBodyPart:getDeepWoundTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." has deep wound. getDeepWoundTime()="..tostring(selectedBodyPart:getDeepWoundTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 					if selectedBodyPart:getStitchTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction / 8; -- adds 1 to counter for every 8h of bleeding
-						--print(tostring(selectedBodyPart:getType()).." is stitched. getStitchTime()="..tostring(selectedBodyPart:getStitchTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." is stitched. getStitchTime()="..tostring(selectedBodyPart:getStitchTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 					if selectedBodyPart:getFractureTime() ~= 0 then
 						player:getModData().MoreTraitsDynamic.InjuredTime = player:getModData().MoreTraitsDynamic.InjuredTime + defaultOneHourFraction / 8; -- adds 1 to counter for every 8h of having fracture
-						--print(tostring(selectedBodyPart:getType()).." is fractured. getFractureTime()="..tostring(selectedBodyPart:getFractureTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
+						--print(tostring(selectedBodyPartType).." is fractured. getFractureTime()="..tostring(selectedBodyPart:getFractureTime()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.InjuredTime));
 					end
 				end
 			end
@@ -700,10 +698,9 @@ function MTDTraitGainsByInjuries()
 		-- Immunocompromised
 		if SandboxVars.MoreTraitsDynamic.ImmunocompromisedDynamic == true and player:HasTrait("immunocompromised") and not player:HasTrait("superimmune") then
 			for n = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-				local selectedBodyPart = player:getBodyDamage():getBodyParts():get(n);
-				if selectedBodyPart:getWoundInfectionLevel() ~= 0 then
+				if player:getBodyDamage():getBodyParts():get(n):getWoundInfectionLevel() ~= 0 then
 					player:getModData().MoreTraitsDynamic.totalInfectionTime = player:getModData().MoreTraitsDynamic.totalInfectionTime + 1 / 6; -- counts hours
-					--print(tostring(selectedBodyPart:getType()).." is infected. getWoundInfectionLevel()="..tostring(selectedBodyPart:getWoundInfectionLevel()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.totalInfectionTime));
+					--print(tostring(player:getBodyDamage():getBodyParts():get(n):getType()).." is infected. getWoundInfectionLevel()="..tostring(player:getBodyDamage():getBodyParts():get(n):getWoundInfectionLevel()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.totalInfectionTime));
 				end
 			end
 			if player:getModData().MoreTraitsDynamic.totalInfectionTime >= SandboxVars.MoreTraitsDynamic.ImmunocompromisedDynamicInfectionTime then
@@ -714,10 +711,9 @@ function MTDTraitGainsByInjuries()
 		-- Super-Immune
 		if SandboxVars.MoreTraitsDynamic.SuperImmuneDynamic == true and not player:HasTrait("superimmune") and not player:HasTrait("immunocompromised") then
 			for n = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-				local selectedBodyPart = player:getBodyDamage():getBodyParts():get(n);
-				if selectedBodyPart:getWoundInfectionLevel() ~= 0 then
+				if player:getBodyDamage():getBodyParts():get(n):getWoundInfectionLevel() ~= 0 then
 					player:getModData().MoreTraitsDynamic.totalInfectionTime = player:getModData().MoreTraitsDynamic.totalInfectionTime + 1 / 6; -- counts hours
-					--print(tostring(selectedBodyPart:getType()).." is infected. getWoundInfectionLevel()="..tostring(selectedBodyPart:getWoundInfectionLevel()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.totalInfectionTime));
+					--print(tostring(player:getBodyDamage():getBodyParts():get(n):getType()).." is infected. getWoundInfectionLevel()="..tostring(player:getBodyDamage():getBodyParts():get(n):getWoundInfectionLevel()).."; Counter: "..tostring(player:getModData().MoreTraitsDynamic.totalInfectionTime));
 				end
 			end
 			if player:getModData().MoreTraitsDynamic.totalInfectionTime >= SandboxVars.MoreTraitsDynamic.SuperImmuneDynamicInfectionTime then
