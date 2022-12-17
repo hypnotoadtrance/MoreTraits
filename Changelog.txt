@@ -2,7 +2,8 @@ Main Changelog Notes:
 	- Fixed Terminator sadness reduction not working properly.
 	- Made Unwavering Trait description more specific on what it does.
 Dynamic Changelog:
-	- Anti-Gun Activist and Ideal Weight added
-	- Prowess: Guns requirements change
-	- Leadfoot changed (credit: Fajdek)
+	- Huge sandbox upgrade, everything is customizable now
+	- Added perks: Anti-Gun Activist, Ideal Weight, Unwavering, Immunocompromised, Super-Immune, Paranoia
+	- Changed requirements: Graverobber, majority of combat related perks now have kills requirements
 	- Integration with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2553809727]KillCount[/url] mod
+	- Reworked perks: Leadfoot (credit: Fajdek)
