@@ -622,6 +622,7 @@ function MTDTraitGainsByWeight()
 				end
 			end
 		end
+	end
 end
 
 function MTDTraitGainsByPanic()
