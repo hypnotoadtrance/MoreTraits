@@ -940,10 +940,9 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
 											rolled = true;
 										end
 										if rolled then
-											local addeditems = container:AddItems(item:getFullType(), n);
-											for i = 0, addeditems:size() - 1 do
-												local item = container:getItems():get(i);
-												container:addItemOnServer(item);
+											for iterator = 0, n - 1 do
+												local addedItem = container:AddItem(item:getFullType());
+												container:addItemOnServer(addedItem);
 											end
 											if MoreTraits.settings.ScroungerAnnounce == true then
 												HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());

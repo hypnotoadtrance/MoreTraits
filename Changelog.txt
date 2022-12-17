@@ -2,6 +2,7 @@ Main Changelog Notes:
 	- Fixed Terminator sadness reduction not working properly.
 	- Made Unwavering Trait description more specific on what it does.
 	- Added Prowess: Guns sandbox option to not consume ammo
+	- Fixed Scrounger (Credit: [url=https://steamcommunity.com/profiles/76561197992434687]Ryougi Shiki[/url])
 Dynamic Changelog:
 	- Huge sandbox upgrade, everything is customizable now
 	- Added perks: Anti-Gun Activist, Ideal Weight, Unwavering, Immunocompromised, Super-Immune, Paranoia
