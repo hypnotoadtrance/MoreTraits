@@ -426,6 +426,22 @@ option MoreTraitsDynamic.MotionSickenssDynamicSkill
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MotionSickenssSkill,
 }
+option MoreTraitsDynamic.MundaneDynamic
+{
+	type = boolean,
+	default = true,
+	page = MoreTraitsDynamic, 
+	translation = MoreTraitsDynamic_Mundane,
+}
+option MoreTraitsDynamic.MundaneDynamicDamage
+{
+	type = integer,
+    min = 0,
+    max = 500000,
+    default = 50000,
+	page = MoreTraitsDynamic, 
+	translation = MoreTraitsDynamic_MundaneDamage,
+}
 option MoreTraitsDynamic.NaturalEaterDynamic
 {
 	type = boolean,
@@ -539,15 +555,6 @@ option MoreTraitsDynamic.ParanoiaDynamicHoursLose
     default = 200,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ParanoiaHoursLose,
-}
-option MoreTraitsDynamic.ParanoiaDynamicHoursGain
-{
-	type = integer,
-    min = 0,
-    max = 100000,
-    default = 200,
-	page = MoreTraitsDynamic, 
-	translation = MoreTraitsDynamic_ParanoiaHoursGain,
 }
 option MoreTraitsDynamic.PracticedSwordsmanDynamic
 {

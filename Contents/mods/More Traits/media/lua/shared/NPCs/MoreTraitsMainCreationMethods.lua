@@ -105,7 +105,7 @@ local function initToadTraits()
 	local blunttwirl = TraitFactory.addTrait("blunttwirl", getText("UI_trait_blunttwirl"), 5, getText("UI_trait_blunttwirldesc"), false, false);
 	blunttwirl:addXPBoost(Perks.SmallBlunt, 1);
 	blunttwirl:addXPBoost(Perks.Blunt, 1);
-	if getActivatedMods():contains("ScavengingSkill") or getActivatedMods():contains("ScavengingSkillFixed") then
+	if getActivatedMods():contains("ScavengingSkill") == false and getActivatedMods():contains("ScavengingSkillFixed") == false then
 		local scrounger = TraitFactory.addTrait("scrounger", getText("UI_trait_scrounger"), 5, getText("UI_trait_scroungerdesc"), false, false);
 	end
 	local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 6, getText("UI_trait_antiquedesc"), false, false);
@@ -314,7 +314,9 @@ local function initToadTraits()
 	TraitFactory.setMutualExclusive("quiet", "Clumsy");
 	TraitFactory.setMutualExclusive("flexible", "Obese");
 	TraitFactory.setMutualExclusive("olympian", "Unfit");
-	TraitFactory.setMutualExclusive("scrounger", "incomprehensive");
+	if getActivatedMods():contains("ScavengingSkill") == false and getActivatedMods():contains("ScavengingSkillFixed") == false then
+		TraitFactory.setMutualExclusive("scrounger", "incomprehensive");
+	end
 	TraitFactory.setMutualExclusive("olympian", "Jogger");
 	TraitFactory.setMutualExclusive("blissful", "depressive");
 	TraitFactory.setMutualExclusive("blissful", "selfdestructive");
