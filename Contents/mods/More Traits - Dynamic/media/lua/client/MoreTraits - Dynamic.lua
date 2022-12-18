@@ -45,7 +45,7 @@ function MTDKillsMainExtended(zombie)
 	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not getPlayer():HasTrait("leadfoot") then
 		MTDLeadFoot(zombie);
 	end
-	MTDTraitGainsByKillCount();
+	--MTDTraitGainsByKillCount();
 end
 
 function MTDKillsMain(zombie)

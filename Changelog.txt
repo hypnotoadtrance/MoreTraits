@@ -1,12 +1,2 @@
-Main Changelog Notes:
-	- Fixed Terminator sadness reduction not working properly.
-	- Made Unwavering Trait description more specific on what it does.
-	- Scrounger is auto-disabled if Scavenging Skill mod is present (they do literally same thing)
-	- Added Prowess: Guns sandbox option to not consume ammo
-	- Fixed Scrounger (Credit: [url=https://steamcommunity.com/profiles/76561197992434687]Ryougi Shiki[/url])
 Dynamic Changelog:
-	- Huge sandbox upgrade, everything is customizable now
-	- Added perks: Anti-Gun Activist, Ideal Weight, Unwavering, Immunocompromised, Super-Immune, Paranoia, Mundane
-	- Changed requirements: Graverobber, majority of combat related perks now have kills requirements
-	- Integration with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2553809727]KillCount[/url] and [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2903135820]Scavenging Skill (fixed)[/url] mod
-	- Reworked perks: Leadfoot (credit: Fajdek)
+	- Hotfix missing function error.
