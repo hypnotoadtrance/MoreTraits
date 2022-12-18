@@ -27,7 +27,7 @@ Dynamic Traits submod is present - you can earn/lose traits by leveling skills, 
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] - Allows for Client-Side settings to be adjusted. Install if you would like extra options.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2859296947]Moodle Framework[/url] - Adds in support for Alcoholic as a moodle.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2721945297]Driving skill[/url] - some traits will be auto-disabled to avoid conflicts
-[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2903135820]Scavenging skill (fixed)[/url] - some traits will give exp boost in scavenging if mod is present. [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2721290568]Original[/url] works too.
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2903135820]Scavenging skill (fixed)[/url] - some traits will give exp boost in scavenging if mod is present. Scrounger perk is disabled if mod is present, it does same thing as Skill. [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2721290568]Original[/url] works too.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2730251452]Expanded Traits[/url] - Hoarder can stack with this mod weight perks/settings. Enabled by default.
 [/list]
 
