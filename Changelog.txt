@@ -1,2 +1,4 @@
 Dynamic Changelog:
-	- Hotfix missing function error.
+	- Fix some nil checks
+	- Fixed Scavenging Skill mod integration
+	- Fixed Ideal Weight linked to incorrect sandbox setting

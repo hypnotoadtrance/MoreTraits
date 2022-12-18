@@ -45,7 +45,7 @@ function MTDKillsMainExtended(zombie)
 	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not getPlayer():HasTrait("leadfoot") then
 		MTDLeadFoot(zombie);
 	end
-	--MTDTraitGainsByKillCount();
+	MTDTraitsGainsByLevel(getPlayer(), "KillCount");
 end
 
 function MTDKillsMain(zombie)
@@ -75,6 +75,10 @@ end
 
 function MTDTraitsGainsByLevel(player, perk)
 	player = player or getPlayer();
+	killCountisOn = false;
+	if getActivatedMods():contains("KillCount") then
+		killCountisOn = true;
+	end;
 	-- Passive
 		-- Strength
 			-- Pack Mouse / Pack Mule
@@ -182,10 +186,10 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Terminator
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Nimble or perk == Perks.Aiming or perk == Perks.Reloading then
-					if player:getModData().KillCount then
+					if killCountisOn then
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Firearm"] then
-							categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Firearm"] ~= nil then
+								categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.TerminatorDynamic == true and not player:HasTrait("terminator") and (player:getPerkLevel(Perks.Nimble) + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= SandboxVars.MoreTraitsDynamic.TerminatorDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.TerminatorDynamicKill then
 							player:getTraits():add("terminator");
@@ -216,19 +220,22 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Prowess: Blade
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Axe or perk == Perks.LongBlade or perk == Perks.SmallBlade then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Axe"] then
-							local axeKills = player:getModData().KillCount.WeaponCategory["Axe"].count or 0;
-							categoryKills = categoryKills + axeKills;
-						end
-						if player:getModData().KillCount.WeaponCategory["LongBlade"] then
-							local longBladeKills = player:getModData().KillCount.WeaponCategory["LongBlade"].count or 0;
-							categoryKills = categoryKills + longBladeKills;
-						end
-						if player:getModData().KillCount.WeaponCategory["SmallBlade"] then
-							local shortBladeKills = player:getModData().KillCount.WeaponCategory["SmallBlade"].count or 0;
-							categoryKills = categoryKills + shortBladeKills;
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil then
+							if player:getModData().KillCount.WeaponCategory["Axe"] ~= nil then
+								local axeKills = player:getModData().KillCount.WeaponCategory["Axe"].count or 0;
+								categoryKills = categoryKills + axeKills;
+							end
+							if player:getModData().KillCount.WeaponCategory["LongBlade"] ~= nil then
+								local longBladeKills = player:getModData().KillCount.WeaponCategory["LongBlade"].count or 0;
+								categoryKills = categoryKills + longBladeKills;
+							end
+							if player:getModData().KillCount.WeaponCategory["SmallBlade"] ~= nil then
+								local shortBladeKills = player:getModData().KillCount.WeaponCategory["SmallBlade"].count or 0;
+								categoryKills = categoryKills + shortBladeKills;
+							end
 						end
 						if SandboxVars.MoreTraitsDynamic.ProwessBladeDynamic == true and not player:HasTrait("problade") and (player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.LongBlade )+ player:getPerkLevel(Perks.SmallBlade)) >= SandboxVars.MoreTraitsDynamic.ProwessBladeDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessBladeDynamicKill then
 							player:getTraits():add("problade");
@@ -248,9 +255,10 @@ function MTDTraitsGainsByLevel(player, perk)
 		-- Long Blunt
 			-- Gordanite
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Blunt then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Blunt"] then
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Blunt"] ~= nil then
 							categoryKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.GordaniteDynamic == true and not player:HasTrait("gordanite") and player:getPerkLevel(Perks.Blunt) >= SandboxVars.MoreTraitsDynamic.GordaniteDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.GordaniteDynamicKill then
@@ -268,15 +276,18 @@ function MTDTraitsGainsByLevel(player, perk)
 				if perk == "characterInitialization" or perk == "KillCount" or perk == "KillCount" or perk == Perks.Blunt or perk == Perks.SmallBlunt then
 					local sumOfLevels = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt);
 					-- Thuggish
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Blunt"] then
-							local longBluntKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
-							categoryKills = categoryKills + longBluntKills;
-						end
-						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
-							local shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
-							categoryKills = categoryKills + shortBluntKills;
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil then 
+							if player:getModData().KillCount.WeaponCategory["Blunt"] ~= nil then
+								local longBluntKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
+								categoryKills = categoryKills + longBluntKills;
+							end
+							if player:getModData().KillCount.WeaponCategory["SmallBlunt"] ~= nil then
+								local shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
+								categoryKills = categoryKills + shortBluntKills;
+							end
 						end
 						if SandboxVars.MoreTraitsDynamic.ThuggishDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.ThuggishDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ThuggishDynamicKill then
 							player:getTraits():add("blunttwirl");
@@ -291,15 +302,18 @@ function MTDTraitsGainsByLevel(player, perk)
 						HaloTextHelper.addTextWithArrow(player, getText("blunttwirl"), true, HaloTextHelper.getColorGreen());
 					end
 					-- Prowess: Blunt
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Long Blunt"] then
-							local longBluntKills = player:getModData().KillCount.WeaponCategory["Long Blunt"].count or 0;
-							categoryKills = categoryKills + longBluntKills;
-						end
-						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
-							local shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
-							categoryKills = categoryKills + shortBluntKills;
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil then
+							if player:getModData().KillCount.WeaponCategory["Long Blunt"] ~= nil then
+								local longBluntKills = player:getModData().KillCount.WeaponCategory["Long Blunt"].count or 0;
+								categoryKills = categoryKills + longBluntKills;
+							end
+							if player:getModData().KillCount.WeaponCategory["SmallBlunt"] ~= nil then
+								local shortBluntKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
+								categoryKills = categoryKills + shortBluntKills;
+							end
 						end
 						if SandboxVars.MoreTraitsDynamic.ProwessBluntDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.ProwessBluntDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessBluntDynamicKill then
 							player:getTraits():add("problunt");
@@ -317,9 +331,10 @@ function MTDTraitsGainsByLevel(player, perk)
 		-- Short Blunt
 			-- Grunt Worker
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.SmallBlunt or perk == Perks.Woodwork then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["SmallBlunt"] then
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["SmallBlunt"] ~= nil then
 							categoryKills = player:getModData().KillCount.WeaponCategory["SmallBlunt"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.GruntWorkerDynamic == true and not player:HasTrait("grunt") and player:getPerkLevel(Perks.SmallBlunt) >= SandboxVars.MoreTraitsDynamic.GruntWorkerDynamicSmallBlunt and player:getPerkLevel(Perks.Woodwork) >= SandboxVars.MoreTraitsDynamic.GruntWorkerDynamicWoodwork and categoryKills >= SandboxVars.MoreTraitsDynamic.GruntWorkerDynamicKill then
@@ -354,15 +369,18 @@ function MTDTraitsGainsByLevel(player, perk)
 		-- Long Blade
 			-- Practiced Swordsman
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.LongBlade or perk == Perks.SmallBlade then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["SmallBlade"] then
-							local shortBladeKills = player:getModData().KillCount.WeaponCategory["SmallBlade"].count or 0;
-							categoryKills = categoryKills + shortBladeKills;
-						end
-						if player:getModData().KillCount.WeaponCategory["Long Blade"] then
-							local longBladeKills = player:getModData().KillCount.WeaponCategory["Long Blade"].count or 0;
-							categoryKills = categoryKills + longBladeKills;
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil then
+							if player:getModData().KillCount.WeaponCategory["SmallBlade"] ~= nil then
+								local shortBladeKills = player:getModData().KillCount.WeaponCategory["SmallBlade"].count or 0;
+								categoryKills = categoryKills + shortBladeKills;
+							end
+							if player:getModData().KillCount.WeaponCategory["Long Blade"] ~= nil then
+								local longBladeKills = player:getModData().KillCount.WeaponCategory["Long Blade"].count or 0;
+								categoryKills = categoryKills + longBladeKills;
+							end
 						end
 						if SandboxVars.MoreTraitsDynamic.PracticedSwordsmanDynamic == true and not player:HasTrait("bladetwirl") and (player:getPerkLevel(Perks.LongBlade) + player:getPerkLevel(Perks.SmallBlade)) >= SandboxVars.MoreTraitsDynamic.PracticedSwordsmanDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.PracticedSwordsmanDynamicKill then
 						player:getTraits():add("bladetwirl");
@@ -380,9 +398,10 @@ function MTDTraitsGainsByLevel(player, perk)
 		-- Spear
 			-- Wildsman
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Spear or perk == Perks.Fishing or perk == Perks.Trapping or perk == Perks.PlantScavenging then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Spear"] then
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Spear"] ~= nil then
 							categoryKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.WildsmanDynamic == true and not player:HasTrait("wildsman") and player:getPerkLevel(Perks.Spear) >= 4 and player:getPerkLevel(Perks.Fishing) >= 1 and player:getPerkLevel(Perks.Trapping) >= 1 and player:getPerkLevel(Perks.PlantScavenging) >= 1 and (player:getPerkLevel(Perks.Fishing) + player:getPerkLevel(Perks.Trapping) + player:getPerkLevel(Perks.PlantScavenging)) >= SandboxVars.MoreTraitsDynamic.WildsmanDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.WildsmanDynamicKill then
@@ -430,9 +449,10 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Prowess: Spear
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Spear  then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Spear"] then
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Spear"] ~= nil then
 							categoryKills = player:getModData().KillCount.WeaponCategory["Spear"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.ProwessSpearDynamic == true and not player:HasTrait("prospear") and player:getPerkLevel(Perks.Spear) >= SandboxVars.MoreTraitsDynamic.ProwessSpearDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessSpearDynamicKill then
@@ -516,9 +536,10 @@ function MTDTraitsGainsByLevel(player, perk)
 		-- Aiming
 			-- Anti-Gun Activist
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Aiming then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Firearm"] then
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Firearm"] ~= nil then
 							categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamic == true and player:HasTrait("antigun") and player:getPerkLevel(Perks.Aiming) >= SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.AntiGunActivistDynamicKill then
@@ -532,9 +553,10 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Prowess Guns
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Aiming or perk == Perks.Reloading then
-					if player:getModData().KillCount then
+					if killCountisOn then
+						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
-						if player:getModData().KillCount.WeaponCategory["Firearm"] then
+						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Firearm"] ~= nil then
 							categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
 						end
 						if SandboxVars.MoreTraitsDynamic.ProwessGunsDynamic == true and not player:HasTrait("progun") and player:getPerkLevel(Perks.Aiming) >= SandboxVars.MoreTraitsDynamic.ProwessGunsDynamicAiming and (player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading)) >= SandboxVars.MoreTraitsDynamic.ProwessGunsDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessGunsDynamicKill then
@@ -560,7 +582,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			end
 		-- Scavenging
-			if getActivatedMods():contains("ScavengingSkill") and ( perk == "characterInitialization" or perk == Perks.Scavenging ) then
+			if ( getActivatedMods():contains("ScavengingSkill") or getActivatedMods():contains("ScavengingSkillFixed") ) and ( perk == "characterInitialization" or perk == Perks.Scavenging ) then
 				-- Incomprehensive
 				if SandboxVars.MoreTraitsDynamic.IncomprehensiveDynamic == true and player:HasTrait("incomprehensive") and player:getPerkLevel(Perks.Scavenging) >= SandboxVars.MoreTraitsDynamic.IncomprehensiveDynamicSkill then
 					player:getTraits():remove("incomprehensive");
@@ -599,14 +621,14 @@ function MTDTraitGainsByWeight()
 	player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours or 0;
 	player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours or 0;
 	if SandboxVars.MoreTraitsDynamic.IdealWeightDynamic == true then 
-		-- Gaining Idea Weight
+		-- Gaining Ideal Weight
 		local weight = player:getNutrition():getWeight();
 		if not player:HasTrait("idealweight") then
 			if weight >= 78 and weight <= 82 then
 				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 1;
 			else
 				player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours + 1;
-				if player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightObtainGracePeriod then
+				if player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightDynamicObtainGracePeriod then
 					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = 0;
 					player:getModData().MoreTraitsDynamic.WeightNotMaintainedHours = 0;
 				end
@@ -621,8 +643,8 @@ function MTDTraitGainsByWeight()
 			-- Losing Ideal Weight
 			if weight >= 78 and weight <= 82 then
 				player:getModData().MoreTraitsDynamic.WeightMaintainedHours = player:getModData().MoreTraitsDynamic.WeightMaintainedHours + 0.0834 * SandboxVars.MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodMultiplier; -- earning grace hours
-				if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightLoseGracePeriodCap then -- grace hours cap
-					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = SandboxVars.MoreTraitsDynamic.IdealWeightLoseGracePeriodCap;
+				if player:getModData().MoreTraitsDynamic.WeightMaintainedHours >= SandboxVars.MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodCap then -- grace hours cap
+					player:getModData().MoreTraitsDynamic.WeightMaintainedHours = SandboxVars.MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodCap;
 				end
 			else
 				if weight <= 75 or weight >= 85 then
