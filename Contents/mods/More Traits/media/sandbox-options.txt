@@ -255,6 +255,11 @@ option MoreTraits.ImmunoChance
 	type = integer, min = 0, max = 100, default = 25,
 	page = MoreTraits, translation = MoreTraits_ImmunoChance,
 }
+option MoreTraits.ProwessGunsAmmoRestore
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_ProwessGunsAmmoRestore,
+}
 
 option MoreTraits.HoarderCompatibility
 {

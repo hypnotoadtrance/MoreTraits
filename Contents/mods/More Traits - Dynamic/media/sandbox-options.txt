@@ -376,6 +376,15 @@ option MoreTraitsDynamic.LeadFootDynamic
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_LeadFoot,
 }
+option MoreTraitsDynamic.LeadFootDynamicKill
+{
+	type = integer,
+    min = 0,
+    max = 50000,
+    default = 200,
+	page = MoreTraitsDynamic, 
+	translation = MoreTraitsDynamic_LeadFootKill,
+}
 option MoreTraitsDynamic.MartialArtistDynamic
 {
 	type = boolean,

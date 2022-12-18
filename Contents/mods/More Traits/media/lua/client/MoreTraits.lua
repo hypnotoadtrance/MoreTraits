@@ -940,10 +940,9 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
 											rolled = true;
 										end
 										if rolled then
-											local addeditems = container:AddItems(item:getFullType(), n);
-											for i = 0, addeditems:size() - 1 do
-												local item = container:getItems():get(i);
-												container:addItemOnServer(item);
+											for iterator = 0, n - 1 do
+												local addedItem = container:AddItem(item:getFullType());
+												container:addItemOnServer(addedItem);
 											end
 											if MoreTraits.settings.ScroungerAnnounce == true then
 												HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
@@ -2085,7 +2084,7 @@ function progun(_actor, _weapon)
 			end
 		end
 		weapondata.iLastWeaponCond = weapon:getCondition();
-		if ZombRand(0, 101) <= chance then
+		if SandboxVars.MoreTraits.ProwessGunsAmmoRestore == true and ZombRand(0, 101) <= chance then
 			if currentCapacity < maxCapacity and currentCapacity > 0 then
 				weapon:setCurrentAmmoCount(currentCapacity + 1);
 				if MoreTraits.settings.ProwessGunsAmmo == true then

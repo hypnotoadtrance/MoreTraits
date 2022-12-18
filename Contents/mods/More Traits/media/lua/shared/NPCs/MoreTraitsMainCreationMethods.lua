@@ -105,12 +105,11 @@ local function initToadTraits()
 	local blunttwirl = TraitFactory.addTrait("blunttwirl", getText("UI_trait_blunttwirl"), 5, getText("UI_trait_blunttwirldesc"), false, false);
 	blunttwirl:addXPBoost(Perks.SmallBlunt, 1);
 	blunttwirl:addXPBoost(Perks.Blunt, 1);
-	local scrounger = TraitFactory.addTrait("scrounger", getText("UI_trait_scrounger"), 5, getText("UI_trait_scroungerdesc"), false, false);
-	if getActivatedMods():contains("ScavengingSkill") then
-		scrounger:addXPBoost(Perks.Scavenging, 1);
+	if getActivatedMods():contains("ScavengingSkill") or getActivatedMods():contains("ScavengingSkillFixed") then
+		local scrounger = TraitFactory.addTrait("scrounger", getText("UI_trait_scrounger"), 5, getText("UI_trait_scroungerdesc"), false, false);
 	end
 	local antique = TraitFactory.addTrait("antique", getText("UI_trait_antique"), 6, getText("UI_trait_antiquedesc"), false, false);
-	if getActivatedMods():contains("ScavengingSkill") then
+	if getActivatedMods():contains("ScavengingSkill") or getActivatedMods():contains("ScavengingSkillFixed") then
 		antique:addXPBoost(Perks.Scavenging, 1);
 	end
 	local evasive = TraitFactory.addTrait("evasive", getText("UI_trait_evasive"), 8, getText("UI_trait_evasivedesc"), false, false);
@@ -190,7 +189,7 @@ local function initToadTraits()
 	gymgoer:addXPBoost(Perks.Fitness, 1);
 	local leadfoot = TraitFactory.addTrait("leadfoot", getText("UI_trait_leadfoot"), 2, getText("UI_trait_leadfootdesc"), false, false);
 	local vagabond = TraitFactory.addTrait("vagabond", getText("UI_trait_vagabond"), 3, getText("UI_trait_vagabonddesc"), false, false);
-	if getActivatedMods():contains("ScavengingSkill") then
+	if getActivatedMods():contains("ScavengingSkill") or getActivatedMods():contains("ScavengingSkillFixed") then
 		vagabond:addXPBoost(Perks.Scavenging, 1);
 	end
 	local quickworker = TraitFactory.addTrait("quickworker", getText("UI_trait_quickworker"), 9, getText("UI_trait_quickworkerdesc"), false, false);
