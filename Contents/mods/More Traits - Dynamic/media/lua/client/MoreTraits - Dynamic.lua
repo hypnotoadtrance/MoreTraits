@@ -735,7 +735,7 @@ function MTDLeadFoot(zombie)
 			getPlayer():getModData().MoreTraitsDynamic.LeadFootCount = getPlayer():getModData().MoreTraitsDynamic.LeadFootCount + 1;
 		end
 	end
-	if player:getModData().MoreTraitsDynamic.LeadFootCount >= 200 then
+	if player:getModData().MoreTraitsDynamic.LeadFootCount >= SandboxVars.MoreTraitsDynamic.LeadFootKill then
 		if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not player:HasTrait("leadfoot") then
 			player:getTraits():add("leadfoot");
 			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_leadfoot"), true, HaloTextHelper.getColorGreen());
