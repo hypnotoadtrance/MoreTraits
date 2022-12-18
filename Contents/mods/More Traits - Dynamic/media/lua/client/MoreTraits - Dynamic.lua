@@ -74,8 +74,8 @@ function MTDLeadFootToggle(wielder, target, weapon)
 end
 
 function MTDTraitsGainsByLevel(player, perk)
-	player = player or getPlayer();
-	killCountisOn = false;
+	local player = player or getPlayer();
+	local killCountisOn = false;
 	if getActivatedMods():contains("KillCount") then
 		killCountisOn = true;
 	end;

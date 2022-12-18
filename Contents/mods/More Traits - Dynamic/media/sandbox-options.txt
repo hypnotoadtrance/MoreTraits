@@ -194,7 +194,7 @@ option MoreTraitsDynamic.GraverobberDynamic
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Graverobber,
 }
-option MoreTraitsDynamic.GraverobberSkill
+option MoreTraitsDynamic.GraverobberDynamicSkill
 {
 	type = integer,
     min = 0,
@@ -203,7 +203,7 @@ option MoreTraitsDynamic.GraverobberSkill
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GraverobberSkill,
 }
-option MoreTraitsDynamic.GraverobberKill
+option MoreTraitsDynamic.GraverobberDynamicKill
 {
 	type = integer,
     min = 0,
