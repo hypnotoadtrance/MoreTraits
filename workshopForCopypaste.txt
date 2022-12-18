@@ -12,7 +12,7 @@ This includes, but not limited to: traits that add some starting equipment, trai
 
 The mod also attempts to add a greater variety of expense, as in there are more -1, -2, -3, -5 traits. This should help prevent the annoying feeling of having one solitary point left with nothing to spend it on.
 
-Dynamic Traits submod has been added - you can earn/lose traits by leveling skills, list of all available perks can be found [url=https://docs.google.com/spreadsheets/d/1YM0g4fTXrDiDYuvFvNkmqEjFIaTIK4_Bb0dQvmLnIvA/edit?usp=sharing]here[/url]. Note, that almost everything is configurable through sandbox settings. Want to make only specific perks dynamic? I got you covered,choose which perks you want 1by1. Want to change Skill level requirement to make it easier or harder? No problem, do that. Out of 90+ or so available perks, 50+ can be made dynamic. Some additional info can be found [url=https://steamcommunity.com/workshop/filedetails/discussion/1299328280/3551679689856511505/]here[/url]
+Dynamic Traits submod is present - you can earn/lose traits by leveling skills, list of all available perks can be found [url=https://docs.google.com/spreadsheets/d/1YM0g4fTXrDiDYuvFvNkmqEjFIaTIK4_Bb0dQvmLnIvA/edit?usp=sharing]here[/url]. Note, that almost everything is configurable through sandbox settings. Want to make only specific perks dynamic? I got you covered,choose which perks you want 1by1. Want to change Skill level requirement to make it easier or harder? No problem, do that. Out of 90+ or so available perks, 50+ can be made dynamic. Some additional info can be found [url=https://steamcommunity.com/workshop/filedetails/discussion/1299328280/3551679689856511505/]here[/url]
 
 [h1]Known Issues[/h1]
 [list]
