@@ -28,9 +28,16 @@ function MTDEveryHoursMain()
 	MTDTraitGainsByWeight();
 end
 
-function MTDAdditionalMain(player, target, weapon, ___)
-	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not getPlayer():HasTrait("leadfoot") then
-		MTDLeadFootToggle(player, target, weapon, ___);
+function MTDOnWeaponHitCharacterMain(wielder, target, weapon, damage)
+	if wielder == getPlayer() and target:isZombie() then
+		-- Leadfoot
+		if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not wielder:HasTrait("leadfoot") then
+			MTDLeadFootToggle(wielder, target, weapon);
+		end
+		-- Mundane
+		if SandboxVars.MoreTraitsDynamic.MundaneDynamic == true and wielder:HasTrait("mundane") then
+			MTDMundane(wielder, damage);
+		end
 	end
 end
 
@@ -45,17 +52,24 @@ function MTDKillsMain(zombie)
 	MTDLeadFoot(zombie);
 end
 
+function MTDMundane(wielder, damage)
+	wielder:getModData().MoreTraitsDynamic = wielder:getModData().MoreTraitsDynamic or {};
+	wielder:getModData().MoreTraitsDynamic.TotalDamageDone = wielder:getModData().MoreTraitsDynamic.TotalDamageDone or 0;
+	wielder:getModData().MoreTraitsDynamic.TotalDamageDone = wielder:getModData().MoreTraitsDynamic.TotalDamageDone + damage;
+	print("Total damage:"..wielder:getModData().MoreTraitsDynamic.TotalDamageDone);
+	if wielder:getModData().MoreTraitsDynamic.TotalDamageDone >= SandboxVars.MoreTraitsDynamic.MundaneDynamicDamage then
+		wielder:getTraits():remove("mundane");
+		HaloTextHelper.addTextWithArrow(wielder, getText("UI_trait_mundane"), false, HaloTextHelper.getColorGreen());
+	end
+end
 
-
-function MTDLeadFootToggle(actor, target, weapon, ___)
-	if actor == getPlayer() and target:isZombie() then
-		actor:getModData().MoreTraitsDynamic = getPlayer():getModData().MoreTraitsDynamic or {};
-		actor:getModData().MoreTraitsDynamic.AllowLeadFootCount = getPlayer():getModData().MoreTraitsDynamic.AllowLeadFootCount or false;
-		if weapon:getName() == "Bare Hands" and target:isProne() then
-			actor:getModData().MoreTraitsDynamic.AllowLeadFootCount = true;
-		else
-			actor:getModData().MoreTraitsDynamic.AllowLeadFootCount = false;
-		end
+function MTDLeadFootToggle(wielder, target, weapon)
+	wielder:getModData().MoreTraitsDynamic = wielder:getModData().MoreTraitsDynamic or {};
+	wielder:getModData().MoreTraitsDynamic.AllowLeadFootCount = wielder:getModData().MoreTraitsDynamic.AllowLeadFootCount or false;
+	if weapon:getName() == "Bare Hands" and target:isProne() then
+		wielder:getModData().MoreTraitsDynamic.AllowLeadFootCount = true;
+	else
+		wielder:getModData().MoreTraitsDynamic.AllowLeadFootCount = false;
 	end
 end
 
@@ -114,7 +128,7 @@ function MTDTraitsGainsByLevel(player, perk)
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_noodlelegs"), false, HaloTextHelper.getColorGreen());
 					end
 					-- Evasive
-					if SandboxVars.MoreTraitsDynamic.EvasiveDynamic == true and not player:HasTrait("evasive") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.EvasiveDynamicSkill then
+					if SandboxVars.MoreTraitsDynamic.EvasiveDynamic == true and not player:HasTrait("evasive") and not player:HasTrait("noodlelegs") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.EvasiveDynamicSkill then
 						player:getTraits():add("evasive");
 						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_evasive"), true, HaloTextHelper.getColorGreen());
 					end
@@ -640,12 +654,6 @@ function MTDTraitGainsByPanic()
 			player:getTraits():remove("paranoia");
 			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), false, HaloTextHelper.getColorGreen());
 		end
-		if not player:HasTrait("paranoia") and player:getModData().MoreTraitsDynamic.FiftyPlusStressAndPanicTime >=
-			SandboxVars.MoreTraitsDynamic.ParanoiaDynamicHoursGain * 60 then
-			player:getModData().MoreTraitsDynamic.FiftyPlusStressAndPanicTime = 0
-			player:getTraits():add("paranoia");
-			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorRed());
-		end
 end
 
 function MTDTraitGainsByInjuries()
@@ -735,7 +743,7 @@ function MTDLeadFoot(zombie)
 			getPlayer():getModData().MoreTraitsDynamic.LeadFootCount = getPlayer():getModData().MoreTraitsDynamic.LeadFootCount + 1;
 		end
 	end
-	if player:getModData().MoreTraitsDynamic.LeadFootCount >= SandboxVars.MoreTraitsDynamic.LeadFootKill then
+	if player:getModData().MoreTraitsDynamic.LeadFootCount >= SandboxVars.MoreTraitsDynamic.LeadFootDynamicKill then
 		if SandboxVars.MoreTraitsDynamic.LeadFootDynamic == true and not player:HasTrait("leadfoot") then
 			player:getTraits():add("leadfoot");
 			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_leadfoot"), true, HaloTextHelper.getColorGreen());
@@ -749,7 +757,7 @@ function MTDInitializeEvents(player)
 	Events.EveryHours.Add(MTDEveryHoursMain);
 
 	Events.LevelPerk.Add(MTDLevelPerkMain);
-	Events.OnWeaponHitCharacter.Add(MTDAdditionalMain);
+	Events.OnWeaponHitCharacter.Add(MTDOnWeaponHitCharacterMain);
 	MTDTraitsGainsByLevel(player, "characterInitialization");
 	if getActivatedMods():contains("KillCount") then
 		Events.OnZombieDead.Add(MTDKillsMainExtended);
