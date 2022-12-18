@@ -4334,8 +4334,8 @@ function EveryHours()
 	
 	if playerdata.UnwaveringInjurySpeedChanged == false and player:HasTrait("unwavering") then
 		playerdata.UnwaveringInjurySpeedChanged = true;
-		for n = 0, bodydamage:getBodyParts():size() - 1 do
-		local i = bodydamage:getBodyParts():get(n);
+		for n = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+		local i = player:getBodyDamage():getBodyParts():get(n);
 			i:setScratchSpeedModifier(i:getScratchSpeedModifier() + 30);
 			i:setCutSpeedModifier(i:getCutSpeedModifier() + 30);
 			i:setDeepWoundSpeedModifier(i:getDeepWoundSpeedModifier() + 60);
