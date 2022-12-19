@@ -10,18 +10,18 @@ option MoreTraitsDynamic.AntiGunActivistDynamic
 option MoreTraitsDynamic.AntiGunActivistDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 6,
+	min = 0,
+	max = 10,
+	default = 6,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_AntiGunActivistSkill,
 }
 option MoreTraitsDynamic.AntiGunActivistDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 600,
+	min = 0,
+	max = 100000,
+	default = 600,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_AntiGunActivistKill,
 }
@@ -35,9 +35,9 @@ option MoreTraitsDynamic.AntiqueCollectorDynamic
 option MoreTraitsDynamic.AntiqueCollectorDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 10,
+	min = 0,
+	max = 10,
+	default = 10,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_AntiqueCollectorSkill,
 }
@@ -51,9 +51,9 @@ option MoreTraitsDynamic.AsceticDynamic
 option MoreTraitsDynamic.AsceticDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_AsceticSkill,
 }
@@ -67,18 +67,18 @@ option MoreTraitsDynamic.BouncerDynamic
 option MoreTraitsDynamic.BouncerDynamicSmallBlunt
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 7,
+	min = 0,
+	max = 10,
+	default = 7,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_BouncerSmallBlunt,
 }
 option MoreTraitsDynamic.BouncerDynamicStrength
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 7,
+	min = 0,
+	max = 10,
+	default = 7,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_BouncerStrength,
 }
@@ -92,9 +92,9 @@ option MoreTraitsDynamic.EvasiveDynamic
 option MoreTraitsDynamic.EvasiveDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 50,
-    default = 40,
+	min = 0,
+	max = 50,
+	default = 40,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_EvasiveSkill,
 }
@@ -108,9 +108,9 @@ option MoreTraitsDynamic.FastDynamic
 option MoreTraitsDynamic.FastDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 40,
-    default = 30,
+	min = 0,
+	max = 40,
+	default = 30,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_FastSkill,
 }
@@ -124,9 +124,9 @@ option MoreTraitsDynamic.FastWorkerDynamic
 option MoreTraitsDynamic.FastWorkerDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 80,
-    default = 60,
+	min = 0,
+	max = 80,
+	default = 60,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_FastWorkerSkill,
 }
@@ -140,9 +140,9 @@ option MoreTraitsDynamic.FlexibleDynamic
 option MoreTraitsDynamic.FlexibleDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 4,
+	min = 0,
+	max = 10,
+	default = 4,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_FlexibleSkill,
 }
@@ -156,18 +156,18 @@ option MoreTraitsDynamic.GordaniteDynamic
 option MoreTraitsDynamic.GordaniteDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 6,
+	min = 0,
+	max = 10,
+	default = 6,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GordaniteSkill,
 }
 option MoreTraitsDynamic.GordaniteDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 300,
+	min = 0,
+	max = 100000,
+	default = 300,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GordaniteKill,
 }
@@ -181,9 +181,9 @@ option MoreTraitsDynamic.GourmandDynamic
 option MoreTraitsDynamic.GourmandDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 9,
+	min = 0,
+	max = 10,
+	default = 9,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GourmandSkill,
 }
@@ -197,18 +197,18 @@ option MoreTraitsDynamic.GraverobberDynamic
 option MoreTraitsDynamic.GraverobberDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 8,
+	min = 0,
+	max = 10,
+	default = 8,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GraverobberSkill,
 }
 option MoreTraitsDynamic.GraverobberDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 1000,
+	min = 0,
+	max = 100000,
+	default = 1000,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GraverobberKill,
 }
@@ -222,27 +222,27 @@ option MoreTraitsDynamic.GruntWorkerDynamic
 option MoreTraitsDynamic.GruntWorkerDynamicSmallBlunt
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 4,
+	min = 0,
+	max = 10,
+	default = 4,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GruntWorkerSmallBlunt,
 }
 option MoreTraitsDynamic.GruntWorkerDynamicWoodwork
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GruntWorkerWoodwork,
 }
 option MoreTraitsDynamic.GruntWorkerDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 200,
+	min = 0,
+	max = 100000,
+	default = 200,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GruntWorkerKill,
 }
@@ -256,9 +256,9 @@ option MoreTraitsDynamic.GymGoerDynamic
 option MoreTraitsDynamic.GymGoerDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 20,
-    default = 14,
+	min = 0,
+	max = 20,
+	default = 14,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_GymGoerSkill,
 }
@@ -272,9 +272,9 @@ option MoreTraitsDynamic.HardyDynamic
 option MoreTraitsDynamic.HardyDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 7,
+	min = 0,
+	max = 10,
+	default = 7,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_HardySkill,
 }
@@ -288,36 +288,36 @@ option MoreTraitsDynamic.IdealWeightDynamic
 option MoreTraitsDynamic.IdealWeightDynamicTargetDaysToObtain
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 21,
+	min = 0,
+	max = 100000,
+	default = 21,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_IdealWeightTargetDaysToObtain,
 }
 option MoreTraitsDynamic.IdealWeightDynamicObtainGracePeriod
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 24,
+	min = 0,
+	max = 100000,
+	default = 24,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_IdealWeightObtainGracePeriod,
 }
 option MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodMultiplier
 {
 	type = double,
-    min = 0,
-    max = 100,
-    default = 1.0,
+	min = 0,
+	max = 100,
+	default = 1.0,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_IdealWeightDynamicLoseGracePeriodMultiplier,
 }
 option MoreTraitsDynamic.IdealWeightDynamicLoseGracePeriodCap
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 18,
+	min = 0,
+	max = 100000,
+	default = 18,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_IdealWeightLoseGracePeriodCap,
 }
@@ -331,9 +331,9 @@ option MoreTraitsDynamic.ImmunocompromisedDynamic
 option MoreTraitsDynamic.ImmunocompromisedDynamicInfectionTime
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 2000,
+	min = 0,
+	max = 100000,
+	default = 2000,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ImmunocompromisedInfectionTime,
 }
@@ -347,9 +347,9 @@ option MoreTraitsDynamic.IncomprehensiveDynamic
 option MoreTraitsDynamic.IncomprehensiveSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 4,
+	min = 0,
+	max = 10,
+	default = 4,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_IncomprehensiveSkill,
 }
@@ -363,9 +363,9 @@ option MoreTraitsDynamic.IndefatigableDynamic
 option MoreTraitsDynamic.IndefatigableDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 120,
-    default = 110,
+	min = 0,
+	max = 120,
+	default = 110,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_IndefatigableSkill,
 }
@@ -379,9 +379,9 @@ option MoreTraitsDynamic.LeadFootDynamic
 option MoreTraitsDynamic.LeadFootDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 50000,
-    default = 200,
+	min = 0,
+	max = 50000,
+	default = 200,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_LeadFootKill,
 }
@@ -395,18 +395,18 @@ option MoreTraitsDynamic.MartialArtistDynamic
 option MoreTraitsDynamic.MartialArtistDynamicSmallBlunt
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 6,
+	min = 0,
+	max = 10,
+	default = 6,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MartialArtistSmallBlunt,
 }
 option MoreTraitsDynamic.MartialArtistDynamicFitness
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 6,
+	min = 0,
+	max = 10,
+	default = 6,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MartialArtistFitness,
 }
@@ -420,9 +420,9 @@ option MoreTraitsDynamic.MotionSickenssDynamic
 option MoreTraitsDynamic.MotionSickenssDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MotionSickenssSkill,
 }
@@ -436,9 +436,9 @@ option MoreTraitsDynamic.MundaneDynamic
 option MoreTraitsDynamic.MundaneDynamicDamage
 {
 	type = integer,
-    min = 0,
-    max = 500000,
-    default = 50000,
+	min = 0,
+	max = 500000,
+	default = 50000,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MundaneDamage,
 }
@@ -452,18 +452,18 @@ option MoreTraitsDynamic.NaturalEaterDynamic
 option MoreTraitsDynamic.NaturalEaterDynamicCooking
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 2,
+	min = 0,
+	max = 10,
+	default = 2,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_NaturalEaterCooking,
 }
 option MoreTraitsDynamic.NaturalEaterDynamicForaging
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 4,
+	min = 0,
+	max = 10,
+	default = 4,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_NaturalEaterForaging,
 }
@@ -477,9 +477,9 @@ option MoreTraitsDynamic.NoodleLegsDynamic
 option MoreTraitsDynamic.NoodleLegsDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 50,
-    default = 30,
+	min = 0,
+	max = 50,
+	default = 30,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_NoodleLegsSkill,
 }
@@ -493,18 +493,18 @@ option MoreTraitsDynamic.OlympianDynamic
 option MoreTraitsDynamic.OlympianDynamicSkillSprinting
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_OlympianSkillSprinting,
 }
 option MoreTraitsDynamic.OlympianDynamicSkillFitness
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 6,
+	min = 0,
+	max = 10,
+	default = 6,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_OlympianSkillFitness,
 }
@@ -518,9 +518,9 @@ option MoreTraitsDynamic.PackMouseDynamic
 option MoreTraitsDynamic.PackMouseDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 7,
+	min = 0,
+	max = 10,
+	default = 7,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PackMouseSkill,
 }
@@ -534,9 +534,9 @@ option MoreTraitsDynamic.PackMuleDynamic
 option MoreTraitsDynamic.PackMuleDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 9,
+	min = 0,
+	max = 10,
+	default = 9,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PackMuleSkill,
 }
@@ -550,9 +550,9 @@ option MoreTraitsDynamic.ParanoiaDynamic
 option MoreTraitsDynamic.ParanoiaDynamicHoursLose
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 200,
+	min = 0,
+	max = 100000,
+	default = 200,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ParanoiaHoursLose,
 }
@@ -566,18 +566,18 @@ option MoreTraitsDynamic.PracticedSwordsmanDynamic
 option MoreTraitsDynamic.PracticedSwordsmanDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 20,
-    default = 10,
+	min = 0,
+	max = 20,
+	default = 10,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PracticedSwordsmanSkill,
 }
 option MoreTraitsDynamic.PracticedSwordsmanDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 500,
+	min = 0,
+	max = 100000,
+	default = 500,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_PracticedSwordsmanKill,
 }
@@ -591,18 +591,18 @@ option MoreTraitsDynamic.ProwessBladeDynamic
 option MoreTraitsDynamic.ProwessBladeDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 30,
-    default = 24,
+	min = 0,
+	max = 30,
+	default = 24,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessBladeSkill,
 }
 option MoreTraitsDynamic.ProwessBladeDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 1200,
+	min = 0,
+	max = 100000,
+	default = 1200,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessBladeKill,
 }
@@ -616,18 +616,18 @@ option MoreTraitsDynamic.ProwessBluntDynamic
 option MoreTraitsDynamic.ProwessBluntDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 20,
-    default = 16,
+	min = 0,
+	max = 20,
+	default = 16,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessBluntSkill,
 }
 option MoreTraitsDynamic.ProwessBluntDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 800,
+	min = 0,
+	max = 100000,
+	default = 800,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessBluntKill,
 }
@@ -641,27 +641,27 @@ option MoreTraitsDynamic.ProwessGunsDynamic
 option MoreTraitsDynamic.ProwessGunsDynamicAiming
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 8,
+	min = 0,
+	max = 10,
+	default = 8,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessGunsAiming,
 }
 option MoreTraitsDynamic.ProwessGunsDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 20,
-    default = 16,
+	min = 0,
+	max = 20,
+	default = 16,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessGunsSkill,
 }
 option MoreTraitsDynamic.ProwessGunsDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 800,
+	min = 0,
+	max = 100000,
+	default = 800,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessGunsKill,
 }
@@ -675,18 +675,18 @@ option MoreTraitsDynamic.ProwessSpearDynamic
 option MoreTraitsDynamic.ProwessSpearDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 8,
+	min = 0,
+	max = 10,
+	default = 8,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessSpearSkill,
 }
 option MoreTraitsDynamic.ProwessSpearDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 400,
+	min = 0,
+	max = 100000,
+	default = 400,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ProwessSpearKill,
 }
@@ -700,9 +700,9 @@ option MoreTraitsDynamic.QuietDynamic
 option MoreTraitsDynamic.QuietDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 4,
+	min = 0,
+	max = 10,
+	default = 4,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_QuietSkill,
 }
@@ -716,18 +716,18 @@ option MoreTraitsDynamic.ScrapperDynamic
 option MoreTraitsDynamic.ScrapperDynamicMaintenance
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ScrapperMaintenance,
 }
 option MoreTraitsDynamic.ScrapperDynamicMetalWelding
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ScrapperMetalWelding,
 }
@@ -741,9 +741,9 @@ option MoreTraitsDynamic.ScroungerDynamic
 option MoreTraitsDynamic.ScroungerDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 6,
+	min = 0,
+	max = 10,
+	default = 6,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ScroungerSkill,
 }
@@ -757,9 +757,9 @@ option MoreTraitsDynamic.SecondWindDynamic
 option MoreTraitsDynamic.SecondWindDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 20,
-    default = 18,
+	min = 0,
+	max = 20,
+	default = 18,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SecondWindSkill,
 }
@@ -773,9 +773,9 @@ option MoreTraitsDynamic.SlowWorkerDynamic
 option MoreTraitsDynamic.SlowWorkerDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 80,
-    default = 30,
+	min = 0,
+	max = 80,
+	default = 30,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SlowWorkerSkill,
 }
@@ -789,9 +789,9 @@ option MoreTraitsDynamic.SlowpokeDynamic
 option MoreTraitsDynamic.SlowpokeDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 40,
-    default = 20,
+	min = 0,
+	max = 40,
+	default = 20,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SlowpokeSkill,
 }
@@ -805,9 +805,9 @@ option MoreTraitsDynamic.SwiftDynamic
 option MoreTraitsDynamic.SwiftDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 4,
+	min = 0,
+	max = 10,
+	default = 4,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SwiftSkill,
 }
@@ -821,9 +821,9 @@ option MoreTraitsDynamic.SuperImmuneDynamic
 option MoreTraitsDynamic.SuperImmuneDynamicInfectionTime
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 5000,
+	min = 0,
+	max = 100000,
+	default = 5000,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_SuperImmuneInfectionTime,
 }
@@ -837,9 +837,9 @@ option MoreTraitsDynamic.TavernBrawlerDynamic
 option MoreTraitsDynamic.TavernBrawlerDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 60,
-    default = 12,
+	min = 0,
+	max = 60,
+	default = 12,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_TavernBrawlerSkill,
 }
@@ -853,18 +853,18 @@ option MoreTraitsDynamic.TerminatorDynamic
 option MoreTraitsDynamic.TerminatorDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 30,
-    default = 28,
+	min = 0,
+	max = 30,
+	default = 28,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_TerminatorSkill,
 }
 option MoreTraitsDynamic.TerminatorDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 1400,
+	min = 0,
+	max = 100000,
+	default = 1400,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_TerminatorKill,
 }
@@ -878,18 +878,18 @@ option MoreTraitsDynamic.ThuggishDynamic
 option MoreTraitsDynamic.ThuggishDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 20,
-    default = 10,
+	min = 0,
+	max = 20,
+	default = 10,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ThuggishSkill,
 }
 option MoreTraitsDynamic.ThuggishDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 500,
+	min = 0,
+	max = 100000,
+	default = 500,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_ThuggishKill,
 }
@@ -903,9 +903,9 @@ option MoreTraitsDynamic.TinkererDynamic
 option MoreTraitsDynamic.TinkererDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 30,
-    default = 12,
+	min = 0,
+	max = 30,
+	default = 12,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_TinkererSkill,
 }
@@ -919,9 +919,9 @@ option MoreTraitsDynamic.UnwaveringDynamic
 option MoreTraitsDynamic.UnwaveringDynamicCounter
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 500,
+	min = 0,
+	max = 100000,
+	default = 500,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_UnwaveringCounter,
 }
@@ -935,9 +935,9 @@ option MoreTraitsDynamic.VagabondDynamic
 option MoreTraitsDynamic.VagabondDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 5,
+	min = 0,
+	max = 10,
+	default = 5,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_VagabondSkill,
 }
@@ -951,9 +951,9 @@ option MoreTraitsDynamic.WellFittedDynamic
 option MoreTraitsDynamic.WellFittedDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 10,
-    default = 8,
+	min = 0,
+	max = 10,
+	default = 8,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_WellFittedSkill,
 }
@@ -967,18 +967,18 @@ option MoreTraitsDynamic.WildsmanDynamic
 option MoreTraitsDynamic.WildsmanDynamicSkill
 {
 	type = integer,
-    min = 0,
-    max = 30,
-    default = 8,
+	min = 0,
+	max = 30,
+	default = 8,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_WildsmanSkill,
 }
 option MoreTraitsDynamic.WildsmanDynamicKill
 {
 	type = integer,
-    min = 0,
-    max = 100000,
-    default = 200,
+	min = 0,
+	max = 100000,
+	default = 200,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_WildsmanKill,
 }
