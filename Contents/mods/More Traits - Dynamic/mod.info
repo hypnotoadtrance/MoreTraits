@@ -5,4 +5,4 @@ versionMin=41.0
 description=If this submod is enabled, Dynamic perks will be enabled. If this mod is disabled, none of the perks in this mod are dynamic. Sandbox settings are present.
 id=ToadTraitsDynamic
 require=ToadTraits
-Authors=Music Maniac
+Authors=MusicManiac
