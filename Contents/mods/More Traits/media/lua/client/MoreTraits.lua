@@ -2830,7 +2830,7 @@ function graveRobber(_zombie)
 	local chance = 10;
 	local extraloot = 1;
 	if SandboxVars.MoreTraits.GraveRobberChance then
-		chance = SandboxVars.MoreTraits.GraveRobberChance;
+		chance = math.floor(SandboxVars.MoreTraits.GraveRobberChance * 10);
 	end
 	if SandboxVars.MoreTraits.GraveRobberGuaranteedLoot then
 		extraloot = SandboxVars.MoreTraits.GraveRobberGuaranteedLoot;
