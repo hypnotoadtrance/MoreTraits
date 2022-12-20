@@ -112,7 +112,7 @@ option MoreTraits.ButterfingersChance
 }
 option MoreTraits.GraveRobberChance
 {
-	type = integer, min = 1, max = 1000, default = 10,
+	type = double, min = 0.01, max = 100, default = 1,
 	page = MoreTraits, translation = MoreTraits_GraveRobberChance,
 }
 option MoreTraits.GraveRobberGuaranteedLoot
