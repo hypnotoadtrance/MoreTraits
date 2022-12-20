@@ -344,7 +344,7 @@ option MoreTraitsDynamic.IncomprehensiveDynamic
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_Incomprehensive,
 }
-option MoreTraitsDynamic.IncomprehensiveSkill
+option MoreTraitsDynamic.IncomprehensiveDynamicSkill
 {
 	type = integer,
 	min = 0,
