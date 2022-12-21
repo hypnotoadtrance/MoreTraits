@@ -428,6 +428,7 @@ function initToadTraitsPerks(_player)
 	playerdata.UnwaveringCooldown = 0;
 	playerdata.UnwaveringInjurySpeedChanged = false;
 	playerdata.OldCalories = 810;
+	playerdata.IngenuitiveActivated = false;
 	
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
@@ -532,6 +533,7 @@ function initToadTraitsPerks(_player)
 	checkWeight();
 	if player:HasTrait("ingenuitive") then
 		LearnAllRecipes(player);
+		playerdata.IngenuitiveActivated = true;
 	end
 	if player:HasTrait("noxpshooter") then
 		local PerkLevel = player:getPerkLevel(Perks.Aiming);
@@ -4342,6 +4344,10 @@ function EveryHours()
 			i:setBurnSpeedModifier(i:getBurnSpeedModifier() + 60);
 		end
 	end
+	if player:HasTrait("ingenuitive") and playerdata.IngenuitiveActivated == false then
+		LearnAllRecipes(player);
+		playerdata.IngenuitiveActivated = true;
+	end
 end
 
 local function EveryDay()
@@ -4469,6 +4475,9 @@ function OnCreatePlayer(_, player)
 	end
 	if playerdata.BodyDamagedFromTrait == nil then
 		playerdata.BodyDamagedFromTrait = {};
+	end
+	if playerdata.IngenuitiveActivated == nil then
+		playerdata.IngenuitiveActivated = false;
 	end
 end
 --Events.OnPlayerMove.Add(gimp);
