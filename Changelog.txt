@@ -2,3 +2,4 @@ Main Changelog:
 	- Fixed Graverobber not giving Scavnging skill multiplier
 Dynamic Changelog:
 	- Fixed Incomprehensive not being removed (wrong sandbox var name)
+	- Made KillCount mod mandatory to run dynamic submod (added as requirement)
