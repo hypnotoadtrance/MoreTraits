@@ -20,9 +20,10 @@ skipxpadd = false;
 suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
+MTModVersion = 1; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 playerdatatable = {}
-playerdatatable[0] = {"modversion", 1}
+playerdatatable[0] = {"MTModVersion", MTModVersion}
 playerdatatable[1] = {"secondwinddisabled", false}
 playerdatatable[2] = {"secondwindrecoveredfatigue", false}
 playerdatatable[3] = {"secondwindcooldown", 0}
@@ -191,7 +192,7 @@ end
 local function InitPlayerData(player)
 	local playerdata = player:getModData()
 	for i, v in pairs(playerdatatable) do
-		if tableContains(playerdata, v[1]) == false then
+		if playerdata[v[1]] == nil then
 			playerdata[v[1]] = v[2] 
 		end
 	end
@@ -4386,6 +4387,16 @@ function OnCreatePlayer(_, player)
 		bodydamage:Update();
 	end
 	InitPlayerData(player)
+	print("More Traits - Mod Version On Which Player Was Created: "..playerdata.MTModVersion)
+	if getGameTime():getModData().MTModVersion == nil then
+		getGameTime():getModData().MTModVersion = 1
+	end
+	print("More Traits - Mod Version On Which Save Was Created: "..getGameTime():getModData().MTModVersion);
+	print("More Traits - Current Mod Version: "..MTModVersion)
+end
+
+function OnInitWorld()
+	getGameTime():getModData().MTModVersion = MTModVersion;
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
@@ -4405,6 +4416,7 @@ Events.AddXP.Add(GymGoer);
 Events.AddXP.Add(antigunxpdecrease);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
+Events.OnInitWorld.Add(OnInitWorld);
 if getActivatedMods():contains("DracoExpandedTraits") then
 	Events.EveryOneMinute.Add(checkWeight);
 else

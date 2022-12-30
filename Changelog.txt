@@ -1,3 +1,4 @@
 Main Changelog:
 	- Missing player data is now automatically filled in, no more errors for missing data.
+	- Logs will now state mod version in which a save and a character was created for debugging purposes.
 Dynamic Changelog:
