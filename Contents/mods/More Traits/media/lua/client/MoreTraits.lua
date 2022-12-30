@@ -21,6 +21,60 @@ suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
+playerdatatable = {}
+playerdatatable[0] = {"modversion", 1}
+playerdatatable[1] = {"secondwinddisabled", false}
+playerdatatable[2] = {"secondwindrecoveredfatigue", false}
+playerdatatable[3] = {"secondwindcooldown", 0}
+playerdatatable[4] = {"bToadTraitDepressed", false}
+playerdatatable[5] = {"indefatigablecooldown", 0}
+playerdatatable[6] = {"indefatigablecuredinfection", false}
+playerdatatable[7] = {"indefatigabledisabled", false}
+playerdatatable[8] = {"bindefatigable", false}
+playerdatatable[9] = {"IndefatigableHasBeenDraggedDown", false}
+playerdatatable[10] = {"bSatedDrink", true}
+playerdatatable[11] = {"iHoursSinceDrink", 0}
+playerdatatable[12] = {"iTimesCannibal", 0}
+playerdatatable[13] = {"fPreviousHealthFromFoodTimer", 1000}
+playerdatatable[14] = {"bWasInfected", false}
+playerdatatable[15] = {"iHardyEndurance", 0}
+playerdatatable[16] = {"iHardyMaxEndurance", 5}
+playerdatatable[17] = {"iHardyInterval", 1000}
+playerdatatable[18] = {"iWithdrawalCooldown", 24}
+playerdatatable[19] = {"iParanoiaCooldown", 10}
+playerdatatable[20] = {"SuperImmuneRecovery", 0}
+playerdatatable[21] = {"SuperImmuneActive", false}
+playerdatatable[22] = {"SuperImmuneMinutesPassed", 0}
+playerdatatable[23] = {"SuperImmuneTextSaid", false}
+playerdatatable[24] = {"SuperImmuneHealedOnce", false}
+playerdatatable[25] = {"SuperImmuneMinutesWellFed", 0}
+playerdatatable[26] = {"SuperImmuneAbsoluteWellFedAmount", 0}
+playerdatatable[27] = {"SuperImmuneInfections", 0}
+playerdatatable[28] = {"SuperImmuneLethal", false}
+playerdatatable[29] = {"MotionActive", false}
+playerdatatable[30] = {"HasSlept", false}
+playerdatatable[31] = {"FatigueWhenSleeping", 0}
+playerdatatable[32] = {"NeckHadPain", false}
+playerdatatable[33] = {"ContainerTraitIllegal", false}
+playerdatatable[34] = {"ContainerTraitPlayerCurrentPositionX", 0}
+playerdatatable[35] = {"ContainerTraitPlayerCurrentPositionY", 0}
+playerdatatable[36] = {"ImmunoActivated", false}
+playerdatatable[37] = {"ImmunoEvasiveTimer", 0}
+playerdatatable[38] = {"ImmunoFinal", false}
+playerdatatable[39] = {"AlbinoTimeSpentOutside", 0}
+playerdatatable[40] = {"isMTAlcoholismInitialized", false}
+playerdatatable[41] = {"iBouncercooldown", 0}
+playerdatatable[42] = {"bisInfected", false}
+playerdatatable[43] = {"bisAlbinoOutside", false}
+playerdatatable[44] = {"bToadTraitDepressed", false}
+playerdatatable[45] = {"bWasJustSprinting", false}
+playerdatatable[46] = {"ImmunoPart", {}}
+playerdatatable[47] = {"BodyDamagedFromTrait", {}}
+playerdatatable[48] = {"UnwaveringActivated", false}
+playerdatatable[49] = {"UnwaveringCooldown", 0}
+playerdatatable[50] = {"UnwaveringInjurySpeedChanged", false}
+playerdatatable[51] = {"OldCalories", 810}
+playerdatatable[52] = {"IngenuitiveActivated", false}
 
 local function AddXP(player, perk, amount)
 	if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
@@ -133,6 +187,14 @@ local function addXPNoMultiplier(_player, _perk, _amount)
 	local player = _player;
 	skipxpadd = true;
 	player:getXp():AddXPNoMultiplier(perk, amount);
+end
+local function InitPlayerData(player)
+	local playerdata = player:getModData()
+	for i, v in pairs(playerdatatable) do
+		if tableContains(playerdata, v[1]) == false then
+			playerdata[v[1]] = v[2] 
+		end
+	end
 end
 
 function initToadTraitsItems(_player)
@@ -378,58 +440,7 @@ function initToadTraitsPerks(_player)
 	if SandboxVars.MoreTraits.LuckImpact then
 		luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
 	end
-	playerdata.secondwinddisabled = false;
-	playerdata.secondwindrecoveredfatigue = false;
-	playerdata.secondwindcooldown = 0;
-	playerdata.bToadTraitDepressed = false;
-	playerdata.indefatigablecooldown = 0;
-	playerdata.indefatigablecuredinfection = false;
-	playerdata.indefatigabledisabled = false;
-	playerdata.bindefatigable = false;
-	playerdata.IndefatigableHasBeenDraggedDown = false;
-	playerdata.bSatedDrink = true;
-	playerdata.iHoursSinceDrink = 0;
-	playerdata.iTimesCannibal = 0;
-	playerdata.fPreviousHealthFromFoodTimer = 1000;
-	playerdata.bWasInfected = false;
-	playerdata.iHardyEndurance = 0;
-	playerdata.iHardyMaxEndurance = 5;
-	playerdata.iHardyInterval = 1000;
-	playerdata.iWithdrawalCooldown = 24;
-	playerdata.iParanoiaCooldown = 10;
-	playerdata.SuperImmuneRecovery = 0;
-	playerdata.SuperImmuneActive = false;
-	playerdata.SuperImmuneMinutesPassed = 0;
-	playerdata.SuperImmuneTextSaid = false;
-	playerdata.SuperImmuneHealedOnce = false;
-	playerdata.SuperImmuneMinutesWellFed = 0;
-	playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-	playerdata.SuperImmuneInfections = 0;
-	playerdata.SuperImmuneLethal = false;
-	playerdata.MotionActive = false;
-	playerdata.HasSlept = false;
-	playerdata.FatigueWhenSleeping = 0;
-	playerdata.NeckHadPain = false;
-	playerdata.ContainerTraitIllegal = false;
-	playerdata.ContainerTraitPlayerCurrentPositionX = 0;
-	playerdata.ContainerTraitPlayerCurrentPositionY = 0;
-	playerdata.ImmunoActivated = false;
-	playerdata.ImmunoEvasiveTimer = 0;
-	playerdata.ImmunoFinal = false;
-	playerdata.AlbinoTimeSpentOutside = 0;
-	playerdata.isMTAlcoholismInitialized = false;
-	playerdata.iBouncercooldown = 0;
-	playerdata.bisInfected = false; 
-	playerdata.bisAlbinoOutside = false;
-	playerdata.bWasJustSprinting = false;
-	playerdata.ImmunoPart = {};
-	playerdata.BodyDamagedFromTrait = {};
-	playerdata.UnwaveringActivated = false;
-	playerdata.UnwaveringCooldown = 0;
-	playerdata.UnwaveringInjurySpeedChanged = false;
-	playerdata.OldCalories = 810;
-	playerdata.IngenuitiveActivated = false;
-	
+	InitPlayerData(player)
 	if player:HasTrait("Lucky") then
 		damage = damage - 5 * luckimpact;
 		bandagestrength = bandagestrength + 2 * luckimpact;
@@ -4374,111 +4385,7 @@ function OnCreatePlayer(_, player)
 	if bodydamage ~= nil then
 		bodydamage:Update();
 	end
-	if playerdata.ContainerTraitIllegal == nil then
-		playerdata.ContainerTraitIllegal = false;
-	end
-	if playerdata.ContainerTraitPlayerCurrentPositionX == nil then
-		playerdata.ContainerTraitPlayerCurrentPositionX = 0;
-	end
-	if playerdata.ContainerTraitPlayerCurrentPositionY == nil then
-		playerdata.ContainerTraitPlayerCurrentPositionY = 0;
-	end
-	if playerdata.iParanoiaCooldown == nil then
-		playerdata.iParanoiaCooldown = 10;
-	end
-	if playerdata.iHardyInterval == nil then
-		playerdata.iHardyInterval = 1000;
-	end
-	if playerdata.fPreviousHealthFromFoodTimer == nil then
-		playerdata.fPreviousHealthFromFoodTimer = 1000;
-	end
-	if playerdata.bisInfected == nil then
-		playerdata.bisInfected = false;
-	end
-	if playerdata.bToadTraitDepressed == nil then
-		playerdata.bToadTraitDepressed = false;
-	end
-	if playerdata.iHardyEndurance == nil then
-		playerdata.iHardyEndurance = 0;
-	end
-	if playerdata.iBouncercooldown == nil then
-		playerdata.iBouncercooldown = 0;
-	end
-	if playerdata.AlbinoTimeSpentOutside == nil then
-		playerdata.AlbinoTimeSpentOutside = 0;
-	end
-	if playerdata.bisAlbinoOutside == nil then
-		playerdata.bisAlbinoOutside = false;
-	end
-	if playerdata.SuperImmuneRecovery == nil then
-		playerdata.SuperImmuneRecovery = 0;
-	end
-	if playerdata.SuperImmuneMinutesPassed == nil then
-		playerdata.SuperImmuneMinutesPassed = 0;
-	end
-	if playerdata.SuperImmuneActive == nil then
-		playerdata.SuperImmuneActive = false;
-	end
-	if playerdata.SuperImmuneTextSaid == nil then
-		playerdata.SuperImmuneTextSaid = false;
-	end
-	if playerdata.SuperImmuneHealedOnce == nil then
-		playerdata.SuperImmuneHealedOnce = false;
-	end
-	if playerdata.SuperImmuneMinutesWellFed == nil then
-		playerdata.SuperImmuneMinutesWellFed = 0;
-	end
-	if playerdata.SuperImmuneAbsoluteWellFedAmount == nil then
-		playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-	end
-	if playerdata.SuperImmuneInfections == nil then
-		playerdata.SuperImmuneInfections = 0;
-	end
-	if playerdata.SuperImmuneLethal == nil then
-		playerdata.SuperImmuneLethal = false;
-	end
-	if playerdata.fLastHP == nil then
-		playerdata.fLastHP = bodydamage:getOverallBodyHealth();
-	end
-	if playerdata.bWasJustSprinting == nil then
-		playerdata.bWasJustSprinting = false;
-	end
-	if playerdata.MotionActive == nil then
-		playerdata.MotionActive = false;
-	end
-	if playerdata.ImmunoPart == nil then
-		playerdata.ImmunoPart = {};
-	end
-	if playerdata.ImmunoActivated == nil then
-		playerdata.ImmunoActivated = false;
-	end
-	if playerdata.ImmunoFinal == nil then
-		playerdata.ImmunoFinal = false;
-	end
-	if playerdata.ImmunoEvasiveTimer == nil then
-		playerdata.ImmunoEvasiveTimer = 0;
-	end
-	if playerdata.IndefatigableHasBeenDraggedDown == nil then
-		playerdata.IndefatigableHasBeenDraggedDown = false;
-	end
-	if playerdata.UnwaveringCooldown == nil then
-		playerdata.UnwaveringCooldown = 0;
-	end
-	if playerdata.UnwaveringActivated == nil then
-		playerdata.UnwaveringActivated = false;
-	end
-	if playerdata.UnwaveringInjurySpeedChanged == nil then
-		playerdata.UnwaveringInjurySpeedChanged = false;
-	end
-	if playerdata.OldCalories == nil then
-		playerdata.OldCalories = 810;
-	end
-	if playerdata.BodyDamagedFromTrait == nil then
-		playerdata.BodyDamagedFromTrait = {};
-	end
-	if playerdata.IngenuitiveActivated == nil then
-		playerdata.IngenuitiveActivated = false;
-	end
+	InitPlayerData(player)
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
