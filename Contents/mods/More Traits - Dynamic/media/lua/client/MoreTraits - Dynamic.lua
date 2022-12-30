@@ -186,7 +186,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Terminator
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Nimble or perk == Perks.Aiming or perk == Perks.Reloading then
-					if killCountisOn then
+					if killCountisOn and not getActivatedMods():contains("Advanced_trajectory") then
 						local categoryKills = 0;
 						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Firearm"] ~= nil then
 								categoryKills = player:getModData().KillCount.WeaponCategory["Firearm"].count or 0;
@@ -536,7 +536,7 @@ function MTDTraitsGainsByLevel(player, perk)
 		-- Aiming
 			-- Anti-Gun Activist
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Aiming then
-					if killCountisOn then
+					if killCountisOn and not getActivatedMods():contains("Advanced_trajectory") then
 						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
 						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Firearm"] ~= nil then
@@ -553,7 +553,7 @@ function MTDTraitsGainsByLevel(player, perk)
 				end
 			-- Prowess Guns
 				if perk == "characterInitialization" or perk == "KillCount" or perk == Perks.Aiming or perk == Perks.Reloading then
-					if killCountisOn then
+					if killCountisOn and not getActivatedMods():contains("Advanced_trajectory") then
 						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
 						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil and player:getModData().KillCount.WeaponCategory["Firearm"] ~= nil then

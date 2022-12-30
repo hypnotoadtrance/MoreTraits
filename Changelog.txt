@@ -2,4 +2,5 @@ Main Changelog:
 	- Fixed Graverobber not giving Scavnging skill multiplier
 Dynamic Changelog:
 	- Fixed Incomprehensive not being removed (wrong sandbox var name)
-	- Made KillCount mod mandatory to run dynamic submod (added as requirement)
+	- [VERY IMPORTANT!] Made KillCount mod mandatory to run dynamic submod (added as requirement)
+	- If you're running [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2895102994]Advanced trajectory[/url], Kill requirements for guns are ignored until Killcount mod properly registers them (AT does some weird stuff with bullets so they are not tracked as firearms kills)
