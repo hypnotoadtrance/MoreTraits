@@ -438,7 +438,7 @@ option MoreTraitsDynamic.MundaneDynamicDamage
 	type = integer,
 	min = 0,
 	max = 500000,
-	default = 50000,
+	default = 5000,
 	page = MoreTraitsDynamic, 
 	translation = MoreTraitsDynamic_MundaneDamage,
 }

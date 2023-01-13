@@ -2,3 +2,4 @@ Main Changelog:
 	- Missing player data is now automatically filled in, no more errors for missing data.
 	- Logs will now state mod version in which a save and a character was created for debugging purposes.
 Dynamic Changelog:
+	- Mundane sandbox option was 10x times higher than intended. Existing saves and server are recommended to adjust the value accordingly.
