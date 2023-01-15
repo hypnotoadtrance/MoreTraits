@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode x_extends="Alt_Bite.xml">
+	<m_Name>Alt_Bite2HandedFromBehind</m_Name>
+	<m_AnimName>Bob_BiteReactBehind_Bat</m_AnimName>
+	<m_Conditions/>
+	<m_Conditions />
+	<m_Conditions>
+		<m_Name>FromBehind</m_Name>
+		<m_Type>BOOL</m_Type>
+		<m_BoolValue>true</m_BoolValue>
+	</m_Conditions>
+	<m_Events>
+		<m_EventName>PushAwayZombie</m_EventName>
+		<m_TimePc>0.50</m_TimePc>
+		<m_ParameterValue></m_ParameterValue>
+	</m_Events>
+</animNode>

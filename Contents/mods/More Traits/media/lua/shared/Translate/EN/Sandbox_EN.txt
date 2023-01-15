@@ -105,4 +105,6 @@ Sandbox_EN = {
 	Sandbox_MoreTraits_QuickSuperImmune_tooltip = "If true, Super Immune is 6 times faster than normal.<br>Preferably used in multiplayer games where you can't fast forward time.",
     Sandbox_MoreTraits_ProwessGunsAmmoRestore = "Prowess: Guns can restore ammo",
 	Sandbox_MoreTraits_ProwessGunsAmmoRestore_tooltip = "If true, Prowess: Guns will have a chance to not consume ammo. Not exactly lore-wise friendly, but fun.",
+	Sandbox_MoreTraits_EvasiveBlocksPVP = "Evasive Dodges PVP Attacks",
+	Sandbox_MoreTraits_EvasiveBlocksPVP_tooltip = "If true, Evasive can dodge attacks from other players.",
 }

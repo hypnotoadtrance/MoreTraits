@@ -17,7 +17,6 @@ I have been unable to find a workaround.
 --]]
 --Global Variables
 skipxpadd = false;
-suspendevasive = false;
 internalTick = 0;
 luckimpact = 1.0;
 MTModVersion = 1; --REMEMBER TO MANUALLY INCREASE
@@ -59,23 +58,19 @@ playerdatatable[32] = {"NeckHadPain", false}
 playerdatatable[33] = {"ContainerTraitIllegal", false}
 playerdatatable[34] = {"ContainerTraitPlayerCurrentPositionX", 0}
 playerdatatable[35] = {"ContainerTraitPlayerCurrentPositionY", 0}
-playerdatatable[36] = {"ImmunoActivated", false}
-playerdatatable[37] = {"ImmunoEvasiveTimer", 0}
-playerdatatable[38] = {"ImmunoFinal", false}
-playerdatatable[39] = {"AlbinoTimeSpentOutside", 0}
-playerdatatable[40] = {"isMTAlcoholismInitialized", false}
-playerdatatable[41] = {"iBouncercooldown", 0}
-playerdatatable[42] = {"bisInfected", false}
-playerdatatable[43] = {"bisAlbinoOutside", false}
-playerdatatable[44] = {"bToadTraitDepressed", false}
-playerdatatable[45] = {"bWasJustSprinting", false}
-playerdatatable[46] = {"ImmunoPart", {}}
-playerdatatable[47] = {"BodyDamagedFromTrait", {}}
-playerdatatable[48] = {"UnwaveringActivated", false}
-playerdatatable[49] = {"UnwaveringCooldown", 0}
-playerdatatable[50] = {"UnwaveringInjurySpeedChanged", false}
-playerdatatable[51] = {"OldCalories", 810}
-playerdatatable[52] = {"IngenuitiveActivated", false}
+playerdatatable[36] = {"AlbinoTimeSpentOutside", 0}
+playerdatatable[37] = {"isMTAlcoholismInitialized", false}
+playerdatatable[38] = {"iBouncercooldown", 0}
+playerdatatable[39] = {"bisInfected", false}
+playerdatatable[40] = {"bisAlbinoOutside", false}
+playerdatatable[41] = {"bToadTraitDepressed", false}
+playerdatatable[42] = {"bWasJustSprinting", false}
+playerdatatable[43] = {"InjuredBodyList", {}}
+playerdatatable[44] = {"UnwaveringInjurySpeedChanged", false}
+playerdatatable[45] = {"OldCalories", 810}
+playerdatatable[46] = {"IngenuitiveActivated", false}
+playerdatatable[47] = {"EvasivePlayerInfected", false}
+playerdatatable[48] = {"TraitInjuredBodyList", {}}
 
 local function AddXP(player, perk, amount)
 	if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
@@ -460,8 +455,7 @@ function initToadTraitsPerks(_player)
 	end
 
 	if player:HasTrait("injured") then
-		local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait
-		suspendevasive = true;
+		local TraitInjuredBodyList = playerdata.TraitInjuredBodyList
 		local bodydamage = player:getBodyDamage();
 		local itterations = ZombRand(1, 4) + 1;
 		local doburns = true;
@@ -482,7 +476,7 @@ function initToadTraitsPerks(_player)
 					b:AddDamage(damage);
 					b:setScratched(true, true);
 					b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-					table.insert(BodyDamagedFromTrait, b);
+					table.insert(TraitInjuredBodyList, randompart);
 				elseif injury == 2 then
 					if doburns == true then
 						b:AddDamage(damage);
@@ -490,7 +484,7 @@ function initToadTraitsPerks(_player)
 						b:setBurnTime(ZombRand(50) + damage);
 						b:setNeedBurnWash(false);
 						b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-						table.insert(BodyDamagedFromTrait, b);
+						table.insert(TraitInjuredBodyList, randompart);
 					else
 						itterations = itterations - 1;
 					end
@@ -498,13 +492,13 @@ function initToadTraitsPerks(_player)
 					b:AddDamage(damage);
 					b:setCut(true, true);
 					b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-					table.insert(BodyDamagedFromTrait, b);
+					table.insert(TraitInjuredBodyList, randompart);
 				elseif injury >= 4 then
 					b:AddDamage(damage);
 					b:setDeepWounded(true);
 					b:setStitched(true);
 					b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-					table.insert(BodyDamagedFromTrait, b);
+					table.insert(TraitInjuredBodyList, randompart);
 				end
 			end
 		end
@@ -512,20 +506,25 @@ function initToadTraitsPerks(_player)
 		bodydamage:setInfectionLevel(0);
 	end
 	if player:HasTrait("broke") then
-		local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait
-		suspendevasive = true;
+		local TraitInjuredBodyList = playerdata.TraitInjuredBodyList
 		local bodydamage = player:getBodyDamage();
-		bodydamage:getBodyPart(BodyPartType.LowerLeg_R):AddDamage(damage);
-		bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setFractureTime(fracturetime);
-		bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setSplint(true, splintstrength);
-		bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setSplintItem("Base.Splint");
-		bodydamage:getBodyPart(BodyPartType.LowerLeg_R):setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
-		bodydamage:setInfected(false);
-		bodydamage:setInfectionLevel(0);
-		table.insert(BodyDamagedFromTrait, bodydamage:getBodyPart(BodyPartType.LowerLeg_R));
+		for i = 0, bodydamage:getBodyParts():size() - 1 do
+			local b = bodydamage:getBodyParts():get(i);
+			if b == player:getBodyDamage():getBodyPart(BodyPartType.FromString("LowerLeg_R")) then
+				b:AddDamage(damage)
+				b:setFractureTime(fracturetime)
+				b:setSplint(true, splintstrength)
+				b:setSplintItem("Base.Splint")
+				b:setBandaged(true, bandagestrength, true, "Base.AlcoholBandage");
+				bodydamage:setInfected(false)
+				bodydamage:setInfectionLevel(0)
+				table.insert(TraitInjuredBodyList, i)
+				break
+			end
+		end
 	end
 	if player:HasTrait("burned") then
-		local BodyDamagedFromTrait = playerdata.BodyDamagedFromTrait;
+		local TraitInjuredBodyList = playerdata.TraitInjuredBodyList;
 		local bodydamage = player:getBodyDamage();
 		for i = 0, bodydamage:getBodyParts():size() - 1 do
 			local b = bodydamage:getBodyParts():get(i);
@@ -533,13 +532,8 @@ function initToadTraitsPerks(_player)
 			b:setBurnTime(ZombRand(10, 100) + damage);
 			b:setNeedBurnWash(false);
 			b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
-			table.insert(BodyDamagedFromTrait, b); --i forgor to add in the thing for burned, but i think this should work fine
+			table.insert(TraitInjuredBodyList, i);
 		end
-	end
-	playerdata.ToadTraitBodyDamage = nil;
-	suspendevasive = false;
-	if player:getBodyDamage() ~= nil then
-		player:getBodyDamage():Update();
 	end
 	playerdata.fLastHP = nil;
 	checkWeight();
@@ -677,122 +671,81 @@ function initToadTraitsPerks(_player)
 	end
 end
 
-function ToadTraitEvasive(_player, _playerdata)
-	function updateBodyDamage(bodydamage, playerdata)
-		-- This function handles updating the saved state of the player's body damage
-		-- We save the body part as a string indiced table for efficient lookups
-		modbodydamage = {};
-		for i = 0, bodydamage:getBodyParts():size() - 1 do
-			local b = bodydamage:getBodyParts():get(i);
-			if b:bandaged() == true then
-				modbodydamage[b:getType()] = {b:getType(), b:getScratchTime() ~= 0, b:getBiteTime() ~= 0, b:getCutTime() ~= 0};
-			else
-				modbodydamage[b:getType()] = {b:getType(), b:scratched(), b:bitten(), b:isCut() };
-			end
-		end
-		playerdata.ToadTraitBodyDamage = modbodydamage;
-		return modbodydamage;
-	end
-
-	function evade(i, lastinfected, bodydamage, player, injurytype)
-		-- We rolled to evade an attack, do the logic for it
-		if SandboxVars.MoreTraits.EvasiveAnimation == true then
-			player:setHitReaction("");
-		end
-		i:setBleedingTime(0);
-		i:setBleeding(false);
-		if injurytype == 1 then
-			i:setScratchTime(0);
-			i:setScratched(false, false);
-		elseif injurytype == 2 then
-			--i:setBiteTime(0) and i:setBitten(false, false) both did nothing for some reason and just spammed errors
-			i:RestoreToFullHealth();
-		elseif injurytype == 3 then
-			i:setCutTime(0);
-			i:setCut(false, false)
-		end
-		if lastinfected == false and bodydamage:IsInfected() == true then
-			i:SetInfected(false); 
-			bodydamage:setInfected(false);
-			bodydamage:setInfectionLevel(0);
-			print("Infection from Dodged Attack Removed");
-		end
-		HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
-	end
-
-	local player = _player;
-	local playerdata = _playerdata;
+function MTPlayerHit(player, _, __)
+	if player:isZombie() then return end
+	local list = player:getModData().InjuredBodyList
+	local wasinfected = player:getModData().EvasivePlayerInfected
+	local infected = player:getBodyDamage():isInfected();
+	local tried = false;
+	local noanim = false
 	if player:HasTrait("evasive") then
-		local basechance = 33;
-		local bMarkForUpdate = false;
-		local bodydamage = player:getBodyDamage();
-		local modbodydamage = playerdata.ToadTraitBodyDamage;
-		local lastinfected = playerdata.bisInfected;
-		local enemies = player:getSpottedList();
-		local nearbyzombies = false;
-		for i = 0, enemies:size() - 1 do
-			local enemy = enemies:get(i);
-			if enemy:isZombie() then
-				local distance = enemy:DistTo(player)
-				if distance <= 3 then
-					nearbyzombies = true;
-					break;
-				end
-			end
-		end
-		if SandboxVars.MoreTraits.EvasiveChance then
-			basechance = SandboxVars.MoreTraits.EvasiveChance;
-		end
-		if player:HasTrait("Lucky") then
-			basechance = basechance + 5 * luckimpact;
-		end
-		if player:HasTrait("Unlucky") then
-			basechance = basechance - 3 * luckimpact;
-		end
-		if modbodydamage == nil or lastinfected == nil then
-			print("Initializing Body Damage");
-			modbodydamage = updateBodyDamage(bodydamage, playerdata)
-			print("Body Damage Initialized");
-		else
-			for n = 0, bodydamage:getBodyParts():size() - 1 do
-				local i = bodydamage:getBodyParts():get(n);
-				local b = modbodydamage[i:getType()];
-				if i:scratched() == false and b[2] == true or i:bitten() == false and b[3] == true or i:isCut() == false and b[4] == true then
-					if i:bandaged() == true then
-						if i:getScratchTime() == 0 and b[2] == true or i:getBiteTime() == 0 and b[3] == true or i:getCutTime() == 0 and b[4] == true then
-							bMarkForUpdate = true;
+		if player:getCurrentState() == PlayerHitReactionState.instance() or (player:getCurrentState() == PlayerHitReactionPVPState.instance() and SandboxVars.MoreTraits.EvasiveBlocksPVP == true) then
+			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+				local bodypart = player:getBodyDamage():getBodyParts():get(i);
+				if bodypart:HasInjury() == true and tableContains(list, i) == false then
+					local chance = SandboxVars.MoreTraits.EvasiveChance
+					if chance >= ZombRand(1, 101) then
+						if SandboxVars.MoreTraits.EvasiveAnimation == true then
+							player:setHitReaction("EvasiveBlocked");
+							noanim = true
+						end
+						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen());
+						if bodypart:IsInfected() and wasinfected == false and infected == true then
+							bodypart:SetInfected(false);
+							player:getBodyDamage():setInfected(false);
+							player:getBodyDamage():setInfectionMortalityDuration(-1);
+							player:getBodyDamage():setInfectionTime(-1);
+							player:getBodyDamage():setInfectionLevel(0);
+							player:getBodyDamage():setInfectionGrowthRate(0);
+						end
+						bodypart:setBleedingTime(0);
+						bodypart:setBleeding(false);
+						if bodypart:scratched() then
+							bodypart:setScratchTime(0);
+							bodypart:setScratched(false, false);
+						end
+						if bodypart:isCut() then
+							bodypart:setCutTime(0);
+							bodypart:setCut(false, false);
+						end
+						if bodypart:bitten() then
+							bodypart:RestoreToFullHealth(); 
 						end
 					else
-					bMarkForUpdate = true;
-					end
-				end
-				if i:scratched() == true and b[2] == false then
-					print("Scratch Detected On: " .. tostring(i:getType()));
-					if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-						evade(i, lastinfected, bodydamage, player, 1)
-					else
-						bMarkForUpdate = true;
-					end
-				elseif i:bitten() == true and b[3] == false then
-					print("Bite Detected On: " .. tostring(i:getType()));
-					if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-						evade(i, lastinfected, bodydamage, player, 2)
-					else
-						bMarkForUpdate = true;
-					end
-				elseif i:isCut() == true and b[4] == false then
-					print("Laceration Detected On: " .. tostring(i:getType()));
-					if ZombRand(1, 101) <= basechance and nearbyzombies == true then
-						evade(i, lastinfected, bodydamage, player, 3)
-					else
-						bMarkForUpdate = true;
+						table.insert(player:getModData().InjuredBodyList, i)
+						if bodypart:IsInfected() and wasinfected == false and infected == true then
+							player:getModData().EvasivePlayerInfected = true;
+						end
 					end
 				end
 			end
 		end
-		if bMarkForUpdate == true then
-			playerdata.ToadTraitBodyDamage = updateBodyDamage(bodydamage, playerdata);
-			playerdata.bisInfected = bodydamage:IsInfected();
+	end
+	if player:HasTrait("Immunocompromised") then
+		if player:getCurrentState() == PlayerHitReactionState.instance() then
+			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+				local bodypart = player:getBodyDamage():getBodyParts():get(i);
+				if bodypart:HasInjury() == true and tableContains(list, i) == false and tried == false then
+					table.insert(player:getModData().InjuredBodyList, i)
+					chance = SandboxVars.MoreTraits.ImmunoChance;
+					tried = true
+					if ZombRand(1, 101) <= chance then
+						bodydamage:setInfected(true);
+					end
+				end
+			end
+		end
+	end
+	if player:HasTrait("Unwavering") and noanim == false then
+		if player:getCurrentState() == PlayerHitReactionState.instance() then
+			if player:getHitReaction() == "Bite" then
+				player:setHitReaction("UnwaveringBite")
+				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
+			end
+			if player:getHitReaction() == "BiteDefended" then
+				player:setHitReaction("UnwaveringBiteDefended")
+				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
+			end
 		end
 	end
 end
@@ -1547,12 +1500,12 @@ function indefatigable(_player, _playerdata)
 				playerdata.IndefatigableHasBeenDraggedDown = true;
 				player:setPlayingDeathSound(false);
 				player:setDeathDragDown(false);
-				player:setHitReaction("Bob_HitReact_01");
+				player:setHitReaction("EvasiveBlocked");
 			end
 			print("Healed to full.");
 			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
 				local b = player:getBodyDamage():getBodyParts():get(i);
-				if tableContains(playerdata.BodyDamagedFromTrait, b) == false then
+				if tableContains(playerdata.TraitInjuredBodyList, i) == false then
 					b:RestoreToFullHealth();
 				else
 					b:AddHealth(100);
@@ -2589,7 +2542,7 @@ local function SuperImmuneRecoveryProcess()
 					--Prevent illness from going too low or too high
 					Illness = Illness + (0.166 * SpeedrunTime);
 				end
-				if Illness > 95 and playerdata.SuperImmuneLethal == false then
+				if Illness > 89 and playerdata.SuperImmuneLethal == false then
 					Illness = Illness - (0.333 * SpeedrunTime);
 				end
 				playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + (1 * SpeedrunTime);
@@ -3696,17 +3649,6 @@ local function FixSpecialization(player, perk)
 	end
 end
 
-local function CheckInjuredHeal(player, playerdata)
-	if (#playerdata.BodyDamagedFromTrait) > 0 then
-		for i, v in ipairs(playerdata.BodyDamagedFromTrait) do
-			if v:HasInjury() == false then
-				table.remove(playerdata.BodyDamagedFromTrait, i, v);
-				i = i - 1;
-			end
-		end
-	end
-end
-
 local function NoodleLegs(_player)
 	if _player:HasTrait("noodlelegs") then
 		local SprintingLvl = _player:getPerkLevel(Perks.Sprinting);
@@ -3957,65 +3899,6 @@ local function HungerCheck(player)
 	end
 end
 
-local function ImmunocompromisedInfection(player, playerdata)
-	local bodydamage = player:getBodyDamage();
-	local isinfected = bodydamage:isInfected();
-	local activated = playerdata.ImmunoActivated;
-	local evasivecheck = playerdata.ImmunoPart;
-	local chance = 25;
-	local checked = false;
-	if SandboxVars.MoreTraits.ImmunoChance then
-		chance = SandboxVars.MoreTraits.ImmunoChance;
-	end
-	if activated == true then
-		if player:getCurrentState() == IdleState.instance() then
-			playerdata.ImmunoActivated = false;
-		end
-	end
-	if playerdata.ImmunoFinal == true and isinfected == false then
-		playerdata.ImmunoFinal = false;
-	end
-	if player:HasTrait("Immunocompromised") then
-		if player:getCurrentState() == PlayerHitReactionState.instance() and activated == false then
-			playerdata.ImmunoActivated = true;
-			for i = 0, bodydamage:getBodyParts():size() - 1 do
-				local b = bodydamage:getBodyParts():get(i);
-				if b:HasInjury() and b:getBleedingTime() ~= 0 and checked == false and bodydamage:isInfected() == false then
-					--Bleeding time to check if an injury was caught, because tailoring or thick skinned might not get injury
-					checked = true;
-					if ZombRand(1, 101) <= chance then
-						bodydamage:setInfected(true);
-						table.insert(evasivecheck, b);
-						playerdata.ImmunoEvasiveTimer = 100;
-					end
-				end
-				if b:bitten() == true then
-					checked = true;
-					bodydamage:setInfected(true);
-					table.insert(evasivecheck, b);
-					playerdata.ImmunoEvasiveTimer = 100;
-				end
-			end
-		end
-		if playerdata.ImmunoEvasiveTimer > 0 then
-			playerdata.ImmunoEvasiveTimer = playerdata.ImmunoEvasiveTimer - 1;
-			if playerdata.ImmunoEvasiveTimer == 0 then
-				for i, b in pairs(evasivecheck) do
-					if b ~= nil then
-						if b:HasInjury() == false and playerdata.ImmunoFinal == false then
-							bodydamage:setInfected(false);
-						else
-							playerdata.ImmunoFinal = true;
-						end
-					end
-					table.remove(evasivecheck, i, v);
-					i = i - 1;
-				end
-			end
-		end
-	end
-end
-
 local function TerminatorGun(player, playerdata)
 	if player:getPrimaryHandItem() ~= nil then
 		if player:getPrimaryHandItem():getCategory() == "Weapon" then
@@ -4099,32 +3982,6 @@ end
 local function antigunxpdecrease(player, perk, amount)
 	if player:HasTrait("antigun") and perk == Perks.Aiming then
 		AddXP(player, perk, 0 - (amount * 0.25));
-	end
-end
-
-local function UnwaveringPreventAttack(player, playerdata)
-	if player:HasTrait("unwavering") and player:getCurrentState() == PlayerHitReactionState.instance() and playerdata.UnwaveringCooldown == 0 then
-		local enemies = player:getSpottedList();
-		if (enemies:size() - 1) > 1 then
-			for i = 0, enemies:size() - 1 do
-				local enemy = enemies:get(i);
-				if enemy:isZombie() then
-					local distance = enemy:DistTo(player)
-					if distance <= 1.25 then
-						HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen());
-						playerdata.UnwaveringActivated = true;
-						enemy:setStaggerBack(true); 
-						enemy:setHitReaction("");
-						enemy:setPlayerAttackPosition("FRONT");
-						enemy:setHitForce(2.0);
-					end
-				end
-			end
-		end
-	end
-	if playerdata.UnwaveringActivated == true and player:getCurrentState() ~= PlayerHitReactionState.instance() then
-		playerdata.UnwaveringActivated = false;
-		playerdata.UnwaveringCooldown = 1440;
 	end
 end
 
@@ -4297,11 +4154,8 @@ function MainPlayerUpdate(_player)
 	QuickWorker(player);
 	SlowWorker(player);
 	SuperImmuneFakeInfectionHealthLoss(player);
-	ImmunocompromisedInfection(player, playerdata);
 	CheckForPlayerBuiltContainer(player, playerdata);
-	UnwaveringPreventAttack(player, playerdata);
-	if suspendevasive == false then
-		ToadTraitEvasive(player, playerdata);
+	if player:getHoursSurvived() > 0 then --Prevent it from occuring on new game
 		GlassBody(player, playerdata);
 	end
 	IdealWeight(player, playerdata);
@@ -4326,9 +4180,6 @@ function EveryOneMinute()
 	AlbinoTimer(player, playerdata);
 	TerminatorGun(player, playerdata);
 	SuperImmuneRecoveryProcess();
-	if playerdata.UnwaveringCooldown ~= 0 then
-		playerdata.UnwaveringCooldown = playerdata.UnwaveringCooldown - 1;
-	end
 end
 
 function EveryHours()
@@ -4342,7 +4193,6 @@ function EveryHours()
 	drinkerpoison();
 	SecondWindRecharge();
 	indefatigablecounter();
-	CheckInjuredHeal(player, playerdata);
 	RestfulSleeper();
 	ToadTraitDepressive();
 	
@@ -4359,6 +4209,18 @@ function EveryHours()
 	if player:HasTrait("ingenuitive") and playerdata.IngenuitiveActivated == false then
 		LearnAllRecipes(player);
 		playerdata.IngenuitiveActivated = true;
+	end
+	for i, v in ipairs(playerdata.InjuredBodyList) do
+		local bodypart = player:getBodyDamage():getBodyParts():get(v);
+		if bodypart:HasInjury() == false then
+			table.remove(playerdata.InjuredBodyList, i, v);
+		end
+	end
+	for i, v in ipairs(playerdata.TraitInjuredBodyList) do
+		local bodypart = player:getBodyDamage():getBodyParts():get(v);
+		if bodypart:HasInjury() == false then
+			table.remove(playerdata.TraitInjuredBodyList, i, v);
+		end
 	end
 end
 
@@ -4380,9 +4242,6 @@ function OnCreatePlayer(_, player)
 			itemdata.sState = nil;
 		end
 	end
-	--reset evasive on game load
-	playerdata.ToadTraitBodyDamage = nil;
-	suspendevasive = false;
 	if bodydamage ~= nil then
 		bodydamage:Update();
 	end
@@ -4417,6 +4276,7 @@ Events.AddXP.Add(antigunxpdecrease);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.OnInitWorld.Add(OnInitWorld);
+Events.OnPlayerGetDamage.Add(MTPlayerHit)
 if getActivatedMods():contains("DracoExpandedTraits") then
 	Events.EveryOneMinute.Add(checkWeight);
 else

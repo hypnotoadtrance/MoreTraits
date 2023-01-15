@@ -105,6 +105,11 @@ option MoreTraits.EvasiveAnimation
 	type = boolean, default = true,
 	page = MoreTraits, translation = MoreTraits_EvasiveAnimation,
 }
+option MoreTraits.EvasiveBlocksPVP
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_EvasiveBlocksPVP,
+}
 option MoreTraits.ButterfingersChance
 {
 	type = integer, min = 100, max = 10000, default = 2000,

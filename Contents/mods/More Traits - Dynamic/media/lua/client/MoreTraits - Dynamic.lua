@@ -57,9 +57,16 @@ function MTDMundane(wielder, damage)
 	wielder:getModData().MoreTraitsDynamic.TotalDamageDone = wielder:getModData().MoreTraitsDynamic.TotalDamageDone or 0;
 	wielder:getModData().MoreTraitsDynamic.TotalDamageDone = wielder:getModData().MoreTraitsDynamic.TotalDamageDone + damage;
 	print("Total damage:"..wielder:getModData().MoreTraitsDynamic.TotalDamageDone);
-	if wielder:getModData().MoreTraitsDynamic.TotalDamageDone >= SandboxVars.MoreTraitsDynamic.MundaneDynamicDamage then
-		wielder:getTraits():remove("mundane");
-		HaloTextHelper.addTextWithArrow(wielder, getText("UI_trait_mundane"), false, HaloTextHelper.getColorGreen());
+	if getGameTime():getModData().MTModVersion == 1 then
+		if wielder:getModData().MoreTraitsDynamic.TotalDamageDone >= math.floor(SandboxVars.MoreTraitsDynamic.MundaneDynamicDamage / 10) then
+			wielder:getTraits():remove("mundane");
+			HaloTextHelper.addTextWithArrow(wielder, getText("UI_trait_mundane"), false, HaloTextHelper.getColorGreen());
+		end
+	else
+		if wielder:getModData().MoreTraitsDynamic.TotalDamageDone >= SandboxVars.MoreTraitsDynamic.MundaneDynamicDamage then
+			wielder:getTraits():remove("mundane");
+			HaloTextHelper.addTextWithArrow(wielder, getText("UI_trait_mundane"), false, HaloTextHelper.getColorGreen());
+		end
 	end
 end
 

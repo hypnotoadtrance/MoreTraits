@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode x_extends="Alt_Bite.xml">
+	<m_Name>Alt_BiteFromLeft</m_Name>
+	<m_AnimName>Bob_BiteReact_Rifle_L</m_AnimName>
+	<m_Conditions>
+		<m_StringValue>BiteLEFT</m_StringValue>
+	</m_Conditions>
+	<m_Conditions />
+</animNode>
