@@ -19,7 +19,7 @@ I have been unable to find a workaround.
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
-MTModVersion = 1; --REMEMBER TO MANUALLY INCREASE
+MTModVersion = 2; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 playerdatatable = {}
 playerdatatable[0] = {"MTModVersion", MTModVersion}
@@ -4248,7 +4248,7 @@ function OnCreatePlayer(_, player)
 	InitPlayerData(player)
 	print("More Traits - Mod Version On Which Player Was Created: "..playerdata.MTModVersion)
 	if getGameTime():getModData().MTModVersion == nil then
-		getGameTime():getModData().MTModVersion = 1
+		getGameTime():getModData().MTModVersion = 2 --REMEMBER TO MANUALLY UPDATE
 	end
 	print("More Traits - Mod Version On Which Save Was Created: "..getGameTime():getModData().MTModVersion);
 	print("More Traits - Current Mod Version: "..MTModVersion)
