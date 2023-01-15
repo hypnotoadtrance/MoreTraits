@@ -18,17 +18,18 @@ Dynamic Traits submod is present - you can earn/lose traits by leveling skills, 
 [list]
 [*] Made of Glass trait sometimes hurts players while sleeping. (Haven't experienced this in a while. Might be fixed?)
 [*] Killing players in Multiplayer with Martial Artist does not sync their death to the server.
+[*] Evasive Insta-Death is usually caused by Instant Infection Mortality. Fix is not expected, as we got no clue why this is happening.
 [/list]
 
 [h1]Mod Compatibility: [/h1]
 [list]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2914075159]Evolving Traits World (ETW)[/url] - ETW submod marks which traits are dynamic, also makes Butterfingers dynamic.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2459400130]Dynamic Traits[/url]  - The mod will opt to use their Alcoholic trait over its own.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2703664356]The Only Cure - The Amputation[/url] is now officially supported, and the mod will opt to use their amputation method instead of its own.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] - Allows for Client-Side settings to be adjusted. Install if you would like extra options.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2859296947]Moodle Framework[/url] - Adds in support for Alcoholic as a moodle.
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2721945297]Driving skill[/url] - some traits will be auto-disabled to avoid conflicts
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2903135820]Scavenging skill (fixed)[/url] - some traits will give exp boost in scavenging if mod is present. Scrounger perk is disabled if mod is present, it does same thing as Skill. [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2721290568]Original[/url] works too.
-[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2730251452]Expanded Traits[/url] - Hoarder can stack with this mod weight perks/settings. Enabled by default.
 [/list]
 
 [h1]Opening The Project Up To The Community: [/h1]
