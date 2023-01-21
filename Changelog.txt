@@ -1,9 +1,2 @@
 Main Changelog:
-	- Missing player data is now automatically filled in, no more errors for missing data.
-	- Logs will now state mod version in which a save and a character was created for debugging and fixing purposes.
-	- Evasive code reworked, better optimization.
-	- New Sandbox Setting: Evasive Blocks PVP.
-	- Unwavering no longer pushes back; Unwavering now halves the duration of any zombie attack stuns.
-	- Fixed an issue where Super Immune can allow the infection to go to Fever stage which can kill you.
-Dynamic Changelog:
-	- Mundane sandbox option was 10x times higher than intended. Existing saves use 10x lower sandbox option value than written to fix the issue.
+Nil check in Glass Body trait.
