@@ -1,2 +1,3 @@
 Main Changelog:
-Nil check in Glass Body trait.
+	- Nil check in Glass Body trait.
+	
