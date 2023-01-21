@@ -72,6 +72,7 @@ playerdatatable[46] = { "IngenuitiveActivated", false }
 playerdatatable[47] = { "EvasivePlayerInfected", false }
 playerdatatable[48] = { "TraitInjuredBodyList", {} }
 playerdatatable[49] = {"fLastHP", 0}
+playerdatatable[50] = {"isSleeping", false}
 
 local function AddXP(player, perk, amount)
 	if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
@@ -3463,6 +3464,7 @@ function GlassBody(_player, _playerdata)
 		if player:isAsleep() then
 			--Don't wound the player in their sleep.
 			playerdata.fLastHP = 0;
+			playerdata.isSleeping = true
 			return ;
 		end
 		local lasthp = playerdata.fLastHP;
@@ -3470,6 +3472,13 @@ function GlassBody(_player, _playerdata)
 		local multiplier = getGameTime():getMultiplier();
 		--Don't check if the multiplier is too high (prevent from injuring so many times)
 		if currenthp < lasthp and multiplier <= 4.0 then
+			if playerdata.isSleeping == true and player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck")):getAdditionalPain() > 0 then
+				playerdata.isSleeping = false
+				playerdata.fLastHP = 0;
+				return
+			else
+				playerdata.isSleeping = false
+			end
 			local chance = 33;
 			local woundstrength = 10;
 			if player:HasTrait("Lucky") then
@@ -3496,6 +3505,7 @@ function GlassBody(_player, _playerdata)
 		playerdata.fLastHP = bodydamage:getOverallBodyHealth();
 	end
 end
+
 function BatteringRam()
 	local player = getPlayer();
 	if player:HasTrait("batteringram") then
