@@ -1,0 +1,16 @@
+Tooltip_JP = {
+    Tooltip_MoreTraits_AntiqueAxe = "希少な強化された石斧。<br>非常に丈夫で耐久性があるが、修理はできない。",
+    Tooltip_MoreTraits_Thumper = "希少な石製の大斧。<br>群衆を一撃で倒すことができる。<br>パワフルだけど、とても重い。",
+    Tooltip_MoreTraits_ObsidianBlade = "希少なアンティークの犠牲の短剣。<br>非常に強力だが、脆い。",
+    Tooltip_MoreTraits_PackerBag = "希少なバックパック。<br>大容量と超軽量化を実現した。",
+    Tooltip_MoreTraits_BloodyCrowbar = "スイングの速さ、ダメージの大きさ、片手でも十分な効果を発揮できるように形状を改良したバールのようなもの。",
+    Tooltip_MoreTraits_Slugger = "重さが軽く、速く振れ、耐久性に優れたアルミ製バット。",
+    Tooltip_MoreTraits_Cure = "ゾンビ化した状態を元に戻すことができる強力な調合薬。<br>最も優秀な医学研究者だけが作れる。",
+    Tooltip_MoreTraits_AntiqueMag1 = "限定版の雑誌。<br>今回は、人間の死体を有用な肥料に変えるというタブーな技術を伝授します。",
+    Tooltip_MoreTraits_AntiqueMag2 = "限定版の雑誌。<br>今回は、紙粘土を使ったホームクラフトのレシピを掘り下げます。",
+    Tooltip_MoreTraits_AntiqueMag3 = "限定版の雑誌。<br>今回は、パプアニューギニアのある部族の人肉食レシピを解説していきます。",
+    Tooltip_MoreTraits_PapierMacheSword = "家族みんなで楽しめる！<br>4歳以下のお子様は対象外です。",
+    Tooltip_MoreTraits_ItemBoost = "このアイテムのステータスは、あなたの特性の1つによって向上しています。",
+    Tooltip_MoreTraits_GordaniteBoost = "バール+",
+    Tooltip_MoreTraits_GordaniteDefault = "バール",
+}
