@@ -273,3 +273,18 @@ option MoreTraits.HoarderCompatibility
 	page = MoreTraits, 
 	translation = MoreTraits_HoarderCompatibility,
 }
+option MoreTraits.BurnedDistance
+{
+	type = integer, min = 5, max = 50, default = 20,
+	page = MoreTraits, translation = MoreTraits_BurnedDistance,
+}
+option MoreTraits.BurnedPanic
+{
+	type = integer, min = 1, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_BurnedPanic,
+}
+option MoreTraits.BurnedStress
+{
+	type = integer, min = 1, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_BurnedStress,
+}

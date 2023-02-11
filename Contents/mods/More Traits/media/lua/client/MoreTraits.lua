@@ -1,6 +1,7 @@
 require('NPCs/MainCreationMethods');
 require("Items/Distributions");
 require("Items/ProceduralDistributions");
+
 if getActivatedMods():contains("MoodleFramework") == true then
 	require("MF_ISMoodle");
 	MF.createMoodle("MTAlcoholism");
@@ -523,18 +524,6 @@ function initToadTraitsPerks(_player)
 				table.insert(TraitInjuredBodyList, i)
 				break
 			end
-		end
-	end
-	if player:HasTrait("burned") then
-		local TraitInjuredBodyList = playerdata.TraitInjuredBodyList;
-		local bodydamage = player:getBodyDamage();
-		for i = 0, bodydamage:getBodyParts():size() - 1 do
-			local b = bodydamage:getBodyParts():get(i);
-			b:setBurned();
-			b:setBurnTime(ZombRand(10, 100) + damage);
-			b:setNeedBurnWash(false);
-			b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
-			table.insert(TraitInjuredBodyList, i);
 		end
 	end
 	playerdata.fLastHP = nil;
@@ -3276,12 +3265,25 @@ function GymGoerUpdate(_player)
 	local player = _player;
 	if player:HasTrait("gymgoer") and SandboxVars.MoreTraits.GymGoerNoExerciseFatigue == true then
 		local bodydamage = player:getBodyDamage();
+		local stiffnesslist = player:getModData().GymGoerStiffnessList
+		if stiffnesslist == nil then
+			stiffnesslist = {}
+			for i = 0, bodydamage:getBodyParts():size() - 1 do
+				stiffnesslist[i] = 0;
+			end
+			player:getModData().GymGoerStiffnessList = stiffnesslist;
+		end
 		for i = 0, bodydamage:getBodyParts():size() - 1 do
 			local b = bodydamage:getBodyParts():get(i);
 			local stiffness = b:getStiffness();
-			if stiffness > 0 then
-				b:setStiffness(0);
+			local moddedstiffness = stiffnesslist[i]
+			if stiffness > moddedstiffness then
+				b:setStiffness(stiffness - (math.abs(moddedstiffness - stiffness) / 1.5))
 			end
+			if stiffness < moddedstiffness then
+				b:setStiffness(stiffness - (math.abs(moddedstiffness - stiffness) * 2))
+			end
+			player:getModData().GymGoerStiffnessList[i] = b:getStiffness()
 		end
 	end
 end
@@ -4035,6 +4037,46 @@ local function QuickRest(player, playerdata)
 	end
 end
 
+local function BurnWardPatient(player, playerdata)
+	if player:HasTrait("burned") then
+		local x = math.floor(player:getX())
+		local y = math.floor(player:getY())
+		local closest = 100
+		local foundfire = false
+		local distance = SandboxVars.MoreTraits.BurnedDistance
+		for a = -distance, distance do
+			local b = -distance
+			while b < distance do
+				local square = getCell():getGridSquare(player:getX() + b, player:getY() + a, player:getZ());
+				if square:haveFire() then
+					foundfire = true
+					if closest > square:DistTo(player:getX(), player:getY()) then
+						closest = square:DistTo(player:getX(), player:getY())
+					end
+				end
+				b = b + 1
+			end
+		end
+		if foundfire == true then
+			while closest < distance do
+				player:getStats():setPanic(player:getStats():getPanic() + SandboxVars.MoreTraits.BurnedPanic);
+				player:getStats():setStress(player:getStats():getStress() + (SandboxVars.MoreTraits.BurnedStress / 1000));
+				closest = closest + 1
+			end
+		end
+	end
+end
+
+local function BurnWardItem(player)
+	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil then
+		local item = player:getPrimaryHandItem()
+		if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
+			player:setPrimaryHandItem(nil)
+			HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), HaloTextHelper.getColorRed());
+		end
+	end
+end
+
 function MTAlcoholismMoodle(_player, _playerdata)
 	--Experimental MoodleFramework Support
 	local player = _player;
@@ -4199,6 +4241,7 @@ function EveryOneMinute()
 	RestfulSleeperWakeUp(player, playerdata);
 	AlbinoTimer(player, playerdata);
 	TerminatorGun(player, playerdata);
+	BurnWardPatient(player, playerdata)
 	SuperImmuneRecoveryProcess();
 end
 
@@ -4262,9 +4305,6 @@ function OnCreatePlayer(_, player)
 			itemdata.sState = nil;
 		end
 	end
-	if bodydamage ~= nil then
-		bodydamage:Update();
-	end
 	InitPlayerData(player)
 	print("More Traits - Mod Version On Which Player Was Created: " .. playerdata.MTModVersion)
 	if getGameTime():getModData().MTModVersion == nil then
@@ -4297,6 +4337,7 @@ Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.OnInitWorld.Add(OnInitWorld);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
+Events.OnEquipPrimary.Add(BurnWardItem)
 if getActivatedMods():contains("DracoExpandedTraits") then
 	Events.EveryOneMinute.Add(checkWeight);
 else

@@ -249,7 +249,7 @@ local function initToadTraits()
 	local glassbody = TraitFactory.addTrait("glassbody", getText("UI_trait_glassbody"), -10, getText("UI_trait_glassbodydesc"), false, false);
 	local slowworker = TraitFactory.addTrait("slowworker", getText("UI_trait_slowworker"), -9, getText("UI_trait_slowworkerdesc"), false, false);
 	local mundane = TraitFactory.addTrait("mundane", getText("UI_trait_mundane"), -9, getText("UI_trait_mundanedesc"), false, false);
-	local burned = TraitFactory.addTrait("burned", getText("UI_trait_burned"), -18, getText("UI_trait_burneddesc"), false, false);
+	local burned = TraitFactory.addTrait("burned", getText("UI_trait_burned"), -7, getText("UI_trait_burneddesc"), false, false);
 	local deprived = TraitFactory.addTrait("deprived", getText("UI_trait_deprived"), -6, getText("UI_trait_depriveddesc"), false, false);
 	--Exclusives
 	if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
