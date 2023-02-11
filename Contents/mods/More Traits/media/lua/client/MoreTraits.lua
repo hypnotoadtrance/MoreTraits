@@ -1485,55 +1485,95 @@ function indefatigable(_player, _playerdata)
 	local enemies = player:getSpottedList();
 	if player:HasTrait("indefatigable") then
 		if (player:getBodyDamage():getHealth() < 15 or player:isDeathDragDown()) and playerdata.bindefatigable == false then
-			if player:getBodyDamage():getHealth() < 15 then
-				print("Health less than 15, indefatigable activated");
-			end
-			if player:isDeathDragDown() then
-				print("Player dragged down, indefatigable activated");
-				playerdata.IndefatigableHasBeenDraggedDown = true;
-				player:setPlayingDeathSound(false);
-				player:setDeathDragDown(false);
-				player:setHitReaction("EvasiveBlocked");
-			end
-			print("Healed to full.");
-			for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-				local b = player:getBodyDamage():getBodyParts():get(i);
-				if tableContains(playerdata.TraitInjuredBodyList, i) == false then
-					b:RestoreToFullHealth();
-				else
-					b:AddHealth(100);
+			if SandboxVars.MoreTraits.IndefatigableOneUse == false then
+				if player:getBodyDamage():getHealth() < 15 then
+					print("Health less than 15, indefatigable activated");
 				end
-			end
-			player:getBodyDamage():setOverallBodyHealth(100);
-			if SandboxVars.MoreTraits.IndefatigableCuresInfection == true then
+				if player:isDeathDragDown() then
+					print("Player dragged down, indefatigable activated");
+					playerdata.IndefatigableHasBeenDraggedDown = true;
+					player:setPlayingDeathSound(false);
+					player:setDeathDragDown(false);
+					player:setHitReaction("EvasiveBlocked");
+				end
+				print("Healed to full.");
+				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+					local b = player:getBodyDamage():getBodyParts():get(i);
+					if tableContains(playerdata.TraitInjuredBodyList, i) == false then
+						b:RestoreToFullHealth();
+					else
+						b:AddHealth(100);
+					end
+				end
+				player:getBodyDamage():setOverallBodyHealth(100);
 				if player:getBodyDamage():IsInfected() then
-					if playerdata.indefatigabledisabled == false then
+					if playerdata.indefatigablecuredinfection == false then
 						local bodydamage = player:getBodyDamage();
 						bodydamage:setInfected(false);
 						bodydamage:setInfectionMortalityDuration(-1);
 						bodydamage:setInfectionTime(-1);
 						bodydamage:setInfectionLevel(0);
 						playerdata.indefatigablecuredinfection = true;
-						if SandboxVars.MoreTraits.IndefatigableCuresInfectionOnce == true then
-							playerdata.indefatigabledisabled = true;
+					end
+				end
+				playerdata.bindefatigable = true;
+				playerdata.indefatigablecooldown = 0;
+				if enemies:size() > 2 then
+					for i = 0, enemies:size() - 1 do
+						if enemies:get(i):isZombie() then
+							if enemies:get(i):DistTo(player) <= 2.5 then
+								enemies:get(i):setStaggerBack(true);
+								enemies:get(i):setKnockedDown(true);
+							end
 						end
 					end
 				end
-			end
-			playerdata.bindefatigable = true;
-			playerdata.indefatigablecooldown = 0;
-			if enemies:size() > 2 then
-				for i = 0, enemies:size() - 1 do
-					if enemies:get(i):isZombie() then
-						if enemies:get(i):DistTo(player) <= 2.5 then
-							enemies:get(i):setStaggerBack(true);
-							enemies:get(i):setKnockedDown(true);
+				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
+			else
+				if playerdata.indefatigabledisabled == true then return end
+				if player:getBodyDamage():getHealth() < 15 then
+					print("Health less than 15, indefatigable activated");
+				end
+				if player:isDeathDragDown() then
+					print("Player dragged down, indefatigable activated");
+					playerdata.IndefatigableHasBeenDraggedDown = true;
+					player:setPlayingDeathSound(false);
+					player:setDeathDragDown(false);
+					player:setHitReaction("EvasiveBlocked");
+				end
+				print("Healed to full.");
+				for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+					local b = player:getBodyDamage():getBodyParts():get(i);
+					if tableContains(playerdata.TraitInjuredBodyList, i) == false then
+						b:RestoreToFullHealth();
+					else
+						b:AddHealth(100);
+					end
+				end
+				player:getBodyDamage():setOverallBodyHealth(100);
+				if player:getBodyDamage():IsInfected() then
+					local bodydamage = player:getBodyDamage();
+					bodydamage:setInfected(false);
+					bodydamage:setInfectionMortalityDuration(-1);
+					bodydamage:setInfectionTime(-1);
+					bodydamage:setInfectionLevel(0);
+					playerdata.indefatigablecuredinfection = true;
+				end
+				playerdata.bindefatigable = true;
+				playerdata.indefatigablecooldown = 0;
+				if enemies:size() > 2 then
+					for i = 0, enemies:size() - 1 do
+						if enemies:get(i):isZombie() then
+							if enemies:get(i):DistTo(player) <= 2.5 then
+								enemies:get(i):setStaggerBack(true);
+								enemies:get(i):setKnockedDown(true);
+							end
 						end
 					end
 				end
+				playerdata.indefatigabledisabled = true
+				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
 			end
-			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
-			--player:Say(getText("UI_trait_indefatigable"));
 		end
 	end
 end
