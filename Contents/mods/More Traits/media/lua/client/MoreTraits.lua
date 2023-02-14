@@ -4088,9 +4088,11 @@ local function BurnWardPatient(player, playerdata)
 			local b = -distance
 			while b < distance do
 				local square = getCell():getGridSquare(player:getX() + b, player:getY() + a, player:getZ());
-				if square:haveFire() then
-					foundfire = true
-					closest = math.min(closest, square:DistTo(player:getX(), player:getY()))
+				if square ~= nil then
+					if square:haveFire() then
+						foundfire = true
+						closest = math.min(closest, square:DistTo(player:getX(), player:getY()))
+					end
 				end
 				b = b + 1
 			end
