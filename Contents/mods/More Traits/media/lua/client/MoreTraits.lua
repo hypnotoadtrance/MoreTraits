@@ -3595,6 +3595,20 @@ function BatteringRam()
 						enemy:setHitForce(2.0);
 						enemy:reportEvent("wasHit");
 						stats:setEndurance(endurance - endurancereduction);
+						if player:HasTrait("martial") then
+							local allow = true;
+							if SandboxVars.MoreTraits.MartialWeapons == false then
+								if player:getPrimaryHandItem() ~= nil then
+									allow = false;
+								end
+							end
+							if allow == true then
+								enemy:setHealth(enemy:getHealth() - (ZombRand(10, 61) / 100));
+								if enemy:getHealth() <= 0 then
+									enemy:update();
+								end
+							end
+						end
 					end
 				end
 			end
