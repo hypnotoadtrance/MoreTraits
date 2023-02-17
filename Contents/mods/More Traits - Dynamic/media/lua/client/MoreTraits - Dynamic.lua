@@ -313,7 +313,7 @@ function MTDTraitsGainsByLevel(player, perk)
 						player:getModData().KillCount = player:getModData().KillCount or {};
 						local categoryKills = 0;
 						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil then
-							if player:getModData().KillCount.WeaponCategory["Long Blunt"] ~= nil then
+							if player:getModData().KillCount.WeaponCategory["Blunt"] ~= nil then
 								local longBluntKills = player:getModData().KillCount.WeaponCategory["Long Blunt"].count or 0;
 								categoryKills = categoryKills + longBluntKills;
 							end
@@ -322,7 +322,7 @@ function MTDTraitsGainsByLevel(player, perk)
 								categoryKills = categoryKills + shortBluntKills;
 							end
 						end
-						if SandboxVars.MoreTraitsDynamic.ProwessBluntDynamic == true and not player:HasTrait("blunttwirl") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.ProwessBluntDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessBluntDynamicKill then
+						if SandboxVars.MoreTraitsDynamic.ProwessBluntDynamic == true and not player:HasTrait("problunt") and sumOfLevels >= SandboxVars.MoreTraitsDynamic.ProwessBluntDynamicSkill and categoryKills >= SandboxVars.MoreTraitsDynamic.ProwessBluntDynamicKill then
 							player:getTraits():add("problunt");
 							MTDapplyXPBoost(player, Perks.Blunt, 1);
 							MTDapplyXPBoost(player, Perks.SmallBlunt, 1);
@@ -600,12 +600,6 @@ function MTDTraitsGainsByLevel(player, perk)
 					player:getTraits():add("vagabond");
 					MTDapplyXPBoost(player, Perks.Scavenging, 1);
 					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond"), true, HaloTextHelper.getColorGreen());
-				end
-				-- Scrounger
-				if SandboxVars.MoreTraitsDynamic.ScroungerDynamic == true and not player:HasTrait("scrounger") and player:getPerkLevel(Perks.Scavenging) >= SandboxVars.MoreTraitsDynamic.ScroungerDynamicSkill then
-					player:getTraits():add("scrounger");
-					MTDapplyXPBoost(player, Perks.Scavenging, 1);
-					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger"), true, HaloTextHelper.getColorGreen());
 				end
 				-- Grave Robber
 				if SandboxVars.MoreTraitsDynamic.GraverobberDynamic == true and not player:HasTrait("graverobber") and player:getPerkLevel(Perks.Scavenging) >= SandboxVars.MoreTraitsDynamic.GraverobberDynamicSkill and player:getZombieKills() >= SandboxVars.MoreTraitsDynamic.GraverobberDynamicKill then
