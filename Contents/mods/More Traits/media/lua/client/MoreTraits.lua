@@ -3595,7 +3595,7 @@ function BatteringRam()
 						enemy:setHitForce(2.0);
 						enemy:reportEvent("wasHit");
 						stats:setEndurance(endurance - endurancereduction);
-						if player:HasTrait("martial") then
+						if player:HasTrait("martial") and SandboxVars.MoreTraits.BatteringRamMartialCombo == true then
 							local allow = true;
 							if SandboxVars.MoreTraits.MartialWeapons == false then
 								if player:getPrimaryHandItem() ~= nil then

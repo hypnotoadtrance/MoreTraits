@@ -111,4 +111,6 @@ Sandbox_EN = {
 	Sandbox_MoreTraits_BurnedPanic_tooltip = "Panic you will get from Burn Ward Patient.<Br>Scaling works by repeatedly adding panic until max distance number is reached, starting from distance of closest fire.<br>What this means is, if fire is 1 tile away and max is 20, it will give 20x panic than this number. This happens every one minute in-game.",
 	Sandbox_MoreTraits_BurnedStress = "Burn Ward Stress",
 	Sandbox_MoreTraits_BurnedStress_tooltip = "Stress you will get from Burn Ward Patient.<Br>Scaling works by repeatedly adding stress until max distance number is reached, starting from distance of closest fire.<br>What this means is, if fire is 1 tile away and max is 20, it will give 20x stress than this number. This happens every one minute in-game.",
+	Sandbox_MoreTraits_BatteringRamMartial = "Battering Ram + Martial Artist",
+	Sandbox_MoreTraits_BatteringRamMartial_tooltip = "If this is enabled, knocking down zombies with Battering Ram trait will damage them if you have Martial Artist trait."
 }
