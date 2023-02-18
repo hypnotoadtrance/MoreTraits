@@ -3602,8 +3602,17 @@ function BatteringRam()
 									allow = false;
 								end
 							end
+							local damageloss = 1;
+							if endurance >= 0.5 and endurance < 0.75 then
+								damageloss = 0.75;
+							elseif endurance >= 0.25 and endurance < 0.5 then
+								damageloss = 0.5;
+							elseif endurance <= 0.25 then
+								damageloss = 0.25;
+							end
+							damage = (ZombRand(10, 61) / 100) * damageloss
 							if allow == true then
-								enemy:setHealth(enemy:getHealth() - (ZombRand(10, 61) / 100));
+								enemy:setHealth(enemy:getHealth() - damage);
 								if enemy:getHealth() <= 0 then
 									enemy:update();
 								end
