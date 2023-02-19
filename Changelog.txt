@@ -2,7 +2,7 @@ Main Changelog:
 	- Burn Ward Patient Rework - Seeing fire gives you panic and stress relative to distance between you and fire, you cannot equip molotovs, fire bombs and cannot start campfires. 18 Points -> 7 Points
 	- 3 New Sandbox Settings for Burn Ward Patient
 	- Burn Ward Patient is no longer exclusive with Injured and Broken Leg traits
-	- Gym Goer Change - No longer gets rid of Exercise Fatigue, Exercise Fatigue now increases very slowly and decreases 3x as fast. Therefore the effects and how long you have Exercise Fatigue is reduced
+	- Gym Goer Change - No longer gets rid of Exercise Fatigue, Exercise Fatigue only lasts for half the duration.
 	- Indefatigable Change - Cures infection by default, but can be used only once per character
 	- New Sandbox Setting for Indefatigable: Indefatigable One Use
 	- Battering Ram now damages zombies if you have Martial Artist trait, can be disabled with sandbox setting

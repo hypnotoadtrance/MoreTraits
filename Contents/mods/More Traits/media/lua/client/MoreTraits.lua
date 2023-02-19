@@ -3308,22 +3308,54 @@ function GymGoerUpdate(_player)
 		local stiffnesslist = player:getModData().GymGoerStiffnessList
 		if stiffnesslist == nil then
 			stiffnesslist = {}
-			for i = 0, bodydamage:getBodyParts():size() - 1 do
-				stiffnesslist[i] = 0;
+			for i = 1, 4 do
+				if i == 1 then
+					stiffnesslist[1] = player:getFitness():getCurrentExeStiffnessInc("arms")
+				elseif i == 2 then
+					stiffnesslist[2] = player:getFitness():getCurrentExeStiffnessInc("legs")
+				elseif i == 3 then
+					stiffnesslist[3] = player:getFitness():getCurrentExeStiffnessInc("chest")
+				else
+					stiffnesslist[4] = player:getFitness():getCurrentExeStiffnessInc("abs")
+				end
 			end
 			player:getModData().GymGoerStiffnessList = stiffnesslist;
 		end
-		for i = 0, bodydamage:getBodyParts():size() - 1 do
-			local b = bodydamage:getBodyParts():get(i);
-			local stiffness = b:getStiffness();
-			local moddedstiffness = stiffnesslist[i]
-			if stiffness > moddedstiffness then
-				b:setStiffness(stiffness - (math.abs(moddedstiffness - stiffness) / 1.5))
+		for i = 1, 4 do
+			local timer = stiffnesslist[i]
+			if i == 1 then
+				if player:getFitness():getCurrentExeStiffnessInc("arms") > timer or player:getFitness():getCurrentExeStiffnessInc("arms") == 0 then
+					player:getModData().GymGoerStiffnessList[i] = player:getFitness():getCurrentExeStiffnessInc("arms")
+				elseif player:getFitness():getCurrentExeStiffnessInc("arms") < (timer / 2) then
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("UpperArm_L")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("UpperArm_R")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("ForeArm_L")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("ForeArm_R")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("Hand_L")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("Hand_R")):setStiffness(0)
+				end
+			elseif i == 2 then
+				if player:getFitness():getCurrentExeStiffnessInc("legs") > timer or player:getFitness():getCurrentExeStiffnessInc("legs") == 0 then
+					player:getModData().GymGoerStiffnessList[i] = player:getFitness():getCurrentExeStiffnessInc("legs")
+				elseif player:getFitness():getCurrentExeStiffnessInc("legs") < (timer / 2) then
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("UpperLeg_L")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("UpperLeg_R")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("LowerLeg_L")):setStiffness(0)
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("LowerLeg_R")):setStiffness(0)
+				end
+			elseif i == 3 then
+				if player:getFitness():getCurrentExeStiffnessInc("chest") > timer or player:getFitness():getCurrentExeStiffnessInc("chest") == 0 then
+					player:getModData().GymGoerStiffnessList[i] = player:getFitness():getCurrentExeStiffnessInc("chest")
+				elseif player:getFitness():getCurrentExeStiffnessInc("chest") < (timer / 2) then
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("Torso_Upper")):setStiffness(0)
+				end
+			else	
+				if player:getFitness():getCurrentExeStiffnessInc("abs") > timer or player:getFitness():getCurrentExeStiffnessInc("abs") == 0 then
+					player:getModData().GymGoerStiffnessList[i] = player:getFitness():getCurrentExeStiffnessInc("abs")
+				elseif player:getFitness():getCurrentExeStiffnessInc("abs") < (timer / 2) then
+					player:getBodyDamage():getBodyPart(BodyPartType.FromString("Torso_Lower")):setStiffness(0)
+				end
 			end
-			if stiffness < moddedstiffness then
-				b:setStiffness(stiffness - (math.abs(moddedstiffness - stiffness) * 2))
-			end
-			player:getModData().GymGoerStiffnessList[i] = b:getStiffness()
 		end
 	end
 end
