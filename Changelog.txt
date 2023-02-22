@@ -6,6 +6,7 @@ Main Changelog:
 	- Indefatigable Change - Cures infection by default, but can be used only once per character
 	- New Sandbox Setting for Indefatigable: Indefatigable One Use
 	- Battering Ram now damages zombies if you have Martial Artist trait, can be disabled with sandbox setting
+	- Fixed Terminator Stress Loss being affected by Smoker Stress
 Dynamic Changelog:
 	- Fixed problunt bugs (was checking incorrect stuff)
 	- Mod will no longer give "ghost" Scrounger perk when Scavenging skill mod is enabled.

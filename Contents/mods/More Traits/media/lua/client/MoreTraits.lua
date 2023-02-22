@@ -4019,7 +4019,7 @@ local function TerminatorGun(player, playerdata)
 			if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
 				if player:HasTrait("Terminator") then
 					if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-						player:getStats():setStress(player:getStats():getStress() - 0.01)
+						player:getStats():setStress(math.max(0.01, player:getStats():getStress() - player:getStats():getStressFromCigarettes()) - 0.01)
 						player:getStats():setPanic(player:getStats():getPanic() - 10)
 						if player:getStats():getPanic() < 0 then
 							player:getStats():setPanic(0);
