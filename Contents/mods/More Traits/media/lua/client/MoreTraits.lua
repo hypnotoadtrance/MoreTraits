@@ -1485,6 +1485,9 @@ function indefatigable(_player, _playerdata)
 	local enemies = player:getSpottedList();
 	if player:HasTrait("indefatigable") then
 		if (player:getBodyDamage():getHealth() < 15 or player:isDeathDragDown()) and playerdata.bindefatigable == false then
+			if getActivatedMods():contains("MTAddonIndefatigableLol") == true then
+				getSoundManager():PlaySound("indefatigabletheme", false, 0):setVolume(0.5);
+			end
 			if SandboxVars.MoreTraits.IndefatigableOneUse == false then
 				if player:getBodyDamage():getHealth() < 15 then
 					print("Health less than 15, indefatigable activated");
