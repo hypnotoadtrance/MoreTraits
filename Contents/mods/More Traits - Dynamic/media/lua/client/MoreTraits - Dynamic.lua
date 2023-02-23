@@ -314,7 +314,7 @@ function MTDTraitsGainsByLevel(player, perk)
 						local categoryKills = 0;
 						if player:getModData().KillCount ~= nil and player:getModData().KillCount.WeaponCategory ~= nil then
 							if player:getModData().KillCount.WeaponCategory["Blunt"] ~= nil then
-								local longBluntKills = player:getModData().KillCount.WeaponCategory["Long Blunt"].count or 0;
+								local longBluntKills = player:getModData().KillCount.WeaponCategory["Blunt"].count or 0;
 								categoryKills = categoryKills + longBluntKills;
 							end
 							if player:getModData().KillCount.WeaponCategory["SmallBlunt"] ~= nil then
