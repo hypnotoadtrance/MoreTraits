@@ -1447,7 +1447,7 @@ function Gordanite(_player)
 	end
 	if player:HasItem("Crowbar") == true then
 		local skip = false;
-		if player:getPrimaryHandItem() ~= null then
+		if player:getPrimaryHandItem() ~= nil then
 			if player:getPrimaryHandItem():getName() == getText("Tooltip_MoreTraits_GordaniteBoost") or player:getPrimaryHandItem():getType() == "Crowbar" then
 				skip = true;
 			end
@@ -1471,7 +1471,7 @@ function Gordanite(_player)
 					crowbar:setMinimumSwingTime(3);
 					crowbar:setTreeDamage(0);
 					crowbar:setBaseSpeed(1);
-					crowbar:setTooltip(null);
+					crowbar:setTooltip(nil);
 					break ;
 				end
 			end
