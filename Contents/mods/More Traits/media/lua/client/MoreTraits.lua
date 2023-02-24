@@ -4085,7 +4085,7 @@ local function QuickRest(player, playerdata)
 end
 
 local function BurnWardPatient(player, playerdata)
-	if player:HasTrait("burned") then
+	if player:HasTrait("burned") and playerdata.MTModVersion >= 3 then
 		local x = math.floor(player:getX())
 		local y = math.floor(player:getY())
 		local closest = 100
@@ -4115,7 +4115,7 @@ local function BurnWardPatient(player, playerdata)
 end
 
 local function BurnWardItem(player)
-	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil then
+	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and playerdata.MTModVersion >= 3 then
 		local item = player:getPrimaryHandItem()
 		if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
 			player:setPrimaryHandItem(nil)

@@ -4,9 +4,9 @@ require "TimedActions/ISBaseTimedAction"
 ISLightFromPetrol = ISBaseTimedAction:derive("ISLightFromPetrol");
 
 function ISLightFromPetrol:isValid()
-	if getPlayer():HasTrait("burned") then
-		HaloTextHelper.addText(getPlayer(), getText("UI_burnedstop"), HaloTextHelper.getColorRed());
-		return self.campfire:getObject() and false
+	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 then
+		HaloTextHelper.addText(self.character, getText("UI_burnedstop"), HaloTextHelper.getColorRed());
+		return
 	end
 	self.campfire:updateFromIsoObject()
 	local playerInv = self.character:getInventory()

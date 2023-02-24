@@ -1,2 +1,3 @@
 Main Changelog:
+	- Characters with Burn Ward Patient trait made before the change won't use the new version.
 	- Hardy code changed to be more consistent with how its max endurance increased works.
