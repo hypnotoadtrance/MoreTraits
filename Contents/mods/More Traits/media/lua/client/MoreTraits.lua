@@ -1635,16 +1635,15 @@ function hardytrait(_player, _playerdata)
 	if player:HasTrait("hardy") then
 		local modendurance = playerdata.iHardyEndurance;
 		local endurance = stats:getEndurance();
-		local interval = playerdata.iHardyInterval;
 		local maxendurance = playerdata.iHardyMaxEndurance;
 		local AmountOfEnduranceRegenerated = 0.05;
 		if SandboxVars.MoreTraits.HardyEndurance then
-			AmountOfEnduranceRegenerated = (SandboxVars.MoreTraits.HardyEndurance * 2) / 1000;
+			AmountOfEnduranceRegenerated = (SandboxVars.MoreTraits.HardyEndurance) / 500;
 		end
 		if playerdata.iHardyMaxEndurance == nil or playerdata.iHardyMaxEndurance ~= 5 then
 			playerdata.iHardyMaxEndurance = 5;
 		end
-		if endurance < 0.9 then
+		if endurance < 0.85 then
 			if modendurance >= 1 then
 				stats:setEndurance(endurance + AmountOfEnduranceRegenerated);
 				playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
@@ -1654,60 +1653,10 @@ function hardytrait(_player, _playerdata)
 			end
 		end
 		if modendurance < maxendurance and endurance == 1 then
-			if interval <= 0 then
-				playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
-				if MoreTraits.settings.HardyNotifier == true then
-					HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
-				end
-				playerdata.iHardyInterval = 1000;
-			else
-				local multiplier = GameSpeedMultiplier()
-				if player:isSitOnGround() == true then
-					if player:HasTrait("quickrest") then
-						multiplier = multiplier * 2;
-					end
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - (1 * multiplier);
-					else
-						playerdata.iHardyInterval = interval - (2 * multiplier);
-					end
-				elseif player:isAsleep() == true then
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - 25;
-					else
-						playerdata.iHardyInterval = interval - 50;
-					end
-				else
-					if player:HasTrait("Asthmatic") then
-						playerdata.iHardyInterval = interval - (0.25 * multiplier);
-					else
-						playerdata.iHardyInterval = interval - (0.5 * multiplier);
-					end
-				end
-			end
-		elseif interval > 0 and endurance == 1 then
-			local multiplier = GameSpeedMultiplier()
-			if player:isSitOnGround() == true then
-				if player:HasTrait("quickrest") then
-					multiplier = multiplier * 2;
-				end
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - (1 * multiplier);
-				else
-					playerdata.iHardyInterval = interval - (2 * multiplier);
-				end
-			elseif player:isAsleep() == true then
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - 25;
-				else
-					playerdata.iHardyInterval = interval - 50;
-				end
-			else
-				if player:HasTrait("Asthmatic") then
-					playerdata.iHardyInterval = interval - (0.25 * multiplier);
-				else
-					playerdata.iHardyInterval = interval - (0.5 * multiplier);
-				end
+			stats:setEndurance(endurance - AmountOfEnduranceRegenerated)
+			playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
+			if MoreTraits.settings.HardyNotifier == true then
+				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
 			end
 		end
 	end
