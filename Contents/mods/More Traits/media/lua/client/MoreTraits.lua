@@ -20,7 +20,7 @@ I have been unable to find a workaround.
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
-MTModVersion = 3; --REMEMBER TO MANUALLY INCREASE
+MTModVersion = 4; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 playerdatatable = {}
 playerdatatable[0] = { "MTModVersion", MTModVersion }
