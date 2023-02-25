@@ -1459,7 +1459,9 @@ function Gordanite(_player)
 			crowbar:setWeaponLength(0.4 + floatmod / 2);
 			crowbar:setMinimumSwingTime(moddata.MinimumSwing - 0.2 - floatmod);
 			if moddata.NameChanged == false then
-				crowbar:setName(crowbar:getName().."+"); 
+				if getActivatedMods():contains("VorpalWeapons") == false then
+					crowbar:setName(crowbar:getName().."+");
+				end
 				moddata.NameChanged = true
 			end
 			if crowbar:getType() == "Crowbar" then
@@ -1480,10 +1482,10 @@ function Gordanite(_player)
 				crowbar:setDoorDamage(moddata.DoorDamage);
 				crowbar:setCriticalChance(moddata.CriticalChance);
 				crowbar:setSwingTime(moddata.SwingTime);
+				local newname = ""
+				local length = string.len(crowbar:getName()) - 1
+				newname = newname..string.sub(crowbar:getName(),0,length)
 				if getActivatedMods():contains("VorpalWeapons") == false then
-					local newname = ""
-					local length = string.len(crowbar:getName()) - 1
-					newname = newname..string.sub(crowbar:getName(),0,length)
 					crowbar:setName(newname)
 				end
 				crowbar:setWeaponLength(0.4);
