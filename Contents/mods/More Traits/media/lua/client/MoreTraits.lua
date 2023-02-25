@@ -38,7 +38,7 @@ playerdatatable[11] = { "iHoursSinceDrink", 0 }
 playerdatatable[12] = { "iTimesCannibal", 0 }
 playerdatatable[13] = { "fPreviousHealthFromFoodTimer", 1000 }
 playerdatatable[14] = { "bWasInfected", false }
-playerdatatable[15] = { "iHardyEndurance", 0 }
+playerdatatable[15] = { "iHardyEndurance", 5 }
 playerdatatable[16] = { "iHardyMaxEndurance", 5 }
 playerdatatable[17] = { "iHardyInterval", 1000 }
 playerdatatable[18] = { "iWithdrawalCooldown", 24 }
@@ -74,6 +74,9 @@ playerdatatable[47] = { "EvasivePlayerInfected", false }
 playerdatatable[48] = { "TraitInjuredBodyList", {} }
 playerdatatable[49] = {"fLastHP", 0}
 playerdatatable[50] = {"isSleeping", false}
+playerdatatable[51] = {"QuickRestActive", false}
+playerdatatable[52] = {"QuickRestEndurance", -1}
+playerdatatable[53] = {"QuickRestFinished", false}
 
 local function AddXP(player, perk, amount)
 	if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
@@ -1417,63 +1420,83 @@ end
 
 function Gordanite(_player)
 	local player = _player;
+	if player:getPrimaryHandItem() == nil then return end
 	if player:HasTrait("gordanite") then
 		local longBluntLvl = player:getPerkLevel(Perks.Blunt);
 		local strengthlvl = player:getPerkLevel(Perks.Strength);
 		local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1;
-		if player:getPrimaryHandItem() ~= nil then
-			if player:getPrimaryHandItem():getType() == "Crowbar" then
-				if SandboxVars.MoreTraits.GordaniteEffectiveness then
-					local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01;
-					floatmod = floatmod * modifier;
-					longBluntLvl = longBluntLvl * modifier;
-					strengthlvl = strengthlvl * modifier;
-				end
-				local crowbar = player:getPrimaryHandItem();
-				crowbar:setMinDamage(0.7 + floatmod / 2);
-				crowbar:setMaxDamage(1.25 + floatmod / 2);
-				crowbar:setPushBackMod(0.6 + floatmod);
-				crowbar:setDoorDamage(15 + strengthlvl + longBluntLvl);
-				crowbar:setTreeDamage(15 + strengthlvl + longBluntLvl * 2);
-				crowbar:setCriticalChance(35 + (strengthlvl + longBluntLvl) / 2);
-				crowbar:setSwingTime(2.8 - floatmod);
-				crowbar:setBaseSpeed(1.1 + floatmod);
-				crowbar:setWeaponLength(0.4 + floatmod / 2);
-				crowbar:setMinimumSwingTime(1.7 - floatmod);
-				crowbar:setName(getText("Tooltip_MoreTraits_GordaniteBoost"));
+		local item = player:getPrimaryHandItem()
+		if item:getType() == "Crowbar" or item:getType() == "BloodyCrowbar" then
+			if SandboxVars.MoreTraits.GordaniteEffectiveness then
+				local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01;
+				floatmod = floatmod * modifier;
+				longBluntLvl = longBluntLvl * modifier;
+				strengthlvl = strengthlvl * modifier;
+			end
+			local crowbar = item;
+			local moddata = crowbar:getModData()
+			if moddata.MTHasBeenModified == nil then
+				moddata.MTHasBeenModified = true
+				moddata.MinDamage = crowbar:getMinDamage()
+				moddata.MaxDamage = crowbar:getMaxDamage()
+				moddata.PushBack = crowbar:getPushBackMod()
+				moddata.DoorDamage = crowbar:getDoorDamage()
+				moddata.TreeDamage = crowbar:getTreeDamage()
+				moddata.CriticalChance = crowbar:getCriticalChance()
+				moddata.SwingTime = crowbar:getSwingTime()
+				moddata.BaseSpeed = crowbar:getBaseSpeed()
+				moddata.MinimumSwing = crowbar:getMinimumSwingTime()
+				moddata.NameChanged = false
+			end
+			crowbar:setMinDamage(moddata.MinDamage + 0.1 + floatmod / 2);
+			crowbar:setMaxDamage(moddata.MaxDamage + 0.1 + floatmod / 2);
+			crowbar:setPushBackMod(moddata.PushBack + 0.1 + floatmod);
+			crowbar:setDoorDamage(moddata.DoorDamage + 7 + strengthlvl + longBluntLvl);
+			crowbar:setTreeDamage(moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2);
+			crowbar:setCriticalChance(moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2);
+			crowbar:setSwingTime(moddata.SwingTime - 0.2 - floatmod);
+			crowbar:setBaseSpeed(moddata.BaseSpeed + 0.1 + floatmod);
+			crowbar:setWeaponLength(0.4 + floatmod / 2);
+			crowbar:setMinimumSwingTime(moddata.MinimumSwing - 0.2 - floatmod);
+			if moddata.NameChanged == false then
+				crowbar:setName(crowbar:getName().."+"); 
+				moddata.NameChanged = true
+			end
+			if crowbar:getType() == "Crowbar" then
 				crowbar:setTooltip(getText("Tooltip_MoreTraits_ItemBoost"));
+			else
+				crowbar:setTooltip(getText("Tooltip_MoreTraits_BloodyItemBoost"));
 			end
 		end
-	end
-	if player:HasItem("Crowbar") == true then
-		local skip = false;
-		if player:getPrimaryHandItem() ~= nil then
-			if player:getPrimaryHandItem():getName() == getText("Tooltip_MoreTraits_GordaniteBoost") or player:getPrimaryHandItem():getType() == "Crowbar" then
-				skip = true;
-			end
-		end
-		if skip == false then
-			local inv = player:getInventory();
-			for i = 0, inv:getItems():size() - 1 do
-				local item = player:getInventory():getItems():get(i);
-				if item:getName() == getText("Tooltip_MoreTraits_GordaniteBoost") then
-					local crowbar = item;
-					crowbar:setMinDamage(0.6);
-					crowbar:setMaxDamage(1.15);
-					crowbar:setPushBackMod(0.5);
-					crowbar:setDoorDamage(8);
-					crowbar:setCriticalChance(35);
-					crowbar:setSwingTime(3);
-					if getActivatedMods():contains("VorpalWeapons") == false then
-						crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
-					end
-					crowbar:setWeaponLength(0.4);
-					crowbar:setMinimumSwingTime(3);
-					crowbar:setTreeDamage(0);
-					crowbar:setBaseSpeed(1);
-					crowbar:setTooltip(nil);
-					break ;
+	else
+		local item = player:getPrimaryHandItem()
+		if item:getType() == "Crowbar" or item:getType() == "BloodyCrowbar" then
+			local crowbar = item;
+			local moddata = crowbar:getModData()
+			if moddata.MTHasBeenModified == true then 
+				crowbar:setMinDamage(moddata.MinDamage);
+				crowbar:setMaxDamage(moddata.MaxDamage);
+				crowbar:setPushBackMod(moddata.PushBack);
+				crowbar:setDoorDamage(moddata.DoorDamage);
+				crowbar:setCriticalChance(moddata.CriticalChance);
+				crowbar:setSwingTime(moddata.SwingTime);
+				if getActivatedMods():contains("VorpalWeapons") == false then
+					local newname = ""
+					local length = string.len(crowbar:getName()) - 1
+					newname = newname..string.sub(crowbar:getName(),0,length)
+					crowbar:setName(newname)
 				end
+				crowbar:setWeaponLength(0.4);
+				crowbar:setMinimumSwingTime(moddata.MinimumSwing);
+				crowbar:setTreeDamage(moddata.TreeDamage);
+				crowbar:setBaseSpeed(moddata.BaseSpeed);
+				if crowbar:getType() == "Crowbar" then
+					crowbar:setTooltip(nil);
+				else
+					crowbar:setTooltip(getText("Tooltip_MoreTraits_BloodyCrowbar"));
+				end
+				moddata.NameChanged = false
+				moddata.MTHasBeenModified = false
 			end
 		end
 	end
@@ -1657,6 +1680,8 @@ function hardytrait(_player, _playerdata)
 			playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
 			if MoreTraits.settings.HardyNotifier == true then
 				HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
+			else
+				HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), HaloTextHelper.getColorWhite())
 			end
 		end
 	end
@@ -4077,9 +4102,21 @@ local function IdealWeight(player, playerdata)
 end
 
 local function QuickRest(player, playerdata)
-	if player:HasTrait("quickrest") and player:isSitOnGround() == true then
-		if player:getStats():getEndurance() < 1 and internalTick >= 25 then
-			player:getStats():setEndurance(player:getStats():getEndurance() + (0.001 * math.ceil(GameSpeedMultiplier() / 2)));
+	if player:HasTrait("quickrest") then
+		if player:getStats():getEndurance() < 1 and playerdata.iHardyEndurance < 5 and player:isSitOnGround() == true then
+			if playerdata.QuickRestEndurance + 0.001 <= player:getStats():getEndurance() then
+				player:getStats():setEndurance(player:getStats():getEndurance() + 0.001)
+				playerdata.QuickRestEndurance = player:getStats():getEndurance()
+			end
+			playerdata.QuickRestActive = true
+		elseif playerdata.QuickRestActive == true and player:getStats():getEndurance() == 1 then
+			playerdata.QuickRestActive = false
+			playerdata.QuickRestEndurance = -1
+			playerdata.QuickRestFinished = true		
+		elseif playerdata.QuickRestFinished == true and player:isSitOnGround() == false then
+			playerdata.QuickRestActive = false
+			playerdata.QuickRestEndurance = -1
+			playerdata.QuickRestFinished = false
 		end
 	end
 end
@@ -4115,7 +4152,7 @@ local function BurnWardPatient(player, playerdata)
 end
 
 local function BurnWardItem(player)
-	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and playerdata.MTModVersion >= 3 then
+	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and player:getModData().MTModVersion >= 3 then
 		local item = player:getPrimaryHandItem()
 		if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
 			player:setPrimaryHandItem(nil)
@@ -4232,7 +4269,6 @@ function MainPlayerUpdate(_player)
 		playerdata.bWasInfected = player:getBodyDamage():isInfected();
 		vehicleCheck(player);
 		FoodUpdate(player);
-		Gordanite(player);
 		BatteringRamUpdate(player, playerdata);
 		clothingUpdate(player);
 	elseif internalTick == 20 then
@@ -4290,6 +4326,12 @@ function EveryOneMinute()
 	TerminatorGun(player, playerdata);
 	BurnWardPatient(player, playerdata)
 	SuperImmuneRecoveryProcess();
+	
+	
+	
+	if playerdata.QuickRestFinished == true then
+		HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), HaloTextHelper.getColorGreen());
+	end
 end
 
 function EveryHours()
@@ -4385,6 +4427,7 @@ Events.EveryOneMinute.Add(EveryOneMinute);
 Events.OnInitWorld.Add(OnInitWorld);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
 Events.OnEquipPrimary.Add(BurnWardItem)
+Events.OnEquipPrimary.Add(Gordanite)
 if getActivatedMods():contains("DracoExpandedTraits") then
 	Events.EveryOneMinute.Add(checkWeight);
 else

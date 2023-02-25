@@ -1,5 +1,10 @@
 Main Changelog:
 	- Characters with Burn Ward Patient trait made before the change won't use the new version.
 	- Hardy code changed to be more consistent with how its max endurance increased works.
+	- Hardy informs you if you need to keep resting.
+	- Quick Rest code changed to be more consistent with how its endurance regeneration works.
+	- Quick Rest informs you if your endurance is max.
+	- Gordanite trait now accounts for Bloody Crowbar from Antique Collector.
+	- Gordanite trait code reworked.
 Dynamic Changelog:
 	-Fixed long blunt incorrect typing.
