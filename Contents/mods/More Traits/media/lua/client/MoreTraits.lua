@@ -1482,9 +1482,8 @@ function Gordanite(_player)
 				crowbar:setDoorDamage(moddata.DoorDamage);
 				crowbar:setCriticalChance(moddata.CriticalChance);
 				crowbar:setSwingTime(moddata.SwingTime);
-				local newname = ""
 				local length = string.len(crowbar:getName()) - 1
-				newname = newname..string.sub(crowbar:getName(),0,length)
+				local newname = string.sub(crowbar:getName(),0,length)
 				if getActivatedMods():contains("VorpalWeapons") == false then
 					crowbar:setName(newname)
 				end
