@@ -726,7 +726,7 @@ function MTPlayerHit(player, _, __)
 					chance = SandboxVars.MoreTraits.ImmunoChance;
 					tried = true
 					if ZombRand(1, 101) <= chance then
-						bodydamage:setInfected(true);
+						player:getBodyDamage():setInfected(true);
 					end
 				end
 			end
