@@ -1,5 +1,6 @@
 Main Changelog:
 	- Characters with Burn Ward Patient trait made before the change won't use the new version.
+	- Burn Ward Patient cannot start fire on corpses, antique stoves and BBQ.
 	- Hardy code changed to be more consistent with how its max endurance increased works.
 	- Hardy informs you if you need to keep resting.
 	- Quick Rest code changed to be more consistent with how its endurance regeneration works.
