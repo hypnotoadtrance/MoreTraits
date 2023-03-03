@@ -1436,6 +1436,21 @@ function Gordanite(_player)
 			local crowbar = item;
 			local moddata = crowbar:getModData()
 			if moddata.MTHasBeenModified == nil then
+				if crowbar:getTreeDamage() > 0 then --Reset stats from old gordanite
+					crowbar:setMinDamage(0.6);
+					crowbar:setMaxDamage(1.15);
+					crowbar:setPushBackMod(0.5);
+					crowbar:setDoorDamage(8);
+					crowbar:setCriticalChance(35);
+					crowbar:setSwingTime(3);
+					if getActivatedMods():contains("VorpalWeapons") == false then
+						crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
+					end
+					crowbar:setWeaponLength(0.4);
+					crowbar:setMinimumSwingTime(3);
+					crowbar:setTreeDamage(0);
+					crowbar:setBaseSpeed(1);
+				end
 				moddata.MTHasBeenModified = true
 				moddata.MinDamage = crowbar:getMinDamage()
 				moddata.MaxDamage = crowbar:getMaxDamage()
