@@ -4419,7 +4419,9 @@ function OnCreatePlayer(_, player)
 end
 
 function OnInitWorld()
-	getGameTime():getModData().MTModVersion = MTModVersion;
+	if getGameTime():getModData().MTModVersion == nil then
+		getGameTime():getModData().MTModVersion = MTModVersion;
+	end
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
