@@ -1,4 +1,4 @@
-Sandbox_EN = {
+Sandbox_CH = {
 	Sandbox_MoreTraitsDynamic = "More Traits - Dynamic",
 	Sandbox_MoreTraitsDynamic_AntiGunActivist = "反槍枝激進主義者",
 	Sandbox_MoreTraitsDynamic_AntiGunActivistSkill = "反槍枝激進主義者瞄準技能要求",
