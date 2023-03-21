@@ -4167,7 +4167,8 @@ local function BurnWardPatient(player, playerdata)
 end
 
 local function BurnWardItem(player)
-	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and player:getModData().MTModVersion >= 3 then
+	local playerdata = player:getModData()
+	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and playerdata.MTModVersion >= 3 then
 		local item = player:getPrimaryHandItem()
 		if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
 			player:setPrimaryHandItem(nil)
