@@ -531,6 +531,18 @@ function initToadTraitsPerks(_player)
 	end
 	playerdata.fLastHP = nil;
 	checkWeight();
+	if player:HasTrait("burned") then
+		local TraitInjuredBodyList = playerdata.TraitInjuredBodyList;
+		local bodydamage = player:getBodyDamage();
+		for i = 0, bodydamage:getBodyParts():size() - 1 do
+			local b = bodydamage:getBodyParts():get(i);
+			b:setBurned();
+			b:setBurnTime(ZombRand(10, 100) + damage);
+			b:setNeedBurnWash(false);
+			b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
+			table.insert(TraitInjuredBodyList, i);
+		end
+	end
 	if player:HasTrait("ingenuitive") then
 		LearnAllRecipes(player);
 		playerdata.IngenuitiveActivated = true;
