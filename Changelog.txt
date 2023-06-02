@@ -8,5 +8,6 @@ Main Changelog:
 	- Gordanite trait now accounts for Bloody Crowbar from Antique Collector.
 	- Gordanite trait code reworked.
 	- Fixed Immunocompromised causing errors.
+	- Burn Ward Patient Adjustments
 Dynamic Changelog:
 	-Fixed long blunt incorrect typing.
