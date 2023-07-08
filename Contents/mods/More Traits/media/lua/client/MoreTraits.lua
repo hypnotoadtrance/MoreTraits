@@ -4319,6 +4319,10 @@ function MTAlcoholismMoodleTracker(_player, _playerdata)
     end
 end
 function MainPlayerUpdate(_player)
+    -- Cows: Do not proceed if the _player is an NPC
+	if (_player:isNPC() == true) then
+		return;
+	end
     local player = _player;
     local playerdata = player:getModData();
     if internalTick >= 30 then
