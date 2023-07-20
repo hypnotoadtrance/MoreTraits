@@ -80,7 +80,9 @@ playerdatatable[53] = { "QuickRestFinished", false }
 
 local function AddXP(player, perk, amount)
     if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
-        player:getXp():AddXP(perk, amount, false, false, false)
+        -- 3rd param: apply boosts
+        -- 4th param: either triggers AddXP event or does something different
+        player:getXp():AddXP(perk, amount, true, true, false)
     else
         player:getXp():AddXP(perk, amount, false, false);
     end
