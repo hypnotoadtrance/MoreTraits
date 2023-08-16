@@ -20,7 +20,7 @@ I have been unable to find a workaround.
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
-MTModVersion = 4; --REMEMBER TO MANUALLY INCREASE
+MTModVersion = 5; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 playerdatatable = {}
 playerdatatable[0] = { "MTModVersion", MTModVersion }
@@ -1415,105 +1415,6 @@ function Specialization(_player, _perk, _amount)
 		end
 	else
 		skipxpadd = false;
-	end
-end
-
-function Gordanite(_player)
-	local player = _player;
-	if player:getPrimaryHandItem() == nil then return end
-	if player:HasTrait("gordanite") then
-		local longBluntLvl = player:getPerkLevel(Perks.Blunt);
-		local strengthlvl = player:getPerkLevel(Perks.Strength);
-		local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1;
-		local item = player:getPrimaryHandItem()
-		if item:getType() == "Crowbar" or item:getType() == "BloodyCrowbar" then
-			if SandboxVars.MoreTraits.GordaniteEffectiveness then
-				local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01;
-				floatmod = floatmod * modifier;
-				longBluntLvl = longBluntLvl * modifier;
-				strengthlvl = strengthlvl * modifier;
-			end
-			local crowbar = item;
-			local moddata = crowbar:getModData()
-			if moddata.MTHasBeenModified == nil then
-				if crowbar:getTreeDamage() > 0 then --Reset stats from old gordanite
-					crowbar:setMinDamage(0.6);
-					crowbar:setMaxDamage(1.15);
-					crowbar:setPushBackMod(0.5);
-					crowbar:setDoorDamage(8);
-					crowbar:setCriticalChance(35);
-					crowbar:setSwingTime(3);
-					if getActivatedMods():contains("VorpalWeapons") == false then
-						crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
-					end
-					crowbar:setWeaponLength(0.4);
-					crowbar:setMinimumSwingTime(3);
-					crowbar:setTreeDamage(0);
-					crowbar:setBaseSpeed(1);
-				end
-				moddata.MTHasBeenModified = true
-				moddata.MinDamage = crowbar:getMinDamage()
-				moddata.MaxDamage = crowbar:getMaxDamage()
-				moddata.PushBack = crowbar:getPushBackMod()
-				moddata.DoorDamage = crowbar:getDoorDamage()
-				moddata.TreeDamage = crowbar:getTreeDamage()
-				moddata.CriticalChance = crowbar:getCriticalChance()
-				moddata.SwingTime = crowbar:getSwingTime()
-				moddata.BaseSpeed = crowbar:getBaseSpeed()
-				moddata.MinimumSwing = crowbar:getMinimumSwingTime()
-				moddata.NameChanged = false
-			end
-			crowbar:setMinDamage(moddata.MinDamage + 0.1 + floatmod / 2);
-			crowbar:setMaxDamage(moddata.MaxDamage + 0.1 + floatmod / 2);
-			crowbar:setPushBackMod(moddata.PushBack + 0.1 + floatmod);
-			crowbar:setDoorDamage(moddata.DoorDamage + 7 + strengthlvl + longBluntLvl);
-			crowbar:setTreeDamage(moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2);
-			crowbar:setCriticalChance(moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2);
-			crowbar:setSwingTime(moddata.SwingTime - 0.2 - floatmod);
-			crowbar:setBaseSpeed(moddata.BaseSpeed + 0.1 + floatmod);
-			crowbar:setWeaponLength(0.4 + floatmod / 2);
-			crowbar:setMinimumSwingTime(moddata.MinimumSwing - 0.2 - floatmod);
-			if moddata.NameChanged == false then
-				if getActivatedMods():contains("VorpalWeapons") == false then
-					crowbar:setName(crowbar:getName().."+");
-				end
-				moddata.NameChanged = true
-			end
-			if crowbar:getType() == "Crowbar" then
-				crowbar:setTooltip(getText("Tooltip_MoreTraits_ItemBoost"));
-			else
-				crowbar:setTooltip(getText("Tooltip_MoreTraits_BloodyItemBoost"));
-			end
-		end
-	else
-		local item = player:getPrimaryHandItem()
-		if item:getType() == "Crowbar" or item:getType() == "BloodyCrowbar" then
-			local crowbar = item;
-			local moddata = crowbar:getModData()
-			if moddata.MTHasBeenModified == true then 
-				crowbar:setMinDamage(moddata.MinDamage);
-				crowbar:setMaxDamage(moddata.MaxDamage);
-				crowbar:setPushBackMod(moddata.PushBack);
-				crowbar:setDoorDamage(moddata.DoorDamage);
-				crowbar:setCriticalChance(moddata.CriticalChance);
-				crowbar:setSwingTime(moddata.SwingTime);
-				local newname = string.sub(crowbar:getName(),0,string.len(crowbar:getName()) - 1)
-				if getActivatedMods():contains("VorpalWeapons") == false then
-					crowbar:setName(newname)
-				end
-				crowbar:setWeaponLength(0.4);
-				crowbar:setMinimumSwingTime(moddata.MinimumSwing);
-				crowbar:setTreeDamage(moddata.TreeDamage);
-				crowbar:setBaseSpeed(moddata.BaseSpeed);
-				if crowbar:getType() == "Crowbar" then
-					crowbar:setTooltip(nil);
-				else
-					crowbar:setTooltip(getText("Tooltip_MoreTraits_BloodyCrowbar"));
-				end
-				moddata.NameChanged = false
-				moddata.MTHasBeenModified = false
-			end
-		end
 	end
 end
 
@@ -4166,8 +4067,104 @@ local function BurnWardPatient(player, playerdata)
 	end
 end
 
-local function BurnWardItem(player)
+local function MTOnEquip(_player)
+	local player = _player
 	local playerdata = player:getModData()
+	if player:getPrimaryHandItem() == nil then return end
+	if player:HasTrait("gordanite") then
+		local longBluntLvl = player:getPerkLevel(Perks.Blunt);
+		local strengthlvl = player:getPerkLevel(Perks.Strength);
+		local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1;
+		local item = player:getPrimaryHandItem()
+		if item:getType() == "Crowbar" or item:getType() == "BloodyCrowbar" then
+			if SandboxVars.MoreTraits.GordaniteEffectiveness then
+				local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01;
+				floatmod = floatmod * modifier;
+				longBluntLvl = longBluntLvl * modifier;
+				strengthlvl = strengthlvl * modifier;
+			end
+			local crowbar = item;
+			local moddata = crowbar:getModData()
+			if moddata.MTHasBeenModified == nil then
+				if crowbar:getTreeDamage() > 0 then --Reset stats from old gordanite
+					crowbar:setMinDamage(0.6);
+					crowbar:setMaxDamage(1.15);
+					crowbar:setPushBackMod(0.5);
+					crowbar:setDoorDamage(8);
+					crowbar:setCriticalChance(35);
+					crowbar:setSwingTime(3);
+					if getActivatedMods():contains("VorpalWeapons") == false then
+						crowbar:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
+					end
+					crowbar:setWeaponLength(0.4);
+					crowbar:setMinimumSwingTime(3);
+					crowbar:setTreeDamage(0);
+					crowbar:setBaseSpeed(1);
+				end
+				moddata.MTHasBeenModified = true
+				moddata.MinDamage = crowbar:getMinDamage()
+				moddata.MaxDamage = crowbar:getMaxDamage()
+				moddata.PushBack = crowbar:getPushBackMod()
+				moddata.DoorDamage = crowbar:getDoorDamage()
+				moddata.TreeDamage = crowbar:getTreeDamage()
+				moddata.CriticalChance = crowbar:getCriticalChance()
+				moddata.SwingTime = crowbar:getSwingTime()
+				moddata.BaseSpeed = crowbar:getBaseSpeed()
+				moddata.MinimumSwing = crowbar:getMinimumSwingTime()
+				moddata.NameChanged = false
+			end
+			crowbar:setMinDamage(moddata.MinDamage + 0.1 + floatmod / 2);
+			crowbar:setMaxDamage(moddata.MaxDamage + 0.1 + floatmod / 2);
+			crowbar:setPushBackMod(moddata.PushBack + 0.1 + floatmod);
+			crowbar:setDoorDamage(moddata.DoorDamage + 7 + strengthlvl + longBluntLvl);
+			crowbar:setTreeDamage(moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2);
+			crowbar:setCriticalChance(moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2);
+			crowbar:setSwingTime(moddata.SwingTime - 0.2 - floatmod);
+			crowbar:setBaseSpeed(moddata.BaseSpeed + 0.1 + floatmod);
+			crowbar:setWeaponLength(0.4 + floatmod / 2);
+			crowbar:setMinimumSwingTime(moddata.MinimumSwing - 0.2 - floatmod);
+			if moddata.NameChanged == false then
+				if getActivatedMods():contains("VorpalWeapons") == false then
+					crowbar:setName(crowbar:getName().."+");
+				end
+				moddata.NameChanged = true
+			end
+			if crowbar:getType() == "Crowbar" then
+				crowbar:setTooltip(getText("Tooltip_MoreTraits_ItemBoost"));
+			else
+				crowbar:setTooltip(getText("Tooltip_MoreTraits_BloodyItemBoost"));
+			end
+		end
+	else
+		local item = player:getPrimaryHandItem()
+		if item:getType() == "Crowbar" or item:getType() == "BloodyCrowbar" then
+			local crowbar = item;
+			local moddata = crowbar:getModData()
+			if moddata.MTHasBeenModified == true then 
+				crowbar:setMinDamage(moddata.MinDamage);
+				crowbar:setMaxDamage(moddata.MaxDamage);
+				crowbar:setPushBackMod(moddata.PushBack);
+				crowbar:setDoorDamage(moddata.DoorDamage);
+				crowbar:setCriticalChance(moddata.CriticalChance);
+				crowbar:setSwingTime(moddata.SwingTime);
+				local newname = string.sub(crowbar:getName(),0,string.len(crowbar:getName()) - 1)
+				if getActivatedMods():contains("VorpalWeapons") == false then
+					crowbar:setName(newname)
+				end
+				crowbar:setWeaponLength(0.4);
+				crowbar:setMinimumSwingTime(moddata.MinimumSwing);
+				crowbar:setTreeDamage(moddata.TreeDamage);
+				crowbar:setBaseSpeed(moddata.BaseSpeed);
+				if crowbar:getType() == "Crowbar" then
+					crowbar:setTooltip(nil);
+				else
+					crowbar:setTooltip(getText("Tooltip_MoreTraits_BloodyCrowbar"));
+				end
+				moddata.NameChanged = false
+				moddata.MTHasBeenModified = false
+			end
+		end
+	end
 	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and playerdata.MTModVersion >= 3 then
 		local item = player:getPrimaryHandItem()
 		if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
@@ -4444,8 +4441,7 @@ Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.OnInitWorld.Add(OnInitWorld);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
-Events.OnEquipPrimary.Add(BurnWardItem)
-Events.OnEquipPrimary.Add(Gordanite)
+Events.OnEquipPrimary.Add(MTOnEquip)
 if getActivatedMods():contains("DracoExpandedTraits") then
 	Events.EveryOneMinute.Add(checkWeight);
 else
