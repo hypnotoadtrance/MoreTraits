@@ -1,12 +1,3 @@
 Main Changelog:
-	- Characters with Burn Ward Patient trait made before the change won't use the new version.
-	- Burn Ward Patient cannot start fire on corpses, antique stoves and BBQ.
-	- Hardy code changed to be more consistent with how its max endurance increase works.
-	- Hardy informs you if you need to keep resting.
-	- Quick Rest code changed to be more consistent with how its endurance regeneration works.
-	- Quick Rest informs you if your endurance is max.
-	- Gordanite trait now accounts for Bloody Crowbar from Antique Collector.
-	- Gordanite trait code reworked.
-	- Fixed Immunocompromised causing errors.
-Dynamic Changelog:
-	-Fixed long blunt incorrect typing.
+	- Adjust Pack Mule trait to have more linear scaling per strength level, as previous calculations only really affected characters with very high strength.
+	- Cap max weight capacity at 50 (engine limitation)
