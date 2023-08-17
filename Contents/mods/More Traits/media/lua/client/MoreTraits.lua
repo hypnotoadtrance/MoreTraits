@@ -4165,13 +4165,24 @@ local function MTOnEquip(_player)
 			end
 		end
 	end
-	if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and playerdata.MTModVersion >= 3 then
-		local item = player:getPrimaryHandItem()
-		if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
-			player:setPrimaryHandItem(nil)
-			HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), HaloTextHelper.getColorRed());
+	if playerdata.MTModVersion ~= nil then
+		if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil and playerdata.MTModVersion >= 3 then
+			local item = player:getPrimaryHandItem()
+			if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
+				player:setPrimaryHandItem(nil)
+				HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), HaloTextHelper.getColorRed());
+			end
+		end
+	else
+		if player:HasTrait("burned") and player:getPrimaryHandItem() ~= nil then
+			local item = player:getPrimaryHandItem()
+			if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
+				player:setPrimaryHandItem(nil)
+				HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), HaloTextHelper.getColorRed());
+			end
 		end
 	end
+	
 end
 
 function MTAlcoholismMoodle(_player, _playerdata)
