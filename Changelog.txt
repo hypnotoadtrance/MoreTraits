@@ -1,3 +1,5 @@
 Main Changelog:
 	- Adjust Pack Mule trait to have more linear scaling per strength level, as previous calculations only really affected characters with very high strength.
 	- Cap max weight capacity at 50 (engine limitation)
+	- Chinese Localization Fix
+	- Burn Ward Error Fix
