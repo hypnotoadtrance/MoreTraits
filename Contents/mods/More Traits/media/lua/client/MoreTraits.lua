@@ -88,9 +88,7 @@ end
 local function GameSpeedMultiplier()
 	local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
 	local multiplier = 1;
-	if gamespeed == 1 then
-		multiplier = 1;
-	elseif gamespeed == 2 then
+	if gamespeed == 2 then
 		multiplier = 5;
 	elseif gamespeed == 3 then
 		multiplier = 20;
@@ -531,6 +529,18 @@ function initToadTraitsPerks(_player)
 	end
 	playerdata.fLastHP = nil;
 	checkWeight();
+	if player:HasTrait("burned") then
+		local TraitInjuredBodyList = playerdata.TraitInjuredBodyList;
+		local bodydamage = player:getBodyDamage();
+		for i = 0, bodydamage:getBodyParts():size() - 1 do
+			local b = bodydamage:getBodyParts():get(i);
+			b:setBurned();
+			b:setBurnTime(ZombRand(10, 100) + damage);
+			b:setNeedBurnWash(false);
+			b:setBandaged(true, ZombRand(1, 10) + bandagestrength, true, "Base.AlcoholBandage");
+			table.insert(TraitInjuredBodyList, i);
+		end
+	end
 	if player:HasTrait("ingenuitive") then
 		LearnAllRecipes(player);
 		playerdata.IngenuitiveActivated = true;
@@ -4019,7 +4029,7 @@ end
 
 local function QuickRest(player, playerdata)
 	if player:HasTrait("quickrest") then
-		if player:getStats():getEndurance() < 1 and playerdata.iHardyEndurance < 5 and player:isSitOnGround() == true then
+		if player:getStats():getEndurance() < 1 and player:isSitOnGround() == true then
 			if playerdata.QuickRestEndurance + 0.001 <= player:getStats():getEndurance() then
 				player:getStats():setEndurance(player:getStats():getEndurance() + 0.001)
 				playerdata.QuickRestEndurance = player:getStats():getEndurance()
