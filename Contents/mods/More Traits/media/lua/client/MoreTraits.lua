@@ -3320,7 +3320,7 @@ function QuickWorker(_player)
 	if player:HasTrait("quickworker") then
 		if player:hasTimedActions() == true then
 			local actions = player:getCharacterActions();
-			local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "" }
+			local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
 			local action = actions:get(0);
 			local type = action:getMetaType();
 			local delta = action:getJobDelta();
