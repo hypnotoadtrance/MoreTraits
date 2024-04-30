@@ -20,7 +20,7 @@ I have been unable to find a workaround.
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
-MTModVersion = 5; --REMEMBER TO MANUALLY INCREASE
+MTModVersion = 5.1; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
 playerdatatable = {}
 playerdatatable[0] = { "MTModVersion", MTModVersion }
@@ -77,6 +77,7 @@ playerdatatable[50] = {"isSleeping", false}
 playerdatatable[51] = {"QuickRestActive", false}
 playerdatatable[52] = {"QuickRestEndurance", -1}
 playerdatatable[53] = {"QuickRestFinished", false}
+playerdatatable[54] = {"iSuperimmuneChance", 0}
 
 local function AddXP(player, perk, amount)
 	if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
@@ -2536,7 +2537,7 @@ function SuperImmune(_player, _playerdata)
 	local player = _player;
 	local playerdata = _playerdata;
 	local bodydamage = player:getBodyDamage();
-	if player:HasTrait("superimmune") then
+	if player:HasTrait("superimmune") and math.random(0,99) < iSuperImmuneChance then
 		if bodydamage:isInfected() == true then
 			bodydamage:setInfected(false);
 			bodydamage:setInfectionMortalityDuration(-1);
