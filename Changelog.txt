@@ -1,3 +1,6 @@
 Main Changelog:
 	- Fixed Quick Rest not working if you didn't have Hardy trait.
 	- Fixed burn ward patient not spawning in injuries, and fixed its description.
+	- PTBR translation fix (MatLuz)
+	- Fixed Quick Worker speeding up instruments. (Aptronymous)
+	- Added The Only Cure - Rebuilt to the method check for disabling Amputee. (Thanks for the headsup Baniel D. Oalderson)
