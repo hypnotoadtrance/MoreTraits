@@ -234,7 +234,7 @@ local function initToadTraits()
     local selfdestructive = TraitFactory.addTrait("selfdestructive", getText("UI_trait_selfdestructive"), -4, getText("UI_trait_selfdestructivedesc"), false, false);
     local badteeth = TraitFactory.addTrait("badteeth", getText("UI_trait_badteeth"), -3, getText("UI_trait_badteethdesc"), false, false);
     local albino = TraitFactory.addTrait("albino", getText("UI_trait_albino"), -5, getText("UI_trait_albinodesc"), false, false);
-    if getActivatedMods():contains("Amputation") == false or getActivatedMods():contains("TheOnlyCure") == false then
+    if getActivatedMods():contains("Amputation") == false and getActivatedMods():contains("TheOnlyCure") == false then
         --Don't enable Amputee trait if the Amputation mod is installed.
         local amputee = TraitFactory.addTrait("amputee", getText("UI_trait_amputee"), -16, getText("UI_trait_amputeedesc"), false, false);
     end
