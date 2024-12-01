@@ -4096,7 +4096,7 @@ local function MTOnEquip(_player)
 			local crowbar = item;
 			local moddata = crowbar:getModData()
 			if moddata.MTHasBeenModified == nil then
-				if crowbar:getTreeDamage() > 0 then --Reset stats from old gordanite
+				if crowbar:getTreeDamage() > 0 and crowbar:getTreeDamage() ~= 100 then --Reset stats from old gordanite
 					crowbar:setMinDamage(0.6);
 					crowbar:setMaxDamage(1.15);
 					crowbar:setPushBackMod(0.5);
