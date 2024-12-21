@@ -22,61 +22,61 @@ internalTick = 0;
 luckimpact = 1.0;
 MTModVersion = 6; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
-playerdatatable = {}
-playerdatatable[0] = { "MTModVersion", MTModVersion }
-playerdatatable[1] = { "secondwinddisabled", false }
-playerdatatable[2] = { "secondwindrecoveredfatigue", false }
-playerdatatable[3] = { "secondwindcooldown", 0 }
-playerdatatable[4] = { "bToadTraitDepressed", false }
-playerdatatable[5] = { "indefatigablecooldown", 0 }
-playerdatatable[6] = { "indefatigablecuredinfection", false }
-playerdatatable[7] = { "indefatigabledisabled", false }
-playerdatatable[8] = { "bindefatigable", false }
-playerdatatable[9] = { "IndefatigableHasBeenDraggedDown", false }
-playerdatatable[10] = { "bSatedDrink", true }
-playerdatatable[11] = { "iHoursSinceDrink", 0 }
-playerdatatable[12] = { "iTimesCannibal", 0 }
-playerdatatable[13] = { "fPreviousHealthFromFoodTimer", 1000 }
-playerdatatable[14] = { "bWasInfected", false }
-playerdatatable[15] = { "iHardyEndurance", 5 }
-playerdatatable[16] = { "iHardyMaxEndurance", 5 }
-playerdatatable[17] = { "iHardyInterval", 1000 }
-playerdatatable[18] = { "iWithdrawalCooldown", 24 }
-playerdatatable[19] = { "iParanoiaCooldown", 10 }
-playerdatatable[20] = { "SuperImmuneRecovery", 0 }
-playerdatatable[21] = { "SuperImmuneActive", false }
-playerdatatable[22] = { "SuperImmuneMinutesPassed", 0 }
-playerdatatable[23] = { "SuperImmuneTextSaid", false }
-playerdatatable[24] = { "SuperImmuneHealedOnce", false }
-playerdatatable[25] = { "SuperImmuneMinutesWellFed", 0 }
-playerdatatable[26] = { "SuperImmuneAbsoluteWellFedAmount", 0 }
-playerdatatable[27] = { "SuperImmuneInfections", 0 }
-playerdatatable[28] = { "SuperImmuneLethal", false }
-playerdatatable[29] = { "MotionActive", false }
-playerdatatable[30] = { "HasSlept", false }
-playerdatatable[31] = { "FatigueWhenSleeping", 0 }
-playerdatatable[32] = { "NeckHadPain", false }
-playerdatatable[33] = { "ContainerTraitIllegal", false }
-playerdatatable[34] = { "ContainerTraitPlayerCurrentPositionX", 0 }
-playerdatatable[35] = { "ContainerTraitPlayerCurrentPositionY", 0 }
-playerdatatable[36] = { "AlbinoTimeSpentOutside", 0 }
-playerdatatable[37] = { "isMTAlcoholismInitialized", false }
-playerdatatable[38] = { "iBouncercooldown", 0 }
-playerdatatable[39] = { "bisInfected", false }
-playerdatatable[40] = { "bisAlbinoOutside", false }
-playerdatatable[41] = { "bToadTraitDepressed", false }
-playerdatatable[42] = { "bWasJustSprinting", false }
-playerdatatable[43] = { "InjuredBodyList", {} }
-playerdatatable[44] = { "UnwaveringInjurySpeedChanged", false }
-playerdatatable[45] = { "OldCalories", 810 }
-playerdatatable[46] = { "IngenuitiveActivated", false }
-playerdatatable[47] = { "EvasivePlayerInfected", false }
-playerdatatable[48] = { "TraitInjuredBodyList", {} }
-playerdatatable[49] = { "fLastHP", 0 }
-playerdatatable[50] = { "isSleeping", false }
-playerdatatable[51] = { "QuickRestActive", false }
-playerdatatable[52] = { "QuickRestEndurance", -1 }
-playerdatatable[53] = { "QuickRestFinished", false }
+playerdatatable = {};
+playerdatatable[0] = { "MTModVersion", MTModVersion };
+playerdatatable[1] = { "secondwinddisabled", false };
+playerdatatable[2] = { "secondwindrecoveredfatigue", false };
+playerdatatable[3] = { "secondwindcooldown", 0 };
+playerdatatable[4] = { "bToadTraitDepressed", false };
+playerdatatable[5] = { "indefatigablecooldown", 0 };
+playerdatatable[6] = { "indefatigablecuredinfection", false };
+playerdatatable[7] = { "indefatigabledisabled", false };
+playerdatatable[8] = { "bindefatigable", false };
+playerdatatable[9] = { "IndefatigableHasBeenDraggedDown", false };
+playerdatatable[10] = { "bSatedDrink", true };
+playerdatatable[11] = { "iHoursSinceDrink", 0 };
+playerdatatable[12] = { "iTimesCannibal", 0 };
+playerdatatable[13] = { "fPreviousHealthFromFoodTimer", 1000 };
+playerdatatable[14] = { "bWasInfected", false };
+playerdatatable[15] = { "iHardyEndurance", 5 };
+playerdatatable[16] = { "iHardyMaxEndurance", 5 };
+playerdatatable[17] = { "iHardyInterval", 1000 };
+playerdatatable[18] = { "iWithdrawalCooldown", 24 };
+playerdatatable[19] = { "iParanoiaCooldown", 10 };
+playerdatatable[20] = { "SuperImmuneRecovery", 0 };
+playerdatatable[21] = { "SuperImmuneActive", false };
+playerdatatable[22] = { "SuperImmuneMinutesPassed", 0 };
+playerdatatable[23] = { "SuperImmuneTextSaid", false };
+playerdatatable[24] = { "SuperImmuneHealedOnce", false };
+playerdatatable[25] = { "SuperImmuneMinutesWellFed", 0 };
+playerdatatable[26] = { "SuperImmuneAbsoluteWellFedAmount", 0 };
+playerdatatable[27] = { "SuperImmuneInfections", 0 };
+playerdatatable[28] = { "SuperImmuneLethal", false };
+playerdatatable[29] = { "MotionActive", false };
+playerdatatable[30] = { "HasSlept", false };
+playerdatatable[31] = { "FatigueWhenSleeping", 0 };
+playerdatatable[32] = { "NeckHadPain", false };
+playerdatatable[33] = { "ContainerTraitIllegal", false };
+playerdatatable[34] = { "ContainerTraitPlayerCurrentPositionX", 0 };
+playerdatatable[35] = { "ContainerTraitPlayerCurrentPositionY", 0 };
+playerdatatable[36] = { "AlbinoTimeSpentOutside", 0 };
+playerdatatable[37] = { "isMTAlcoholismInitialized", false };
+playerdatatable[38] = { "iBouncercooldown", 0 };
+playerdatatable[39] = { "bisInfected", false };
+playerdatatable[40] = { "bisAlbinoOutside", false };
+playerdatatable[41] = { "bToadTraitDepressed", false };
+playerdatatable[42] = { "bWasJustSprinting", false };
+playerdatatable[43] = { "InjuredBodyList", {} };
+playerdatatable[44] = { "UnwaveringInjurySpeedChanged", false };
+playerdatatable[45] = { "OldCalories", 810 };
+playerdatatable[46] = { "IngenuitiveActivated", false };
+playerdatatable[47] = { "EvasivePlayerInfected", false };
+playerdatatable[48] = { "TraitInjuredBodyList", {} };
+playerdatatable[49] = { "fLastHP", 0 };
+playerdatatable[50] = { "isSleeping", false };
+playerdatatable[51] = { "QuickRestActive", false };
+playerdatatable[52] = { "QuickRestEndurance", -1 };
+playerdatatable[53] = { "QuickRestFinished", false };
 
 local function AddXP(player, perk, amount)
     if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
@@ -440,7 +440,7 @@ function initToadTraitsPerks(_player)
     if SandboxVars.MoreTraits.LuckImpact then
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
-    InitPlayerData(player)
+    InitPlayerData(player);
     if player:HasTrait("Lucky") then
         damage = damage - 5 * luckimpact;
         bandagestrength = bandagestrength + 2 * luckimpact;
@@ -528,7 +528,7 @@ function initToadTraitsPerks(_player)
         end
     end
     playerdata.fLastHP = nil;
-    checkWeight();
+    MT_checkWeight();
     if player:HasTrait("burned") then
         local TraitInjuredBodyList = playerdata.TraitInjuredBodyList;
         local bodydamage = player:getBodyDamage();
@@ -542,7 +542,7 @@ function initToadTraitsPerks(_player)
         end
     end
     if player:HasTrait("ingenuitive") then
-        LearnAllRecipes(player);
+        MT_LearnAllRecipes(player);
         playerdata.IngenuitiveActivated = true;
     end
     if player:HasTrait("noxpshooter") then
@@ -2696,7 +2696,7 @@ for i = 1, activeModIDs:size() do
     end
 end
 
-function checkWeight()
+function MT_checkWeight()
     local player = getPlayer();
     local strength = player:getPerkLevel(Perks.Strength);
     local mule = 10;
@@ -3276,7 +3276,7 @@ function ContainerEvents(_iSInventoryPage, _state)
         ToadTraitAntique(page, state, player);
     end
 end
-function LearnAllRecipes(_player)
+function MT_LearnAllRecipes(_player)
     local player = _player;
     local recipes = getScriptManager():getAllRecipes();
     if SandboxVars.MoreTraits.IngenuitiveLimit == true then
@@ -4396,7 +4396,7 @@ function EveryHours()
         end
     end
     if player:HasTrait("ingenuitive") and playerdata.IngenuitiveActivated == false then
-        LearnAllRecipes(player);
+        MT_LearnAllRecipes(player);
         playerdata.IngenuitiveActivated = true;
     end
     for i, v in ipairs(playerdata.InjuredBodyList) do
@@ -4467,9 +4467,9 @@ Events.OnInitWorld.Add(OnInitWorld);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
 Events.OnEquipPrimary.Add(MTOnEquip)
 if getActivatedMods():contains("DracoExpandedTraits") then
-    Events.EveryOneMinute.Add(checkWeight);
+    Events.EveryOneMinute.Add(MT_checkWeight);
 else
-    Events.EveryTenMinutes.Add(checkWeight);
+    Events.EveryTenMinutes.Add(MT_checkWeight);
 end
 Events.EveryHours.Add(EveryHours);
 Events.OnNewGame.Add(initToadTraitsPerks);

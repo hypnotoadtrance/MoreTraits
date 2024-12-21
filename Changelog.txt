@@ -2,3 +2,4 @@ Main Changelog:
  - Migrating/Renaming/Adjusting skill changes for various traits to account for new skills.
  - Enabling Lucky/Unlucky and Light/Heavy Drinker
  - Ideal Weight mutually exclusive to Fast/Slow Metabolism
+ - Disabled Custom Crafting Recipes until such time as they can be ported to use the new crafting system. Their inclusion was breaking the game and causing various IU issues (map/vehicle dash)
