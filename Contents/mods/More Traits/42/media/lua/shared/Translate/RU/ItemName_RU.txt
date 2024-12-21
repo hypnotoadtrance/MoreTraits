@@ -1,40 +1,40 @@
 ItemName_RU = {
 
 
-ItemName_MoreTraits.PackerBag = "Расширенная походная сумка",
-ItemName_MoreTraits.Bag_SmallHikingBag = "Маленькая походная сумка",
-ItemName_MoreTraits.AntiqueAxe = "Редкий старинный топор",
-ItemName_MoreTraits.Thumper = "Тяжеленная античная кувалда", 
-ItemName_MoreTraits.ObsidianBlade = "Обсидиановый кинжал",
+ItemName_MoreTraits.PackerBag = "Р Р°СЃС€РёСЂРµРЅРЅР°СЏ РїРѕС…РѕРґРЅР°СЏ СЃСѓРјРєР°",
+ItemName_MoreTraits.Bag_SmallHikingBag = "РњР°Р»РµРЅСЊРєР°СЏ РїРѕС…РѕРґРЅР°СЏ СЃСѓРјРєР°",
+ItemName_MoreTraits.AntiqueAxe = "Р РµРґРєРёР№ СЃС‚Р°СЂРёРЅРЅС‹Р№ С‚РѕРїРѕСЂ",
+ItemName_MoreTraits.Thumper = "РўСЏР¶РµР»РµРЅРЅР°СЏ Р°РЅС‚РёС‡РЅР°СЏ РєСѓРІР°Р»РґР°", 
+ItemName_MoreTraits.ObsidianBlade = "РћР±СЃРёРґРёР°РЅРѕРІС‹Р№ РєРёРЅР¶Р°Р»",
 
-ItemName_MoreTraits.AntiqueSpear = "Редкая крепкая пика",
-ItemName_MoreTraits.AntiqueHammer = "Редкий молот бронника",
-ItemName_MoreTraits.AntiqueKatana = "Редкий нодати",
+ItemName_MoreTraits.AntiqueSpear = "Р РµРґРєР°СЏ РєСЂРµРїРєР°СЏ РїРёРєР°",
+ItemName_MoreTraits.AntiqueHammer = "Р РµРґРєРёР№ РјРѕР»РѕС‚ Р±СЂРѕРЅРЅРёРєР°",
+ItemName_MoreTraits.AntiqueKatana = "Р РµРґРєРёР№ РЅРѕРґР°С‚Рё",
 
-ItemName_MoreTraits.BloodyCrowbar = "Потёртая монтировка",
-ItemName_MoreTraits.Slugger = "Коллекционная бейсбольная бита",
+ItemName_MoreTraits.BloodyCrowbar = "РџРѕС‚С‘СЂС‚Р°СЏ РјРѕРЅС‚РёСЂРѕРІРєР°",
+ItemName_MoreTraits.Slugger = "РљРѕР»Р»РµРєС†РёРѕРЅРЅР°СЏ Р±РµР№СЃР±РѕР»СЊРЅР°СЏ Р±РёС‚Р°",
 
-ItemName_MoreTraits.ZombificationCure = "Лекарство от зомби-вируса",
+ItemName_MoreTraits.ZombificationCure = "Р›РµРєР°СЂСЃС‚РІРѕ РѕС‚ Р·РѕРјР±Рё-РІРёСЂСѓСЃР°",
 
-ItemName_MoreTraits.MedicalMag1 = "Журнал «Античная агрономия»",
-ItemName_MoreTraits.MedicalMag2 = "Журнал «Папье-маше - это просто»",
-ItemName_MoreTraits.MedicalMag3 = "Журнал «Каннибализ для чайников»",
-ItemName_MoreTraits.MedicalMag4 = "Журнал «Редкий журнал, выпуск 4»",
+ItemName_MoreTraits.MedicalMag1 = "Р–СѓСЂРЅР°Р» В«РђРЅС‚РёС‡РЅР°СЏ Р°РіСЂРѕРЅРѕРјРёСЏВ»",
+ItemName_MoreTraits.MedicalMag2 = "Р–СѓСЂРЅР°Р» В«РџР°РїСЊРµ-РјР°С€Рµ - СЌС‚Рѕ РїСЂРѕСЃС‚РѕВ»",
+ItemName_MoreTraits.MedicalMag3 = "Р–СѓСЂРЅР°Р» В«РљР°РЅРЅРёР±Р°Р»РёР· РґР»СЏ С‡Р°Р№РЅРёРєРѕРІВ»",
+ItemName_MoreTraits.MedicalMag4 = "Р–СѓСЂРЅР°Р» В«Р РµРґРєРёР№ Р¶СѓСЂРЅР°Р», РІС‹РїСѓСЃРє 4В»",
 
-ItemName_MoreTraits.AntiqueMag1 = "Журнал «Коллекционер антиквариата, выпуск 1»",
-ItemName_MoreTraits.AntiqueMag2 = "Журнал «Коллекционер антиквариата, выпуск 2»",
-ItemName_MoreTraits.AntiqueMag3 = "Журнал «Коллекционер антиквариата, выпуск 3»",
+ItemName_MoreTraits.AntiqueMag1 = "Р–СѓСЂРЅР°Р» В«РљРѕР»Р»РµРєС†РёРѕРЅРµСЂ Р°РЅС‚РёРєРІР°СЂРёР°С‚Р°, РІС‹РїСѓСЃРє 1В»",
+ItemName_MoreTraits.AntiqueMag2 = "Р–СѓСЂРЅР°Р» В«РљРѕР»Р»РµРєС†РёРѕРЅРµСЂ Р°РЅС‚РёРєРІР°СЂРёР°С‚Р°, РІС‹РїСѓСЃРє 2В»",
+ItemName_MoreTraits.AntiqueMag3 = "Р–СѓСЂРЅР°Р» В«РљРѕР»Р»РµРєС†РёРѕРЅРµСЂ Р°РЅС‚РёРєРІР°СЂРёР°С‚Р°, РІС‹РїСѓСЃРє 3В»",
 
-ItemName_MoreTraits.PapierMache = "Папье-маше",
-ItemName_MoreTraits.PapierMacheSword = "Меч из папье-маше",
+ItemName_MoreTraits.PapierMache = "РџР°РїСЊРµ-РјР°С€Рµ",
+ItemName_MoreTraits.PapierMacheSword = "РњРµС‡ РёР· РїР°РїСЊРµ-РјР°С€Рµ",
 
-ItemName_MoreTraits.ZombPatty = "Человеческая плоть",
-ItemName_MoreTraits.BloodBox = "Человеческая кровь",
+ItemName_MoreTraits.ZombPatty = "Р§РµР»РѕРІРµС‡РµСЃРєР°СЏ РїР»РѕС‚СЊ",
+ItemName_MoreTraits.BloodBox = "Р§РµР»РѕРІРµС‡РµСЃРєР°СЏ РєСЂРѕРІСЊ",
 
 
-ItemName_MoreTraits.AntiqueJacket = "Редкая антикварная кожанка",
-ItemName_MoreTraits.AntiqueVest = "Редкий бронированный жилет",
-ItemName_MoreTraits.AntiqueBoots = "Редкие облегченные сапоги",
+ItemName_MoreTraits.AntiqueJacket = "Р РµРґРєР°СЏ Р°РЅС‚РёРєРІР°СЂРЅР°СЏ РєРѕР¶Р°РЅРєР°",
+ItemName_MoreTraits.AntiqueVest = "Р РµРґРєРёР№ Р±СЂРѕРЅРёСЂРѕРІР°РЅРЅС‹Р№ Р¶РёР»РµС‚",
+ItemName_MoreTraits.AntiqueBoots = "Р РµРґРєРёРµ РѕР±Р»РµРіС‡РµРЅРЅС‹Рµ СЃР°РїРѕРіРё",
 
 
 
