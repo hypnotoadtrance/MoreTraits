@@ -324,7 +324,7 @@ MoreTraits {
 		Type = Literature,
 		DisplayName = Antique Collector's Weekly Vol. 3,
 		Icon = MagazineBlacksmith3,
-		TeachedRecipes = Strip Meat from Corpse,
+		TeachedRecipes = Process Corpse Into Propane,
 		ReplaceOnUse = MoreTraits.AntiqueMag3,
 		Tooltip = Tooltip_MoreTraits_AntiqueMag3,
 		StaticModel = Magazine,

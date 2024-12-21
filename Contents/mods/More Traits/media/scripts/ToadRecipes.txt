@@ -208,17 +208,16 @@ recipe Make Duct Tape
 	NeedToBeLearn: true,
 	Time: 50.0
 }
-recipe Strip Meat from Corpse
+recipe Process Corpse Into Propane
 {
 	keep Base.HuntingKnife/Base.KitchenKnife/Base.Saw/Base.Axe/Base.HandAxe/Base.AxeStone/Base.WoodAxe/Base.MeatCleaver/Base.FlintKnife/Base.Machete,
 	Base.CorpseMale/Base.CorpseFemale,
-	Result: MoreTraits.ZombPatty,
+	Result: Base.PropaneTank,
 	CanBeDoneFromFloor: true,
 	Sound:SliceMeat,
 	Category: Cooking,
 	NeedToBeLearn: true,
 	OnGiveXP:Recipe.OnGiveXP.Cooking10,
-	OnCreate:ZombPatty_OnCreate,
-	Time: 20.0
+	Time: 200.0
 }
 }
