@@ -1,3 +1,4 @@
 Main Changelog:
 - Change RU translation to UTF-8
 - Modified B41 antique recipe to convert corpses to propane instead of food.
+- Implement Native PZ Mod Options
