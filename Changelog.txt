@@ -1,2 +1,4 @@
 Main Changelog:
- - Port to build 42. Quick and dirty just so people can enable the mod. No guarantees of functionality yet.
+ - Migrating/Renaming/Adjusting skill changes for various traits to account for new skills.
+ - Enabling Lucky/Unlucky and Light/Heavy Drinker
+ - Ideal Weight mutually exclusive to Fast/Slow Metabolism

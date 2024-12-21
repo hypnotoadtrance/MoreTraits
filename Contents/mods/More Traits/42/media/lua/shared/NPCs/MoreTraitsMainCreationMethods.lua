@@ -76,15 +76,21 @@ local function initToadTraits()
     local grunt = TraitFactory.addTrait("grunt", getText("UI_trait_grunt"), 4, getText("UI_trait_gruntdesc"), false, false);
     grunt:addXPBoost(Perks.Woodwork, 1);
     grunt:addXPBoost(Perks.SmallBlunt, 1);
+    grunt:addXPBoost(Perks.Masonry, 1);
+    grunt:addXPBoost(Perks.Blacksmith, 1);
     local quiet = TraitFactory.addTrait("quiet", getText("UI_trait_quiet"), 2, getText("UI_trait_quietdesc"), false, false);
     quiet:addXPBoost(Perks.Sneak, 1);
+    quiet:addXPBoost(Perks.Lightfoot, 1);
     local tinkerer = TraitFactory.addTrait("tinkerer", getText("UI_trait_tinkerer"), 5, getText("UI_trait_tinkererdesc"), false, false);
     tinkerer:addXPBoost(Perks.Electricity, 1);
     tinkerer:addXPBoost(Perks.Mechanics, 1);
     tinkerer:addXPBoost(Perks.Tailoring, 1);
+    tinkerer:addXPBoost(Perks.FlintKnapping, 1);
+    tinkerer:addXPBoost(Perks.Carving, 1);
     local scrapper = TraitFactory.addTrait("scrapper", getText("UI_trait_scrapper"), 3, getText("UI_trait_scrapperdesc"), false, false);
     scrapper:addXPBoost(Perks.MetalWelding, 1);
     scrapper:addXPBoost(Perks.Maintenance, 1);
+    scrapper:addXPBoost(Perks.Blacksmith, 1);
     scrapper:getFreeRecipes():add("Make Metal Pipe");
     scrapper:getFreeRecipes():add("Make Metal Sheet");
     local wildsman = TraitFactory.addTrait("wildsman", getText("UI_trait_wildsman"), 8, getText("UI_trait_wildsmandesc"), false, false);
@@ -92,6 +98,9 @@ local function initToadTraits()
     wildsman:addXPBoost(Perks.Trapping, 1);
     wildsman:addXPBoost(Perks.PlantScavenging, 1);
     wildsman:addXPBoost(Perks.Spear, 1);
+    wildsman:addXPBoost(Perks.Tracking, 1);
+    wildsman:addXPBoost(Perks.Carving, 1);
+    wildsman:addXPBoost(Perks.FlintKnapping, 1);
     wildsman:getFreeRecipes():add("Make Stick Trap");
     wildsman:getFreeRecipes():add("Make Snare Trap");
     wildsman:getFreeRecipes():add("Make Fishing Rod");
@@ -130,20 +139,30 @@ local function initToadTraits()
         speccrafting:addXPBoost(Perks.MetalWelding, 2);
         speccrafting:addXPBoost(Perks.Mechanics, 2);
         speccrafting:addXPBoost(Perks.Tailoring, 2);
+        speccrafting:addXPBoost(Perks.Carving, 2);
+        speccrafting:addXPBoost(Perks.FlintKnapping, 2);
+        speccrafting:addXPBoost(Perks.Blacksmith, 2);
+        speccrafting:addXPBoost(Perks.Masonry, 2);
+        speccrafting:addXPBoost(Perks.Pottery, 2);
+        speccrafting:addXPBoost(Perks.Glassmaking, 2);
         local specfood = TraitFactory.addTrait("specfood", getText("UI_trait_specfood"), 12, getText("UI_trait_specfooddesc"), false, false);
         specfood:addXPBoost(Perks.Cooking, 2);
         specfood:addXPBoost(Perks.Trapping, 2);
         specfood:addXPBoost(Perks.PlantScavenging, 2);
         specfood:addXPBoost(Perks.Farming, 2);
         specfood:addXPBoost(Perks.Fishing, 2);
+        specfood:addXPBoost(Perks.Butchering, 2);
+        specfood:addXPBoost(Perks.Tracking, 2);
+        specfood:addXPBoost(Perks.Husbandry, 2);
         local specguns = TraitFactory.addTrait("specguns", getText("UI_trait_specguns"), 12, getText("UI_trait_specgunsdesc"), false, false);
         specguns:addXPBoost(Perks.Aiming, 4);
         specguns:addXPBoost(Perks.Reloading, 4);
+        specguns:addXPBoost(Perks.Tracking, 4);
         local specmove = TraitFactory.addTrait("specmove", getText("UI_trait_specmove"), 12, getText("UI_trait_specmovedesc"), false, false);
-        specmove:addXPBoost(Perks.Lightfoot, 2);
-        specmove:addXPBoost(Perks.Sprinting, 2);
-        specmove:addXPBoost(Perks.Sneak, 2);
-        specmove:addXPBoost(Perks.Nimble, 2);
+        specmove:addXPBoost(Perks.Lightfoot, 4);
+        specmove:addXPBoost(Perks.Sprinting, 4);
+        specmove:addXPBoost(Perks.Sneak, 4);
+        specmove:addXPBoost(Perks.Nimble, 4);
         local specaid = TraitFactory.addTrait("specaid", getText("UI_trait_specaid"), 12, getText("UI_trait_specaiddesc"), false, false);
         specaid:addXPBoost(Perks.Doctor, 8);
         specaid:getFreeRecipes():add("Improvise Bandage");
@@ -379,15 +398,27 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("idealweight", "Very Underweight");
     TraitFactory.setMutualExclusive("idealweight", "Obese");
     TraitFactory.setMutualExclusive("idealweight", "Emaciated");
+    TraitFactory.setMutualExclusive("idealweight", "Weight Gain");
+    TraitFactory.setMutualExclusive("idealweight", "Weight Loss");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
-    TraitFactory.sortList();
     local version = getCore():getGameVersion();
+    if version:getMajor() >= 42 and version:getMinor() >= 0 then
+        -- Re-enable Lucky/Unlucky
+        TraitFactory.addTrait("Lucky", getText("UI_trait_lucky"), 4, getText("UI_trait_luckydesc"), false, false);
+        TraitFactory.addTrait("Unlucky", getText("UI_trait_unlucky"), -4, getText("UI_trait_unluckydesc"), false, false);
+        TraitFactory.setMutualExclusive("Lucky", "Unlucky");
+        -- Re-enable Light/Heavy UI_trait_drinker
+        TraitFactory.addTrait("LightDrinker", getText("UI_trait_lightdrink"), -2, getText("UI_trait_lightdrinkdesc"), false);
+        TraitFactory.addTrait("HeavyDrinker", getText("UI_trait_harddrink"), 3, getText("UI_trait_harddrinkdesc"), false);
+        TraitFactory.setMutualExclusive("LightDrinker", "HeavyDrinker");
+    end
     if version:getMajor() >= 41 and version:getMinor() >= 66 then
-        --Re-enable Lucky/Unlucky
+        --Re-enable Lucky/Unlucky in Multiplayer
         TraitFactory.getTrait("Lucky"):setRemoveInMP(false);
         TraitFactory.getTrait("Unlucky"):setRemoveInMP(false);
     end
+    TraitFactory.sortList();
 end
 
 Events.OnGameBoot.Add(initToadTraits);
