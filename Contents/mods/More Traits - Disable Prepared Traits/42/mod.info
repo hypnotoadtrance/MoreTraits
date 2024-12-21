@@ -1,0 +1,7 @@
+name=More Traits - Disable Prepared Traits
+poster=generic.png
+versionMin=41.0
+description= If this submod is enabled, Prepared traits will be disabled. 
+id=1299328280/ToadTraitsDisablePrepared
+icon=icon.png
+require=\1299328280/ToadTraits

@@ -1,2 +1,2 @@
 Main Changelog:
- - That awkward moment when you use an OR instead of an AND comparator and end up nullifying the change you did.
+ - Port to build 42. Quick and dirty just so people can enable the mod. No guarantees of functionality yet.

@@ -1,0 +1,7 @@
+name=More Traits - Disable Specialization Traits
+poster=generic.png
+versionMin=41.0
+description= If this submod is enabled, Specialization traits will be disabled. 
+id=1299328280/ToadTraitsDisableSpec
+require=\1299328280/ToadTraits
+icon=icon.png

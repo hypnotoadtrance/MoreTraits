@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<clothingItem>
+	<m_MaleModel>skinned\backpacks\m_hikingbag</m_MaleModel>
+	<m_FemaleModel>skinned\backpacks\f_hikingbag</m_FemaleModel>
+	<m_GUID>60ad4e73-45ca-443b-bd63-4ab78a6eeb63</m_GUID>
+	<m_Static>false</m_Static>
+	<m_AllowRandomTint>false</m_AllowRandomTint>
+	<m_AttachBone></m_AttachBone>
+	<textureChoices>hikingbagblue</textureChoices>
+	<textureChoices>hikingbaggreen</textureChoices>
+	<textureChoices>hikingbagred</textureChoices>
+</clothingItem>

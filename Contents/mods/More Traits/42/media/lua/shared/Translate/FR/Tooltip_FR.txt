@@ -1,0 +1,17 @@
+Tooltip_FR = {
+	Tooltip_MoreTraits_AntiqueAxe = "Une hache rare en pierre durcie.<br>Très solide et durable, mais irréparable.",
+	Tooltip_MoreTraits_Thumper = "Un maillet rare en pierre.<br>Capable d'abattre des foules entières d'un seul coup.<br>Incroyablement puissant, mais aussi extrémement lourd!",
+	Tooltip_MoreTraits_ObsidianBlade = "Une dague antique sacrificielle rare.<br>Très puissante, mais fragile.",
+	Tooltip_MoreTraits_PackerBag = "Un sac rare.<br>Grande capacité et grande réduction de poids.",
+	Tooltip_MoreTraits_BloodyCrowbar = "Ce pied de biche a été façonné et affiné pour se balancer plus vite et infliger plus de dégàts.",
+	Tooltip_MoreTraits_Slugger = "Une batte de baseball en aluminium rare et signée.<br>Pèse moins, oscille plus vite, et est plus durable qu'une batte de baseball standard.",
+	Tooltip_MoreTraits_Cure = "Une concoction puissante capable d'inverser les effets de la zombification.<br>Ne peut être fabriqué que par les chercheurs médicaux les plus talentueux.",
+	Tooltip_MoreTraits_AntiqueMag1 = "Un magazine en édition limitée.<br>Cette édition enseigne l'art tabou de convertir des cadavres humains en engrais utile.",
+	Tooltip_MoreTraits_AntiqueMag2 = "Un magazine en édition limitée.<br>Cette édition plonge dans les recettes d'artisanat maison avec du papier mâché.",
+	Tooltip_MoreTraits_AntiqueMag3 = "Un magazine en édition limitée.<br>Cette édition propose des commentaires sur les recettes cannibales de certaines tribus de Papouasie-Nouvelle-Guinée.",
+	Tooltip_MoreTraits_PapierMacheSword = "Du plaisir pour toute la famille!<br>Pas pour les enfants de moins de quatre ans.",
+	Tooltip_MoreTraits_ItemBoost = "Les statistiques de cet objet sont améliorées par l'un de vos traits.",
+	Tooltip_MoreTraits_GordaniteBoost = "pied de biche+",
+	Tooltip_MoreTraits_GordaniteDefault = "pied de biche",
+}
+

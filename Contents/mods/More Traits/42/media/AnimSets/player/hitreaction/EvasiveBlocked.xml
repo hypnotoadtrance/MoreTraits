@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode>
+	<m_Name>EvasiveBlocked</m_Name>
+	<m_AnimName>Bob_BiteDefend</m_AnimName>
+	<m_deferredBoneAxis>Y</m_deferredBoneAxis>
+	<m_Looped>false</m_Looped>
+	<m_SpeedScale>20</m_SpeedScale>
+	<m_BlendTime>20</m_BlendTime>
+	<m_Conditions>
+		<m_Name>hitreaction</m_Name>
+		<m_Type>STRING</m_Type>
+		<m_StringValue>EvasiveBlocked</m_StringValue>
+	</m_Conditions>
+</animNode>

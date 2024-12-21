@@ -1,0 +1,18 @@
+Moodles_JP {
+    Moodles_MTAlcoholism_Good_lvl1 = "満足した",
+    Moodles_MTAlcoholism_Good_desc_lvl1 = "酒で渇きをいやした",
+    Moodles_MTAlcoholism_Good_lvl2 = "十分に満足した",
+    Moodles_MTAlcoholism_Good_desc_lvl2 = "満足感を覚える",
+    Moodles_MTAlcoholism_Good_lvl3 = "贅沢",
+    Moodles_MTAlcoholism_Good_desc_lvl3 = "とても良い気分！",
+    Moodles_MTAlcoholism_Good_lvl4 = "充血した",
+    Moodles_MTAlcoholism_Good_desc_lvl4 = "暫く酒は必要無い",
+    Moodles_MTAlcoholism_Bad_lvl1 = "憧憬",
+    Moodles_MTAlcoholism_Bad_desc_lvl1 = "久しぶりの飲酒だ。<br>まだ悪影響はない。",
+    Moodles_MTAlcoholism_Bad_lvl2 = "むずむずする",
+    Moodles_MTAlcoholism_Bad_desc_lvl2 = "酒の必要性が無視できなくなってきた。<br>イライラすることが増えた。",
+    Moodles_MTAlcoholism_Bad_lvl3 = "渇望",
+    Moodles_MTAlcoholism_Bad_desc_lvl3 = "一口飲むだけでいいのに...<br>ストレスが増える。",
+    Moodles_MTAlcoholism_Bad_lvl4 = "離脱症状",
+    Moodles_MTAlcoholism_Bad_desc_lvl4 = "お酒のためなら何でもする。<br>日に日に離脱症状が進行していく。",
+}

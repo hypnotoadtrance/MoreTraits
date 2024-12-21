@@ -1,0 +1,18 @@
+Moodles_CN {
+    Moodles_MTAlcoholism_Good_lvl1 = "小酌",
+    Moodles_MTAlcoholism_Good_desc_lvl1 = "解决了对饮酒的需求。",
+    Moodles_MTAlcoholism_Good_lvl2 = "满足",
+    Moodles_MTAlcoholism_Good_desc_lvl2 = "感到满足。",
+    Moodles_MTAlcoholism_Good_lvl3 = "纵饮",
+    Moodles_MTAlcoholism_Good_desc_lvl3 = "感觉真的好极了！",
+    Moodles_MTAlcoholism_Good_lvl4 = "狂饮",
+    Moodles_MTAlcoholism_Good_desc_lvl4 = "很久都不需要再喝了！",
+    Moodles_MTAlcoholism_Bad_lvl1 = "憧憬",
+    Moodles_MTAlcoholism_Bad_desc_lvl1 = "已经一段时间没有喝了。<br>还没有负面效果。",
+    Moodles_MTAlcoholism_Bad_lvl2 = "瘙痒",
+    Moodles_MTAlcoholism_Bad_desc_lvl2 = "需求已难以忽视。<br>更加烦躁易怒。",
+    Moodles_MTAlcoholism_Bad_lvl3 = "渴求",
+    Moodles_MTAlcoholism_Bad_desc_lvl3 = "只要一小嘬...<br>提升压力",
+    Moodles_MTAlcoholism_Bad_lvl4 = "戒断",
+    Moodles_MTAlcoholism_Bad_desc_lvl4 = "只要能喝一口做什么都行。<br>在能满足前将会愈加痛苦病态。",
+}
