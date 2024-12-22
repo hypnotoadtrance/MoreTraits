@@ -1,3 +1,5 @@
 Main Changelog:
 - Update Antique Collector Items.
 - Prepared Weapons was trying to give a non-existant item.
+- Fix Prepared Camping Hiking Bag and Packer Bag not rendering.
+- Add new Campfire and Tent materials to Prepared Camping.

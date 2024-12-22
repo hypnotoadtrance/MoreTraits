@@ -312,8 +312,10 @@ function initToadTraitsItems(_player)
                     end
                     local baginv = bag:getInventory();
                     baginv:addItemOnServer(baginv:AddItem("Base.Matches"));
-                    baginv:addItemOnServer(baginv:AddItem("camping.CampfireKit"));
-                    baginv:addItemOnServer(baginv:AddItem("camping.CampingTentKit"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Stone2"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Stone2"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.Stone2"));
+                    baginv:addItemOnServer(baginv:AddItem("Base.TentGreen_Packed"));
                     baginv:addItemOnServer(baginv:AddItem("Base.BeefJerky"));
                     baginv:addItemOnServer(baginv:AddItem("Base.Pop"));
                     baginv:addItemOnServer(baginv:AddItem("Base.FishingRod"));

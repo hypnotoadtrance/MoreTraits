@@ -4,26 +4,32 @@ MoreTraits {
 		Base
 	}
 
-	item PackerBag {
-		DisplayCategory = Bag,
-		WeightReduction = 95,
-		Weight = 0.5,
-		Type = Container,
-		Capacity = 50,
+	item PackerBag
+	{
+		/* DisplayName = Big Hiking Bag,*/
 		DisplayName = Packer Bag,
+		DisplayCategory = Bag,
+		Type = Container,
+		Weight = 0.5,
 		IconsForTexture = BigHiking_Blue;BigHiking_Green;BigHiking_Red,
-		CanBeEquipped = Back,
-		OpenSound = OpenBag,
-		CloseSound = CloseBag,
-		PutInSound = PutItemInBag,
-		ClothingItem = Bag_PackerBag,
-		BloodLocation = Bag,
-		RunSpeedModifier = 0.90,
 		AttachmentReplacement = Bag,
-		Tooltip = Tooltip_MoreTraits_PackerBag,
-		ReplaceInSecondHand = Bag_BigHikingBag_LHand holdingbagleft,
+		BloodLocation = Bag,
+		CanBeEquipped = Back,
+		Capacity = 50,
+		CloseSound = CloseBag,
+		ClothingItem = Bag_PackerBag,
+		EquipSound = EquipBackpackLarge,
+		OpenSound = OpenBag,
+		PutInSound = PutItemInBag,
 		ReplaceInPrimaryHand = Bag_BigHikingBag_RHand holdingbagright,
+		ReplaceInSecondHand = Bag_BigHikingBag_LHand holdingbagleft,
+		RunSpeedModifier = 0.95,
+		SoundParameter = EquippedBaggageContainer HikingBag,
+		WeightReduction = 95,
 		WorldStaticModel = BigHikingBag_Ground,
+		AttachmentsProvided = BedrollBottomBig,
+		Tooltip = Tooltip_MoreTraits_PackerBag,
+        Tags = IsFireFuel;IsFireTinder,
 	}
 	item AntiqueAxe
 	{
@@ -534,24 +540,29 @@ MoreTraits {
 	}
 	item Bag_SmallHikingBag
 	{
-		DisplayCategory = Bag,
-		WeightReduction = 60,
-		Weight = 0.8,
-		Type = Container,
-		Capacity = 8,
+		/*DisplayName = Hiking Bag,*/
 		DisplayName = Small Hiking Bag,
-		IconsForTexture = Hiking_Blue;Hiking_Green;Hiking_Red,
-		CanBeEquipped = Back,
-		OpenSound = OpenBag,
-		CloseSound = CloseBag,
-		PutInSound = PutItemInBag,
-		ClothingItem = Bag_SmallHikingBag,
-		BloodLocation = Bag,
-		RunSpeedModifier = 0.9,
+		DisplayCategory = Bag,
+		Type = Container,
+		Weight = 0.8,
+		IconsForTexture = Hiking_Blue;Hiking_Green;Hiking_Red;Hiking_Green,
 		AttachmentReplacement = Bag,
-		ReplaceInSecondHand = Bag_HikingBag_LHand holdingbagleft,
+		BloodLocation = Bag,
+		CanBeEquipped = Back,
+		Capacity = 10,
+		CloseSound = CloseBag,
+		ClothingItem = Bag_SmallHikingBag,
+		EquipSound = EquipBackpackLarge,
+		OpenSound = OpenBag,
+		PutInSound = PutItemInBag,
 		ReplaceInPrimaryHand = Bag_HikingBag_RHand holdingbagright,
+		ReplaceInSecondHand = Bag_HikingBag_LHand holdingbagleft,
+		RunSpeedModifier = 0.96,
+		SoundParameter = EquippedBaggageContainer HikingBag,
+		WeightReduction = 50,
 		WorldStaticModel = HikingBag_Ground,
+	    AttachmentsProvided = BedrollBottom,
+        Tags = IsFireFuel;IsFireTinder,
 	}
 	item AntiqueSpear
 	{
