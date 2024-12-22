@@ -288,22 +288,6 @@ MoreTraits {
 		Tooltip = Tooltip_MoreTraits_Slugger,
 		Tags = HasMetal;RepairWithEpoxy;SmeltableIronMedium,
 	}
-	item ZombificationCure
-	{
-		Weight = 1.0,
-		Type = Food,
-		UnhappyChange = -99,
-		StressChange = -99,
-		BoredomChange = -99,
-		FatigueChange = -99,
-		EnduranceChange = 99,
-		UseWhileEquipped = FALSE,
-		DisplayName = Zombification Cure,
-		Icon = PillsAntidepressant,
-		Tooltip = Tooltip_MoreTraits_Cure,
-		StaticModel = PillBottle,
-		Medical = TRUE,
-	}
 	item MedicalMag1
 	{
 		DisplayCategory = SkillBook,
@@ -379,7 +363,7 @@ MoreTraits {
 		Type = Literature,
 		DisplayName = Antique Collector's Weekly Vol. 3,
 		Icon = MagazineBlacksmith3,
-		TeachedRecipes = Strip Meat from Corpse,
+		TeachedRecipes = Extract Propane From Corpse,
 		ReplaceOnUse = MoreTraits.AntiqueMag3,
 		Tooltip = Tooltip_MoreTraits_AntiqueMag3,
 		StaticModel = Magazine,
@@ -433,51 +417,6 @@ MoreTraits {
 		TwoHandWeapon = FALSE,
 		WeaponLength = 0.4,
 		AttachmentType = BigBlade,
-	}
-	item ZombPatty
-	{
-		HungerChange = -8,
-		UnhappyChange = 50,
-		ThirstChange = -4,
-		Weight = 0.5,
-		Type = Food,
-		IsCookable = TRUE,
-		DangerousUncooked = TRUE,
-		DaysTotallyRotten = 4,
-		MinutesToBurn = 70,
-		DisplayName = Human Meat,
-		Icon = MeatPatty,
-		DaysFresh = 2,
-		MinutesToCook = 30,
-		EvolvedRecipe = Stew:15;Stir fry Griddle Pan:15;Stir fry:15;Sandwich:15;Salad:15;Roasted Vegetables:15;PastaPot:15;PastaPan:15;RicePot:15;RicePan:15;Burger:15,
-		FoodType = Meat,
-		Carbohydrates = 0,
-		Proteins = 26,
-		Lipids = 30,
-		CustomEatSound = MaleZombieEating,
-		Calories = 180,
-		BadInMicrowave = true,
-		GoodHot = true,
-		BadCold = true,
-	}
-	item BloodBox
-	{
-		Type = Food,
-		DisplayName = Human Blood,
-		Icon = JuiceBox,
-		Weight = 0.1,
-		ThirstChange = -10,
-		HungerChange = -1,
-		UnhappyChange = -10,
-		Spice = true,
-		CustomContextMenu = Drink,
-		CustomEatSound = FemaleZombieEating,
-		EvolvedRecipe = Soup:1;Stew:1;Pie:1;Stir fry Griddle Pan:1;Stir fry:1;Burger:1;Salad:1;Roasted Vegetables:1;RicePot:1;RicePan:1;PastaPot:1;PastaPan:1,
-		CantBeFrozen = TRUE,
-		Carbohydrates = 14,
-		Proteins = 0,
-		Lipids = 0,
-		Calories = 60,
 	}
 	item AntiqueJacket
 	{

@@ -1,226 +1,356 @@
-/*
 module ToadRecipes { imports { Base}
 
-recipe Improvise Bandage {
-	Base.RippedSheets/Base.RippedSheetsDirty/Base.DenimStrips/Base.DenimStripsDirty/Base.LeatherStrips/Base.LeatherStripsDirty,
-
-	Result: Base.Bandage,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 50.0
+craftRecipe Improvise Bandage {
+    timedAction = Making,
+    Time = 50,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+        item 1 [Base.RippedSheets;Base.RippedSheetsDirty;Base.DenimStrips;Base.DenimStripsDirty;Base.LeatherStrips;Base.LeatherStripsDirty],
+    }
+    outputs
+    {
+        item 1 Base.Bandage,
+    }
 }
-recipe Improvise Splint
-{
-	Base.RippedSheets/Base.RippedSheetsDirty/Base.DenimStrips/Base.DenimStripsDirty/Base.LeatherStrips/Base.LeatherStripsDirty=10,
-
-	Result: Base.Splint,
-	SkillRequired:Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 200.0
+craftRecipe Improvise Splint {
+    timedAction = Making,
+    Time = 200,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+        item 10 [Base.RippedSheets;Base.RippedSheetsDirty;Base.DenimStrips;Base.DenimStripsDirty;Base.LeatherStrips;Base.LeatherStripsDirty],
+    }
+    outputs
+    {
+        item 1 Base.Splint,
+    }
 }
-recipe Improvise Suture
-{
-	Base.RippedSheets/Base.RippedSheetsDirty/Base.DenimStrips/Base.DenimStripsDirty/Base.LeatherStrips/Base.LeatherStripsDirty/Base.Twine/Base.Thread,
-	Base.Nails/Base.Screws/Base.Paperclip/Base.Needle/Base.KnittingNeedles,
-
-	Result: Base.SutureNeedle,
-	SkillRequired: Doctor=2,
-	CanBeDoneFromFloor: false,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 100.0
+craftRecipe Improvise Suture {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+    SkillRequired = Doctor:2,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+        item 1 [Base.RippedSheets;Base.RippedSheetsDirty;Base.DenimStrips;Base.DenimStripsDirty;Base.LeatherStrips;Base.LeatherStripsDirty;Base.Twine;Base.Thread] mode:destroy,
+		item 1 [Base.Nails;Base.Screws;Base.Paperclip;Base.Needle;Base.KnittingNeedles],
+    }
+    outputs
+    {
+        item 1 Base.SutureNeedle,
+    }
 }
-recipe Improvise Suture Holder
-{
-	Base.Tweezers/Base.KnittingNeedles,
-
-	Result: Base.SutureNeedleHolder,
-	SkillRequired: Doctor=2,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 100.0
+craftRecipe Improvise Suture Holder {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+    SkillRequired = Doctor:2,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+        item 1 [Base.Tweezers;Base.KnittingNeedles],
+    }
+    outputs
+    {
+        item 1 Base.SutureNeedle,
+    }
 }
-recipe Improvise Disinfectant
-{
-	Base.CleaningLiquid2/Base.Vinegar/Base.GardeningSprayCigarettes/Base.GardeningSprayMilk/Base.Fertilizer/Base.PetrolCan,
-	Water,
-
-	Result: Base.Disinfectant;3,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 50.0
+craftRecipe Improvise Disinfectant {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+    SkillRequired = Doctor:2,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 [*],
+			-fluid 0.1 [CleaningLiquid;Petrol],
+		item 1 [*],
+			-fluid 0.1 [Water],
+    }
+    outputs
+    {
+        item 1 [*],
+		-fluid 0.2 [Alcohol],
+    }
 }
-recipe Improvise Disinfectant
-{
-	Base.Bleach,Water=10,
-
-	Result: Base.Disinfectant;60,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 200.0
+craftRecipe Improvise Disinfectant {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+    SkillRequired = Doctor:2,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+        item 1 [Base.Vinegar2;Vinegar_Jug] mode:destroy,
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 1 Base.Disinfectant,
+    }
 }
-recipe Improvise Disinfectant
-{
-	Base.Milk,Water=5,
-
-	Result: Base.Disinfectant;9,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 100.0
+craftRecipe Improvise Disinfectant {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 [*],
+			-fluid 0.1 [Bleach],
+		item 1 [*],
+			-fluid 0.9 [Water],
+    }
+    outputs
+    {
+        item 1 [*],
+		-fluid 1.0 [Alcohol],
+    }
 }
-recipe Improvise Painkillers
-{
-	keep Base.MortarPestle,
-	Base.Plantain/Base.PlantainCataplasm/Base.Charcoal/Base.PetrolCan,
-	Water=2,Base.Flour/Base.BucketConcreteFull/Base.BucketPlasterFull/Base.Dirtbag/Base.Gravelbag/Base.Sandbag,
-
-	Result: Base.Pills;8,
-	SkillRequired: Doctor=2,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 250.0
+craftRecipe Improvise Disinfectant {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 [*],
+			-fluid 0.5 [Milk],
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 1 [*],
+		-fluid 1.0 [Alcohol],
+    }
 }
-recipe Improvise Antibiotics
-{
-	keep Base.MortarPestle,
-	Base.WildGarlic/Base.WildGarlicCataplasm/Base.Honey,
-	Water=2,Base.Flour/Base.BucketConcreteFull/Base.BucketPlasterFull/Base.Dirtbag/Base.Gravelbag/Base.Sandbag,Base.Charcoal,
-
-	Result: Base.Antibiotics,
-	SkillRequired: Doctor=3,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 250.0
+craftRecipe Improvise Painkillers {
+    timedAction = Making,
+    Time = 250,
+    needTobeLearn = true,
+    SkillRequired = Doctor:2,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+		item 1 [Base.Plantain;Base.PlantainCataplasm],
+        item 1 [Base.Flour;Base.BucketPlasterFull] mode:destroy,
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 5 Base.Pills,
+    }
 }
-recipe Improvise Betablockers
-{
-	keep Base.MortarPestle,
-	Base.Comfrey/Base.ComfreyCataplasm/Base.PropaneTank/Base.BlowTorch/Base.PaintBlack/Base.PaintBlue/Base.PaintBrown/Base.PaintCyan/Base.PaintGreen/Base.PaintGrey/Base.PaintLightBlue/Base.PaintLightBrown/Base.PaintOrange/Base.PaintPink/Base.PaintPurple/Base.PaintRed/Base.PaintTurquoise/Base.PaintWhite/Base.PaintYellow,
-	Water=2,Base.Flour/Base.BucketConcreteFull/Base.BucketPlasterFull/Base.Dirtbag/Base.Gravelbag/Base.Sandbag,
-
-	Result: Base.PillsBeta;4,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 250.0
+craftRecipe Improvise Antibiotics {
+    timedAction = Making,
+    Time = 250,
+    needTobeLearn = true,
+    SkillRequired = Doctor:3,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+		item 1 [Base.WildGarlic;Base.WildGarlicCataplasm;Base.Honey],
+        item 1 [Base.Flour;Base.BucketPlasterFull;Base.Charcoal] mode:destroy,
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 5 Base.Antibiotics,
+    }
 }
-recipe Improvise Antidepressants
-{
-	keep Base.MortarPestle,
-	Base.LemonGrass/Base.WhiskeyFull/Base.BeerCan/Base.Wine/Base.Wine2,
-	Water=2,Base.Sugar,Base.Flour/Base.BucketConcreteFull/Base.BucketPlasterFull/Base.Dirtbag/Base.Gravelbag/Base.Sandbag,
-
-	Result: Base.PillsAntiDep;4,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 250.0
+craftRecipe Improvise Betablockers {
+    timedAction = Making,
+    Time = 250,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+		item 1 [Base.Comfrey;Base.ComfreyCataplasm;Base.PaintBlack;Base.PaintBlue;Base.PaintBrown;Base.PaintCyan;Base.PaintGreen;Base.PaintGrey;Base.PaintLightBlue;Base.PaintLightBrown;Base.PaintOrange;Base.PaintPink;Base.PaintPurple;Base.PaintRed;Base.PaintTurquoise;Base.PaintWhite;Base.PaintYellow],
+        item 1 [Base.Flour;Base.BucketPlasterFull;Base.Charcoal] mode:destroy,
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 5 Base.PillsBeta,
+    }
 }
-recipe Improvise Sleeping Pills
-{
-	keep Base.MortarPestle,
-	Base.WhiskeyFull/Base.BeerCan/Base.Wine/Base.Wine2=2,
-	Water=1,Base.Flour/Base.BucketConcreteFull/Base.BucketPlasterFull/Base.Dirtbag/Base.Gravelbag/Base.Sandbag,
-
-	Result: Base.PillsSleepingTablets;2,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	NeedToBeLearn: true,
-	Time: 250.0
+craftRecipe Improvise Antidepressants {
+    timedAction = Making,
+    Time = 250,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+		item 1 [Base.LemonGrass;Base.WhiskeyFull;Base.BeerCan;Base.Wine;Base.Wine2],
+        item 1 [Base.Flour;Base.BucketPlasterFull;Base.Charcoal] mode:destroy,
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 5 Base.PillsAntiDep,
+    }
 }
-recipe Inject Zombification Cure
-{
-	MoreTraits.ZombificationCure,
-	Result: Base.SmashedBottle,
-	SkillRequired: Doctor=1,
-	CanBeDoneFromFloor: true,
-	Category: Health,
-	OnCreate:ZombificationCure_OnCreate,
-	NeedToBeLearn: false,
-	Time: 200.0
+craftRecipe Improvise Antidepressants {
+    timedAction = Making,
+    Time = 250,
+    needTobeLearn = true,
+    SkillRequired = Doctor:1,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Medical,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+		item 2 [Base.WhiskeyFull;Base.BeerCan;Base.Wine;Base.Wine2],
+        item 1 [Base.Flour;Base.BucketPlasterFull;Base.Charcoal] mode:destroy,
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 5 Base.PillsSleepingTablets,
+    }
 }
-recipe Mince Corpse into Fertilizer
-{
-	keep Base.MortarPestle,
-	keep Base.HuntingKnife/Base.KitchenKnife/Base.Saw/Base.Axe/Base.HandAxe/Base.AxeStone/Base.WoodAxe/Base.MeatCleaver/Base.FlintKnife/Base.Machete,
-	Base.CorpseMale/Base.CorpseFemale,Base.EmptySandbag/Base.FertilizerEmpty,
-	Result: Base.CompostBag,
-	Sound:MaleZombieEating,
-	CanBeDoneFromFloor: true,
-	Category: Farming,
-	NeedToBeLearn: true,
-	Time: 250.0
+craftRecipe Mince Corpse into Fertilizer {
+    timedAction = Making,
+    Time = 250,
+    needTobeLearn = true,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Farming,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+		item 1 tags[SharpKnife] mode:keep flags[MayDegradeLight;IsNotDull],
+        item 1 [Base.CorpseMale;Base.CorpseFemale] mode:destroy,
+		item 1 [Base.EmptySandbag;Base.FertilizerEmpty],
+    }
+    outputs
+    {
+        item 1 Base.CompostBag,
+    }
 }
-recipe Make Papier Mache
-{
-	keep Base.MortarPestle,
-	Base.Flour/Base.Glue,Water=1,Base.SheetPaper2,
-	Result: MoreTraits.PapierMache,
-	CanBeDoneFromFloor: true,
-	Sound:AddItemInRecipe,
-	Category: Carpentry,
-	NeedToBeLearn: true,
-	Time: 50.0
+craftRecipe Make Papier Mache {
+    timedAction = Making,
+    Time = 50,
+    needTobeLearn = true,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Carpentry,
+	Sound = SliceMeat,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+        item 1 [Base.Flour;Base.Glue] mode:destroy,
+		item 1 [Base.SheetPaper2],
+		item 1 [*],
+			-fluid 0.5 [Water],
+    }
+    outputs
+    {
+        item 1 MoreTraits.PapierMache,
+    }
 }
-recipe Make Papier Mache Sword
-{
-	MoreTraits.PapierMache,Water=1,Base.Plank,
-	Result: MoreTraits.PapierMacheSword,
-	CanBeDoneFromFloor: true,
-	Sound:SliceMeat,
-	Category: Carpentry,
-	NeedToBeLearn: true,
-	Time: 100.0
+craftRecipe Make Papier Mache Sword {
+    timedAction = Making,
+    Time = 100,
+    needTobeLearn = true,
+	Sound = SliceBread,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Carpentry,
+    inputs
+    {
+        item 1 [MoreTraits.PapierMache] mode:destroy,
+		item 1 [Base.Plank],
+		item 1 [*],
+			-fluid 1.0 [Water],
+    }
+    outputs
+    {
+        item 1 MoreTraits.PapierMacheSword,
+    }
 }
-recipe Make Wood Glue
-{
-	keep Base.MortarPestle,
-	Water=2,MoreTraits.PapierMache,Base.UnusableWood/Base.Twigs/Base.TreeBranch/Base.Plank,
-	Result: Base.Woodglue;6,
-	CanBeDoneFromFloor: true,
-	Category: Carpentry,
-	Sound:SliceBread,
-	NeedToBeLearn: true,
-	Time: 50.0
+craftRecipe Make Wood Glue {
+    timedAction = Making,
+    Time = 50,
+    needTobeLearn = true,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Carpentry,
+	Sound = SliceBread,
+    inputs
+    {
+		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
+        item 1 [MoreTraits.PapierMache] mode:destroy,
+		item 1 [Base.UnusableWood;Base.Twigs;Base.TreeBranch;Base.Plank],
+		item 1 [*],
+			-fluid 2.0 [Water],
+    }
+    outputs
+    {
+        item 1 Base.Woodglue,
+    }
 }
-recipe Make Duct Tape
-{
-	Base.Glue,MoreTraits.PapierMache,
-	Result: Base.DuctTape;4,
-	CanBeDoneFromFloor: true,
-	Sound:FixWithTape,
-	Category: Carpentry,
-	NeedToBeLearn: true,
-	Time: 50.0
+craftRecipe Make Duct Tape {
+    timedAction = Making,
+    Time = 50,
+    needTobeLearn = true,
+	Sound = FixWithTape,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Carpentry,
+	Sound = SliceBread,
+    inputs
+    {
+        item 1 [Base.Gluel;MoreTraits.PapierMache] mode:destroy,
+    }
+    outputs
+    {
+        item 1 Base.DuctTape,
+    }
 }
-recipe Strip Meat from Corpse
-{
-	keep Base.HuntingKnife/Base.KitchenKnife/Base.Saw/Base.Axe/Base.HandAxe/Base.AxeStone/Base.WoodAxe/Base.MeatCleaver/Base.FlintKnife/Base.Machete,
-	Base.CorpseMale/Base.CorpseFemale,
-	Result: MoreTraits.ZombPatty,
-	CanBeDoneFromFloor: true,
-	Sound:SliceMeat,
-	Category: Cooking,
-	NeedToBeLearn: true,
-	OnGiveXP:Recipe.OnGiveXP.Cooking10,
-	OnCreate:ZombPatty_OnCreate,
-	Time: 20.0
+craftRecipe Extract Propane From Corpse {
+    timedAction = Making,
+    Time = 500,
+    needTobeLearn = true,
+	Sound = FixWithTape,
+    Tags = InHandCraft;Health;CanBeDoneInDark,
+    category = Carpentry,
+    inputs
+    {
+		item 1 [Base.CorpseMale;Base.CorpseFemale] mode:destroy,
+    }
+    outputs
+    {
+        item 1 Base.PropaneTank,
+    }
 }
 }
-*/
