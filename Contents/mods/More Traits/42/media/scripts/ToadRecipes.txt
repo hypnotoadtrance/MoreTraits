@@ -254,7 +254,7 @@ craftRecipe Mince Corpse into Fertilizer {
 		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
 		item 1 tags[SharpKnife] mode:keep flags[MayDegradeLight;IsNotDull],
         item 1 [Base.CorpseMale;Base.CorpseFemale] mode:destroy,
-		item 1 [Base.EmptySandbag;Base.FertilizerEmpty],
+		item 1 [*] mode:destroy flags[HoldDirt;HoldCompost]
     }
     outputs
     {
