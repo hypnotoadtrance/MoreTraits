@@ -2821,7 +2821,7 @@ function graveRobber(_zombie)
                     inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem)) + 1]));
                 elseif roll <= 90 then
                     local randomitem = { "Base.DumbBell", "Base.EggCarton", "Base.HomeAlarm", "Base.HotDog", "Base.HottieZ", "Base.Icecream", "Base.Machete", "Base.Revolver_Long",
-                                         "Base.MeatPatty", "Base.Milk", "Base.MuttonChop", "Base.Padlock", "Base.PorkChop", "Base.Wine", "Base.Wine2", "Base.WhiskeyFull", "Base.Ham" };
+                                         "Base.MeatPatty", "Base.Milk", "Base.MuttonChop", "Base.Padlock", "Base.PorkChop", "Base.Wine", "Base.Wine2", "Base.Whiskey", "Base.Ham" };
                     inv:addItemOnServer(inv:AddItem(randomitem[ZombRand(tablelength(randomitem)) + 1]));
                 elseif roll <= 95 then
                     local randomitem = { "Base.PropaneTank", "Base.BlowTorch", "Base.Woodglue", "Base.DuctTape", "Base.Rope", "Base.Extinguisher" };
