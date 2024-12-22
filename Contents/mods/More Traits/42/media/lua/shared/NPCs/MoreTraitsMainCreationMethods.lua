@@ -5,7 +5,7 @@ local function initToadTraits()
     local gunspecialist = TraitFactory.addTrait("gunspecialist", getText("UI_trait_gunspecialist"), 8, getText("UI_trait_gunspecialistdesc"), false, false);
     gunspecialist:addXPBoost(Perks.Aiming, 2);
     gunspecialist:addXPBoost(Perks.Reloading, 2);
-    if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
+    if getActivatedMods():contains("\\1299328280/ToadTraitsDisablePrepared") == false then
         local preparedfood = TraitFactory.addTrait("preparedfood", getText("UI_trait_preparedfood"), 1, getText("UI_trait_preparedfooddesc"), false, false);
         local preparedammo = TraitFactory.addTrait("preparedammo", getText("UI_trait_preparedammo"), 1, getText("UI_trait_preparedammodesc"), false, false);
         local preparedmedical = TraitFactory.addTrait("preparedmedical", getText("UI_trait_preparedmedical"), 1, getText("UI_trait_preparedmedicaldesc"), false, false);
@@ -124,7 +124,7 @@ local function initToadTraits()
     local evasive = TraitFactory.addTrait("evasive", getText("UI_trait_evasive"), 8, getText("UI_trait_evasivedesc"), false, false);
     evasive:addXPBoost(Perks.Nimble, 1);
     local blissful = TraitFactory.addTrait("blissful", getText("UI_trait_blissful"), 3, getText("UI_trait_blissfuldesc"), false, false);
-    if getActivatedMods():contains("ToadTraitsDisableSpec") == false then
+    if getActivatedMods():contains("\\1299328280/ToadTraitsDisableSpec") == false then
         local specweapons = TraitFactory.addTrait("specweapons", getText("UI_trait_specweapons"), 12, getText("UI_trait_specweaponsdesc"), false, false);
         specweapons:addXPBoost(Perks.Axe, 2);
         specweapons:addXPBoost(Perks.Spear, 2);
@@ -271,7 +271,7 @@ local function initToadTraits()
     local burned = TraitFactory.addTrait("burned", getText("UI_trait_burned"), -20, getText("UI_trait_burneddesc"), false, false);
     local deprived = TraitFactory.addTrait("deprived", getText("UI_trait_deprived"), -6, getText("UI_trait_depriveddesc"), false, false);
     --Exclusives
-    if getActivatedMods():contains("ToadTraitsDisablePrepared") == false then
+    if getActivatedMods():contains("1299328280/ToadTraitsDisablePrepared") == false then
         TraitFactory.setMutualExclusive("preparedfood", "preparedammo");
         TraitFactory.setMutualExclusive("preparedfood", "preparedrepair");
         TraitFactory.setMutualExclusive("preparedfood", "preparedmedical");
@@ -342,7 +342,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("olympian", "Jogger");
     TraitFactory.setMutualExclusive("blissful", "depressive");
     TraitFactory.setMutualExclusive("blissful", "selfdestructive");
-    if getActivatedMods():contains("ToadTraitsDisableSpec") == false then
+    if getActivatedMods():contains("1299328280/ToadTraitsDisableSpec") == false then
         TraitFactory.setMutualExclusive("specweapons", "speccrafting");
         TraitFactory.setMutualExclusive("specweapons", "specfood");
         TraitFactory.setMutualExclusive("specweapons", "specguns");

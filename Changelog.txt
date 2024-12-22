@@ -1,3 +1,4 @@
 Main Changelog:
  - Resolve Unable to Light Fires
  - Sandbox Option to Toggle Burn Ward Fire Aversion
+ - Recognize Disable trait submods.
