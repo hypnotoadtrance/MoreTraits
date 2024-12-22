@@ -1,18 +1,28 @@
+--***********************************************************
+--**                    ROBERT JOHNSON                     **
+--***********************************************************
 
 require "TimedActions/ISBaseTimedAction"
 
 ISLightFromLiterature = ISBaseTimedAction:derive("ISLightFromLiterature");
 
 function ISLightFromLiterature:isValid()
-	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 then
+	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
 		HaloTextHelper.addText(self.character, getText("UI_burnedstop"), HaloTextHelper.getColorRed());
 		return
 	end
 	self.campfire:updateFromIsoObject()
-	return self.campfire:getObject() ~= nil and
-		self.character:getInventory():contains(self.lighter) and
-		self.character:getInventory():contains(self.item) and
-		not self.campfire.isLit
+	if isClient() and self.item and self.lighter then
+		return self.campfire:getObject() ~= nil and
+				self.character:getInventory():containsID(self.lighter:getID()) and
+				self.character:getInventory():containsID(self.item:getID()) and
+				not self.campfire.isLit
+	else
+		return self.campfire:getObject() ~= nil and
+				self.character:getInventory():contains(self.lighter) and
+				self.character:getInventory():contains(self.item) and
+				not self.campfire.isLit
+	end
 end
 
 function ISLightFromLiterature:waitToStart()
@@ -26,6 +36,10 @@ function ISLightFromLiterature:update()
 end
 
 function ISLightFromLiterature:start()
+	if isClient() and self.item and self.lighter then
+		self.lighter = self.character:getInventory():getItemById(self.lighter:getID())
+		self.item = self.character:getInventory():getItemById(self.item:getID())
+	end
 	self.item:setJobType(campingText.lightCampfire);
 	self.item:setJobDelta(0.0);
 	self:setActionAnim("Loot")
@@ -43,30 +57,41 @@ end
 function ISLightFromLiterature:perform()
 	self.character:stopOrTriggerSound(self.sound)
 	self.item:getContainer():setDrawDirty(true);
-    self.item:setJobDelta(0.0);
-	self.character:getInventory():Remove(self.item);
-	self.lighter:Use();
+	self.item:setJobDelta(0.0);
 
-	local fuelAmt = self.fuelAmt * 60
-	local cf = self.campfire
-	local args = { x = cf.x, y = cf.y, z = cf.z, fuelAmt = fuelAmt }
-	CCampfireSystem.instance:sendCommand(self.character, 'lightFire', args)
-
-    -- needed to remove from queue / start next.
+	-- needed to remove from queue / start next.
 	ISBaseTimedAction.perform(self);
 end
 
-function ISLightFromLiterature:new(character, item, lighter, campfire, fuelAmt, time)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.character = character;
+function ISLightFromLiterature:complete()
+	self.item:UseAndSync();
+	self.lighter:UseAndSync();
+
+	local fuelAmt = self.fuelAmt * 60
+
+	local campfire = SCampfireSystem.instance:getLuaObjectAt(self.campfire.x, self.campfire.y, self.campfire.z)
+
+	if campfire then
+		campfire:addFuel(fuelAmt)
+		campfire:lightFire()
+	end
+
+	return true
+end
+
+function ISLightFromLiterature:getDuration()
+	if self.character:isTimedActionInstant() then
+		return 1
+	end
+	return 100;
+end
+
+function ISLightFromLiterature:new(character, item, lighter, campfire, fuelAmt)
+	local o = ISBaseTimedAction.new(self, character)
 	o.campfire = campfire;
 	o.item = item;
 	o.lighter = lighter;
 	o.fuelAmt = fuelAmt;
-	o.stopOnWalk = true;
-	o.stopOnRun = true;
-	o.maxTime = time;
+	o.maxTime = o:getDuration();
 	return o;
 end

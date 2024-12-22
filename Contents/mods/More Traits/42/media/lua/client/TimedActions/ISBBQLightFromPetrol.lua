@@ -1,16 +1,20 @@
+--***********************************************************
+--**                    THE INDIE STONE                    **
+--***********************************************************
+
 require "TimedActions/ISBaseTimedAction"
 
 ISBBQLightFromPetrol = ISBaseTimedAction:derive("ISBBQLightFromPetrol")
 
 function ISBBQLightFromPetrol:isValid()
-	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 then
+	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
 		HaloTextHelper.addText(self.character, getText("UI_burnedstop"), HaloTextHelper.getColorRed());
 		return
 	end
 	local playerInv = self.character:getInventory()
 	return playerInv:contains(self.petrol) and playerInv:contains(self.lighter) and
-			self.lighter:getUsedDelta() > 0 and
-			self.petrol:getUsedDelta() > 0 and
+			self.lighter:getCurrentUsesFloat() > 0 and
+			self.petrol:getCurrentUsesFloat() > 0 and
 			self.bbq:getObjectIndex() ~= -1 and
 			not self.bbq:isLit() and
 			self.bbq:hasFuel()
@@ -30,7 +34,7 @@ function ISBBQLightFromPetrol:start()
 	self.petrol:setJobType(campingText.lightCampfire)
 	self.petrol:setJobDelta(0.0)
 	self:setActionAnim(CharacterActionAnims.Pour)
---	self:setAnimVariable("FoodType", "Kettle");
+	--	self:setAnimVariable("FoodType", "Kettle");
 	-- Don't call setOverrideHandModels() with self.petrol, the right-hand mask
 	-- will bork the animation.
 	self:setOverrideHandModels(self.petrol:getStaticModel(), nil)
@@ -46,25 +50,36 @@ end
 function ISBBQLightFromPetrol:perform()
 	self.character:stopOrTriggerSound(self.sound)
 	self.petrol:getContainer():setDrawDirty(true)
-    self.petrol:setJobDelta(0.0)
-    self.lighter:Use()
-    self.petrol:Use()
-	local bbq = self.bbq
-	local args = { x = bbq:getX(), y = bbq:getY(), z = bbq:getZ() }
-	sendClientCommand(self.character, 'bbq', 'light', args)
+	self.petrol:setJobDelta(0.0)
 
-    -- needed to remove from queue / start next.
+	-- needed to remove from queue / start next.
 	ISBaseTimedAction.perform(self)
 end
 
-function ISBBQLightFromPetrol:new(character, bbq, lighter, petrol, time)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.character = character
-	o.stopOnWalk = true
-	o.stopOnRun = true
-	o.maxTime = time
+function ISBBQLightFromPetrol:complete()
+
+	self.lighter:Use(false, false, true)
+	self.petrol:Use(false, false, true)
+
+	if not self.bbq then return end
+	if self.bbq:hasFuel() and not self.bbq:isLit() then
+		self.bbq:setLit(true)
+		self.bbq:sendObjectChange('state')
+	end
+
+	return true;
+end
+
+function ISBBQLightFromPetrol:getDuration()
+	if self.character:isTimedActionInstant() then
+		return 1;
+	end
+	return 20
+end
+
+function ISBBQLightFromPetrol:new(character, bbq, lighter, petrol)
+	local o = ISBaseTimedAction.new(self, character)
+	o.maxTime = o:getDuration();
 	-- custom fields
 	o.bbq = bbq
 	o.lighter = lighter

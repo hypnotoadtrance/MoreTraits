@@ -4051,7 +4051,7 @@ local function QuickRest(player, playerdata)
 end
 
 local function BurnWardPatient(player, playerdata)
-    if player:HasTrait("burned") and playerdata.MTModVersion >= 3 then
+    if player:HasTrait("burned") and playerdata.MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
         local x = math.floor(player:getX())
         local y = math.floor(player:getY())
         local closest = 100

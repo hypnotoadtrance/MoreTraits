@@ -273,6 +273,13 @@ option MoreTraits.HoarderCompatibility
 	page = MoreTraits, 
 	translation = MoreTraits_HoarderCompatibility,
 }
+option MoreTraits.BurnedFireAversion
+{
+	type = boolean,
+	default = true,
+	page = MoreTraits,
+	translation = MoreTraits_BurnedFireAversion,
+}
 option MoreTraits.BurnedDistance
 {
 	type = integer, min = 5, max = 50, default = 20,
