@@ -241,7 +241,7 @@ function initToadTraitsItems(_player)
         player:setSecondaryHandItem(case);
     end
     if player:HasTrait("preparedweapon") then
-        inv:addItemOnServer(inv:AddItem("Base.BaseballBatNails"));
+        inv:addItemOnServer(inv:AddItem("Base.BaseballBat_Can"));
         inv:addItemOnServer(inv:AddItem("Base.HuntingKnife"));
     end
     if player:HasTrait("preparedmedical") then

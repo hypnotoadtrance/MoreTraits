@@ -1,2 +1,3 @@
 Main Changelog:
 - Update Antique Collector Items.
+- Prepared Weapons was trying to give a non-existant item.
