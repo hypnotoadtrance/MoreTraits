@@ -81,7 +81,7 @@ craftRecipe Improvise Disinfectant {
     }
     outputs
     {
-        fluid 0.2 [Alcohol],
+        item 1 Base.Disinfectant,
     }
 }
 craftRecipe Improvise Disinfectant {
@@ -118,7 +118,7 @@ craftRecipe Improvise Disinfectant {
     }
     outputs
     {
-        fluid 1.0 [Alcohol],
+        item 1 Base.Disinfectant,
     }
 }
 craftRecipe Improvise Disinfectant {
@@ -131,13 +131,13 @@ craftRecipe Improvise Disinfectant {
     inputs
     {
 		item 1 [*],
-			-fluid 0.5 [Milk],
+			-fluid 0.5 [CowMilk],
 		item 1 [*],
 			-fluid 0.5 [Water],
     }
     outputs
     {
-        fluid 1.0 [Alcohol],
+        item 1 Base.Disinfectant,
     }
 }
 craftRecipe Improvise Painkillers {
@@ -308,7 +308,7 @@ craftRecipe Make Wood Glue {
     {
 		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
         item 1 [MoreTraits.PapierMache] mode:destroy,
-		item 1 [Base.UnusableWood;Base.Twigs;Base.TreeBranch;Base.Plank],
+		item 1 [Base.UnusableWood;Base.Twigs;Base.TreeBranch2;Base.Plank],
 		item 1 [*],
 			-fluid 2.0 [Water],
     }
