@@ -1,2 +1,4 @@
 Main Changelog:
 - Converted Recipes from B41 to B42
+- Fix Grave Robber Loot Table
+- Fix Ingenuitive

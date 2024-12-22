@@ -3281,7 +3281,7 @@ function ContainerEvents(_iSInventoryPage, _state)
 end
 function MT_LearnAllRecipes(_player)
     local player = _player;
-    local recipes = getScriptManager():getAllRecipes();
+    local recipes = getScriptManager():getAllCraftRecipes();
     if SandboxVars.MoreTraits.IngenuitiveLimit == true then
         local percenttolearn = 0.5;
         local unknownrecipes = {};
@@ -3291,9 +3291,7 @@ function MT_LearnAllRecipes(_player)
         for i = recipes:size() - 1, 0, -1 do
             local recipe = recipes:get(i);
             if recipe:needToBeLearn() == true then
-                if player:isRecipeKnown(recipe) == false then
-                    table.insert(unknownrecipes, recipe:getOriginalname());
-                end
+                    table.insert(unknownrecipes, recipe:getName());
             end
         end
         if tablelength(unknownrecipes) > 1 then
@@ -3313,9 +3311,7 @@ function MT_LearnAllRecipes(_player)
         for i = recipes:size() - 1, 0, -1 do
             local recipe = recipes:get(i);
             if recipe:needToBeLearn() == true then
-                if player:isRecipeKnown(recipe) == false then
-                    player:learnRecipe(recipe:getOriginalname());
-                end
+                    player:learnRecipe(recipe:getName());
             end
         end
     end
