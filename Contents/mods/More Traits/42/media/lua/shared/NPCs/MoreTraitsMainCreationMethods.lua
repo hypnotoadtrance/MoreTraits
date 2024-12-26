@@ -271,7 +271,7 @@ local function initToadTraits()
     local burned = TraitFactory.addTrait("burned", getText("UI_trait_burned"), -20, getText("UI_trait_burneddesc"), false, false);
     local deprived = TraitFactory.addTrait("deprived", getText("UI_trait_deprived"), -6, getText("UI_trait_depriveddesc"), false, false);
     --Exclusives
-    if getActivatedMods():contains("1299328280/ToadTraitsDisablePrepared") == false then
+    if getActivatedMods():contains("\\1299328280/ToadTraitsDisablePrepared") == false then
         TraitFactory.setMutualExclusive("preparedfood", "preparedammo");
         TraitFactory.setMutualExclusive("preparedfood", "preparedrepair");
         TraitFactory.setMutualExclusive("preparedfood", "preparedmedical");
@@ -342,7 +342,7 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("olympian", "Jogger");
     TraitFactory.setMutualExclusive("blissful", "depressive");
     TraitFactory.setMutualExclusive("blissful", "selfdestructive");
-    if getActivatedMods():contains("1299328280/ToadTraitsDisableSpec") == false then
+    if getActivatedMods():contains("\\1299328280/ToadTraitsDisableSpec") == false then
         TraitFactory.setMutualExclusive("specweapons", "speccrafting");
         TraitFactory.setMutualExclusive("specweapons", "specfood");
         TraitFactory.setMutualExclusive("specweapons", "specguns");

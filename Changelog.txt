@@ -1,4 +1,3 @@
 Main Changelog:
-- Converted Recipes from B41 to B42
-- Fix Grave Robber Loot Table
-- Fix Ingenuitive
+- stopgap fix for Gym Goer until CallLua flag of AddXP method is recognized.
+- Resolve setMutualExclusive error.

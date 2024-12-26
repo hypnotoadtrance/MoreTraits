@@ -17,7 +17,7 @@ Ever since the animations update, the previous calculations stopped working, and
 I have been unable to find a workaround.
 --]]
 --Global Variables
-MT_Config = PZAPI.ModOptions:getOptions("1299328280")
+MT_Config = PZAPI.ModOptions:getOptions("1299328280");
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
@@ -80,11 +80,7 @@ playerdatatable[52] = { "QuickRestEndurance", -1 };
 playerdatatable[53] = { "QuickRestFinished", false };
 
 local function AddXP(player, perk, amount)
-    if getCore():getGameVersion():getMajor() > 41 or (getCore():getGameVersion():getMajor() == 41 and getCore():getGameVersion():getMinor() >= 66) then
-        player:getXp():AddXP(perk, amount, false, false, false)
-    else
-        player:getXp():AddXP(perk, amount, false, false);
-    end
+    player:getXp():AddXP(perk, amount, false, false, false);
 end
 local function GameSpeedMultiplier()
     local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
@@ -186,7 +182,6 @@ local function addXPNoMultiplier(_player, _perk, _amount)
     local perk = _perk;
     local amount = _amount;
     local player = _player;
-    skipxpadd = true;
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 local function InitPlayerData(player)
@@ -3205,7 +3200,10 @@ function GymGoer(_player, _perk, _amount)
     if player:HasTrait("gymgoer") and player:getCurrentState() == FitnessState.instance() then
         if perk == Perks.Fitness or perk == Perks.Strength then
             amount = amount * (modifier - 1);
+            --stopgap fix until CallLua flag of AddXP method is recognized.
+            amount = amount * 0.1;
             AddXP(player, perk, amount);
+            --print("Amount: " .. amount);
         end
     end
 end
@@ -3291,7 +3289,7 @@ function MT_LearnAllRecipes(_player)
         for i = recipes:size() - 1, 0, -1 do
             local recipe = recipes:get(i);
             if recipe:needToBeLearn() == true then
-                    table.insert(unknownrecipes, recipe:getName());
+                table.insert(unknownrecipes, recipe:getName());
             end
         end
         if tablelength(unknownrecipes) > 1 then
@@ -3311,7 +3309,7 @@ function MT_LearnAllRecipes(_player)
         for i = recipes:size() - 1, 0, -1 do
             local recipe = recipes:get(i);
             if recipe:needToBeLearn() == true then
-                    player:learnRecipe(recipe:getName());
+                player:learnRecipe(recipe:getName());
             end
         end
     end
