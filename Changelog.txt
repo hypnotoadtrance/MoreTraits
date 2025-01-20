@@ -1,3 +1,2 @@
 Main Changelog:
-- stopgap fix for Gym Goer until CallLua flag of AddXP method is recognized.
-- Resolve setMutualExclusive error.
+- Update Italian Translation for B41 and B42 (Art Tippet)
