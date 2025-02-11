@@ -1,4 +1,4 @@
-require "forageDefinitions";
+require "Foraging/forageDefinitions";
 MoreTraitsSkills = {
 	incomprehensive = {
 		name = "incomprehensive",
@@ -128,4 +128,6 @@ MoreTraitsSkills = {
 		},
 	},
 };
-table.insert(forageSkills, MoreTraitsSkills);
+for skillName, skillDef in pairs(MoreTraitsSkills) do
+	table.insert(forageSkills, skillDef);
+end
