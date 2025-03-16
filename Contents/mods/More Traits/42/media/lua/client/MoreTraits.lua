@@ -1607,7 +1607,7 @@ function hardytrait(_player, _playerdata)
             if MT_Config:getOption("HardyNotifier"):getValue() == true then
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
             else
-                HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), HaloTextHelper.getColorWhite())
+                HaloTextHelper.addText(player, getText("UI_trait_hardyrest"))
             end
         end
     end

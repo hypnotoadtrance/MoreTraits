@@ -398,8 +398,8 @@ local function initToadTraits()
     TraitFactory.setMutualExclusive("idealweight", "Very Underweight");
     TraitFactory.setMutualExclusive("idealweight", "Obese");
     TraitFactory.setMutualExclusive("idealweight", "Emaciated");
-    TraitFactory.setMutualExclusive("idealweight", "Weight Gain");
-    TraitFactory.setMutualExclusive("idealweight", "Weight Loss");
+    TraitFactory.setMutualExclusive("idealweight", "WeightGain");
+    TraitFactory.setMutualExclusive("idealweight", "WeightLoss");
     --TraitFactory.setMutualExclusive("gimp", "fast");
     --TraitFactory.setMutualExclusive("blissful", "Brooding");
     local version = getCore():getGameVersion();
