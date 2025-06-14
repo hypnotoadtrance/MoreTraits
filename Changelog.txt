@@ -1,2 +1,3 @@
 Main Changelog:
 - Disable Custom Forage Definitions for More Traits until such time as issue can be resolved.
+- Resolve HaloTextHelper No Implementation Error.

@@ -1607,7 +1607,7 @@ function hardytrait(_player, _playerdata)
             if MT_Config:getOption("HardyNotifier"):getValue() == true then
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
             else
-                HaloTextHelper.addText(player, getText("UI_trait_hardyrest"))
+                HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), "")
             end
         end
     end
@@ -1879,7 +1879,7 @@ function martial(_actor, _target, _weapon, _damage)
             damage = damage * 0.1;
             damage = damage * damageloss;
             if MT_Config:getOption("MartialDamage"):getValue() == true then
-                HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), HaloTextHelper.getColorGreen());
+                HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), "", HaloTextHelper.getColorGreen());
             end
             _target:setHealth(_target:getHealth() - damage);
             if _target:getHealth() <= 0 then
@@ -1995,7 +1995,7 @@ function progun(_actor, _weapon)
             if currentCapacity < maxCapacity and currentCapacity > 0 then
                 weapon:setCurrentAmmoCount(currentCapacity + 1);
                 if MT_Config:getOption("ProwessGunsAmmo"):getValue() == true then
-                    HaloTextHelper.addText(player, getText("UI_progunammo"), HaloTextHelper.getColorGreen());
+                    HaloTextHelper.addText(player, getText("UI_progunammo"), "", HaloTextHelper.getColorGreen());
                 end
             end
         end
@@ -4182,7 +4182,7 @@ local function MTOnEquip(_player)
             local item = player:getPrimaryHandItem()
             if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
                 player:setPrimaryHandItem(nil)
-                HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), HaloTextHelper.getColorRed());
+                HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed());
             end
         end
     else
@@ -4190,7 +4190,7 @@ local function MTOnEquip(_player)
             local item = player:getPrimaryHandItem()
             if item:getType() == "FlameTrap" or item:getType() == "FlameTrapTriggered" or item:getType() == "FlameTrapSensorV1" or item:getType() == "FlameTrapSensorV2" or item:getType() == "FlameTrapSensorV3" or item:getType() == "FlameTrapRemote" or item:getType() == "Molotov" then
                 player:setPrimaryHandItem(nil)
-                HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), HaloTextHelper.getColorRed());
+                HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed());
             end
         end
     end
@@ -4364,7 +4364,7 @@ function EveryOneMinute()
     SuperImmuneRecoveryProcess();
 
     if playerdata.QuickRestFinished == true then
-        HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), HaloTextHelper.getColorGreen());
+        HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), "", HaloTextHelper.getColorGreen());
     end
 end
 
