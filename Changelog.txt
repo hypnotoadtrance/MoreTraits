@@ -1,2 +1,2 @@
 Main Changelog:
-- Update Italian Translation for B41 and B42 (Art Tippet)
+- Disable Custom Forage Definitions for More Traits until such time as issue can be resolved.

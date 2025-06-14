@@ -129,5 +129,6 @@ MoreTraitsSkills = {
 	},
 };
 for skillName, skillDef in pairs(MoreTraitsSkills) do
-	table.insert(forageSkills, skillDef);
+	--Disable Custom Forage Definitions for More Traits until such time as issue can be resolved.
+	--table.insert(forageSkills, skillDef);
 end
