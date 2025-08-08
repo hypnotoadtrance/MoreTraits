@@ -79,31 +79,34 @@ playerdatatable[51] = { "QuickRestActive", false };
 playerdatatable[52] = { "QuickRestEndurance", -1 };
 playerdatatable[53] = { "QuickRestFinished", false };
 
-local function GetXPModifier(player, perk)  
-    local m = 1.0  
+local function GetXPModifier(player, perk)
+    local m = 1.0
 
-    -- GymGoer bonus  
-    if player:HasTrait("gymgoer")  
-        and (perk == Perks.Fitness or perk == Perks.Strength)  
-        and player:getCurrentState() == FitnessState.instance() then  
-            local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200  
-            m = m * ((gymMod * 0.01) - 1) * 0.1  
-    end  
+    -- GymGoer bonus
+    if player:HasTrait("gymgoer")
+        and (perk == Perks.Fitness or perk == Perks.Strength)
+        and player:getCurrentState() == FitnessState.instance() then
+            local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200
+            m = m + ((gymMod * 0.01) - 1) * 0.1
+    end
 
-    -- Auto-detect spec* traits  
-    local specMod = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01  
-    for i = 0, player:getTraits():size()-1 do  
-        if player:getTraits():get(i):sub(1,4) == "spec" then  
-            m = m * specMod  
-        end  
-    end  
+    -- Auto-detect spec* traits
+    local specMod = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01
+    for i = 0, player:getTraits():size()-1 do
+        if player:getTraits():get(i):sub(1,4) == "spec" then
+            m = m * specMod
+        end
+    end
 
-    return m  
+    return m
 end
 
+-- Fonction AddXP
 local function AddXP(player, perk, amount)
     player:getXp():AddXP(perk, amount, false, false, false);
 end
+
+
 local function GameSpeedMultiplier()
     local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
     local multiplier = 1;
@@ -3121,13 +3124,31 @@ function FearfulUpdate(_player)
     end
 end
 
-function GymGoer(player, perk, amount)  
-    if player:HasTrait("gymgoer")  
-        and (perk == Perks.Fitness or perk == Perks.Strength)  
-        and player:getCurrentState() == FitnessState.instance() then  
-            local finalAmount = amount * GetXPModifier(player, perk)  
-            AddXP(player, perk, finalAmount)  
-    end  
+function GymGoer(player, perk, amount)
+    -- Prévention de la récursion infinie
+    local playerData = player:getModData()
+    if playerData.GymGoerProcessing then
+        return  -- Sortir si déjà en cours de traitement
+    end
+
+    if player:HasTrait("gymgoer")
+        and (perk == Perks.Fitness or perk == Perks.Strength)
+        and player:getCurrentState() == FitnessState.instance() then
+
+        -- Marquer qu'on traite le bonus gymgoer
+        playerData.GymGoerProcessing = true
+
+        -- Calculer le bonus XP
+        local modifier = SandboxVars.MoreTraits.GymGoerPercent or 200
+        local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1
+        local bonusAmount = amount * bonusMultiplier
+
+        -- Ajouter XP sans déclencher l'événement récursivement
+        player:getXp():AddXP(perk, bonusAmount, false, false, false)
+
+        -- Libérer le verrou
+        playerData.GymGoerProcessing = false
+    end
 end
 
 function GymGoerUpdate(_player)
@@ -3188,6 +3209,7 @@ function GymGoerUpdate(_player)
         end
     end
 end
+
 function ContainerEvents(_iSInventoryPage, _state)
     local page = _iSInventoryPage;
     local state = _state;
