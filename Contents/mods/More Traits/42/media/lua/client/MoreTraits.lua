@@ -79,6 +79,28 @@ playerdatatable[51] = { "QuickRestActive", false };
 playerdatatable[52] = { "QuickRestEndurance", -1 };
 playerdatatable[53] = { "QuickRestFinished", false };
 
+local function GetXPModifier(player, perk)  
+    local m = 1.0  
+
+    -- GymGoer bonus  
+    if player:HasTrait("gymgoer")  
+        and (perk == Perks.Fitness or perk == Perks.Strength)  
+        and player:getCurrentState() == FitnessState.instance() then  
+            local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200  
+            m = m * ((gymMod * 0.01) - 1) * 0.1  
+    end  
+
+    -- Auto-detect spec* traits  
+    local specMod = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01  
+    for i = 0, player:getTraits():size()-1 do  
+        if player:getTraits():get(i):sub(1,4) == "spec" then  
+            m = m * specMod  
+        end  
+    end  
+
+    return m  
+end
+
 local function AddXP(player, perk, amount)
     player:getXp():AddXP(perk, amount, false, false, false);
 end
@@ -1329,101 +1351,12 @@ function Blissful(_player)
     end
 end
 
-function Specialization(_player, _perk, _amount)
-    local player = _player;
-    local perk = _perk;
-    local amount = _amount;
-    local newamount = 0;
-    local skip = false;
-    local modifier = 75;
-    local perklvl = player:getPerkLevel(_perk);
-    local perkxpmod = 1;
-    if SandboxVars.MoreTraits.SpecializationXPPercent then
-        modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
-    end
-    --shift decimal over two places for calculation purposes.
-    modifier = modifier * 0.01;
-    if perk == Perks.Fitness or perk == Perks.Strength then
-        skipxpadd = true;
-    end
-    if skipxpadd == false then
-        if player:HasTrait("specweapons") or player:HasTrait("specfood") or player:HasTrait("specguns") or player:HasTrait("specmove") or player:HasTrait("speccrafting") or player:HasTrait("specaid") then
-            if player:HasTrait("specweapons") then
-                if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
-                    skip = true;
-                end
-            end
-            if player:HasTrait("specfood") then
-                if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing or perk == Perks.Butchering or perk == Perks.Tracking or perk == Perks.Husbandry then
-                    skip = true;
-                end
-            end
-            if player:HasTrait("specguns") then
-                if perk == Perks.Aiming or perk == Perks.Reloading or perk == Perks.Tracking then
-                    skip = true;
-                end
-            end
-            if player:HasTrait("specmove") then
-                if perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sprinting or perk == Perks.Sneak then
-                    skip = true;
-                end
-            end
-            if player:HasTrait("speccrafting") then
-                if perk == Perks.Woodwork or perk == Perks.Electricity or perk == Perks.MetalWelding or perk == Perks.Mechanics or perk == Perks.Tailoring or perk == Perks.Blacksmith or perk == Perks.Carving or perk == Perks.FlintKnapping or perk == Perks.Glassmaking or perk == Perks.Pottery or perk == Perks.Masonry then
-                    skip = true;
-                end
-            end
-            if player:HasTrait("specaid") then
-                if perk == Perks.Doctor then
-                    skip = true;
-                end
-            end
-            newamount = amount * modifier;
-            local currentxp = player:getXp():getXP(perk);
-            local correctamount = currentxp - newamount
-            local testxp = currentxp - amount;
-            --Check if the newxp amount would give the player a negative level.
-            --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
-            if skip == false then
-                if perklvl == 0 and testxp <= 0 then
-                    skip = true;
-                elseif perklvl == 1 and testxp <= 75 then
-                    skip = true;
-                elseif perklvl == 2 and testxp <= 150 then
-                    skip = true;
-                elseif perklvl == 3 and testxp <= 300 then
-                    skip = true;
-                elseif perklvl == 4 and testxp <= 750 then
-                    skip = true;
-                elseif perklvl == 5 and testxp <= 1500 then
-                    skip = true;
-                elseif perklvl == 6 and testxp <= 3000 then
-                    skip = true;
-                elseif perklvl == 7 and testxp <= 4500 then
-                    skip = true;
-                elseif perklvl == 8 and testxp <= 6000 then
-                    skip = true;
-                elseif perklvl == 9 and testxp <= 7500 then
-                    skip = true;
-                elseif perklvl == 10 and testxp <= 9000 then
-                    skip = true;
-                end
-            end
-            if skip == false then
-                local xpforlevel = perk:getXpForLevel(perklvl) + 50;
-                while player:getXp():getXP(perk) > correctamount do
-                    local curxp = player:getXp():getXP(perk);
-                    if xpforlevel >= curxp then
-                        break ;
-                    else
-                        AddXP(player, perk, -1 * 0.1);
-                    end
-                end
-            end
-        end
-    else
-        skipxpadd = false;
-    end
+function Specialization(player, perk, amount)  
+    if perk == Perks.Fitness or perk == Perks.Strength then  
+        return  
+    end  
+    local finalAmount = amount * GetXPModifier(player, perk)  
+    AddXP(player, perk, finalAmount)  
 end
 
 function indefatigable(_player, _playerdata)
@@ -3187,26 +3120,16 @@ function FearfulUpdate(_player)
         end
     end
 end
-function GymGoer(_player, _perk, _amount)
-    local player = _player;
-    local perk = _perk;
-    local amount = _amount;
-    local modifier = 200;
-    if SandboxVars.MoreTraits.GymGoerPercent then
-        modifier = SandboxVars.MoreTraits.GymGoerPercent;
-    end
-    --Shift decimal over two places.
-    modifier = modifier * 0.01;
-    if player:HasTrait("gymgoer") and player:getCurrentState() == FitnessState.instance() then
-        if perk == Perks.Fitness or perk == Perks.Strength then
-            amount = amount * (modifier - 1);
-            --stopgap fix until CallLua flag of AddXP method is recognized.
-            amount = amount * 0.1;
-            AddXP(player, perk, amount);
-            --print("Amount: " .. amount);
-        end
-    end
+
+function GymGoer(player, perk, amount)  
+    if player:HasTrait("gymgoer")  
+        and (perk == Perks.Fitness or perk == Perks.Strength)  
+        and player:getCurrentState() == FitnessState.instance() then  
+            local finalAmount = amount * GetXPModifier(player, perk)  
+            AddXP(player, perk, finalAmount)  
+    end  
 end
+
 function GymGoerUpdate(_player)
     local player = _player;
     if player:HasTrait("gymgoer") and SandboxVars.MoreTraits.GymGoerNoExerciseFatigue == true then
