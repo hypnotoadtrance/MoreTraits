@@ -3355,52 +3355,92 @@ function LeadFoot(_player)
         end
     end
 end
+
 function GlassBody(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
+    
     if player:HasTrait("glassbody") then
-        if player:isAsleep() then
-            --Don't wound the player in their sleep.
-            playerdata.fLastHP = 0;
-            playerdata.isSleeping = true
-            return ;
-        end
-        local lasthp = playerdata.fLastHP;
         local currenthp = bodydamage:getOverallBodyHealth();
-        local multiplier = getGameTime():getMultiplier();
-        --Don't check if the multiplier is too high (prevent from injuring so many times)
-        if currenthp < lasthp and multiplier <= 4.0 then
-            if playerdata.isSleeping == true and player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck")):getAdditionalPain() > 0 then
-                playerdata.isSleeping = false
-                playerdata.fLastHP = 0;
-                return
-            else
-                playerdata.isSleeping = false
+        local isCurrentlyAsleep = player:isAsleep();
+        
+        -- Gestion de l'état de sommeil
+        if isCurrentlyAsleep then
+            -- Si le joueur vient de s'endormir, sauvegarder sa HP actuelle
+            if not playerdata.isSleeping then
+                playerdata.fLastHP = currenthp;
+                playerdata.isSleeping = true;
             end
+            -- Ne pas blesser le joueur pendant qu'il dort
+            return;
+        end
+        
+        -- Le joueur est réveillé
+        if playerdata.isSleeping then
+            -- Transition sommeil -> éveil
+            playerdata.isSleeping = false;
+            -- Réinitialiser la HP de référence au réveil pour éviter les faux positifs
+            playerdata.fLastHP = currenthp;
+            return;
+        end
+        
+        -- Vérifications de sécurité
+        local lasthp = playerdata.fLastHP or currenthp;
+        local multiplier = getGameTime():getMultiplier();
+        
+        -- Ne pas traiter si la HP n'est pas valide ou si le multiplicateur est trop élevé
+        if lasthp <= 0 or currenthp <= 0 or multiplier > 4.0 then
+            playerdata.fLastHP = currenthp;
+            return;
+        end
+        
+        -- Logique principale - seulement si la HP a diminué
+        if currenthp < lasthp then
             local chance = 33;
             local woundstrength = 10;
+            
+            -- Modificateurs basés sur les traits
             if player:HasTrait("Lucky") then
-                chance = chance - 5 * luckimpact;
-                woundstrength = woundstrength - 5 * luckimpact;
+                chance = chance - 5 * (luckimpact or 1);
+                woundstrength = woundstrength - 5 * (luckimpact or 1);
             elseif player:HasTrait("Unlucky") then
-                chance = chance + 5 * luckimpact;
-                woundstrength = woundstrength + 5 * luckimpact;
+                chance = chance + 5 * (luckimpact or 1);
+                woundstrength = woundstrength + 5 * (luckimpact or 1);
             end
+            
+            -- S'assurer que les valeurs restent dans des limites raisonnables
+            chance = math.max(5, math.min(95, chance));
+            woundstrength = math.max(5, math.min(25, woundstrength));
+            
             local difference = lasthp - currenthp;
-            --Divide the difference by the number of body parts, since ReduceGeneralHealth applies to each part.
-            difference = difference * 2 / bodydamage:getBodyParts():size();
-            bodydamage:ReduceGeneralHealth(difference);
+            
+            -- Appliquer les dégâts additionnels (Made of Glass = double dégâts)
+            -- Diviser par le nombre de parties du corps car ReduceGeneralHealth affecte chaque partie
+            local bodyPartsCount = bodydamage:getBodyParts():size();
+            local additionalDamage = (difference * 2) / bodyPartsCount;
+            
+            -- Appliquer les dégâts supplémentaires
+            bodydamage:ReduceGeneralHealth(additionalDamage);
+            
+            -- Chance de fracture si les dégâts sont importants
             if difference > 0.33 and ZombRand(100) <= chance then
                 local randompart = ZombRand(0, 16);
-                local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
-                b:setFractureTime(ZombRand(20) + woundstrength);
+                local bodypart = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
+                if bodypart then
+                    bodypart:setFractureTime(ZombRand(20) + woundstrength);
+                end
+            -- Chance d'égratignure si les dégâts sont modérés
             elseif difference > 0.1 and ZombRand(100) <= chance then
                 local randompart = ZombRand(0, 16);
-                local b = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
-                b:setScratched(true, true);
+                local bodypart = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
+                if bodypart then
+                    bodypart:setScratched(true, true);
+                end
             end
         end
+        
+        -- Mettre à jour la HP de référence
         playerdata.fLastHP = bodydamage:getOverallBodyHealth();
     end
 end
