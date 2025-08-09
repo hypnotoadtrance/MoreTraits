@@ -79,31 +79,26 @@ playerdatatable[51] = { "QuickRestActive", false };
 playerdatatable[52] = { "QuickRestEndurance", -1 };
 playerdatatable[53] = { "QuickRestFinished", false };
 
-local function GetXPModifier(player, perk)  
-    local m = 1.0  
+local function GetXPModifier(player, perk)
+    local m = 1.0
 
-    -- GymGoer bonus  
-    if player:HasTrait("gymgoer")  
-        and (perk == Perks.Fitness or perk == Perks.Strength)  
-        and player:getCurrentState() == FitnessState.instance() then  
-            local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200  
-            m = m * ((gymMod * 0.01) - 1) * 0.1  
-    end  
+    -- GymGoer bonus UNIQUEMENT
+    if player:HasTrait("gymgoer")
+        and (perk == Perks.Fitness or perk == Perks.Strength)
+        and player:getCurrentState() == FitnessState.instance() then
+            local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200
+            m = m + ((gymMod * 0.01) - 1) * 0.1
+    end
 
-    -- Auto-detect spec* traits  
-    local specMod = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01  
-    for i = 0, player:getTraits():size()-1 do  
-        if player:getTraits():get(i):sub(1,4) == "spec" then  
-            m = m * specMod  
-        end  
-    end  
-
-    return m  
+    return m
 end
 
+-- Fonction AddXP
 local function AddXP(player, perk, amount)
     player:getXp():AddXP(perk, amount, false, false, false);
 end
+
+
 local function GameSpeedMultiplier()
     local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
     local multiplier = 1;
@@ -1351,13 +1346,45 @@ function Blissful(_player)
     end
 end
 
-function Specialization(player, perk, amount)  
-    if perk == Perks.Fitness or perk == Perks.Strength then  
-        return  
-    end  
-    local finalAmount = amount * GetXPModifier(player, perk)  
-    AddXP(player, perk, finalAmount)  
+function Specialization(player, perk, amount)
+    -- Ignorer Fitness et Strength (gérés par GymGoer)
+    if perk == Perks.Fitness or perk == Perks.Strength then return end
+
+    -- Table des traits de spécialisation et des perks concernés
+    local specs = {
+        specweapons = {Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade, Perks.Maintenance, Perks.SmallBlunt, Perks.Spear},
+        specfood = {Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping, Perks.Fishing},
+        specguns = {Perks.Aiming, Perks.Reloading},
+        specmove = {Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak},
+        speccrafting = {Perks.Woodwork, Perks.Electricity, Perks.MetalWelding, Perks.Mechanics, Perks.Tailoring},
+        specaid = {Perks.Doctor}
+    }
+
+    -- Vérifier si le joueur possède au moins un trait "spec*"
+    local hasSpec = false
+    for trait in pairs(specs) do
+        if player:HasTrait(trait) then
+            hasSpec = true
+            break
+        end
+    end
+    if not hasSpec then return end
+
+    -- Si le perk correspond à une spécialisation du joueur, on ne fait rien
+    for trait, perks in pairs(specs) do
+        if player:HasTrait(trait) then
+            for _, p in ipairs(perks) do
+                if perk == p then return end
+            end
+        end
+    end
+
+    -- Appliquer la pénalité d'XP
+    local modifier = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01
+    local xpToRemove = amount - (amount * modifier)
+    AddXP(player, perk, -xpToRemove)
 end
+
 
 function indefatigable(_player, _playerdata)
     local player = _player;
@@ -3121,13 +3148,31 @@ function FearfulUpdate(_player)
     end
 end
 
-function GymGoer(player, perk, amount)  
-    if player:HasTrait("gymgoer")  
-        and (perk == Perks.Fitness or perk == Perks.Strength)  
-        and player:getCurrentState() == FitnessState.instance() then  
-            local finalAmount = amount * GetXPModifier(player, perk)  
-            AddXP(player, perk, finalAmount)  
-    end  
+function GymGoer(player, perk, amount)
+    -- Prévention de la récursion infinie
+    local playerData = player:getModData()
+    if playerData.GymGoerProcessing then
+        return  -- Sortir si déjà en cours de traitement
+    end
+
+    if player:HasTrait("gymgoer")
+        and (perk == Perks.Fitness or perk == Perks.Strength)
+        and player:getCurrentState() == FitnessState.instance() then
+
+        -- Marquer qu'on traite le bonus gymgoer
+        playerData.GymGoerProcessing = true
+
+        -- Calculer le bonus XP
+        local modifier = SandboxVars.MoreTraits.GymGoerPercent or 200
+        local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1
+        local bonusAmount = amount * bonusMultiplier
+
+        -- Ajouter XP sans déclencher l'événement récursivement
+        AddXP(player, perk, bonusAmount)
+
+        -- Libérer le verrou
+        playerData.GymGoerProcessing = false
+    end
 end
 
 function GymGoerUpdate(_player)
@@ -3188,6 +3233,7 @@ function GymGoerUpdate(_player)
         end
     end
 end
+
 function ContainerEvents(_iSInventoryPage, _state)
     local page = _iSInventoryPage;
     local state = _state;
