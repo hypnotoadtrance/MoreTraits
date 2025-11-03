@@ -457,20 +457,20 @@ function initToadTraitsPerks(_player)
     end
     InitPlayerData(player);
     if player:HasTrait("Lucky") then
-        damage = damage - 5 * luckimpact;
-        bandagestrength = bandagestrength + 2 * luckimpact;
-        fracturetime = fracturetime - 5 * luckimpact;
-        splintstrength = splintstrength + 0.1 * luckimpact;
-        scratchtimemod = scratchtimemod - 5 * luckimpact;
-        bleedtimemod = bleedtimemod - 2 * luckimpact;
+        damage = damage - 5 * (luckimpact or 1.0);
+        bandagestrength = bandagestrength + 2 * (luckimpact or 1.0);
+        fracturetime = fracturetime - 5 * (luckimpact or 1.0);
+        splintstrength = splintstrength + 0.1 * (luckimpact or 1.0);
+        scratchtimemod = scratchtimemod - 5 * (luckimpact or 1.0);
+        bleedtimemod = bleedtimemod - 2 * (luckimpact or 1.0);
     end
     if player:HasTrait("Unlucky") then
-        damage = damage + 5 * luckimpact;
-        bandagestrength = bandagestrength - 2 * luckimpact;
-        fracturetime = fracturetime + 5 * luckimpact;
-        splintstrength = splintstrength - 0.1 * luckimpact;
-        scratchtimemod = scratchtimemod + 5 * luckimpact;
-        bleedtimemod = bleedtimemod + 2 * luckimpact;
+        damage = damage + 5 * (luckimpact or 1.0);
+        bandagestrength = bandagestrength - 2 * (luckimpact or 1.0);
+        fracturetime = fracturetime + 5 * (luckimpact or 1.0);
+        splintstrength = splintstrength - 0.1 * (luckimpact or 1.0);
+        scratchtimemod = scratchtimemod + 5 * (luckimpact or 1.0);
+        bleedtimemod = bleedtimemod + 2 * (luckimpact or 1.0);
     end
 
     if player:HasTrait("injured") then
@@ -786,7 +786,7 @@ function ToadTraitButter(_player)
             basechance = basechance - 1;
         end
         if player:HasTrait("Lucky") then
-            basechance = basechance - 1 * luckimpact;
+            basechance = basechance - 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("packmule") then
             basechance = basechance - 1;
@@ -795,7 +795,7 @@ function ToadTraitButter(_player)
             basechance = basechance + 1;
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance + 1 * luckimpact;
+            basechance = basechance + 1 * (luckimpact or 1.0);
         end
         local weight = player:getInventoryWeight();
         local chancemod = 0;
@@ -864,12 +864,12 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
             modifier = 1.0 + SandboxVars.MoreTraits.ScroungerLootModifier * 0.01;
         end
         if player:HasTrait("Lucky") then
-            basechance = basechance + 5 * luckimpact;
-            modifier = modifier + 0.1 * luckimpact;
+            basechance = basechance + 5 * (luckimpact or 1.0);
+            modifier = modifier + 0.1 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance - 5 * luckimpact;
-            modifier = modifier - 0.1 * luckimpact;
+            basechance = basechance - 5 * (luckimpact or 1.0);
+            modifier = modifier - 0.1 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
@@ -902,10 +902,10 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                             bchance = SandboxVars.MoreTraits.ScroungerItemChance;
                                         end
                                         if player:HasTrait("Lucky") then
-                                            bchance = bchance + 5 * luckimpact;
+                                            bchance = bchance + 5 * (luckimpact or 1.0);
                                         end
                                         if player:HasTrait("Unlucky") then
-                                            bchance = bchance - 5 * luckimpact;
+                                            bchance = bchance - 5 * (luckimpact or 1.0);
                                         end
                                         if item:getCategory() == "Food" then
                                             bchance = bchance + 10;
@@ -990,10 +990,10 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
             basechance = SandboxVars.MoreTraits.IncomprehensiveChance;
         end
         if player:HasTrait("Lucky") then
-            basechance = basechance - 5 * luckimpact;
+            basechance = basechance - 5 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance + 5 * luckimpact;
+            basechance = basechance + 5 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             local tempcontainer = {};
@@ -1016,10 +1016,10 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                                     if count == 1 then
                                         local bchance = 5;
                                         if player:HasTrait("Lucky") then
-                                            bchance = bchance - 5 * luckimpact;
+                                            bchance = bchance - 5 * (luckimpact or 1.0);
                                         end
                                         if player:HasTrait("Unlucky") then
-                                            bchance = bchance + 5 * luckimpact;
+                                            bchance = bchance + 5 * (luckimpact or 1.0);
                                         end
                                         if item:IsFood() then
                                             bchance = bchance + 10;
@@ -1102,10 +1102,10 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
         local basechance = 10;
         local roll = 1500;
         if player:HasTrait("Lucky") then
-            basechance = basechance + 1 * luckimpact;
+            basechance = basechance + 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance - 1 * luckimpact;
+            basechance = basechance - 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("AllThumbs") then
             basechance = basechance - 1;
@@ -1231,10 +1231,10 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
             basechance = SandboxVars.MoreTraits.VagabondChance;
         end
         if player:HasTrait("Lucky") then
-            basechance = basechance + 5 * luckimpact;
+            basechance = basechance + 5 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance - 5 * luckimpact;
+            basechance = basechance - 5 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
@@ -1279,10 +1279,10 @@ function ToadTraitDepressive()
     if player:HasTrait("depressive") then
         local basechance = 2;
         if player:HasTrait("Lucky") then
-            basechance = basechance - 1 * luckimpact;
+            basechance = basechance - 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance + 1 * luckimpact;
+            basechance = basechance + 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("Brooding") then
             basechance = basechance + 1;
@@ -1645,10 +1645,10 @@ function drinkertick()
             divider = 1;
         end
         if player:HasTrait("Lucky") then
-            hoursthreshold = hoursthreshold + 4 * luckimpact;
+            hoursthreshold = hoursthreshold + 4 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            hoursthreshold = hoursthreshold - 2 * luckimpact;
+            hoursthreshold = hoursthreshold - 2 * (luckimpact or 1.0);
         end
         if player:HasTrait("Lightdrinker") then
             hoursthreshold = hoursthreshold - 2;
@@ -1744,10 +1744,10 @@ function bouncerupdate(_player, _playerdata)
             distance = SandboxVars.MoreTraits.BouncerDistance;
         end
         if player:HasTrait("Lucky") then
-            chance = chance + 1 * luckimpact;
+            chance = chance + 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            chance = chance - 1 * luckimpact;
+            chance = chance - 1 * (luckimpact or 1.0);
         end
         if playerdata.iBouncercooldown > 0 then
             playerdata.iBouncercooldown = playerdata.iBouncercooldown - 1;
@@ -1786,17 +1786,23 @@ end
 
 function martial(_actor, _target, _weapon, _damage)
     local player = getPlayer();
+    if not player then return; end
+    if not _weapon then return; end
+    
     local playerdata = player:getModData();
+    if not playerdata then return; end
+    
     local weapon = _weapon;
     local damage = _damage;
     local critchance = 5;
     local endurance = player:getStats():getEndurance();
+    
     if _actor == player and player:HasTrait("martial") then
         if player:HasTrait("Lucky") then
-            critchance = critchance + 1 * luckimpact;
+            critchance = critchance + 1 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            critchance = critchance - 1 * luckimpact;
+            critchance = critchance - 1 * (luckimpact or 1.0);
         end
         local scaling = 1.0;
         if SandboxVars.MoreTraits.MartialScaling then
@@ -1815,13 +1821,26 @@ function martial(_actor, _target, _weapon, _damage)
                 allow = false;
             end
         end
-        if weapon:getType() == "BareHands" and allow == true then
+        
+        local isBareHands = false;
+        if weapon.getType then
+            local weaponType = weapon:getType();
+            if weaponType == "BareHands" then
+                isBareHands = true;
+            end
+        end
+        
+        if isBareHands and allow == true then
             if playerdata.itemWeaponBareHands == nil then
                 playerdata.itemWeaponBareHands = weapon;
             end
             playerdata.itemWeaponBareHands:setDoorDamage(9 + maximumdmg);
             playerdata.itemWeaponBareHands:setTreeDamage(1 + maximumdmg);
-            playerdata.itemWeaponBareHands:getCategories():set(0, "SmallBlunt");
+            
+            if playerdata.itemWeaponBareHands.getCategories then
+                playerdata.itemWeaponBareHands:getCategories():set(0, "SmallBlunt");
+            end
+            
             playerdata.itemWeaponBareHands:setMinDamage(minimumdmg);
             playerdata.itemWeaponBareHands:setMaxDamage(maximumdmg);
             playerdata.itemWeaponBareHands:setCriticalChance(critchance);
@@ -1850,7 +1869,11 @@ function martial(_actor, _target, _weapon, _damage)
             if playerdata.itemWeaponBareHands ~= nil then
                 playerdata.itemWeaponBareHands:setDoorDamage(1);
                 playerdata.itemWeaponBareHands:setTreeDamage(1);
-                playerdata.itemWeaponBareHands:getCategories():set(0, "SmallBlunt");
+                
+                if playerdata.itemWeaponBareHands.getCategories then
+                    playerdata.itemWeaponBareHands:getCategories():set(0, "SmallBlunt");
+                end
+                
                 playerdata.itemWeaponBareHands:setMinDamage(0.1);
                 playerdata.itemWeaponBareHands:setMaxDamage(0.2);
                 playerdata.itemWeaponBareHands:setCriticalChance(1);
@@ -1861,17 +1884,40 @@ end
 
 function problunt(_actor, _target, _weapon, _damage)
     local player = getPlayer();
+    if not player then return; end
+    if not _weapon then return; end
     local weapon = _weapon;
     local weapondata = weapon:getModData();
+    if not weapondata then return; end
     local critchance = player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt) + 5;
     local damage = _damage;
+    
     if _actor == player and player:HasTrait("problunt") then
-        if weapon:getCategories():contains("Blunt") or weapon:getCategories():contains("SmallBlunt") then
+        local isBlunt = false;
+        
+        if weapon.getCategories then
+            local categories = weapon:getCategories();
+            if categories and (categories:contains("Blunt") or categories:contains("SmallBlunt")) then
+                isBlunt = true;
+            end
+        elseif weapon.getType then
+            local weaponType = weapon:getType();
+            if weaponType and (weaponType:contains("Blunt") or weaponType:contains("SmallBlunt")) then
+                isBlunt = true;
+            end
+        elseif weapon.getCategory then
+            local category = weapon:getCategory();
+            if category == "Blunt" or category == "SmallBlunt" then
+                isBlunt = true;
+            end
+        end
+        
+        if isBlunt then
             if player:HasTrait("Lucky") then
-                critchance = critchance + 1 * luckimpact;
+                critchance = critchance + 1 * (luckimpact or 1.0);
             end
             if player:HasTrait("Unlucky") then
-                critchance = critchance - 1 * luckimpact;
+                critchance = critchance - 1 * (luckimpact or 1.0);
             end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 2;
@@ -1895,17 +1941,40 @@ end
 
 function problade(_actor, _target, _weapon, _damage)
     local player = getPlayer();
+    if not player then return; end
+    if not _weapon then return; end
     local weapon = _weapon;
     local weapondata = weapon:getModData();
+    if not weapondata then return; end
     local critchance = player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.SmallBlade) + player:getPerkLevel(Perks.LongBlade);
     local damage = _damage;
+    
     if _actor == player and player:HasTrait("problade") then
-        if weapon:getCategories():contains("SmallBlade") or weapon:getCategories():contains("Axe") or weapon:getCategories():contains("LongBlade") then
+        local isBlade = false;
+        
+        if weapon.getCategories then
+            local categories = weapon:getCategories();
+            if categories and (categories:contains("SmallBlade") or categories:contains("Axe") or categories:contains("LongBlade")) then
+                isBlade = true;
+            end
+        elseif weapon.getType then
+            local weaponType = weapon:getType();
+            if weaponType and (weaponType:contains("Blade") or weaponType:contains("Axe") or weaponType:contains("Sword") or weaponType:contains("Knife")) then
+                isBlade = true;
+            end
+        elseif weapon.getCategory then
+            local category = weapon:getCategory();
+            if category == "SmallBlade" or category == "Axe" or category == "LongBlade" then
+                isBlade = true;
+            end
+        end
+        
+        if isBlade then
             if player:HasTrait("Lucky") then
-                critchance = critchance + 1 * luckimpact;
+                critchance = critchance + 1 * (luckimpact or 1.0);
             end
             if player:HasTrait("Unlucky") then
-                critchance = critchance - 1 * luckimpact;
+                critchance = critchance - 1 * (luckimpact or 1.0);
             end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 2;
@@ -1929,17 +1998,37 @@ end
 
 function progun(_actor, _weapon)
     local player = getPlayer();
+    if not player then return; end
+    if not _weapon then return; end
     local weapon = _weapon;
     local weapondata = weapon:getModData();
+    if not weapondata then return; end
+    
+    if not weapon.getMaxAmmo or not weapon.getCurrentAmmoCount then return; end
+    
     local maxCapacity = weapon:getMaxAmmo();
     local currentCapacity = weapon:getCurrentAmmoCount();
     local chance = 10 + player:getPerkLevel(Perks.Aiming) + player:getPerkLevel(Perks.Reloading);
-    if _actor == player and player:HasTrait("progun") and weapon:getSubCategory() == "Firearm" then
+    
+    local isFirearm = false;
+    if weapon.getSubCategory then
+        local subCat = weapon:getSubCategory();
+        if subCat == "Firearm" then
+            isFirearm = true;
+        end
+    elseif weapon.getType then
+        local weaponType = weapon:getType();
+        if weaponType and (weaponType:contains("Firearm") or weaponType:contains("Gun") or weaponType:contains("Pistol") or weaponType:contains("Rifle")) then
+            isFirearm = true;
+        end
+    end
+    
+    if _actor == player and player:HasTrait("progun") and isFirearm then
         if player:HasTrait("Lucky") then
-            chance = chance + 5 * luckimpact;
+            chance = chance + 5 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            chance = chance - 5 * luckimpact;
+            chance = chance - 5 * (luckimpact or 1.0);
         end
 
         if weapondata.iLastWeaponCond == nil then
@@ -1964,17 +2053,40 @@ end
 
 function prospear(_actor, _target, _weapon, _damage)
     local player = getPlayer();
+    if not player then return; end
+    if not _weapon then return; end
     local weapon = _weapon;
     local weapondata = weapon:getModData();
+    if not weapondata then return; end
     local critchance = player:getPerkLevel(Perks.Spear) + 5;
     local damage = _damage;
+    
     if _actor == player and player:HasTrait("prospear") then
-        if weapon:getCategories():contains("Spear") then
+        local isSpear = false;
+        
+        if weapon.getCategories then
+            local categories = weapon:getCategories();
+            if categories and categories:contains("Spear") then
+                isSpear = true;
+            end
+        elseif weapon.getType then
+            local weaponType = weapon:getType();
+            if weaponType and (weaponType:contains("Spear") or weaponType:contains("Javelin")) then
+                isSpear = true;
+            end
+        elseif weapon.getCategory then
+            local category = weapon:getCategory();
+            if category == "Spear" then
+                isSpear = true;
+            end
+        end
+        
+        if isSpear then
             if player:HasTrait("Lucky") then
-                critchance = critchance + 1 * luckimpact;
+                critchance = critchance + 1 * (luckimpact or 1.0);
             end
             if player:HasTrait("Unlucky") then
-                critchance = critchance - 1 * luckimpact;
+                critchance = critchance - 1 * (luckimpact or 1.0);
             end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
                 damage = damage * 2;
@@ -1998,24 +2110,56 @@ end
 
 function tavernbrawler(_actor, _target, _weapon, _damage)
     local player = getPlayer();
+    if not player then return; end
+    if not _weapon then return; end
+    
     local weapon = _weapon;
     local weapondata = weapon:getModData();
+    if not weapondata then return; end
+    
     local chance = 50;
     local whitelist = { "ToolWeapon", "WeaponCrafted", "Cooking", "Household", "FirstAid", "Gardening", "Sports" };
     local damage = _damage;
     local multiplier = 1;
+    
     if _actor == player and player:HasTrait("tavernbrawler") then
-        if tableContains(whitelist, weapon:getDisplayCategory()) == true or weapon:getCategories():contains("Improvised") then
-            if weapon:getCategories():contains("Spear") then
+        local isImprovisedWeapon = false;
+        local displayCategory = "";
+        
+        if weapon.getDisplayCategory then
+            displayCategory = weapon:getDisplayCategory();
+            if tableContains(whitelist, displayCategory) then
+                isImprovisedWeapon = true;
+            end
+        end
+        
+        if not isImprovisedWeapon and weapon.getCategories then
+            local categories = weapon:getCategories();
+            if categories and categories:contains("Improvised") then
+                isImprovisedWeapon = true;
+            end
+        end
+        
+        if isImprovisedWeapon then
+            local isSpear = false;
+            if weapon.getCategories then
+                local categories = weapon:getCategories();
+                if categories and categories:contains("Spear") then
+                    isSpear = true;
+                end
+            end
+            
+            if isSpear then
                 chance = 0;
                 multiplier = 0.25;
             end
+            
             if player:HasTrait("Lucky") then
-                chance = chance + 5 * luckimpact;
+                chance = chance + 5 * (luckimpact or 1.0);
                 multiplier = multiplier + 0.1;
             end
             if player:HasTrait("Unlucky") then
-                chance = chance - 5 * luckimpact;
+                chance = chance - 5 * (luckimpact or 1.0);
                 multiplier = multiplier - 0.1;
             end
             if weapon:getConditionLowerChance() <= 2 then
@@ -2210,10 +2354,10 @@ function actionhero(_actor, _target, _weapon, _damage)
         end
 
         if player:HasTrait("Lucky") then
-            critchance = critchance + 5 * luckimpact;
+            critchance = critchance + 5 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            critchance = critchance - 5 * luckimpact;
+            critchance = critchance - 5 * (luckimpact or 1.0);
         end
         if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait("mundane") == false then
             damage = damage * 5;
@@ -2529,10 +2673,10 @@ function SuperImmune(_player, _playerdata)
                 TimeOfRecovery = TimeOfRecovery + 5;
             end
             if player:HasTrait("Lucky") then
-                TimeOfRecovery = TimeOfRecovery - 2 * luckimpact;
+                TimeOfRecovery = TimeOfRecovery - 2 * (luckimpact or 1.0);
             end
             if player:HasTrait("Unlucky") then
-                TimeOfRecovery = TimeOfRecovery + 2 * luckimpact;
+                TimeOfRecovery = TimeOfRecovery + 2 * (luckimpact or 1.0);
             end
             if TimeOfRecovery < minimum then
                 TimeOfRecovery = minimum;
@@ -2704,10 +2848,10 @@ function graveRobber(_zombie)
     end
     if player:HasTrait("graverobber") and zombie:DistTo(player) <= 12 then
         if player:HasTrait("Lucky") then
-            chance = chance + 2 * luckimpact;
+            chance = chance + 2 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            chance = chance - 2 * luckimpact;
+            chance = chance - 2 * (luckimpact or 1.0);
         end
         if player:HasTrait("scrounger") then
             chance = chance + 2;
@@ -2799,10 +2943,10 @@ function Gourmand(_iSInventoryPage, _state, _player)
     if player:HasTrait("gourmand") then
         local basechance = 33;
         if player:HasTrait("Lucky") then
-            basechance = basechance + 10 * luckimpact;
+            basechance = basechance + 10 * (luckimpact or 1.0);
         end
         if player:HasTrait("Unlucky") then
-            basechance = basechance - 10 * luckimpact;
+            basechance = basechance - 10 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
             if v.inventory:getParent() then
@@ -3100,10 +3244,10 @@ function FearfulUpdate(_player)
                 chance = chance + 1;
             end
             if player:HasTrait("Lucky") then
-                chance = chance - 1 * luckimpact;
+                chance = chance - 1 * (luckimpact or 1.0);
             end
             if player:HasTrait("Unlucky") then
-                chance = chance + 1 * luckimpact;
+                chance = chance + 1 * (luckimpact or 1.0);
             end
             if ZombRand(0, 1000) <= chance then
                 if panic <= 25 then
@@ -3300,9 +3444,9 @@ function QuickWorker(_player)
                     modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01);
                 end
                 if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
-                    modifier = modifier + 0.25 * luckimpact;
+                    modifier = modifier + 0.25 * (luckimpact or 1.0);
                 elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
-                    modifier = modifier - 0.25 * luckimpact;
+                    modifier = modifier - 0.25 * (luckimpact or 1.0);
                 end
                 if player:HasTrait("Dextrous") and ZombRand(100) <= 10 then
                     modifier = modifier + 0.25;
@@ -3346,9 +3490,9 @@ function SlowWorker(_player)
                     chance = SandboxVars.MoreTraits.SlowWorkerScaler;
                 end
                 if player:HasTrait("Lucky") and ZombRand(100) <= 10 then
-                    modifier = modifier - 0.5 * luckimpact;
+                    modifier = modifier - 0.5 * (luckimpact or 1.0);
                 elseif player:HasTrait("Unlucky") and ZombRand(100) <= 10 then
-                    modifier = modifier + 0.5 * luckimpact;
+                    modifier = modifier + 0.5 * (luckimpact or 1.0);
                 end
                 if player:HasTrait("Dextrous") and ZombRand(100) <= 10 then
                     modifier = modifier - 0.5;
