@@ -170,7 +170,7 @@ craftRecipe Improvise Antibiotics {
     inputs
     {
 		item 1 tags[MortarPestle] mode:keep flags[MayDegradeLight],
-		item 1 [Base.Garlic;Base.WildGarlicCataplasm;Base.Honey],
+		item 1 [Base.WildGarlic2;Base.WildGarlicCataplasm;Base.Honey],
         item 1 [Base.Flour2;Base.Cornflour2;Base.BucketPlasterFull;Base.Charcoal] mode:destroy,
 		item 1 [*],
 			-fluid 0.5 [Water],
