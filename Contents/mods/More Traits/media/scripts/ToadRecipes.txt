@@ -94,7 +94,7 @@ recipe Improvise Painkillers
 recipe Improvise Antibiotics
 {
 	keep Base.MortarPestle,
-	Base.WildGarlic/Base.WildGarlicCataplasm/Base.Honey,
+	Base.WildGarlic2/Base.WildGarlicCataplasm/Base.Honey,
 	Water=2,Base.Flour/Base.BucketConcreteFull/Base.BucketPlasterFull/Base.Dirtbag/Base.Gravelbag/Base.Sandbag,Base.Charcoal,
 
 	Result: Base.Antibiotics,
