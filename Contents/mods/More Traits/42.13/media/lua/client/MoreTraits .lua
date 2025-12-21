@@ -827,15 +827,15 @@ function ToadTraitParanoia(_player, _playerdata)
                 local basechance = 1;
                 local randNum = ZombRand(100) + 1;
                 local stats = player:getStats();
-                local panic = stats:getPanic();
-                local stress = stats:getStress();
+                local panic = stats:get(CharacterStat.PANIC);
+                local stress = stats:get(CharacterStat.STRESS);
                 randNum = randNum - (randNum * stats:getStress());
                 if randNum <= basechance then
                     getSoundManager():PlaySound("ZombieSurprisedPlayer", false, 0):setVolume(0.05);
                     panic = panic + 25;
                     stress = stress + 0.1;
-                    stats:setPanic(panic);
-                    stats:setStress(stress);
+                    stats:set(CharacterStat.PANIC, panic);
+                    stats:set(CharacterStat.STRESS, stress);
                     playerdata.iParanoiaCooldown = 30;
                     if player:isFemale() then
                         getSoundManager():PlaySound("female_heavybreathpanic", false, 5):setVolume(0.025);
