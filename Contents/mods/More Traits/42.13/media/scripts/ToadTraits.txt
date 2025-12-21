@@ -1008,4 +1008,54 @@ module ToadTraits
        UIName = UI_trait_burned,
        UIDescription = UI_trait_burneddesc,
     }
+	character_trait_definition ToadTraits:lucky
+    {
+       IsProfessionTrait = false,
+       DisabledInMultiplayer = false,
+       CharacterTrait = ToadTraits:lucky,
+       Cost = 4,
+       UIName = UI_trait_lucky,
+       UIDescription = UI_trait_luckydesc,
+       MutuallyExclusiveTraits = ToadTraits:unlucky,
+    }
+	character_trait_definition ToadTraits:unlucky
+    {
+       IsProfessionTrait = false,
+       DisabledInMultiplayer = false,
+       CharacterTrait = ToadTraits:unlucky,
+       Cost = -4,
+       UIName = UI_trait_unlucky,
+       UIDescription = UI_trait_unluckydesc,
+       MutuallyExclusiveTraits = ToadTraits:lucky,
+    }
+	character_trait_definition ToadTraits:lightdrinker
+    {
+       IsProfessionTrait = false,
+       DisabledInMultiplayer = false,
+       CharacterTrait = ToadTraits:lightdrinker,
+       Cost = -2,
+       UIName = UI_trait_lightdrink,
+       UIDescription = UI_trait_lightdrinkdesc,
+       MutuallyExclusiveTraits = ToadTraits:heavydrinker,
+    }
+	character_trait_definition ToadTraits:heavydrinker
+    {
+       IsProfessionTrait = false,
+       DisabledInMultiplayer = false,
+       CharacterTrait = ToadTraits:heavydrinker,
+       Cost = 3,
+       UIName = UI_trait_harddrink,
+       UIDescription = UI_trait_harddrinkdesc,
+       MutuallyExclusiveTraits = ToadTraits:lightdrinker,
+    }
+	character_trait_definition ToadTraits:brooding
+    {
+       IsProfessionTrait = false,
+       DisabledInMultiplayer = false,
+       CharacterTrait = ToadTraits:brooding,
+       Cost = -2,
+       UIName = UI_trait_brooding,
+       UIDescription = UI_trait_broodingdesc,
+       MutuallyExclusiveTraits = ToadTraits:blissful,
+    }
 }

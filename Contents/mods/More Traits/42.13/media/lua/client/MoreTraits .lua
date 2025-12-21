@@ -408,7 +408,7 @@ function initToadTraitsItems(_player)
             inv:addItemOnServer(inv:AddItem("Base.WhiskeyFull"));
         end
     end
-    if player:HasTrait(base:tailor) then
+    if player:HasTrait(CharacterTrait.TAILOR) then
         inv:addItemOnServer(inv:AddItem("Base.SewingKit"));
         for i = 0, inv:getItems():size() - 1 do
             local bag = inv:getItems():get(i);
@@ -427,7 +427,7 @@ function initToadTraitsItems(_player)
             end
         end
     end
-    if player:HasTrait(base:smoker) then
+    if player:HasTrait(CharacterTrait.SMOKER) then
         if SandboxVars.MoreTraits.SmokerStart == true then
             inv:addItemOnServer(inv:AddItem("Base.Cigarettes"));
             inv:addItemOnServer(inv:AddItem("Base.Lighter"));
@@ -456,7 +456,7 @@ function initToadTraitsPerks(_player)
         luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01;
     end
     InitPlayerData(player);
-    if player:HasTrait(base:lucky) then
+    if player:HasTrait(ToadTraitsRegistries.lucky) then
         damage = damage - 5 * (luckimpact or 1.0);
         bandagestrength = bandagestrength + 2 * (luckimpact or 1.0);
         fracturetime = fracturetime - 5 * (luckimpact or 1.0);
@@ -464,7 +464,7 @@ function initToadTraitsPerks(_player)
         scratchtimemod = scratchtimemod - 5 * (luckimpact or 1.0);
         bleedtimemod = bleedtimemod - 2 * (luckimpact or 1.0);
     end
-    if player:HasTrait(base:unlucky) then
+    if player:HasTrait(ToadTraitsRegistries.unlucky) then
         damage = damage + 5 * (luckimpact or 1.0);
         bandagestrength = bandagestrength - 2 * (luckimpact or 1.0);
         fracturetime = fracturetime + 5 * (luckimpact or 1.0);
@@ -779,13 +779,13 @@ function ToadTraitButter(_player)
         if SandboxVars.MoreTraits.ButterfingersChance then
             chanceinx = SandboxVars.MoreTraits.ButterfingersChance;
         end
-        if player:HasTrait(base:allthumbs) then
+        if player:HasTrait(CharacterTrait.ALL_THUMBS) then
             basechance = basechance + 1;
         end
-        if player:HasTrait(base:dextrous) then
+        if player:HasTrait(CharacterTrait.DEXTROUS) then
             basechance = basechance - 1;
         end
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance - 1 * (luckimpact or 1.0);
         end
         if player:HasTrait(ToadTraitsRegistries.packmule) then
@@ -794,7 +794,7 @@ function ToadTraitButter(_player)
         if player:HasTrait(ToadTraitsRegistries.packmouse) then
             basechance = basechance + 1;
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance + 1 * (luckimpact or 1.0);
         end
         local weight = player:getInventoryWeight();
@@ -863,11 +863,11 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
         if SandboxVars.MoreTraits.ScroungerLootModifier then
             modifier = 1.0 + SandboxVars.MoreTraits.ScroungerLootModifier * 0.01;
         end
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance + 5 * (luckimpact or 1.0);
             modifier = modifier + 0.1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance - 5 * (luckimpact or 1.0);
             modifier = modifier - 0.1 * (luckimpact or 1.0);
         end
@@ -901,10 +901,10 @@ function ToadTraitScrounger(_iSInventoryPage, _state, _player)
                                         if SandboxVars.MoreTraits.ScroungerItemChance then
                                             bchance = SandboxVars.MoreTraits.ScroungerItemChance;
                                         end
-                                        if player:HasTrait(base:lucky) then
+                                        if player:HasTrait(ToadTraitsRegistries.lucky) then
                                             bchance = bchance + 5 * (luckimpact or 1.0);
                                         end
-                                        if player:HasTrait(base:unlucky) then
+                                        if player:HasTrait(ToadTraitsRegistries.unlucky) then
                                             bchance = bchance - 5 * (luckimpact or 1.0);
                                         end
                                         if item:getCategory() == "Food" then
@@ -989,10 +989,10 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
         if SandboxVars.MoreTraits.IncomprehensiveChance then
             basechance = SandboxVars.MoreTraits.IncomprehensiveChance;
         end
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance - 5 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance + 5 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
@@ -1015,10 +1015,10 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
                                     end
                                     if count == 1 then
                                         local bchance = 5;
-                                        if player:HasTrait(base:lucky) then
+                                        if player:HasTrait(ToadTraitsRegistries.lucky) then
                                             bchance = bchance - 5 * (luckimpact or 1.0);
                                         end
-                                        if player:HasTrait(base:unlucky) then
+                                        if player:HasTrait(ToadTraitsRegistries.unlucky) then
                                             bchance = bchance + 5 * (luckimpact or 1.0);
                                         end
                                         if item:IsFood() then
@@ -1101,16 +1101,16 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
     if player:HasTrait(ToadTraitsRegistries.antique) then
         local basechance = 10;
         local roll = 1500;
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance + 1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance - 1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:allthumbs) then
+        if player:HasTrait(CharacterTrait.ALL_THUMBS) then
             basechance = basechance - 1;
         end
-        if player:HasTrait(base:dextrous) then
+        if player:HasTrait(CharacterTrait.DEXTROUS) then
             basechance = basechance + 1;
         end
         if player:HasTrait(ToadTraitsRegistries.scrounger) then
@@ -1230,10 +1230,10 @@ function ToadTraitVagabond(_iSInventoryPage, _state, _player)
         if SandboxVars.MoreTraits.VagabondChance then
             basechance = SandboxVars.MoreTraits.VagabondChance;
         end
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance + 5 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance - 5 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
@@ -1278,13 +1278,13 @@ function ToadTraitDepressive()
     local player = getPlayer();
     if player:HasTrait(ToadTraitsRegistries.depressive) then
         local basechance = 2;
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance - 1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance + 1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:brooding) then
+        if player:HasTrait(ToadTraitsRegistries.brooding) then
             basechance = basechance + 1;
         end
         if player:HasTrait(ToadTraitsRegistries.selfdestructive) then
@@ -1644,13 +1644,13 @@ function drinkertick()
         elseif hoursthreshold <= 20 then
             divider = 1;
         end
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             hoursthreshold = hoursthreshold + 4 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             hoursthreshold = hoursthreshold - 2 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:lightdrinker) then
+        if player:HasTrait(ToadTraitsRegistries.lightdrinker) then
             hoursthreshold = hoursthreshold - 2;
         end
         playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
@@ -1743,10 +1743,10 @@ function bouncerupdate(_player, _playerdata)
         if SandboxVars.MoreTraits.BouncerDistance then
             distance = SandboxVars.MoreTraits.BouncerDistance;
         end
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             chance = chance + 1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             chance = chance - 1 * (luckimpact or 1.0);
         end
         if playerdata.iBouncercooldown > 0 then
@@ -1798,10 +1798,10 @@ function martial(_actor, _target, _weapon, _damage)
     local endurance = player:getStats():getEndurance();
     
     if _actor == player and player:HasTrait(ToadTraitsRegistries.martial) then
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             critchance = critchance + 1 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             critchance = critchance - 1 * (luckimpact or 1.0);
         end
         local scaling = 1.0;
@@ -1913,10 +1913,10 @@ function problunt(_actor, _target, _weapon, _damage)
         end
         
         if isBlunt then
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 critchance = critchance + 1 * (luckimpact or 1.0);
             end
-            if player:HasTrait(base:unlucky) then
+            if player:HasTrait(ToadTraitsRegistries.unlucky) then
                 critchance = critchance - 1 * (luckimpact or 1.0);
             end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait(ToadTraitsRegistries.mundane) == false then
@@ -1970,10 +1970,10 @@ function problade(_actor, _target, _weapon, _damage)
         end
         
         if isBlade then
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 critchance = critchance + 1 * (luckimpact or 1.0);
             end
-            if player:HasTrait(base:unlucky) then
+            if player:HasTrait(ToadTraitsRegistries.unlucky) then
                 critchance = critchance - 1 * (luckimpact or 1.0);
             end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait(ToadTraitsRegistries.mundane) == false then
@@ -2024,10 +2024,10 @@ function progun(_actor, _weapon)
     end
     
     if _actor == player and player:HasTrait(ToadTraitsRegistries.progun) and isFirearm then
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             chance = chance + 5 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             chance = chance - 5 * (luckimpact or 1.0);
         end
 
@@ -2082,10 +2082,10 @@ function prospear(_actor, _target, _weapon, _damage)
         end
         
         if isSpear then
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 critchance = critchance + 1 * (luckimpact or 1.0);
             end
-            if player:HasTrait(base:unlucky) then
+            if player:HasTrait(ToadTraitsRegistries.unlucky) then
                 critchance = critchance - 1 * (luckimpact or 1.0);
             end
             if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait(ToadTraitsRegistries.mundane) == false then
@@ -2154,11 +2154,11 @@ function tavernbrawler(_actor, _target, _weapon, _damage)
                 multiplier = 0.25;
             end
             
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 chance = chance + 5 * (luckimpact or 1.0);
                 multiplier = multiplier + 0.1;
             end
-            if player:HasTrait(base:unlucky) then
+            if player:HasTrait(ToadTraitsRegistries.unlucky) then
                 chance = chance - 5 * (luckimpact or 1.0);
                 multiplier = multiplier - 0.1;
             end
@@ -2353,10 +2353,10 @@ function actionhero(_actor, _target, _weapon, _damage)
             end
         end
 
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             critchance = critchance + 5 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             critchance = critchance - 5 * (luckimpact or 1.0);
         end
         if _target:isZombie() and ZombRand(0, 101) <= critchance and player:HasTrait(ToadTraitsRegistries.mundane) == false then
@@ -2576,10 +2576,10 @@ local function SuperImmuneRecoveryProcess()
                 else
                     Illness = Illness + ((ZombRand(100, 501) / 6000) * SpeedrunTime); --Immune system doesn't notice the virus until 6 hours in
                 end
-                if player:HasTrait(base:fasthealer) then
+                if player:HasTrait(CharacterTrait.FAST_HEALER) then
                     Illness = Illness - ((0.25 / 60) * SpeedrunTime);
                 end
-                if player:HasTrait(base:slowhealer) then
+                if player:HasTrait(CharacterTrait.SLOW_HEALER) then
                     Illness = Illness + ((0.25 / 60) * SpeedrunTime);
                 end
                 if Illness < 26 then
@@ -2604,9 +2604,9 @@ local function SuperImmuneRecoveryProcess()
             else
                 if Illness > 0 or Illness ~= 0 then
                     --Recover from illness completely over-time once recovery time ends.
-                    if player:HasTrait(base:fasthealer) then
+                    if player:HasTrait(CharacterTrait.FAST_HEALER) then
                         Illness = Illness - (1.5 / 60); --0.7 to 2.5 days
-                    elseif player:HasTrait(base:slowhealer) then
+                    elseif player:HasTrait(CharacterTrait.SLOW_HEALER) then
                         Illness = Illness - (0.75 / 60); --1.4 to 5 days
                     else
                         Illness = Illness - (1 / 60); --1 to 3.7 days
@@ -2666,16 +2666,16 @@ function SuperImmune(_player, _playerdata)
             else
                 TimeOfRecovery = ZombRand(minimum, maximum + 1);
             end
-            if player:HasTrait(base:fasthealer) then
+            if player:HasTrait(CharacterTrait.FAST_HEALER) then
                 TimeOfRecovery = TimeOfRecovery - 5;
             end
-            if player:HasTrait(base:slowhealer) then
+            if player:HasTrait(CharacterTrait.SLOW_HEALER) then
                 TimeOfRecovery = TimeOfRecovery + 5;
             end
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 TimeOfRecovery = TimeOfRecovery - 2 * (luckimpact or 1.0);
             end
-            if player:HasTrait(base:unlucky) then
+            if player:HasTrait(ToadTraitsRegistries.unlucky) then
                 TimeOfRecovery = TimeOfRecovery + 2 * (luckimpact or 1.0);
             end
             if TimeOfRecovery < minimum then
@@ -2725,9 +2725,9 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
                 if playerdata.SuperImmuneHealedOnce == true then
                     limit = 5;
                 end
-                if player:HasTrait(base:fasthealer) then
+                if player:HasTrait(CharacterTrait.FAST_HEALER) then
                     limit = limit + 1;
-                elseif player:HasTrait(base:slowhealer) then
+                elseif player:HasTrait(CharacterTrait.SLOW_HEALER) then
                     limit = limit - 1;
                 end
                 if playerdata.SuperImmuneInfections >= limit then
@@ -2847,10 +2847,10 @@ function graveRobber(_zombie)
         extraloot = SandboxVars.MoreTraits.GraveRobberGuaranteedLoot;
     end
     if player:HasTrait(ToadTraitsRegistries.graverobber) and zombie:DistTo(player) <= 12 then
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             chance = chance + 2 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             chance = chance - 2 * (luckimpact or 1.0);
         end
         if player:HasTrait(ToadTraitsRegistries.scrounger) then
@@ -2942,10 +2942,10 @@ function Gourmand(_iSInventoryPage, _state, _player)
     local container;
     if player:HasTrait(ToadTraitsRegistries.gourmand) then
         local basechance = 33;
-        if player:HasTrait(base:lucky) then
+        if player:HasTrait(ToadTraitsRegistries.lucky) then
             basechance = basechance + 10 * (luckimpact or 1.0);
         end
-        if player:HasTrait(base:unlucky) then
+        if player:HasTrait(ToadTraitsRegistries.unlucky) then
             basechance = basechance - 10 * (luckimpact or 1.0);
         end
         for i, v in ipairs(_iSInventoryPage.backpacks) do
@@ -3240,13 +3240,13 @@ function FearfulUpdate(_player)
         local panic = stats:getPanic();
         if panic > 5 then
             local chance = 3 + panic / 10;
-            if player:HasTrait(base:cowardly) then
+            if player:HasTrait(CharacterTrait.COWARDLY) then
                 chance = chance + 1;
             end
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 chance = chance - 1 * (luckimpact or 1.0);
             end
-            if player:HasTrait(base:unlucky) then
+            if player:HasTrait(ToadTraitsRegistries.unlucky) then
                 chance = chance + 1 * (luckimpact or 1.0);
             end
             if ZombRand(0, 1000) <= chance then
@@ -3443,20 +3443,20 @@ function QuickWorker(_player)
                 if SandboxVars.MoreTraits.QuickWorkerScaler then
                     modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01);
                 end
-                if player:HasTrait(base:lucky) and ZombRand(100) <= 10 then
+                if player:HasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then
                     modifier = modifier + 0.25 * (luckimpact or 1.0);
-                elseif player:HasTrait(base:unlucky) and ZombRand(100) <= 10 then
+                elseif player:HasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then
                     modifier = modifier - 0.25 * (luckimpact or 1.0);
                 end
-                if player:HasTrait(base:dextrous) and ZombRand(100) <= 10 then
+                if player:HasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then
                     modifier = modifier + 0.25;
-                elseif player:HasTrait(base:allthumbs) and ZombRand(100) <= 10 then
+                elseif player:HasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then
                     modifier = modifier - 0.25;
                 end
                 if type == "ISReadABook" then
-                    if player:HasTrait(base:fastreader) then
+                    if player:HasTrait(CharacterTrait.FAST_READER) then
                         modifier = modifier * 5;
-                    elseif player:HasTrait(base:slowreader) then
+                    elseif player:HasTrait(CharacterTrait.SLOW_READER) then
                         modifier = modifier * 1.5;
                     else
                         modifier = modifier * 3;
@@ -3489,20 +3489,20 @@ function SlowWorker(_player)
                 if SandboxVars.MoreTraits.SlowWorkerScaler then
                     chance = SandboxVars.MoreTraits.SlowWorkerScaler;
                 end
-                if player:HasTrait(base:lucky) and ZombRand(100) <= 10 then
+                if player:HasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then
                     modifier = modifier - 0.5 * (luckimpact or 1.0);
-                elseif player:HasTrait(base:unlucky) and ZombRand(100) <= 10 then
+                elseif player:HasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then
                     modifier = modifier + 0.5 * (luckimpact or 1.0);
                 end
-                if player:HasTrait(base:dextrous) and ZombRand(100) <= 10 then
+                if player:HasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then
                     modifier = modifier - 0.5;
-                elseif player:HasTrait(base:allthumbs) and ZombRand(100) <= 10 then
+                elseif player:HasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then
                     modifier = modifier + 0.5;
                 end
                 if type == "ISReadABook" then
-                    if player:HasTrait(base:fastreader) then
+                    if player:HasTrait(CharacterTrait.FAST_READER) then
                         modifier = modifier * 0.1;
-                    elseif player:HasTrait(base:slowreader) then
+                    elseif player:HasTrait(CharacterTrait.SLOW_READER) then
                         modifier = modifier * 0.5;
                     else
                         modifier = modifier * 0.25;
@@ -3591,10 +3591,10 @@ function GlassBody(_player, _playerdata)
             local woundstrength = 10;
             
             -- Modificateurs basés sur les traits
-            if player:HasTrait(base:lucky) then
+            if player:HasTrait(ToadTraitsRegistries.lucky) then
                 chance = chance - 5 * (luckimpact or 1);
                 woundstrength = woundstrength - 5 * (luckimpact or 1);
-            elseif player:HasTrait(base:unlucky) then
+            elseif player:HasTrait(ToadTraitsRegistries.unlucky) then
                 chance = chance + 5 * (luckimpact or 1);
                 woundstrength = woundstrength + 5 * (luckimpact or 1);
             end
@@ -3825,16 +3825,16 @@ local function NoodleLegs(_player)
         local N_Chance = 100;
         local ChanceToTrip = 500001;
         ChanceToTrip = ChanceToTrip + (NimbleLvl * 12500) + (SprintingLvl * 12500);
-        if _player:HasTrait(base:graceful) then
+        if _player:HasTrait(CharacterTrait.GRACEFUL) then
             ChanceToTrip = ChanceToTrip * 1.2;
         end
-        if _player:HasTrait(base:clumsy) then
+        if _player:HasTrait(CharacterTrait.CLUMSY) then
             ChanceToTrip = ChanceToTrip * 0.8;
         end
-        if _player:HasTrait(base:lucky) then
+        if _player:HasTrait(ToadTraitsRegistries.lucky) then
             ChanceToTrip = ChanceToTrip * (1.05 * luckimpact);
         end
-        if _player:HasTrait(base:unlucky) then
+        if _player:HasTrait(ToadTraitsRegistries.unlucky) then
             ChanceToTrip = ChanceToTrip * (0.95 * luckimpact);
         end
         if _player:IsRunning() == true then

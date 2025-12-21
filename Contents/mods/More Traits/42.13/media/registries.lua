@@ -109,3 +109,11 @@ ToadTraitsRegistries.mundane = CharacterTrait.register("ToadTraits:mundane")
 ToadTraitsRegistries.deprived = CharacterTrait.register("ToadTraits:deprived")
 ToadTraitsRegistries.burned = CharacterTrait.register("ToadTraits:burned")
 --
+-- Re-enable Lucky/Unlucky
+ToadTraitsRegistries.lucky = CharacterTrait.register("ToadTraits:lucky")
+ToadTraitsRegistries.unlucky = CharacterTrait.register("ToadTraits:unlucky")
+-- Re-enable Light/Heavy UI_trait_drinker
+ToadTraitsRegistries.lightdrinker = CharacterTrait.register("ToadTraits:lightdrinker")
+ToadTraitsRegistries.heavydrinker = CharacterTrait.register("ToadTraits:heavydrinker")
+--Re-enable Brooding.
+ToadTraitsRegistries.brooding = CharacterTrait.register("ToadTraits:brooding")
