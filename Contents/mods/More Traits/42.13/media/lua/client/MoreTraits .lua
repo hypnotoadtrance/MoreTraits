@@ -1315,13 +1315,14 @@ end
 
 function CheckSelfHarm(_player)
     local player = _player;
+    local playerstats = player:getStats();
     local modifier = 3;
     if player:hasTrait(ToadTraitsRegistries.depressive) then
         modifier = modifier - 1;
     end
     if player:hasTrait(ToadTraitsRegistries.selfdestructive) then
-        if player:getBodyDamage():getUnhappynessLevel() >= 25 then
-            if player:getBodyDamage():getOverallBodyHealth() >= (100 - player:getBodyDamage():getUnhappynessLevel() / modifier) then
+        if playerstats:get(CharacterStat.UNHAPPINESS) >= 25 then
+            if player:getBodyDamage():getOverallBodyHealth() >= (100 - playerstats:get(CharacterStat.UNHAPPINESS) / modifier) then
                 for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
                     local b = player:getBodyDamage():getBodyParts():get(i);
                     b:AddDamage(0.001 * GameSpeedMultiplier());
@@ -1333,15 +1334,15 @@ end
 
 function Blissful(_player)
     local player = _player;
-    local bodydamage = player:getBodyDamage();
-    local unhappiness = bodydamage:getUnhappynessLevel();
-    local boredom = bodydamage:getBoredomLevel();
+    local playerstats = player:getStats();
+    local unhappiness = playerstats:get(CharacterStat.UNHAPPINESS);
+    local boredom = playerstats:get(CharacterStat.BOREDOM);
     if player:hasTrait(ToadTraitsRegistries.blissful) then
         if unhappiness >= 10 then
-            bodydamage:setUnhappynessLevel(unhappiness - 0.01);
+            playerstats:set(CharacterStat.UNHAPPINESS, unhappiness - 0.01);
         end
         if boredom >= 10 then
-            bodydamage:setBoredomLevel(boredom - 0.005);
+            playerstats:set(CharacterStat.BOREDOM, boredom - 0.005);
         end
     end
 end
@@ -1578,9 +1579,9 @@ function drinkerupdate(_player, _playerdata)
     local playerdata = _playerdata;
     if player:hasTrait(ToadTraitsRegistries.drinker) then
         local stats = player:getStats();
-        local drunkness = stats:getDrunkenness();
-        local anger = stats:getAnger();
-        local stress = stats:getStress();
+        local drunkness = stats:get(CharacterStat.INTOXICATION);
+        local anger = stats:get(CharacterStat.ANGER);
+        local stress = stats:get(CharacterStat.STRESS);
         local hoursthreshold = 36;
         local divider = 5;
         if SandboxVars.MoreTraits.AlcoholicFrequency then
@@ -1602,24 +1603,24 @@ function drinkerupdate(_player, _playerdata)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicsatisfied"), true, HaloTextHelper.getColorGreen());
             end
             playerdata.iHoursSinceDrink = 0;
-            stats:setAnger(0);
-            stats:setStress(0);
+            stats:set(CharacterStat.ANGER, 0);
+            stats:set(CharacterStat.STRESS, 0);
         end
         if drunkness > 0 then
             if internalTick >= 25 then
-                stats:setFatigue(stats:getFatigue() - 0.001);
+                stats:set(CharacterStat.FATIGUE,(stats:get(CharacterStat.FATIGUE) - 0.001));
             end
         end
         if playerdata.bSatedDrink == false then
             if playerdata.iHoursSinceDrink > hoursthreshold then
-                stats:setPain(divcalc);
+                stats:set(CharacterStat.PAIN, divcalc);
             end
             if internalTick == 30 then
                 if anger < 0.05 + (divcalc * 0.1) / 3 then
-                    stats:setAnger(anger + 0.01);
+                    stats:set(CharacterStat.ANGER, anger + 0.01);
                 end
                 if stress < 0.15 + (divcalc * 0.1) / 2 then
-                    stats:setStress(stress + 0.01);
+                    stats:set(CharacterStat.STRESS, stress + 0.01);
                 end
             end
         end
@@ -2195,7 +2196,7 @@ function albino(_player, _playerdata)
     local playerdata = _playerdata;
     local modpain = playerdata.AlbinoTimeSpentOutside;
     local stats = player:getStats();
-    local pain = stats:getPain();
+    local pain = stats:get(CharacterStat.PAIN);
     local umbrella = false;
     local head = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Head"));
     if player:hasTrait(ToadTraitsRegistries.albino) then
@@ -2712,8 +2713,8 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
     local playerdata = player:getModData();
     local MaxHealth = 10;
     local Health = player:getBodyDamage():getOverallBodyHealth();
-    local Stress = player:getStats():getStress();
-    local Illness = player:getBodyDamage():getFakeInfectionLevel();
+    local Stress = player:getStats():get(CharacterStat.STRESS);
+    local Illness = player:getStats():get(CharacterStat.SICKNESS);
     local stop = false;
     if player:hasTrait(ToadTraitsRegistries.superimmune) then
         if playerdata.SuperImmuneActive then
@@ -2762,7 +2763,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player)
             end
             if Illness > 10 then
                 if internalTick >= 25 and Stress <= Illness * 3 then
-                    player:getStats():setStress(Stress + 0.001 * GameSpeedMultiplier());
+                    player:getStats():set(CharacterStat.STRESS, Stress + 0.001 * GameSpeedMultiplier());
                 end
             end
         end
@@ -2773,7 +2774,7 @@ function Immunocompromised(_player, _playerdata)
     local player = _player;
     local playerdata = _playerdata;
     local bodydamage = player:getBodyDamage();
-    if player:hasTrait(ToadTraitsRegistries.Immunocompromised) then
+    if player:hasTrait(ToadTraitsRegistries.immunocompromised) then
         for i = 0, bodydamage:getBodyParts():size() - 1 do
             local b = bodydamage:getBodyParts():get(i);
             if b:HasInjury() then
@@ -4025,7 +4026,7 @@ local function RestfulSleeper()
 end
 
 local function RestfulSleeperWakeUp(player, playerdata)
-    local Fatigue = player:getStats():getFatigue();
+    local Fatigue = player:getStats():get(CharacterStat.FATIGUE);
     local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
     if player:hasTrait(ToadTraitsRegistries.restfulsleeper) and Fatigue <= 0 and player:isAsleep() == true then
         player:forceAwake();
@@ -4453,7 +4454,6 @@ end
 function MainPlayerUpdate(_player)
     local player = _player;
     local playerdata = player:getModData();
-    local traits = player:getCharacterTraits();
     if internalTick >= 30 then
         amputee(player, (playerdata.bWasInfected ~= player:getBodyDamage():isInfected()
                 and player:getBodyDamage():isInfected()));
