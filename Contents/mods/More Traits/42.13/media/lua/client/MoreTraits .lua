@@ -1640,7 +1640,7 @@ function hardytrait(_player, _playerdata)
     local stats = player:getStats();
     if player:hasTrait(ToadTraitsRegistries.hardy) then
         local modendurance = playerdata.iHardyEndurance;
-        local endurance = stats:getEndurance();
+        local endurance = stats:get(CharacterStat.ENDURANCE);
         local maxendurance = playerdata.iHardyMaxEndurance;
         local AmountOfEnduranceRegenerated = 0.05;
         if SandboxVars.MoreTraits.HardyEndurance then
@@ -1651,7 +1651,7 @@ function hardytrait(_player, _playerdata)
         end
         if endurance < 0.85 then
             if modendurance >= 1 then
-                stats:setEndurance(endurance + AmountOfEnduranceRegenerated);
+                stats:set(CharacterStat.ENDURANCE, endurance + AmountOfEnduranceRegenerated);
                 playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1;
                 if MT_Config:getOption("HardyNotifier"):getValue() == true then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance - 1, false, HaloTextHelper.getColorRed());
@@ -1659,7 +1659,7 @@ function hardytrait(_player, _playerdata)
             end
         end
         if modendurance < maxendurance and endurance == 1 then
-            stats:setEndurance(endurance - AmountOfEnduranceRegenerated)
+            stats:set(CharacterStat.ENDURANCE, endurance - AmountOfEnduranceRegenerated)
             playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1;
             if MT_Config:getOption("HardyNotifier"):getValue() == true then
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. modendurance + 1, true, HaloTextHelper.getColorGreen());
