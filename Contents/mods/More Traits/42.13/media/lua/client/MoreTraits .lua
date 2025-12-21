@@ -4279,13 +4279,15 @@ end
 
 local function QuickRest(player, playerdata)
     if player:hasTrait(ToadTraitsRegistries.quickrest) then
-        if player:getStats():getEndurance() < 1 and player:isSitOnGround() == true then
-            if playerdata.QuickRestEndurance + 0.001 <= player:getStats():getEndurance() then
-                player:getStats():setEndurance(player:getStats():getEndurance() + 0.001)
-                playerdata.QuickRestEndurance = player:getStats():getEndurance()
+        local playerstats = player:getStats();
+        local curendurance = playerstats:get(CharacterStat.ENDURANCE);
+        if curendurance < 1 and player:isSitOnGround() == true then
+            if playerdata.QuickRestEndurance + 0.001 <= curendurance then
+                player:getStats():set(CharacterStat.ENDURANCE, curendurance + 0.001)
+                playerdata.QuickRestEndurance = playerstats:get(CharacterStat.ENDURANCE)
             end
             playerdata.QuickRestActive = true
-        elseif playerdata.QuickRestActive == true and player:getStats():getEndurance() == 1 then
+        elseif playerdata.QuickRestActive == true and curendurance == 1 then
             playerdata.QuickRestActive = false
             playerdata.QuickRestEndurance = -1
             playerdata.QuickRestFinished = true
