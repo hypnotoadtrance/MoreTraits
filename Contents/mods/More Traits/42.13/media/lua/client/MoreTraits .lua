@@ -4321,8 +4321,11 @@ local function BurnWardPatient(player, playerdata)
         end
         if foundfire == true then
             while closest < distance do
-                player:getStats():setPanic(player:getStats():getPanic() + SandboxVars.MoreTraits.BurnedPanic);
-                player:getStats():setStress(player:getStats():getStress() + (SandboxVars.MoreTraits.BurnedStress / 1000));
+                local playerstats = player:getStats();
+                local curpanic = playerstats:get(CharacterStat.PANIC);
+                local curstress = playerstats:get(CharacterStat.STRESS);
+                playerstats:set(CharacterStat.PANIC, curpanic + SandboxVars.MoreTraits.BurnedPanic);
+                playerstats:set(CharacterStat.STRESS, curstress + (SandboxVars.MoreTraits.BurnedStress / 1000));
                 closest = closest + 1
             end
         end
