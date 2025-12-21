@@ -3742,7 +3742,7 @@ function BatteringRam()
         end
         local endurancereduction = (10 / Fitnesslvl) * 0.01;
         local stats = player:getStats();
-        local endurance = stats:getEndurance();
+        local endurance = stats:get(CharacterStat.ENDURANCE);
         local inTree = player:getCurrentSquare():Has(IsoObjectType.tree);
         if player:isSprinting() then
             local bodydamage = player:getBodyDamage();
@@ -3778,7 +3778,7 @@ function BatteringRam()
                         enemy:setPlayerAttackPosition("FRONT");
                         enemy:setHitForce(2.0);
                         enemy:reportEvent("wasHit");
-                        stats:setEndurance(endurance - endurancereduction);
+                        stats:set(CharacterStat.ENDURANCE, endurance - endurancereduction);
                         if player:hasTrait(ToadTraitsRegistries.martial) and SandboxVars.MoreTraits.BatteringRamMartialCombo == true then
                             local allow = true;
                             if SandboxVars.MoreTraits.MartialWeapons == false then
