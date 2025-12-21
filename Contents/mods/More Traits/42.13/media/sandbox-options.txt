@@ -1,0 +1,297 @@
+VERSION = 1,
+
+option MoreTraits.PreparedMedicalBandageAmount
+{
+	type = integer, min = 1, max = 999, default = 4,
+	page = MoreTraits, translation = MoreTraits_PreparedMedicalBandageAmount,
+}
+option MoreTraits.PreparedCarGasToggle
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_PreparedCarGasToggle,
+}
+option MoreTraits.InjuredBurns
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_InjuredBurns,
+}
+option MoreTraits.AlcoholicFreeDrink
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_AlcoholicFreeDrink,
+}
+option MoreTraits.SmokerStart
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_SmokerStart,
+}
+option MoreTraits.LuckImpact
+{
+	type = integer, min = 0, max = 200, default = 100,
+	page = MoreTraits, translation = MoreTraits_LuckImpact,
+}
+option MoreTraits.AlcoholicFrequency
+{
+	type = integer, min = 1, max = 720, default = 24,
+	page = MoreTraits, translation = MoreTraits_AlcoholicFrequency,
+}
+option MoreTraits.AlcoholicWithdrawal
+{
+	type = integer, min = 1, max = 720, default = 72,
+	page = MoreTraits, translation = MoreTraits_AlcoholicWithdrawal,
+}
+option MoreTraits.SpecializationXPPercent
+{
+	type = integer, min = 0, max = 90, default = 75,
+	page = MoreTraits, translation = MoreTraits_SpecializationXPPercent,
+}
+option MoreTraits.BouncerEffectiveness
+{
+	type = integer, min = 1, max = 100, default = 5,
+	page = MoreTraits, translation = MoreTraits_BouncerEffectiveness,
+}
+option MoreTraits.BouncerCooldown
+{
+	type = integer, min = 1, max = 240, default = 60,
+	page = MoreTraits, translation = MoreTraits_BouncerCooldown,
+}
+option MoreTraits.BouncerDistance
+{
+	type = double, min = 0.25, max = 5.0, default = 1.75,
+	page = MoreTraits, translation = MoreTraits_BouncerDistance,
+}
+option MoreTraits.GymGoerPercent
+{
+	type = integer, min = 100, max = 1000, default = 200,
+	page = MoreTraits, translation = MoreTraits_GymGoerPercent,
+}
+option MoreTraits.GymGoerNoExerciseFatigue
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_GymGoerNoExerciseFatigue,
+}
+option MoreTraits.IndefatigableOneUse
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_IndefatigableOneUse,
+}
+option MoreTraits.IndefatigableRecharge
+{
+	type = integer, min = 7, max = 30, default = 7,
+	page = MoreTraits, translation = MoreTraits_IndefatigableRecharge,
+}
+option MoreTraits.GordaniteEffectiveness
+{
+	type = integer, min = 0, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_GordaniteEffectiveness,
+}
+option MoreTraits.MartialScaling
+{
+	type = integer, min = 25, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_MartialScaling,
+}
+option MoreTraits.BatteringRamMartialCombo
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_BatteringRamMartial,
+}
+option MoreTraits.EvasiveChance
+{
+	type = integer, min = 0, max = 100, default = 33,
+	page = MoreTraits, translation = MoreTraits_EvasiveChance,
+}
+option MoreTraits.EvasiveAnimation
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_EvasiveAnimation,
+}
+option MoreTraits.EvasiveBlocksPVP
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_EvasiveBlocksPVP,
+}
+option MoreTraits.ButterfingersChance
+{
+	type = integer, min = 100, max = 10000, default = 2000,
+	page = MoreTraits, translation = MoreTraits_ButterfingersChance,
+}
+option MoreTraits.GraveRobberChance
+{
+	type = double, min = 0.1, max = 100, default = 1,
+	page = MoreTraits, translation = MoreTraits_GraveRobberChance,
+}
+option MoreTraits.GraveRobberGuaranteedLoot
+{
+	type = integer, min = 0, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_GraveRobberGuaranteedLoot,
+}
+option MoreTraits.ScroungerChance
+{
+	type = integer, min = 1, max = 100, default = 20,
+	page = MoreTraits, translation = MoreTraits_ScroungerChance,
+}
+option MoreTraits.ScroungerItemChance
+{
+	type = integer, min = 1, max = 100, default = 10,
+	page = MoreTraits, translation = MoreTraits_ScroungerItemChance,
+}
+option MoreTraits.ScroungerLootModifier
+{
+	type = integer, min = 10, max = 1000, default = 30,
+	page = MoreTraits, translation = MoreTraits_ScroungerLootModifier,
+}
+option MoreTraits.IncomprehensiveChance
+{
+	type = integer, min = 1, max = 100, default = 10,
+	page = MoreTraits, translation = MoreTraits_IncomprehensiveChance,
+}
+option MoreTraits.VagabondChance
+{
+	type = integer, min = 1, max = 100, default = 33,
+	page = MoreTraits, translation = MoreTraits_VagabondChance,
+}
+option MoreTraits.VagabondGuaranteedExtraLoot
+{
+	type = integer, min = 0, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_VagabondGuaranteedExtraLoot,
+}
+option MoreTraits.WeightPackMule
+{
+	type = integer, min = 1, max = 100, default = 10,
+	page = MoreTraits, translation = MoreTraits_WeightPackMule,
+}
+option MoreTraits.WeightPackMouse
+{
+	type = integer, min = 1, max = 100, default = 6,
+	page = MoreTraits, translation = MoreTraits_WeightPackMouse,
+}
+option MoreTraits.WeightDefault
+{
+	type = integer, min = 1, max = 100, default = 8,
+	page = MoreTraits, translation = MoreTraits_WeightDefault,
+}
+option MoreTraits.WeightGlobalMod
+{
+	type = integer, min = -100, max = 100, default = 0,
+	page = MoreTraits, translation = MoreTraits_WeightGlobalMod,
+}
+option MoreTraits.QuickWorkerScaler
+{
+	type = integer, min = 1, max = 1000, default = 100,
+	page = MoreTraits, translation = MoreTraits_QuickWorkerScaler,
+}
+option MoreTraits.SlowWorkerScaler
+{
+	type = integer, min = 5, max = 50, default = 15,
+	page = MoreTraits, translation = MoreTraits_SlowWorkerScaler,
+}
+option MoreTraits.IngenuitiveLimit
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_IngenuitiveLimit,
+}
+option MoreTraits.IngenuitiveLimitAmount
+{
+	type = integer, min = 5, max = 95, default = 50,
+	page = MoreTraits, translation = MoreTraits_IngenuitiveLimitAmount,
+}
+option MoreTraits.MartialWeapons
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_MartialWeapons,
+}
+option MoreTraits.AntiqueChance
+{
+	type = integer, min = 100, max = 10000, default = 1500,
+	page = MoreTraits, translation = MoreTraits_AntiqueChance,
+}
+option MoreTraits.AntiqueAnywhere
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_AntiqueAnywhere,
+}
+option MoreTraits.ForgivingDeprived
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_ForgivingDeprived,
+}
+option MoreTraits.NonlethalAlcoholic
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_NonlethalAlcoholic,
+}
+option MoreTraits.SecondWindCooldown
+{
+	type = integer, min = 1, max = 30, default = 14,
+	page = MoreTraits, translation = MoreTraits_SecondWindCooldown,
+}
+option MoreTraits.HardyEndurance
+{
+	type = integer, min = 5, max = 50, default = 25,
+	page = MoreTraits, translation = MoreTraits_HardyEndurance,
+}
+option MoreTraits.SuperImmuneMinDays
+{
+	type = integer, min = 5, max = 60, default = 10,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneMinimum,
+}
+option MoreTraits.SuperImmuneMaxDays
+{
+	type = integer, min = 5, max = 60, default = 30,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneMaximum,
+}
+option MoreTraits.SuperImmuneFirstInfectionBonus 
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneFirstInfectionBonus,
+}
+option MoreTraits.SuperImmuneWeakness
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_SuperImmuneWeakness,
+}
+option MoreTraits.QuickSuperImmune
+{
+	type = boolean, default = false,
+	page = MoreTraits, translation = MoreTraits_QuickSuperImmune,
+}
+option MoreTraits.ImmunoChance
+{
+	type = integer, min = 0, max = 100, default = 25,
+	page = MoreTraits, translation = MoreTraits_ImmunoChance,
+}
+option MoreTraits.ProwessGunsAmmoRestore
+{
+	type = boolean, default = true,
+	page = MoreTraits, translation = MoreTraits_ProwessGunsAmmoRestore,
+}
+
+option MoreTraits.HoarderCompatibility
+{
+	type = boolean,
+	default = true,
+	page = MoreTraits, 
+	translation = MoreTraits_HoarderCompatibility,
+}
+option MoreTraits.BurnedFireAversion
+{
+	type = boolean,
+	default = true,
+	page = MoreTraits,
+	translation = MoreTraits_BurnedFireAversion,
+}
+option MoreTraits.BurnedDistance
+{
+	type = integer, min = 5, max = 50, default = 20,
+	page = MoreTraits, translation = MoreTraits_BurnedDistance,
+}
+option MoreTraits.BurnedPanic
+{
+	type = integer, min = 1, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_BurnedPanic,
+}
+option MoreTraits.BurnedStress
+{
+	type = integer, min = 1, max = 10, default = 1,
+	page = MoreTraits, translation = MoreTraits_BurnedStress,
+}

@@ -1,0 +1,16 @@
+Tooltip_TR = {
+    Tooltip_MoreTraits_AntiqueAxe = "Nadir Sertleþtirilmiþ Taþ Balta.<br>Çok güçlü ve dayanýklý olsa da ne yazýk ki tamir edilebilir deðil.",
+    Tooltip_MoreTraits_Thumper = "Nadir taþtan Balyoz.<br>Tüm kalabalýðý tek vuruþta devirebilir.<br>Ýnanýlmaz derecede güçlü ama ayný zamanda son derece aðýr!",
+    Tooltip_MoreTraits_ObsidianBlade = "Nadir bir antika kurban hançeri.<br>Çok güçlü ama kýrýlgan.",
+    Tooltip_MoreTraits_PackerBag = "Nadir bir çanta.<br>Geniþ kapasite ve yüksek aðýrlýk azaltmaya sahip.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Bu levye, daha hýzlý sallanýp daha fazla hasar verecek þekilde þekillendirildi ve geliþtirildi.",
+    Tooltip_MoreTraits_Slugger = "Nadir bulunan, imzalý bir alüminyum beyzbol sopasý.<br>Standart bir beyzbol sopasýndan daha hafiftir, daha hýzlý sallanýr ve daha dayanýklýdýr.",
+    Tooltip_MoreTraits_Cure = "Zombileþtirmenin etkilerini tersine çevirebilen güçlü bir karýþým.<br>Yalnýzca en yetenekli týp araþtýrmacýlarý tarafýndan yapýlabilir.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Sýnýrlý sayýda bir dergi.<br>Bu dergi Cesetler ile gübre yapmana olanak saðlar.",
+    Tooltip_MoreTraits_AntiqueMag2 = "Sýnýrlý sayýda bir dergi.<br>Bu dergi evdeki eþyalarla PapierMache yapmanýzý saðlar.",
+    Tooltip_MoreTraits_AntiqueMag3 = "Sýnýrlý sayýda bir dergi.<br>Bu baský, belirli Papua Yeni Gine kabilelerinin yamyam tarifleri hakkýnda yorumlar sunuyor.",
+    Tooltip_MoreTraits_PapierMacheSword = "Tüm aile için eðlence!<br>Dört yaþýn altýndaki çocuklar için uygun deðildir.",
+    Tooltip_MoreTraits_ItemBoost = "Bu öðenin istatislikleri özelliklerinizden biri tarafýndan arttýrýlýyor.",
+    Tooltip_MoreTraits_GordaniteBoost = "Levye+",
+    Tooltip_MoreTraits_GordaniteDefault = "Levye",
+}

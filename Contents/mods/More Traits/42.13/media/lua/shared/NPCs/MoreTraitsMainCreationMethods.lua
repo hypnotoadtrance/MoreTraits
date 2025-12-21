@@ -1,3 +1,4 @@
+--[[
 require('NPCs/MainCreationMethods');
 
 local function initToadTraits()
@@ -422,3 +423,4 @@ local function initToadTraits()
 end
 
 Events.OnGameBoot.Add(initToadTraits);
+--]]

@@ -1,0 +1,15 @@
+Tooltip_EN = {
+    Tooltip_MoreTraits_AntiqueAxe = "A rare, hardened stone axe.<br>Very strong and durable, but unrepairable.",
+    Tooltip_MoreTraits_Thumper = "A rare stone maul.<br>Capable of knocking down entire crowds in one swing.<br>Incredibly powerful, but also extremely heavy!",
+    Tooltip_MoreTraits_ObsidianBlade = "A rare antique sacrificial dagger.<br>Very powerful, but brittle.",
+    Tooltip_MoreTraits_PackerBag = "A rare pack.<br>Large capacity and high weight reduction.",
+    Tooltip_MoreTraits_BloodyCrowbar = "This crowbar has been shaped and refined to swing faster, deal more damage, and be fully effective in only one hand.",
+    Tooltip_MoreTraits_Slugger = "A rare, signed aluminium baseball bat.<br>Weighs less, swings faster, and is more durable than a standard baseball bat.",
+    Tooltip_MoreTraits_Cure = "A powerful concoction capable of reversing the effects of zombification.<br>Can only be crafted by the most talented medical researchers.",
+    Tooltip_MoreTraits_AntiqueMag1 = "A limited edition magazine.<br>This edition teaches the taboo art of converting human corpses into useful fertilizer.",
+    Tooltip_MoreTraits_AntiqueMag2 = "A limited edition magazine.<br>This edition delves into home crafting recipes with Papier-Mache.",
+    Tooltip_MoreTraits_AntiqueMag3 = "A limited edition magazine.<br>This edition teaches how the gases produced during decomposition can be harvested and converted into usable propane.",
+    Tooltip_MoreTraits_PapierMacheSword = "Fun for the whole family!<br>Not for children under the age of four.",
+    Tooltip_MoreTraits_ItemBoost = "This item's stats are being boosted by one of your traits.",
+    Tooltip_MoreTraits_BloodyItemBoost = "This crowbar has been shaped and refined to swing faster, deal more damage, and be fully effective in only one hand.<br>This item's stats are being boosted by one of your traits.",
+}

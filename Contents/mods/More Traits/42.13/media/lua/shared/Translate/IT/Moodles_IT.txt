@@ -1,0 +1,18 @@
+Moodles_IT {
+    Moodles_MTAlcoholism_Good_lvl1 = "Spento",
+    Moodles_MTAlcoholism_Good_desc_lvl1 = "Placato il bisogno di alcol.",
+    Moodles_MTAlcoholism_Good_lvl2 = "Appagato",
+    Moodles_MTAlcoholism_Good_desc_lvl2 = "Ti senti soddisfatto.",
+    Moodles_MTAlcoholism_Good_lvl3 = "Assecondato",
+    Moodles_MTAlcoholism_Good_desc_lvl3 = "Ti senti veramente bene!",
+    Moodles_MTAlcoholism_Good_lvl4 = "Ingorgato",
+    Moodles_MTAlcoholism_Good_desc_lvl4 = "Non avrò bisogno di alcol per un bel po'!",
+    Moodles_MTAlcoholism_Bad_lvl1 = "Desiderio",
+    Moodles_MTAlcoholism_Bad_desc_lvl1 = "È da un po' che non bevo.<br>Ancora nessun effetto negativo.",
+    Moodles_MTAlcoholism_Bad_lvl2 = "Prurito",
+    Moodles_MTAlcoholism_Bad_desc_lvl2 = "Il bisogno sta diventando difficile da ignorare.<br>Più irritabile.",
+    Moodles_MTAlcoholism_Bad_lvl3 = "Brama",
+    Moodles_MTAlcoholism_Bad_desc_lvl3 = "Solo un sorso...<br>Aumento dello stress.",
+    Moodles_MTAlcoholism_Bad_lvl4 = "Recessione",
+    Moodles_MTAlcoholism_Bad_desc_lvl4 = "Faresti qualsiasi cosa per un drink.<br>Ti sentirai sempre più male ogni giorno che passa, finché non sarai appagato.",
+}
