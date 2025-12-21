@@ -1892,7 +1892,7 @@ function martial(_actor, _target, _weapon, _damage)
     local weapon = _weapon;
     local damage = _damage;
     local critchance = 5;
-    local endurance = player:getStats():getEndurance();
+    local endurance = player:getStats():get(CharacterStat.ENDURANCE);
     
     if _actor == player and player:hasTrait(ToadTraitsRegistries.martial) then
         if player:hasTrait(ToadTraitsRegistries.lucky) then
@@ -1961,7 +1961,7 @@ function martial(_actor, _target, _weapon, _damage)
             if _target:getHealth() <= 0 then
                 _target:update();
             end
-            player:getStats():setEndurance(endurance - 0.002)
+            player:getStats():set(CharacterStat.ENDURANCE, endurance - 0.002)
         else
             if playerdata.itemWeaponBareHands ~= nil then
                 playerdata.itemWeaponBareHands:setDoorDamage(1);
