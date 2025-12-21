@@ -4171,18 +4171,22 @@ local function TerminatorGun(player, playerdata)
     if player:getPrimaryHandItem() ~= nil then
         if player:getPrimaryHandItem():getCategory() == "Weapon" then
             if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
+                local playerstats = player:getStats();
                 if player:hasTrait(ToadTraitsRegistries.Terminator) then
+                    local curstress = playerstats:get(CharacterStat.STRESS);
+                    local curpanic = playerstats:get(CharacterStat.PANIC);
                     if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-                        player:getStats():setStress(math.max(0.01, player:getStats():getStress() - player:getStats():getStressFromCigarettes()) - 0.01)
-                        player:getStats():setPanic(player:getStats():getPanic() - 10)
-                        if player:getStats():getPanic() < 0 then
-                            player:getStats():setPanic(0);
+                        playerstats:set(CharacterStat.STRESS, math.max(0.01, curstress - 0.01))
+                        playerstats:set(CharacterStat.PANIC, curpanic - 10)
+                        if playerstats:get(CharacterStat.PANIC) < 0 then
+                            playerstats:set(CharacterStat.PANIC, 0);
                         end
                     end
                 end
                 if player:hasTrait(ToadTraitsRegistries.antigun) then
                     if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-                        player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.6);
+                        local curunhappiness = playerstats:get(CharacterStat.UNHAPPINESS)
+                        playerstats:set(CharacterStat.UNHAPPINESS, curunhappiness + 0.6);
                     end
                 end
                 local item = player:getPrimaryHandItem();
