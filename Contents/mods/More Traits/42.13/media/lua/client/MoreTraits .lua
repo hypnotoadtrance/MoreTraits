@@ -1294,7 +1294,7 @@ function ToadTraitDepressive()
         if ZombRand(100) <= basechance then
             if player:getModData().bToadTraitDepressed == false then
                 print("Player is experiencing depression.");
-                player:getBodyDamage():setUnhappynessLevel((player:getBodyDamage():getUnhappynessLevel() + 25));
+                player:getStats():set(CharacterStat.UNHAPPINESS, (player:getStats():get(CharacterStat.UNHAPPINESS) + 25));
                 player:getModData().bToadTraitDepressed = true;
             end
         end
@@ -1306,10 +1306,10 @@ function CheckDepress(_player, _playerdata)
     local playerdata = _playerdata;
     local depressed = playerdata.bToadTraitDepressed;
     if depressed == true then
-        if player:getBodyDamage():getUnhappynessLevel() < 25 then
+        if player:getStats():get(CharacterStat.UNHAPPINESS) < 25 then
             playerdata.bToadTraitDepressed = false;
         else
-            player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.001);
+            player:getStats():set(CharacterStat.UNHAPPINESS, (player:getStats():get(CharacterStat.UNHAPPINESS) + 0.001);
         end
     end
 end
