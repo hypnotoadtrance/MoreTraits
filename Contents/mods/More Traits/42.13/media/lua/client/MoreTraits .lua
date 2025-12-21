@@ -169,23 +169,24 @@ function ZombificationCure_OnCreate(items, result, player)
     bodyDamage:setInfectionTime(-1);
     bodyDamage:setInfectionLevel(0);
     bodyDamage:setInfectionGrowthRate(0);
-    bodyDamage:setUnhappynessLevel(0);
-    stats:setEndurance(0);
-    stats:setBoredom(0);
-    stats:setStress(0);
+    stats:set(CharacterStat.UNHAPPINESS, 0);
+    stats:set(CharacterStat.ENDURANCE, 0);
+    stats:set(CharacterStat.BOREDOM, 0);
+    stats:set(CharacterStat.STRESS, 0);
 end
 function ZombPatty_OnCreate(items, result, player)
     local stats = player:getStats();
+    local curstress = stats:get(CharacterStat.STRESS)
     local times = player:getModData().iTimesCannibal;
     if times <= 25 then
-        stats:setStress(stats:getStress() + 0.2);
+        stats:set(CharacterStat.STRESS, curstress + 0.2);
         result:setTooltip(getText("UI_cannibal_early"));
     elseif times <= 50 then
-        stats:setStress(stats:getStress() + 0.1);
+        stats:set(CharacterStat.STRESS,curstress + 0.1);
         result:setUnhappyChange(10);
         result:setTooltip(getText("UI_cannibal_familiar"));
     else
-        stats:setStress(stats:getStress() - 0.1);
+        stats:set(CharacterStat.STRESS,curstress - 0.1);
         result:setTooltip(getText("UI_cannibal_comfortable"));
         result:setUnhappyChange(-10);
         player:getInventory():AddItem("MoreTraits.BloodBox");
