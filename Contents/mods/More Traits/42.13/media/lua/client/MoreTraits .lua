@@ -655,7 +655,7 @@ function initToadTraitsPerks(_player)
             player:getXp():setXPToLevel(Perks.Lightfoot, PerkLevel2 + 1);
         end
     end
-    if player:hasTrait(ToadTraitsRegistries.Terminator) then
+    if player:hasTrait(ToadTraitsRegistries.terminator) then
         local PerkLevel1 = player:getPerkLevel(Perks.Aiming);
         local PerkLevel2 = player:getPerkLevel(Perks.Reloading)
         local PerkLevel3 = player:getPerkLevel(Perks.Nimble)
@@ -4172,7 +4172,7 @@ local function TerminatorGun(player, playerdata)
         if player:getPrimaryHandItem():getCategory() == "Weapon" then
             if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
                 local playerstats = player:getStats();
-                if player:hasTrait(ToadTraitsRegistries.Terminator) then
+                if player:hasTrait(ToadTraitsRegistries.terminator) then
                     local curstress = playerstats:get(CharacterStat.STRESS);
                     local curpanic = playerstats:get(CharacterStat.PANIC);
                     if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
@@ -4211,7 +4211,7 @@ local function TerminatorGun(player, playerdata)
                     itemdata.OGmindmg = mindamage;
                     itemdata.OGmaxdmg = maxdamage;
                 end
-                if player:hasTrait(ToadTraitsRegistries.Terminator) and itemdata.MTstate ~= "Terminator" then
+                if player:hasTrait(ToadTraitsRegistries.terminator) and itemdata.MTstate ~= "Terminator" then
                     item:setAimingTime(itemdata.OGaimingtime * 2);
                     item:setMaxRange(itemdata.OGrange + 5);
                     item:setJamGunChance(itemdata.OGjamchance / 2);
@@ -4227,7 +4227,7 @@ local function TerminatorGun(player, playerdata)
                     end
                     itemdata.MTstate = "antigun";
                 end
-                if player:hasTrait(ToadTraitsRegistries.Terminator) == false and player:hasTrait(ToadTraitsRegistries.antigun) == false and itemdata.MTState ~= "Normal" then
+                if player:hasTrait(ToadTraitsRegistries.terminator) == false and player:hasTrait(ToadTraitsRegistries.antigun) == false and itemdata.MTState ~= "Normal" then
                     item:setAimingTime(itemdata.OGaimingtime);
                     item:setMaxRange(itemdata.OGrange);
                     item:setJamGunChance(itemdata.OGjamchance);
