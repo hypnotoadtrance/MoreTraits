@@ -170,24 +170,25 @@ function ZombificationCure_OnCreate(items, result, player)
     bodyDamage:setInfectionTime(-1);
     bodyDamage:setInfectionLevel(0);
     bodyDamage:setInfectionGrowthRate(0);
-    bodyDamage:setUnhappynessLevel(0);
-    stats:setEndurance(0);
-    stats:setBoredom(0);
-    stats:setStress(0);
+    stats:set(CharacterStat.UNHAPPINESS, 0);
+    stats:set(CharacterStat.ENDURANCE, 0);
+    stats:set(CharacterStat.BOREDOM, 0);
+    stats:set(CharacterStat.STRESS, 0);
 end
 
 function ZombPatty_OnCreate(items, result, player)
     local stats = player:getStats();
+    local curstress = stats:get(CharacterStat.STRESS)
     local times = player:getModData().iTimesCannibal;
     if times <= 25 then
-        stats:setStress(stats:getStress() + 0.2);
+        stats:set(CharacterStat.STRESS, curstress + 0.2);
         result:setTooltip(getText("UI_cannibal_early"));
     elseif times <= 50 then
-        stats:setStress(stats:getStress() + 0.1);
+        stats:set(CharacterStat.STRESS,curstress + 0.1);
         result:setUnhappyChange(10);
         result:setTooltip(getText("UI_cannibal_familiar"));
     else
-        stats:setStress(stats:getStress() - 0.1);
+        stats:set(CharacterStat.STRESS,curstress - 0.1);
         result:setTooltip(getText("UI_cannibal_comfortable"));
         result:setUnhappyChange(-10);
         player:getInventory():AddItem("MoreTraits.BloodBox");
@@ -684,8 +685,8 @@ function ToadTraitParanoia(player, playerdata)
         triggerThreshold = triggerThreshold + (stress * 2)
         if ZombRand(100) < triggerThreshold then
             local sm = getSoundManager()
-            local stinger = sm:PlaySound("ZombieSurprisedPlayer", false, 0)
-            if stinger then stinger:setVolume(0.05) end
+            local surprised = sm:PlaySound("ZombieSurprisedPlayer", false, 0)
+            if surprised then surprised:setVolume(0.05) end
 
             stats:set(CharacterStat.PANIC, math.min(panic + 25, 100))
             stats:set(CharacterStat.STRESS, math.min(stress + 0.1, 1.0))
@@ -1184,18 +1185,157 @@ function Blissful(player)
     if boredom >= 10 then stats:set(CharacterStat.BOREDOM, boredom - 0.005); end
 end
 
+function Specialization(_player, _perk, _amount)
+    local player = _player;
+    local perk = _perk;
+    local amount = _amount;
+    local newamount = 0;
+    local skip = false;
+    local modifier = 75;
+    local perklvl = player:getPerkLevel(_perk);
+    local perkxpmod = 1;
+    if SandboxVars.MoreTraits.SpecializationXPPercent then
+        modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
+    end
+    --shift decimal over two places for calculation purposes.
+    modifier = modifier * 0.01;
+    if perk == Perks.Fitness or perk == Perks.Strength then
+        skipxpadd = true;
+    end
+    if skipxpadd == false then
+        if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
+            if player:hasTrait(ToadTraitsRegistries.specweapons) then
+                if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
+                    skip = true;
+                end
+            end
+            if player:hasTrait(ToadTraitsRegistries.specfood) then
+                if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
+                    skip = true;
+                end
+            end
+        end
+    end
+end
+
+function Blissful(player)
+    if not player:hasTrait(ToadTraitsRegistries.blissful) then return end
+    local stats = player:getStats()
+    local unhappiness = stats:get(CharacterStat.UNHAPPINESS);
+    local boredom = stats:get(CharacterStat.BOREDOM);
+    if unhappiness >= 10 then stats:set(CharacterStat.UNHAPPINESS, unhappiness - 0.01); end
+    if boredom >= 10 then stats:set(CharacterStat.BOREDOM, boredom - 0.005); end
+end
+
+function Specialization(_player, _perk, _amount)
+    local player = _player;
+    local perk = _perk;
+    local amount = _amount;
+    local newamount = 0;
+    local skip = false;
+    local modifier = 75;
+    local perklvl = player:getPerkLevel(_perk);
+    local perkxpmod = 1;
+    if SandboxVars.MoreTraits.SpecializationXPPercent then
+        modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
+    end
+    --shift decimal over two places for calculation purposes.
+    modifier = modifier * 0.01;
+    if perk == Perks.Fitness or perk == Perks.Strength then
+        skipxpadd = true;
+    end
+    if skipxpadd == false then
+        if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
+            if player:hasTrait(ToadTraitsRegistries.specweapons) then
+                if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
+                    skip = true;
+                end
+            end
+            if player:hasTrait(ToadTraitsRegistries.specfood) then
+                if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
+                    skip = true;
+                end
+            end
+            if player:hasTrait(ToadTraitsRegistries.specguns) then
+                if perk == Perks.Aiming or perk == Perks.Reloading then
+                    skip = true;
+                end
+            end
+            if player:hasTrait(ToadTraitsRegistries.specmove) then
+                if perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sprinting or perk == Perks.Sneak then
+                    skip = true;
+                end
+            end
+            if player:hasTrait(ToadTraitsRegistries.speccrafting) then
+                if perk == Perks.Woodwork or perk == Perks.Electricity or perk == Perks.MetalWelding or perk == Perks.Mechanics or perk == Perks.Tailoring then
+                    skip = true;
+                end
+            end
+            if player:hasTrait(ToadTraitsRegistries.specaid) then
+                if perk == Perks.Doctor then
+                    skip = true;
+                end
+            end
+            newamount = amount * modifier;
+            local currentxp = player:getXp():getXP(perk);
+            local correctamount = currentxp - newamount
+            local testxp = currentxp - amount;
+            --Check if the newxp amount would give the player a negative level.
+            --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
+            if skip == false then
+                if perklvl == 0 and testxp <= 0 then
+                    skip = true;
+                elseif perklvl == 1 and testxp <= 75 then
+                    skip = true;
+                elseif perklvl == 2 and testxp <= 150 then
+                    skip = true;
+                elseif perklvl == 3 and testxp <= 300 then
+                    skip = true;
+                elseif perklvl == 4 and testxp <= 750 then
+                    skip = true;
+                elseif perklvl == 5 and testxp <= 1500 then
+                    skip = true;
+                elseif perklvl == 6 and testxp <= 3000 then
+                    skip = true;
+                elseif perklvl == 7 and testxp <= 4500 then
+                    skip = true;
+                elseif perklvl == 8 and testxp <= 6000 then
+                    skip = true;
+                elseif perklvl == 9 and testxp <= 7500 then
+                    skip = true;
+                elseif perklvl == 10 and testxp <= 9000 then
+                    skip = true;
+                end
+            end
+            if skip == false then
+                local xpforlevel = perk:getXpForLevel(perklvl) + 50;
+                while player:getXp():getXP(perk) > correctamount do
+                    local curxp = player:getXp():getXP(perk);
+                    if xpforlevel >= curxp then
+                        break ;
+                    else
+                        AddXP(player, perk, -1 * 0.1);
+                    end
+                end
+            end
+        end
+    else
+        skipxpadd = false;
+    end
+end
+--[[
 function Specialization(player, perk, amount)
     -- Ignorer Fitness et Strength (gérés par GymGoer)
     if perk == Perks.Fitness or perk == Perks.Strength then return end
 
     -- Table des traits de spécialisation et des perks concernés
     local specs = {
-        [ToadTraitsRegistries.specweapons] = {Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade, Perks.Maintenance, Perks.SmallBlunt, Perks.Spear},
-        [ToadTraitsRegistries.specfood] = {Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping, Perks.Fishing},
-        [ToadTraitsRegistries.specguns] = {Perks.Aiming, Perks.Reloading},
-        [ToadTraitsRegistries.specmove] = {Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak},
-        [ToadTraitsRegistries.speccrafting] = {Perks.Woodwork, Perks.Electricity, Perks.MetalWelding, Perks.Mechanics, Perks.Tailoring},
-        [ToadTraitsRegistries.specaid] = {Perks.Doctor}
+        specweapons = {Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade, Perks.Maintenance, Perks.SmallBlunt, Perks.Spear},
+        specfood = {Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping, Perks.Fishing},
+        specguns = {Perks.Aiming, Perks.Reloading},
+        specmove = {Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak},
+        speccrafting = {Perks.Woodwork, Perks.Electricity, Perks.MetalWelding, Perks.Mechanics, Perks.Tailoring},
+        specaid = {Perks.Doctor}
     }
 
     -- Vérifier si le joueur possède au moins un trait "spec*"
@@ -1222,6 +1362,7 @@ function Specialization(player, perk, amount)
     local xpToRemove = amount - (amount * modifier)
     AddXP(player, perk, -xpToRemove)
 end
+--]]
 
 function indefatigable(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.indefatigable) then return end
@@ -1334,22 +1475,19 @@ function hardytrait(player, playerdata)
     local regenAmount = 0.05
     if SandboxVars.MoreTraits.HardyEndurance then regenAmount = SandboxVars.MoreTraits.HardyEndurance / 500 end
 
-    local showNotifier = not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() or false
-
     if currentEndurance < 0.85 and playerdata.iHardyEndurance >= 1 then
         local newEndurance = math.min(currentEndurance + regenAmount, 1.0)
         stats:set(CharacterStat.ENDURANCE, newEndurance);
         
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
-        
-        if showNotifier then
+        if MT_Config:getOption("HardyNotifier"):getValue() == true then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
         end
     elseif currentEndurance >= 1.0 and playerdata.iHardyEndurance < playerdata.iHardyMaxEndurance then
         stats:set(CharacterStat.ENDURANCE, currentEndurance - regenAmount);
         playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1
         
-        if showNotifier then
+        if MT_Config:getOption("HardyNotifier"):getValue() == true then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
         else
             HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), "")
@@ -3421,7 +3559,7 @@ local function MotionSicknessHealthLoss(player)
 end
 
 local function RestfulSleeper(player, playerdata)
-    if not (player:hasTrait(ToadTraitsRegistries.restfulsleeper) and player:isAsleep()) then return end
+    if not (player:hasTrait(ToadTraitsRegistries.restfulsleeper) and not player:isAsleep()) then return end
 
     local stats = player:getStats()
     local fatigue = stats:get(CharacterStat.FATIGUE)
@@ -3501,18 +3639,22 @@ local function TerminatorGun(player, playerdata)
     if player:getPrimaryHandItem() ~= nil then
         if player:getPrimaryHandItem():getCategory() == "Weapon" then
             if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
-                if player:hasTrait(ToadTraitsRegistries.Terminator) then
+                local playerstats = player:getStats();
+                if player:hasTrait(ToadTraitsRegistries.terminator) then
+                    local curstress = playerstats:get(CharacterStat.STRESS);
+                    local curpanic = playerstats:get(CharacterStat.PANIC);
                     if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-                        player:getStats():setStress(math.max(0.01, player:getStats():getStress() - player:getStats():getStressFromCigarettes()) - 0.01)
-                        player:getStats():setPanic(player:getStats():getPanic() - 10)
-                        if player:getStats():getPanic() < 0 then
-                            player:getStats():setPanic(0);
+                        playerstats:set(CharacterStat.STRESS, math.max(0.01, curstress - 0.01))
+                        playerstats:set(CharacterStat.PANIC, curpanic - 10)
+                        if playerstats:get(CharacterStat.PANIC) < 0 then
+                            playerstats:set(CharacterStat.PANIC, 0);
                         end
                     end
                 end
                 if player:hasTrait(ToadTraitsRegistries.antigun) then
                     if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-                        player:getBodyDamage():setUnhappynessLevel(player:getBodyDamage():getUnhappynessLevel() + 0.6);
+                        local curunhappiness = playerstats:get(CharacterStat.UNHAPPINESS)
+                        playerstats:set(CharacterStat.UNHAPPINESS, curunhappiness + 0.6);
                     end
                 end
                 local item = player:getPrimaryHandItem();
@@ -3537,7 +3679,7 @@ local function TerminatorGun(player, playerdata)
                     itemdata.OGmindmg = mindamage;
                     itemdata.OGmaxdmg = maxdamage;
                 end
-                if player:hasTrait(ToadTraitsRegistries.Terminator) and itemdata.MTstate ~= "Terminator" then
+                if player:hasTrait(ToadTraitsRegistries.terminator) and itemdata.MTstate ~= "Terminator" then
                     item:setAimingTime(itemdata.OGaimingtime * 2);
                     item:setMaxRange(itemdata.OGrange + 5);
                     item:setJamGunChance(itemdata.OGjamchance / 2);
@@ -3553,7 +3695,7 @@ local function TerminatorGun(player, playerdata)
                     end
                     itemdata.MTstate = "antigun";
                 end
-                if player:hasTrait(ToadTraitsRegistries.Terminator) == false and player:hasTrait(ToadTraitsRegistries.antigun) == false and itemdata.MTState ~= "Normal" then
+                if player:hasTrait(ToadTraitsRegistries.terminator) == false and player:hasTrait(ToadTraitsRegistries.antigun) == false and itemdata.MTState ~= "Normal" then
                     item:setAimingTime(itemdata.OGaimingtime);
                     item:setMaxRange(itemdata.OGrange);
                     item:setJamGunChance(itemdata.OGjamchance);
@@ -3803,9 +3945,9 @@ function MTAlcoholismMoodle(_player, _playerdata)
     local playerdata = _playerdata;
     if player:hasTrait(ToadTraitsRegistries.drinker) then
         local stats = player:getStats();
-        local drunkness = stats:getDrunkenness();
-        local anger = stats:getAnger();
-        local stress = stats:getStress();
+        local drunkness = stats:get(CharacterStat.INTOXICATION);
+        local anger = stats:get(CharacterStat.ANGER);
+        local stress = stats:get(CharacterStat.STRESS);
         local hoursthreshold = 36;
         local divider = 5;
         local mf = MF;
@@ -3833,13 +3975,13 @@ function MTAlcoholismMoodle(_player, _playerdata)
             MF.getMoodle("MTAlcoholism"):setValue(0);
         end
         if Alcoholism >= 0.7 then
-            stats:setAnger(0);
-            stats:setStress(0);
-            stats:setBoredom(0);
-            stats:setPanic(0);
-            stats:setPain(0);
-            stats:setIdleboredom(0);
-            player:getBodyDamage():setUnhappynessLevel(0);
+            stats:set(CharacterStat.ANGER, 0);
+            stats:set(CharacterStat.STRESS,0);
+            stats:set(CharacterStat.BOREDOM,0);
+            stats:set(CharacterStat.PANIC,0);
+            stats:set(CharacterStat.PAIN,0);
+            stats:set(CharacterStat.IDLENESS,0);
+            stats:set(CharacterStat.UNHAPPINESS,0);
         end
         if internalTick >= 29 then
             if drunkness >= 20 then
@@ -3853,7 +3995,7 @@ function MTAlcoholismMoodle(_player, _playerdata)
                 MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.003);
                 playerdata.iHoursSinceDrink = 0;
             elseif drunkness > 0 then
-                stats:setFatigue(stats:getFatigue() - 0.001);
+                stats:set(CharacterStat.FATIGUE, stats:get(CharacterStat.FATIGUE) - 0.001);
                 MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.002);
                 MF.getMoodle("MTAlcoholism"):setChevronCount(1);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
@@ -3869,12 +4011,12 @@ function MTAlcoholismMoodle(_player, _playerdata)
         if internalTick == 30 then
             if Alcoholism <= 0.3 then
                 if anger < 0.05 + (divcalc * 0.1) / 2 then
-                    stats:setAnger(anger + 0.01);
+                    stats:set(CharacterStat.ANGER, anger + 0.01);
                 end
             end
             if Alcoholism <= 0.2 then
                 if stress < 0.15 + (divcalc * 0.1) / 2 then
-                    stats:setStress(stress + 0.01);
+                    stats:set(CharacterStat.STRESS, stress + 0.01);
                 end
             end
         end

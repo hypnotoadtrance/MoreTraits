@@ -1,2 +1,4 @@
 Main Changelog:
-- Experimental In-Progress 42.13 Update.
+- Fix closing ')' on line 1312 because am big dumb.- Fix closing ')' on line 1312 because am big dumb.
+- Disable Forage System until can migrate to new system.
+- Resolve capitalization issue with terminator trait.
