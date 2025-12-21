@@ -1,16 +1,13 @@
---***********************************************************
---**                    THE INDIE STONE                    **
---***********************************************************
-
 require "TimedActions/ISBaseTimedAction"
 
 ISBBQLightFromPetrol = ISBaseTimedAction:derive("ISBBQLightFromPetrol")
 
 function ISBBQLightFromPetrol:isValid()
-	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
+	if self.character:hasTrait(ToadTraitsRegistries.burned) and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
 		HaloTextHelper.addText(self.character, getText("UI_burnedstop"), HaloTextHelper.getColorRed());
 		return
 	end
+	
 	local playerInv = self.character:getInventory()
 	return playerInv:contains(self.petrol) and playerInv:contains(self.lighter) and
 			self.lighter:getCurrentUsesFloat() > 0 and
@@ -34,7 +31,7 @@ function ISBBQLightFromPetrol:start()
 	self.petrol:setJobType(campingText.lightCampfire)
 	self.petrol:setJobDelta(0.0)
 	self:setActionAnim(CharacterActionAnims.Pour)
-	--	self:setAnimVariable("FoodType", "Kettle");
+--	self:setAnimVariable("FoodType", "Kettle");
 	-- Don't call setOverrideHandModels() with self.petrol, the right-hand mask
 	-- will bork the animation.
 	self:setOverrideHandModels(self.petrol:getStaticModel(), nil)
@@ -50,20 +47,19 @@ end
 function ISBBQLightFromPetrol:perform()
 	self.character:stopOrTriggerSound(self.sound)
 	self.petrol:getContainer():setDrawDirty(true)
-	self.petrol:setJobDelta(0.0)
+    self.petrol:setJobDelta(0.0)
 
-	-- needed to remove from queue / start next.
+    -- needed to remove from queue / start next.
 	ISBaseTimedAction.perform(self)
 end
 
 function ISBBQLightFromPetrol:complete()
-
-	self.lighter:Use(false, false, true)
-	self.petrol:Use(false, false, true)
+	self.petrol:getFluidContainer():adjustAmount(self.petrol:getFluidContainer():getAmount() - ZomboidGlobals.LightFromPetrolAmount);
+	self.lighter:UseAndSync()
 
 	if not self.bbq then return end
 	if self.bbq:hasFuel() and not self.bbq:isLit() then
-		self.bbq:setLit(true)
+		self.bbq:turnOn()
 		self.bbq:sendObjectChange('state')
 	end
 
