@@ -4146,7 +4146,7 @@ local function HungerCheck(player)
     local playerdata = player:getModData();
     if player:hasTrait(ToadTraitsRegistries.superimmune) and player:getModData().SuperImmuneActive == true then
         local stats = player:getStats();
-        local hunger = stats:getHunger();
+        local hunger = stats:get(CharacterStat.HUNGER);
         local SuperImmuneMinutesWellFed = player:getModData().SuperImmuneMinutesWellFed;
         if hunger == 0 then
             player:getModData().SuperImmuneMinutesWellFed = SuperImmuneMinutesWellFed + 1;
