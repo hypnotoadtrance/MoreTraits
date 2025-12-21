@@ -19,7 +19,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedfood,
        UIDescription = UI_trait_preparedfooddesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 
     character_trait_definition ToadTraits:preparedammo
@@ -30,7 +30,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedammo,
        UIDescription = UI_trait_preparedammodesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }	
 	
 	character_trait_definition ToadTraits:preparedmedical
@@ -41,7 +41,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedmedical,
        UIDescription = UI_trait_preparedmedicaldesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedfood;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedfood;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:preparedrepair
@@ -52,7 +52,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedrepair,
        UIDescription = UI_trait_preparedrepairdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedfood;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedfood;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:preparedcamp
@@ -63,7 +63,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedcamp,
        UIDescription = UI_trait_preparedcampdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedfood;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedfood;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:preparedweapon
@@ -74,7 +74,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedweapon,
        UIDescription = UI_trait_preparedweapondesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedfood,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedfood;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:preparedpack
@@ -85,7 +85,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedpack,
        UIDescription = UI_trait_preparedpackdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:preparedcar
@@ -96,7 +96,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedcar,
        UIDescription = UI_trait_preparedcardesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedfood;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedfood;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:preparedcoordination
@@ -107,7 +107,7 @@ module ToadTraits
        Cost = 1,
        UIName = UI_trait_preparedcoordination,
        UIDescription = UI_trait_preparedcoordinationdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedfood;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedfood;ToadTraits:preparedpack;ToadTraits:preparedweapon;ToadTraits:deprived,
     }
 	
 	character_trait_definition ToadTraits:swift
@@ -645,69 +645,70 @@ module ToadTraits
 	   MutuallyExclusiveTraits = base:insomniac,
     }
 	
-	character_trait_definition ToadTraits:noxpshooter
+    character_trait_definition ToadTraits:noxpaxe
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpshooter,
-       Cost = 3,
-       UIName = UI_trait_noxpshooter,
-       UIDescription = UI_trait_noxpshooterdesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpaxe,
+        Cost = 3,
+        UIName = UI_trait_noxpaxe,
+        UIDescription = UI_trait_noxpaxedesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
     }
-	
-	character_trait_definition ToadTraits:noxptechnician
+
+    character_trait_definition ToadTraits:noxpfirstaid
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxptechnician,
-       Cost = 3,
-       UIName = UI_trait_noxptechnician,
-       UIDescription = UI_trait_noxptechniciandesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpshooter;ToadTraits:noxpmaintenance;ToadTraits:noxpfirstaid,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpfirstaid,
+        Cost = 3,
+        UIName = UI_trait_noxpfirstaid,
+        UIDescription = UI_trait_noxpfirstaiddesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
     }
-	
-	character_trait_definition ToadTraits:noxpaxe
+
+    character_trait_definition ToadTraits:noxpmaintenance
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpaxe,
-       Cost = 3,
-       UIName = UI_trait_noxpaxe,
-       UIDescription = UI_trait_noxpaxedesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpmaintenance;ToadTraits:noxpfirstaid,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpmaintenance,
+        Cost = 3,
+        UIName = UI_trait_noxpmaintenance,
+        UIDescription = UI_trait_noxpmaintenancedesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpshooter;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
     }
-	
-	character_trait_definition ToadTraits:noxpfirstaid
+
+    character_trait_definition ToadTraits:noxpshooter
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpfirstaid,
-       Cost = 3,
-       UIName = UI_trait_noxpfirstaid,
-       UIDescription = UI_trait_noxpfirstaiddesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpmaintenance,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpshooter,
+        Cost = 3,
+        UIName = UI_trait_noxpshooter,
+        UIDescription = UI_trait_noxpshooterdesc,
+        MutuallyExclusiveTraits = ToadTraits:antigun;ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
     }
-	
-	character_trait_definition ToadTraits:noxpmaintenance
+
+    character_trait_definition ToadTraits:noxpsneaky
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpmaintenance,
-       Cost = 3,
-       UIName = UI_trait_noxpmaintenance,
-       UIDescription = UI_trait_noxpmaintenancedesc,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpsneaky,
+        Cost = 3,
+        UIName = UI_trait_noxpsneaky,
+        UIDescription = UI_trait_noxpsneakydesc,
+        MutuallyExclusiveTraits = base:conspicuous;ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxptechnician,
     }
-	
-	character_trait_definition ToadTraits:noxpsneaky
+
+    character_trait_definition ToadTraits:noxptechnician
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpsneaky,
-       Cost = 3,
-       UIName = UI_trait_noxpsneaky,
-       UIDescription = UI_trait_noxpsneakydesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxptechnician;ToadTraits:noxpshooter;ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:conspicuous,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxptechnician,
+        Cost = 3,
+        UIName = UI_trait_noxptechnician,
+        UIDescription = UI_trait_noxptechniciandesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxpsneaky,
     }
 	
 	character_trait_definition ToadTraits:terminator
