@@ -4459,9 +4459,9 @@ function MTAlcoholismMoodle(_player, _playerdata)
     local playerdata = _playerdata;
     if player:hasTrait(ToadTraitsRegistries.drinker) then
         local stats = player:getStats();
-        local drunkness = stats:getDrunkenness();
-        local anger = stats:getAnger();
-        local stress = stats:getStress();
+        local drunkness = stats:get(CharacterStat.INTOXICATION);
+        local anger = stats:get(CharacterStat.ANGER);
+        local stress = stats:get(CharacterStat.STRESS);
         local hoursthreshold = 36;
         local divider = 5;
         local mf = MF;
@@ -4489,13 +4489,13 @@ function MTAlcoholismMoodle(_player, _playerdata)
             MF.getMoodle("MTAlcoholism"):setValue(0);
         end
         if Alcoholism >= 0.7 then
-            stats:setAnger(0);
-            stats:setStress(0);
-            stats:setBoredom(0);
-            stats:setPanic(0);
-            stats:setPain(0);
-            stats:setIdleboredom(0);
-            player:getBodyDamage():setUnhappynessLevel(0);
+            stats:set(CharacterStat.ANGER, 0);
+            stats:set(CharacterStat.STRESS,0);
+            stats:set(CharacterStat.BOREDOM,0);
+            stats:set(CharacterStat.PANIC,0);
+            stats:set(CharacterStat.PAIN,0);
+            stats:set(CharacterStat.IDLENESS,(0);
+            stats:set(CharacterStat.UNHAPPINESS,(0);
         end
         if internalTick >= 29 then
             if drunkness >= 20 then
@@ -4525,12 +4525,12 @@ function MTAlcoholismMoodle(_player, _playerdata)
         if internalTick == 30 then
             if Alcoholism <= 0.3 then
                 if anger < 0.05 + (divcalc * 0.1) / 2 then
-                    stats:setAnger(anger + 0.01);
+                    stats:set(CharacterStat.ANGER, anger + 0.01);
                 end
             end
             if Alcoholism <= 0.2 then
                 if stress < 0.15 + (divcalc * 0.1) / 2 then
-                    stats:setStress(stress + 0.01);
+                    stats:set(CharacterStat.STRESS, stress + 0.01);
                 end
             end
         end
