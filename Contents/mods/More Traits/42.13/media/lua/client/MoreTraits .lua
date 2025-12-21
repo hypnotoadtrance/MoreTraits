@@ -1309,7 +1309,7 @@ function CheckDepress(_player, _playerdata)
         if player:getStats():get(CharacterStat.UNHAPPINESS) < 25 then
             playerdata.bToadTraitDepressed = false;
         else
-            player:getStats():set(CharacterStat.UNHAPPINESS, (player:getStats():get(CharacterStat.UNHAPPINESS) + 0.001);
+            player:getStats():set(CharacterStat.UNHAPPINESS, (player:getStats():get(CharacterStat.UNHAPPINESS) + 0.001));
         end
     end
 end
@@ -4499,8 +4499,8 @@ function MTAlcoholismMoodle(_player, _playerdata)
             stats:set(CharacterStat.BOREDOM,0);
             stats:set(CharacterStat.PANIC,0);
             stats:set(CharacterStat.PAIN,0);
-            stats:set(CharacterStat.IDLENESS,(0);
-            stats:set(CharacterStat.UNHAPPINESS,(0);
+            stats:set(CharacterStat.IDLENESS,0);
+            stats:set(CharacterStat.UNHAPPINESS,0);
         end
         if internalTick >= 29 then
             if drunkness >= 20 then
