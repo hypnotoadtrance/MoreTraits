@@ -1798,9 +1798,9 @@ function drinkerpoison()
                 print("Player is suffering from alcohol withdrawal.");
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
                 if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
-                    player:getBodyDamage():setPoisonLevel(20);
+                    player:getStats():set(CharacterStat.POISON, 20);
                 else
-                    player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+                    player:getStats():set(CharacterStat.POISON, (playerdata.iHoursSinceDrink / divider));
                 end
                 playerdata.iWithdrawalCooldown = ZombRand(12, 24);
             end
@@ -1810,9 +1810,9 @@ function drinkerpoison()
                 print("Player is suffering from alcohol withdrawal.");
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed());
                 if SandboxVars.MoreTraits.NonlethalAlcoholic == true then
-                    player:getBodyDamage():setPoisonLevel(20);
+                    player:getStats():set(CharacterStat.POISON, 20);
                 else
-                    player:getBodyDamage():setPoisonLevel((playerdata.iHoursSinceDrink / divider));
+                    player:getStats():set(CharacterStat.POISON, (playerdata.iHoursSinceDrink / divider));
                 end
                 playerdata.iWithdrawalCooldown = ZombRand(12, 24);
             end
