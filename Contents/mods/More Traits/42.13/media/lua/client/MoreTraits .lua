@@ -3980,7 +3980,7 @@ local function SecondWind(player)
     local enemies = player:getSpottedList();
     local playerstats = player:getStats();
     if player:hasTrait(ToadTraitsRegistries.secondwind) then
-        if playerstats:getEndurance() < 0.5 or playerstats:getFatigue() > 0.8 then
+        if playerstats:get(CharacterStat.ENDURANCE) < 0.5 or playerstats:get(CharacterStat.FATIGUE) > 0.8 then
             if playerdata.secondwinddisabled == false then
                 if enemies:size() > 2 then
                     for i = 0, enemies:size() - 1 do
@@ -3991,13 +3991,13 @@ local function SecondWind(player)
                         end
                     end
                     if zombiesnearplayer > 2 then
-                        playerstats:setEndurance(1);
+                        playerstats:set(CharacterStat.ENDURANCE, 1);
                         playerdata.iHardyEndurance = 5;
-                        if playerstats:getFatigue() > 0.6 then
+                        if playerstats:get(CharacterStat.FATIGUE) > 0.6 then
                             playerdata.secondwindrecoveredfatigue = true;
                         end
-                        if playerstats:getFatigue() > 0.4 then
-                            playerstats:setFatigue(0.4);
+                        if playerstats:get(CharacterStat.FATIGUE) > 0.4 then
+                            playerstats:set(CharacterStat.FATIGUE, 0.4);
                         end
                         playerdata.secondwindcooldown = 0;
                         playerdata.secondwinddisabled = true;
