@@ -218,7 +218,7 @@ function initToadTraitsItems(player)
     if isClient() then return end -- We want this to be run directly on the server to avoid desync
     local inv = player:getInventory();
 
-    if player:hasTrait(ToadTraitsRegistries.Deprived) then
+    if player:hasTrait(ToadTraitsRegistries.deprived) then
         player:clearWornItems();
         inv:removeAllItems();
         player:createKeyRing();
@@ -228,7 +228,7 @@ function initToadTraitsItems(player)
         end
         return
     end
-    if player:hasTrait(ToadTraitsRegistries.PreparedFood) then
+    if player:hasTrait(ToadTraitsRegistries.preparedfood) then
         local holder = inv:AddItem("Base.Plasticbag");
         if holder then
             local holderInv = holder:getItemContainer();
@@ -241,7 +241,7 @@ function initToadTraitsItems(player)
             end
             player:setSecondaryHandItem(holder);
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedAmmo) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedammo) then
         local holder = inv:AddItem("Base.PistolCase1");
         if holder then
             local holderInv = holder:getItemContainer();
@@ -254,13 +254,13 @@ function initToadTraitsItems(player)
             end
             player:setSecondaryHandItem(holder);
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedWeapon) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedweapon) then
         local items = {"Base.BaseballBat_Can", "Base.HuntingKnife"}
         for _, item in ipairs(items) do
             local i = inv:AddItem(item);
             inv:addItemOnServer(i);
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedMedical) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedmedical) then
         local holder = inv:AddItem("Base.FirstAidKit");
         if holder then
             local holderInv = holder:getItemContainer();
@@ -278,7 +278,7 @@ function initToadTraitsItems(player)
             end
             player:setSecondaryHandItem(holder);
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedRepair) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedrepair) then
         local holder = inv:AddItem("Base.Toolbox")
         if holder then
             local holderInv = holder:getItemContainer();
@@ -295,7 +295,7 @@ function initToadTraitsItems(player)
             end
             player:setSecondaryHandItem(holder);
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedCamp) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedcamp) then
         local holder = inv:AddItem("MoreTraits.Bag_SmallHikingBag");
         if holder then
             local holderInv = holder:getItemContainer();
@@ -312,13 +312,13 @@ function initToadTraitsItems(player)
             end
             if player:getClothingItem_Back() == nil then player:setClothingItem_Back(holder); end
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedPack) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedpack) then
         local holder = inv:AddItem("Base.Bag_NormalHikingBag")
         inv:addItemOnServer(holder);
         if holder then
             if player:getClothingItem_Back() == nil then player:setClothingItem_Back(holder); end
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedCar) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedcar) then
         local holder = inv:AddItem("Base.Bag_JanitorToolbox");
         if holder then
             local holderInv = holder:getItemContainer();
@@ -336,7 +336,7 @@ function initToadTraitsItems(player)
             inv:addItemOnServer(holder2);
             if holder2 then player:setSecondaryHandItem(holder); end
         end
-    elseif player:hasTrait(ToadTraitsRegistries.PreparedCoordination) then
+    elseif player:hasTrait(ToadTraitsRegistries.preparedcoordination) then
         local holder = inv:AddItem("Base.Bag_FannyPackFront");
         local watch = inv:AddItem("Base.WristWatch_Right_DigitalBlack");
         if holder then
@@ -356,7 +356,7 @@ function initToadTraitsItems(player)
             player:setWornItem(watch:getBodyLocation(), watch)
         end
     end
-    if player:hasTrait(ToadTraitsRegistries.Drinker) then
+    if player:hasTrait(ToadTraitsRegistries.drinker) then
         if SandboxVars.MoreTraits.AlcoholicFreeDrink then
             local item = inv:AddItem("Base.WhiskeyFull");
             inv:addItemOnServer(item);
