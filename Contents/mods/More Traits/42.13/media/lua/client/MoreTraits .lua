@@ -4101,7 +4101,7 @@ local function RestfulSleeper()
     local player = getPlayer();
     local playerdata = player:getModData();
     local Multiplier = 1;
-    local Fatigue = player:getStats():getFatigue();
+    local Fatigue = player:getStats():get(CharacterStat.FATIGUE);
     local Neck = player:getBodyDamage():getBodyPart(BodyPartType.FromString("Neck"));
     if player:hasTrait(ToadTraitsRegistries.restfulsleeper) and player:isAsleep() then
         playerdata.HasSlept = true;
@@ -4111,11 +4111,11 @@ local function RestfulSleeper()
             playerdata.NeckHadPain = false;
         end
         if Fatigue >= 0.6 then
-            player:getStats():setFatigue(Fatigue - (0.2 * Multiplier));
+            player:getStats():set(CharacterStat.FATIGUE, Fatigue - (0.2 * Multiplier));
         elseif Fatigue >= 0.2 and Fatigue < 0.6 then
-            player:getStats():setFatigue(Fatigue - (0.1 * Multiplier));
+            player:getStats():set(CharacterStat.FATIGUE,Fatigue - (0.1 * Multiplier));
         elseif Fatigue < 0.2 then
-            player:getStats():setFatigue(Fatigue - (0.05 * Multiplier));
+            player:getStats():set(CharacterStat.FATIGUE,Fatigue - (0.05 * Multiplier));
         end
         playerdata.FatigueWhenSleeping = Fatigue;
     end
@@ -4131,7 +4131,7 @@ local function RestfulSleeperWakeUp(player, playerdata)
         playerdata.FatigueWhenSleeping = Fatigue;
     elseif player:hasTrait(ToadTraitsRegistries.restfulsleeper) and playerdata.HasSlept == true then
         if Fatigue > playerdata.FatigueWhenSleeping then
-            player:getStats():setFatigue(playerdata.FatigueWhenSleeping);
+            player:getStats():set(CharacterStat.FATIGUE,playerdata.FatigueWhenSleeping);
         end
         playerdata.HasSlept = false;
         playerdata.FatigueWhenSleeping = 0;
