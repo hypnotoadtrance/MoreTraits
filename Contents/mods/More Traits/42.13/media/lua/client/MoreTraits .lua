@@ -4514,7 +4514,7 @@ function MTAlcoholismMoodle(_player, _playerdata)
                 MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.003);
                 playerdata.iHoursSinceDrink = 0;
             elseif drunkness > 0 then
-                stats:setFatigue(stats:getFatigue() - 0.001);
+                stats:set(CharacterStat.FATIGUE, stats:get(CharacterStat.FATIGUE) - 0.001);
                 MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.002);
                 MF.getMoodle("MTAlcoholism"):setChevronCount(1);
                 MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
