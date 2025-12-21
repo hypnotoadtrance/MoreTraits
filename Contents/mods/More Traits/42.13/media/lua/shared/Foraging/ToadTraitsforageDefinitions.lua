@@ -1,3 +1,4 @@
+--[[
 require "Foraging/forageDefinitions";
 MoreTraitsSkills = {
 	incomprehensive = {
@@ -131,3 +132,4 @@ MoreTraitsSkills = {
 for skillName, skillDef in pairs(MoreTraitsSkills) do
 	table.insert(forageSystem.forageSkillDefinitions, skillDef);
 end
+--]]
