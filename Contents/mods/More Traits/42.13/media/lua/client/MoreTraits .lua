@@ -3835,7 +3835,7 @@ function EveryHours()
     SecondWindRecharge(player, playerdata);
     indefatigablecounter(player, playerdata);
     RestfulSleeper(player, playerdata);
-    ToadTraitDepressive(player, playdata);
+    ToadTraitDepressive(player, playerdata);
 
     if playerdata.UnwaveringInjurySpeedChanged == false and player:hasTrait(ToadTraitsRegistries.unwavering) then
         playerdata.UnwaveringInjurySpeedChanged = true;
