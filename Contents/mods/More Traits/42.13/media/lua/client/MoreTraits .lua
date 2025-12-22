@@ -3643,9 +3643,7 @@ local function MTOnEquip(_player)
         end
     end
 
-end
-
-function MTAlcoholismMoodle(_player, _playerdata)
+function MTAlcoholismMoodle(player, playerdata)
     --Experimental MoodleFramework Support
     if not player:hasTrait(ToadTraitsRegistries.drinker) then return end
     
