@@ -3865,7 +3865,6 @@ function OnCreatePlayer(_, player)
     --reset any worn clothing to default state.
     local playerdata = player:getModData();
     local wornItems = player:getWornItems();
-    local bodydamage = player:getBodyDamage();
     for i = wornItems:size() - 1, 0, -1 do
         local item = wornItems:getItemByIndex(i);
         if item:IsClothing() then
