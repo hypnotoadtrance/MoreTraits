@@ -2091,9 +2091,7 @@ function vehicleCheck(player)
     end
 end
 
-local function SuperImmuneRecoveryProcess()
-    local player = getPlayer();
-    local playerdata = player:getModData();
+local function SuperImmuneRecoveryProcess(player, playerdata)
     local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
     local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
     local MinutesPerDay = 1440;
