@@ -650,12 +650,10 @@ function ToadTraitButter(player)
 
         if player:hasTrait(CharacterTrait.ALL_THUMBS) then basechance = basechance + 1; end
         if player:hasTrait(CharacterTrait.DEXTROUS) then basechance = basechance - 1; end
-        
-        if player:hasTrait(ToadTraitsRegistries.PackMule) then basechance = basechance - 1; end
-        if player:hasTrait(ToadTraitsRegistries.PackMouse) then basechance = basechance + 1; end
-
-        if player:hasTrait(ToadTraitsRegistries.Lucky) then basechance = basechance - 1 * luckmod; end
-        if player:hasTrait(ToadTraitsRegistries.Unlucky) then basechance = basechance + 1 * luckmod; end
+        if player:hasTrait(ToadTraitsRegistries.packmule) then basechance = basechance - 1; end
+        if player:hasTrait(ToadTraitsRegistries.packmouse) then basechance = basechance + 1; end
+        if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance - 1 * luckimpact; end
+        if player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance + 1 * luckimpact; end
 
         local weight = player:getInventoryWeight();
         local chancemod =  math.floor(weight / 5);
