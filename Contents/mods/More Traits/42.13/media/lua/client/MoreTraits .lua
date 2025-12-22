@@ -774,7 +774,6 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
                                     else inventory:addItemOnServer(addedItem) end
                                 end
 
-                                -- Visual feedback
                                 if MT_Config:getOption("ScroungerAnnounce"):getValue() then
                                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen())
                                 end
