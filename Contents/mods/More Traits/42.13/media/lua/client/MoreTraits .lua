@@ -2359,7 +2359,6 @@ function Gourmand(_iSInventoryPage, _state, player)
                     local item = items:get(l)
                     if item and item:getCategory() == "Food" then
                         if item:isRotten() or not item:isFresh() then
-                            basechance = 10000
                             if ZombRand(100) < basechance then
                                 table.insert(itemsToReplace, item)
                             end
@@ -2369,13 +2368,14 @@ function Gourmand(_iSInventoryPage, _state, player)
 
                 for _, oldItem in ipairs(itemsToReplace) do
                     local itemType = oldItem:getFullType()
-                    
                     container:Remove(oldItem)
-                    sendRemoveItemFromContainer(container, oldItem)
+                    if isClient() then sendRemoveItemFromContainer(container, oldItem)
+                    else container:removeItemOnServer(oldItem); end
 
                     local newItem = instanceItem(itemType)
                     container:AddItem(newItem)
-                    sendAddItemToContainer(container, newItem)
+                    if isClient() then sendAddItemToContainer(container, newItem)
+                    else container:addItemOnServer(newItem) end
 
                     if MT_Config:getOption("GourmandAnnounce"):getValue() then
                         local text = getText("UI_trait_gourmand") .. ": " .. newItem:getName()
