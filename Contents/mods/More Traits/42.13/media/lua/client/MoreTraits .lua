@@ -1592,6 +1592,7 @@ function martial(actor, target, weapon, damage)
     end
 end
 
+--- Traits for ProBlade, ProBlunt and ProSpear --- 
 function promelee(actor, target, weapon, damage)
     local player = getPlayer();
     if not player or actor ~= player then return end
@@ -1603,49 +1604,26 @@ function promelee(actor, target, weapon, damage)
     local weapondata = weapon:getModData();
     if not weapondata then return end
 
-    local hasTrait = false
     local critchance = 5
-
-    if hasBladeTrait then
-        local function isMatchingWeapon(weapon)
-            return weapon:isOfWeaponCategory(WeaponCategory.AXE) 
-                or weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLADE) 
-                or weapon:isOfWeaponCategory(WeaponCategory.LONG_BLADE)
-        end
-        if not isMatchingWeapon(weapon) then return end
-
+    local matched = false
+    if hasBladeTrait and (weapon:isOfWeaponCategory(WeaponCategory.AXE) or weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLADE) or weapon:isOfWeaponCategory(WeaponCategory.LONG_BLADE)) then
         local axe = player:getPerkLevel(Perks.Axe);
         local blade = player:getPerkLevel(Perks.LongBlade);
         local smallBlade = player:getPerkLevel(Perks.SmallBlade);
         critchance = critchance + axe + blade + smallBlade
-        hasTrait = true
-    end    
-    
-    if hasBluntTrait then
-        local function isMatchingWeapon(weapon)
-            return weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLUNT) 
-                or weapon:isOfWeaponCategory(WeaponCategory.BLUNT)
-        end
-        if not isMatchingWeapon(weapon) then return end
-
+        matched = true
+    elseif hasBluntTrait and (weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLUNT) or weapon:isOfWeaponCategory(WeaponCategory.BLUNT)) then
         local blunt = player:getPerkLevel(Perks.Blunt);
         local smallBlunt = player:getPerkLevel(Perks.SmallBlunt);
         critchance = critchance + blunt + smallBlunt
-        hasTrait = true
-    end
-
-    if hasSpearTrait then
-        local function isMatchingWeapon(weapon)
-            return weapon:isOfWeaponCategory(WeaponCategory.SPEAR)
-        end
-        if not isMatchingWeapon(weapon) then return end
-
+        matched = true
+    elseif hasSpearTrait and (weapon:isOfWeaponCategory(WeaponCategory.SPEAR)) then
         local spear = player:getPerkLevel(Perks.Spear);
         critchance = critchance + spear
-        hasTrait = true
+        matched = true
     end
 
-    if not hasTrait then return end
+    if not matched then return end
 
     if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckimpact end
     if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckimpact end
