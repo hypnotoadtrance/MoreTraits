@@ -2764,11 +2764,10 @@ function UpdateWorkerSpeed(player)
     if isQuick and SandboxVars.MoreTraits.QuickWorkerScaler then modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01)
     elseif isSlow and SandboxVars.MoreTraits.SlowWorkerScaler then modifier = modifier end
 
-    local luckImpact = (luckimpact or 1.0)
     local traitModiifer = 0
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then traitModiifer = 0.25 * luckImpact
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then traitModiifer = -0.25 * luckImpact end
+    if player:hasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then traitModiifer = 0.25 * luckimpact
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then traitModiifer = -0.25 * luckimpact end
 
     if player:hasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then traitModiifer = traitModiifer + 0.25
     elseif player:hasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then traitModiifer = traitModiifer - 0.25 end
