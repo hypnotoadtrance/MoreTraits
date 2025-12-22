@@ -708,13 +708,13 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
     local itemBaseChance = SandboxVars.MoreTraits.ScroungerItemChance or 10
 
     if player:hasTrait(ToadTraitsRegistries.lucky) then
-        baseChance = baseChance + (5 * luckImpact)
-        modifier = modifier + (0.1 * luckImpact)
-        itemBaseChance = itemBaseChance + (5 * luckImpact)
+        baseChance = baseChance + (5 * luckimpact)
+        modifier = modifier + (0.1 * luckimpact)
+        itemBaseChance = itemBaseChance + (5 * luckimpact)
     elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
-        baseChance = baseChance - (5 * luckImpact)
-        modifier = modifier - (0.1 * luckImpact)
-        itemBaseChance = itemBaseChance - (5 * luckImpact)
+        baseChance = baseChance - (5 * luckimpact)
+        modifier = modifier - (0.1 * luckimpact)
+        itemBaseChance = itemBaseChance - (5 * luckimpact)
     end
 
     for _, v in ipairs(_iSInventoryPage.backpacks) do
@@ -730,12 +730,11 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
                 modData.bScroungerorIncomprehensiveRolled = true
                 containerObj:transmitModData()
 
-                if playerData.ContainerTraitIllegal then
-                    playerData.ContainerTraitIllegal = false
+                if playerdata.ContainerTraitIllegal then
+                    playerdata.ContainerTraitIllegal = false
                     return 
                 end
 
-                -- Roll for Scrounger Proc
                 if ZombRand(100) <= baseChance then
                     local items = inventory:getItems()
                     if not items or items:isEmpty() then return end
@@ -780,12 +779,12 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
 
                                 -- Visual feedback
                                 if MT_Config:getOption("ScroungerAnnounce"):getValue() then
-                                    HaloTextHelper.addTextWithArrow(_player, getText("UI_trait_scrounger") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen())
+                                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen())
                                 end
 
                                 if MT_Config:getOption("ScroungerHighlight"):getValue() then
-                                    playerData.scroungerHighlightsTbl = playerData.scroungerHighlightsTbl or {}
-                                    playerData.scroungerHighlightsTbl[containerObj] = 0
+                                    playerdata.scroungerHighlightsTbl = playerdata.scroungerHighlightsTbl or {}
+                                    playerdata.scroungerHighlightsTbl[containerObj] = 0
                                     containerObj:setHighlighted(true, false)
                                     containerObj:setHighlightColor(0.5, 1, 0.4, 1)
                                 end
@@ -812,31 +811,6 @@ function UnHighlightScrounger(player, playerdata)
             highlights[containerObj] = nil
         else
             highlights[containerObj] = timer + 1
-        end
-    end
-end
-
-function UnHighlightScrounger(_player, _playerdata)
-    if MT_Config:getOption("ScroungerHighlight"):getValue() == true then
-        local maxTime = MT_Config:getOption("ScroungerHighlightTime"):getValue() * 10;
-        local player = _player;
-        local playerData = _playerdata;
-        if not playerData.scroungerHighlightsTbl then
-            playerData.scroungerHighlightsTbl = {}
-        end
-        local scroungerHighlightsTbl = playerData.scroungerHighlightsTbl;
-        if scroungerHighlightsTbl ~= {} then
-            if player:hasTrait(ToadTraitsRegistries.scrounger) then
-                for containerObj, timer in pairs(scroungerHighlightsTbl) do
-                    if timer >= maxTime then
-                        containerObj:setHighlighted(false);
-                        -- print("container removed from table!");
-                        scroungerHighlightsTbl[containerObj] = nil;
-                    else
-                        scroungerHighlightsTbl[containerObj] = timer + 1;
-                    end
-                end
-            end
         end
     end
 end
