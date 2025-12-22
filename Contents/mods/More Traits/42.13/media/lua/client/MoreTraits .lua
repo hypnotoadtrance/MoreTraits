@@ -773,7 +773,8 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
                             if rolled and n > 0 then
                                 for j = 1, n do
                                     local addedItem = inventory:AddItem(fullType)
-                                    inventory:addItemOnServer(addedItem)
+                                    if isClient() then sendAddItemToContainer(inventory, addedItem)
+                                    else inventory:addItemOnServer(addedItem) end
                                 end
 
                                 -- Visual feedback
@@ -1010,11 +1011,17 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, player, playerdata)
                     for i = 1, iterations do
                         if ZombRand(100) <= basechance then
                             local x = ZombRand(#items) + 1;
-                            local item = container:AddItem(items[x]);
-                            container:addItemOnServer(item);
+                            local itemType = items[x];
+                            local item = nil;
+
+                            if itemType then
+                                item = container:AddItem(itemType);
+                                if isClient() then sendAddItemToContainer(container, item);
+                                else container:addItemOnServer(item); end
+                            end
 
                             -- Visual feedback
-                            if MT_Config:getOption("VagabondAnnounce"):getValue() then
+                            if item and MT_Config:getOption("VagabondAnnounce"):getValue() then
                                 HaloTextHelper.addTextWithArrow(
                                     player, getText("UI_trait_vagabond") .. " : " .. item:getName(), 
                                     true, HaloTextHelper.getColorGreen()
