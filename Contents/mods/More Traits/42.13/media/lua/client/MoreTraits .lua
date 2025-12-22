@@ -1,4 +1,4 @@
-require('NPCs/MainCreationMethods');
+--require('NPCs/MainCreationMethods');
 require("Items/Distributions");
 require("Items/ProceduralDistributions");
 
