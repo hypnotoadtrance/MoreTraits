@@ -3839,12 +3839,13 @@ function EveryHours()
 
     if player:hasTrait(ToadTraitsRegistries.unwavering) and not playerdata.UnwaveringInjurySpeedChanged then
         playerdata.UnwaveringInjurySpeedChanged = true;
-        for n = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-            local i = player:getBodyDamage():getBodyParts():get(n);
-            i:setScratchSpeedModifier(i:getScratchSpeedModifier() + 30);
-            i:setCutSpeedModifier(i:getCutSpeedModifier() + 30);
-            i:setDeepWoundSpeedModifier(i:getDeepWoundSpeedModifier() + 60);
-            i:setBurnSpeedModifier(i:getBurnSpeedModifier() + 60);
+        local bodyParts = player:getBodyDamage():getBodyParts()
+        for n = 0, bodyParts:size() - 1 do
+            local part = bodyParts:get(n);
+            part:setScratchSpeedModifier(part:getScratchSpeedModifier() + 30);
+            part:setCutSpeedModifier(part:getCutSpeedModifier() + 30);
+            part:setDeepWoundSpeedModifier(part:getDeepWoundSpeedModifier() + 60);
+            part:setBurnSpeedModifier(part:getBurnSpeedModifier() + 60);
         end
     end
     if player:hasTrait(ToadTraitsRegistries.ingenuitive) and playerdata.IngenuitiveActivated == false then
