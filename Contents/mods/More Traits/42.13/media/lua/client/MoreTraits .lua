@@ -2237,8 +2237,7 @@ function SuperImmune(player, playerdata)
     end
 end
 
-local function SuperImmuneFakeInfectionHealthLoss(player)
-    local playerdata = player:getModData();
+local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
     local MaxHealth = 10;
     local Health = player:getBodyDamage():getOverallBodyHealth();
     local Stress = player:getStats():get(CharacterStat.STRESS);
