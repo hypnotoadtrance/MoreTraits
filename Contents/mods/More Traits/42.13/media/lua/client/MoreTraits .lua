@@ -3815,7 +3815,7 @@ function EveryOneMinute()
     AlbinoTimer(player, playerdata);
     TerminatorGun(player);
     BurnWardPatient(player, playerdata)
-    SuperImmuneRecoveryProcess();
+    SuperImmuneRecoveryProcess(player, playerdata);
 
     if playerdata.QuickRestFinished == true then
         HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), "", HaloTextHelper.getColorGreen());
