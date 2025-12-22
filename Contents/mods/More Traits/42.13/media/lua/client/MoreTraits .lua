@@ -2333,52 +2333,54 @@ function graveRobber(_zombie)
     end
 end
 
-function Gourmand(_iSInventoryPage, _state, _player)
-    local player = _player;
-    local containerObj;
-    local container;
-    if player:hasTrait(ToadTraitsRegistries.gourmand) then
-        local basechance = 33;
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            basechance = basechance + 10 * (luckimpact or 1.0);
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            basechance = basechance - 10 * (luckimpact or 1.0);
-        end
-        for i, v in ipairs(_iSInventoryPage.backpacks) do
-            if v.inventory:getParent() then
-                containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bGourmandRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bGourmandRolled = true;
-                    containerObj:transmitModData();
-                    container = containerObj:getContainer();
-                    for l = 0, container:getItems():size() - 1 do
-                        local item = container:getItems():get(l);
-                        if item ~= nil then
-                            if item:getCategory() == "Food" then
-                                if item:isRotten() == true then
-                                    if ZombRand(100) <= basechance then
-                                        local newitem = container:AddItem(item:getFullType());
-                                        container:addItemOnServer(newitem)
-                                        container:Remove(item);
-                                        container:removeItemOnServer(item);
-                                        if MT_Config:getOption("GourmandAnnounce"):getValue() == true then
-                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
-                                        end
-                                    end
-                                elseif item:isFresh() == false then
-                                    if ZombRand(100) <= basechance then
-                                        local newitem = container:AddItem(item:getFullType());
-                                        container:addItemOnServer(newitem);
-                                        container:Remove(item);
-                                        container:removeItemOnServer(item);
-                                        if MT_Config:getOption("GourmandAnnounce"):getValue() == true then
-                                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand") .. ": " .. newitem:getName(), true, HaloTextHelper.getColorGreen());
-                                        end
-                                    end
-                                end
+function Gourmand(_iSInventoryPage, _state, player)
+    if not player:hasTrait(ToadTraitsRegistries.gourmand) then return end
+
+    local basechance = 33
+    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (10 * luckimpact)
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (10 * luckimpact)
+    end
+
+    for _, v in ipairs(_iSInventoryPage.backpacks) do
+        local inventory = v.inventory
+        local containerObj = inventory:getParent()
+
+        if containerObj and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") then
+            local modData = containerObj:getModData()
+            
+            if not modData.bGourmandRolled and containerObj:getContainer() then
+                modData.bGourmandRolled = true
+                containerObj:transmitModData()
+
+                local container = containerObj:getContainer()
+                local items = container:getItems()
+                local itemsToReplace = {}
+
+                for l = 0, items:size() - 1 do
+                    local item = items:get(l)
+                    if item and item:getCategory() == "Food" then
+                        if item:isRotten() or not item:isFresh() then
+                            basechance = 10000
+                            if ZombRand(100) < basechance then
+                                table.insert(itemsToReplace, item)
                             end
                         end
+                    end
+                end
+
+                for _, oldItem in ipairs(itemsToReplace) do
+                    local itemType = oldItem:getFullType()
+                    
+                    container:Remove(oldItem)
+                    sendRemoveItemFromContainer(container, oldItem)
+
+                    local newItem = instanceItem(itemType)
+                    container:AddItem(newItem)
+                    sendAddItemToContainer(container, newItem)
+
+                    if MT_Config:getOption("GourmandAnnounce"):getValue() then
+                        local text = getText("UI_trait_gourmand") .. ": " .. newItem:getName()
+                        HaloTextHelper.addTextWithArrow(player, text, true, HaloTextHelper.getColorGreen())
                     end
                 end
             end
