@@ -636,6 +636,10 @@ function MTPlayerHit(player, _, __)
             end
         end
     end
+
+    if player:hasTrait(ToadTraitsRegistries.glassbody) then
+        GlassBody(player, playerData)
+    end
 end
 
 function ToadTraitButter(player)
@@ -3112,86 +3116,69 @@ function LeadFoot(player)
     end
 end
 
-function GlassBody(_player, _playerdata)
-    local player = _player;
-    local playerdata = _playerdata;
-    local bodydamage = player:getBodyDamage();
+function GlassBody(player, playerData)
+    local bodyDamage = player:getBodyDamage();
+    local currenthp = bodyDamage:getOverallBodyHealth();
+    local multiplier = getGameTime():getMultiplier();
+    local playerData = player:getModData();
+
+    if playerData.glassBodyLastHP == nil then
+        playerData.glassBodyLastHP = currenthp;
+        playerData.glassBodyInitialized = true;
+        print("Last HP: " .. playerData.glassBodyLastHP)
+        return;
+    end
+
+    if playerData.glassBodyInitialized == true then
+        playerData.glassBodyInitialized = false;
+        playerData.glassBodyLastHP = currenthp; -- Update to current HP
+        print("Skipping first damage check after init")
+        return;
+    end
+
+    if player:isAsleep() or multiplier > 4.0 then
+        playerData.glassBodyLastHP = currenthp;
+        return;
+    end
+
+    local lasthp = playerData.glassBodyLastHP;
     
-    if player:hasTrait(ToadTraitsRegistries.glassbody) then
-        local currenthp = bodydamage:getOverallBodyHealth();
-        local isCurrentlyAsleep = player:isAsleep();
-        
-        -- Gestion de l'état de sommeil
-        if isCurrentlyAsleep then
-            -- Si le joueur vient de s'endormir, sauvegarder sa HP actuelle
-            if not playerdata.isSleeping then
-                playerdata.fLastHP = currenthp;
-                playerdata.isSleeping = true;
-            end
-            -- Ne pas blesser le joueur pendant qu'il dort
+    if currenthp < lasthp then
+        local difference = lasthp - currenthp;
+        if difference > 50 then
+            playerData.glassBodyLastHP = currenthp;
             return;
         end
+
+        local chance = 33;
+        local woundstrength = 10;
+        local luckmod = (luckimpact or 1);
         
-        -- Le joueur est réveillé
-        if playerdata.isSleeping then
-            -- Transition sommeil -> éveil
-            playerdata.isSleeping = false;
-            -- Réinitialiser la HP de référence au réveil pour éviter les faux positifs
-            playerdata.fLastHP = currenthp;
-            return;
+        if player:hasTrait(ToadTraitsRegistries.Lucky) then
+            chance = chance - (5 * luckmod);
+            woundstrength = woundstrength - (5 * luckmod);
+        elseif player:hasTrait(ToadTraitsRegistries.Unlucky) then
+            chance = chance + (5 * luckmod);
+            woundstrength = woundstrength + (5 * luckmod);
         end
         
-        -- Vérifications de sécurité
-        local lasthp = playerdata.fLastHP or currenthp;
-        local multiplier = getGameTime():getMultiplier();
+        chance = math.max(5, math.min(95, chance));
+        woundstrength = math.max(5, math.min(25, woundstrength));
+
+        local extraDamageMultiplier = 2;
+        bodyDamage:ReduceGeneralHealth(difference * extraDamageMultiplier);
         
-        -- Ne pas traiter si la HP n'est pas valide ou si le multiplicateur est trop élevé
-        if lasthp <= 0 or currenthp <= 0 or multiplier > 4.0 then
-            playerdata.fLastHP = currenthp;
-            return;
-        end
-        
-        -- Logique principale - seulement si la HP a diminué
-        if currenthp < lasthp then
-            local chance = 33;
-            local woundstrength = 10;
-            
-            -- Modificateurs basés sur les traits
-            if player:hasTrait(ToadTraitsRegistries.lucky) then
-                chance = chance - 5 * (luckimpact or 1);
-                woundstrength = woundstrength - 5 * (luckimpact or 1);
-            elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
-                chance = chance + 5 * (luckimpact or 1);
-                woundstrength = woundstrength + 5 * (luckimpact or 1);
-            end
-            
-            -- S'assurer que les valeurs restent dans des limites raisonnables
-            chance = math.max(5, math.min(95, chance));
-            woundstrength = math.max(5, math.min(25, woundstrength));
-            
-            local difference = lasthp - currenthp;
-            
-            -- Appliquer les dégâts additionnels (Made of Glass = double dégâts)
-            -- Diviser par le nombre de parties du corps car ReduceGeneralHealth affecte chaque partie
-            local bodyPartsCount = bodydamage:getBodyParts():size();
-            local additionalDamage = (difference * 2) / bodyPartsCount;
-            
-            -- Appliquer les dégâts supplémentaires
-            bodydamage:ReduceGeneralHealth(additionalDamage);
-            
-            -- Chance de fracture si les dégâts sont importants
-            if difference > 0.33 and ZombRand(100) <= chance then
-                local randompart = ZombRand(0, 16);
-                local bodypart = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
-                if bodypart then
-                    bodypart:setFractureTime(ZombRand(20) + woundstrength);
-                end
-            -- Chance d'égratignure si les dégâts sont modérés
-            elseif difference > 0.1 and ZombRand(100) <= chance then
-                local randompart = ZombRand(0, 16);
-                local bodypart = bodydamage:getBodyPart(BodyPartType.FromIndex(randompart));
-                if bodypart then
-                    bodypart:setScratched(true, true);
+        if ZombRand(100) <= chance then
+            local partIndex = ZombRand(0, 17);
+            local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(partIndex));
+            if bodyPart then
+                if difference > 0.33 then
+                    local fracture = bodyPart:getFractureTime();
+                    if not fracture or fracture <= 0 then
+                        bodyPart:setFractureTime(ZombRand(20) + woundstrength);
+                    end
+                elseif difference > 0.1 then
+                    bodyPart:setScratched(true, true);
                 end
             end
         end
@@ -3199,6 +3186,7 @@ function GlassBody(_player, _playerdata)
         -- Mettre à jour la HP de référence
         playerdata.fLastHP = bodydamage:getOverallBodyHealth();
     end
+    playerData.glassBodyLastHP = bodyDamage:getOverallBodyHealth();
 end
 
 function BatteringRam(player, playerData)
@@ -4051,10 +4039,6 @@ function MainPlayerUpdate(player)
     UpdateWorkerSpeed(player)
     SuperImmuneFakeInfectionHealthLoss(player, playerdata);
     CheckForPlayerBuiltContainer(player, playerdata);
-    if player:getHoursSurvived() > 0 then
-        --Prevent it from occuring on new game
-        GlassBody(player, playerdata);
-    end
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
     internalTick = internalTick + 1;
