@@ -3853,16 +3853,24 @@ function EveryHours()
         MT_LearnAllRecipes(player)
         playerdata.IngenuitiveActivated = true
     end
-    for i, v in ipairs(playerdata.InjuredBodyList) do
-        local bodypart = player:getBodyDamage():getBodyParts():get(v);
-        if bodypart:HasInjury() == false then
-            table.remove(playerdata.InjuredBodyList, i, v);
+
+    local bodyParts = player:getBodyDamage():getBodyParts()
+
+    if playerdata.InjuredBodyList then
+        for i = #playerdata.InjuredBodyList, 1, -1 do
+            local partIdx = playerdata.InjuredBodyList[i]
+            if not bodyParts:get(partIdx):HasInjury() then
+                table.remove(playerdata.InjuredBodyList, i)
+            end
         end
     end
-    for i, v in ipairs(playerdata.TraitInjuredBodyList) do
-        local bodypart = player:getBodyDamage():getBodyParts():get(v);
-        if bodypart:HasInjury() == false then
-            table.remove(playerdata.TraitInjuredBodyList, i, v);
+
+    if playerdata.TraitInjuredBodyList then
+        for i = #playerdata.TraitInjuredBodyList, 1, -1 do
+            local partIdx = playerdata.TraitInjuredBodyList[i]
+            if not bodyParts:get(partIdx):HasInjury() then
+                table.remove(playerdata.TraitInjuredBodyList, i)
+            end
         end
     end
 end
