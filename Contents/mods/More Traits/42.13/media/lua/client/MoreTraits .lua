@@ -4075,7 +4075,7 @@ function MainPlayerUpdate(player)
     badteethtrait(player, playerdata);
     albino(player, playerdata);
     UpdateWorkerSpeed(player)
-    SuperImmuneFakeInfectionHealthLoss(player);
+    SuperImmuneFakeInfectionHealthLoss(player, playerdata);
     CheckForPlayerBuiltContainer(player, playerdata);
     if player:getHoursSurvived() > 0 then
         --Prevent it from occuring on new game
