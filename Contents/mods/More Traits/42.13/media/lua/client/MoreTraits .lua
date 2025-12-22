@@ -3824,7 +3824,7 @@ end
 
 function EveryHours()
     local player = getPlayer();
-    if not player then return end;
+    if not player then return end
     local playerdata = player:getModData();
     if not playerdata then return end;
 
