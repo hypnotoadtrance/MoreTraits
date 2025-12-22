@@ -212,176 +212,124 @@ local function InitPlayerData(player, playerdata)
 end
 
 function initToadTraitsItems(player)
-    if isClient() then return end -- We want this to be run directly on the server to avoid desync
     local inv = player:getInventory();
+
+    local function syncItem(container, item)
+        if not item then return end
+        if isClient() then sendAddItemToContainer(container, item)
+        else container:addItemOnServer(item) end
+    end
+
+    local function giveItem(container, itemID)
+        local item = container:AddItem(itemID)
+        syncItem(container, item)
+        return item
+    end
 
     if player:hasTrait(ToadTraitsRegistries.deprived) then
         player:clearWornItems();
         inv:removeAllItems();
         player:createKeyRing();
-        if SandboxVars.MoreTraits.ForgivingDeprived then
-            local item = inv:AddItem("Base.Belt2");
-            inv:addItemOnServer(item);
-        end
+        if SandboxVars.MoreTraits.ForgivingDeprived then giveItem(inv, "Base.Belt2") end
         return
     end
+
     if player:hasTrait(ToadTraitsRegistries.preparedfood) then
-        local holder = inv:AddItem("Base.Plasticbag");
+        local holder = giveItem(inv, "Base.Plasticbag")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.TinOpener", "Base.CannedTomato", "Base.CannedPotato", "Base.CannedCarrots", "Base.CannedBroccoli", "Base.CannedCabbage", "Base.CannedEggplant"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-            end
-            player:setSecondaryHandItem(holder);
+            local holderInv = holder:getItemContainer()
+            local items = {"Base.TinOpener", "Base.CannedTomato", "Base.CannedPotato", "Base.CannedCarrots", "Base.CannedBroccoli", "Base.CannedCabbage", "Base.CannedEggplant"}
+            for _, item in ipairs(items) do giveItem(holderInv, item) end
+            if not player:getSecondaryHandItem() then player:setSecondaryHandItem(holder) end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedammo) then
-        local holder = inv:AddItem("Base.PistolCase1");
+        local holder = giveItem(inv, "Base.PistolCase1")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.Bullets9mmBox", "Base.Bullets45Box", "Base.Bullets44Box", "Base.Bullets38Box", "Base.223Box", "Base.308Box", "Base.556Box", "Base.ShotgunShellsBox"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-            end
-            player:setSecondaryHandItem(holder);
+            local holderInv = holder:getItemContainer()
+            local items = {"Base.Bullets9mmBox", "Base.Bullets45Box", "Base.Bullets44Box", "Base.Bullets38Box", "Base.223Box", "Base.308Box", "Base.556Box", "Base.ShotgunShellsBox"}
+            for _, item in ipairs(items) do giveItem(holderInv, item) end
+            if not player:getSecondaryHandItem() then player:setSecondaryHandItem(holder) end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedweapon) then
-        local items = {"Base.BaseballBat_Can", "Base.HuntingKnife"}
-        for _, item in ipairs(items) do
-            local i = inv:AddItem(item);
-            inv:addItemOnServer(i);
-        end
+        giveItem(inv, "Base.BaseballBat_Can")
+        giveItem(inv, "Base.HuntingKnife")
     elseif player:hasTrait(ToadTraitsRegistries.preparedmedical) then
-        local holder = inv:AddItem("Base.FirstAidKit");
+        local holder = giveItem(inv, "Base.FirstAidKit")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.Bandaid", "Base.PillsAntiDep", "Base.Disinfectant", "Base.AlcoholWipes", "Base.PillsBeta", "Base.Pills", "Base.SutureNeedle", "Base.Tissue", "Base.Tweezers"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-                local amount = SandboxVars.MoreTraits.PreparedMedicalBandageAmount or 4
-                for i = 1, amount do
-                    local item = holderInv:AddItem("Base.Bandage");
-                    if item then holderInv:addItemOnServer(item) end
-                end
-            end
-            player:setSecondaryHandItem(holder);
+            local holderInv = holder:getItemContainer()
+            local items = {"Base.Bandaid", "Base.PillsAntiDep", "Base.Disinfectant", "Base.AlcoholWipes", "Base.PillsBeta", "Base.Pills", "Base.SutureNeedle", "Base.Tissue", "Base.Tweezers"}
+            for _, item in ipairs(items) do giveItem(holderInv, item) end
+            local amount = SandboxVars.MoreTraits.PreparedMedicalBandageAmount or 4
+            for i = 1, amount do giveItem(holderInv, "Base.Bandage") end
+            if not player:getSecondaryHandItem() then player:setSecondaryHandItem(holder) end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedrepair) then
-        local holder = inv:AddItem("Base.Toolbox")
+        local holder = giveItem(inv, "Base.Toolbox")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.Screwdriver", "Base.Saw", "Base.Hammer", "Base.NailsBox"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-                for i = 1, 8 do
-                    local item = holderInv:AddItem("Base.Garbagebag");
-                    if item then holderInv:addItemOnServer(item) end
-                end
-            end
-            player:setSecondaryHandItem(holder);
+            local holderInv = holder:getItemContainer()
+            local items = {"Base.Screwdriver", "Base.Saw", "Base.Hammer", "Base.NailsBox"}
+            for _, item in ipairs(items) do giveItem(holderInv, item) end
+            for i = 1, 8 do giveItem(holderInv, "Base.Garbagebag") end
+            if not player:getSecondaryHandItem() then player:setSecondaryHandItem(holder) end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedcamp) then
-        local holder = inv:AddItem("MoreTraits.Bag_SmallHikingBag");
+        local holder = giveItem(inv, "MoreTraits.Bag_SmallHikingBag")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.Matches", "Base.TentGreen_Packed", "Base.BeefJerky", "Base.Pop", "Base.FishingRod", "Base.FishingLine", "Base.FishingTackle", "Base.Battery", "Base.Torch", "Base.WaterBottleFull"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-                for i = 1, 3 do
-                    local item = holderInv:AddItem("Base.Stone2")
-                    if item then holderInv:addItemOnServer(item) end
-                end
-            end
-            if player:getClothingItem_Back() == nil then player:setClothingItem_Back(holder); end
+            local hInv = holder:getItemContainer()
+            local items = {"Base.Matches", "Base.TentGreen_Packed", "Base.BeefJerky", "Base.Pop", "Base.FishingRod", "Base.FishingLine", "Base.FishingTackle", "Base.Battery", "Base.Torch", "Base.WaterBottleFull"}
+            for _, item in ipairs(items) do giveItem(hInv, item) end
+            for i = 1, 3 do giveItem(hInv, "Base.Stone2") end
+            if player:getClothingItem_Back() == nil then player:setClothingItem_Back(holder) end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedpack) then
-        local holder = inv:AddItem("Base.Bag_NormalHikingBag")
-        inv:addItemOnServer(holder);
-        if holder then
-            if player:getClothingItem_Back() == nil then player:setClothingItem_Back(holder); end
-        end
+        local holder = giveItem(inv, "Base.Bag_NormalHikingBag")
+        if holder and player:getClothingItem_Back() == nil then player:setClothingItem_Back(holder) end
     elseif player:hasTrait(ToadTraitsRegistries.preparedcar) then
-        local holder = inv:AddItem("Base.Bag_JanitorToolbox");
+        local holder = giveItem(inv, "Base.Bag_JanitorToolbox")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.CarBattery", "Base.Screwdriver", "Base.Wrench", "Base.LugWrench", "Base.TirePump", "Base.Jack"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-            end
-            player:setPrimaryHandItem(holder);
+            local hInv = holder:getItemContainer()
+            local items = {"Base.CarBattery", "Base.Screwdriver", "Base.Wrench", "Base.LugWrench", "Base.TirePump", "Base.Jack"}
+            for _, item in ipairs(items) do giveItem(hInv, item) end
+            if not player:getPrimaryHandItem() then player:setPrimaryHandItem(holder) end
         end
         if SandboxVars.MoreTraits.PreparedCarGasToggle then
-            local holder2 = inv:AddItem("Base.PetrolCan");
-            inv:addItemOnServer(holder2);
-            if holder2 then player:setSecondaryHandItem(holder2); end
+            local gas = giveItem(inv, "Base.PetrolCan")
+            if not player:getSecondaryHandItem() then player:setSecondaryHandItem(gas) end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedcoordination) then
-        local holder = inv:AddItem("Base.Bag_FannyPackFront");
-        local watch = inv:AddItem("Base.WristWatch_Right_DigitalBlack");
+        local holder = giveItem(inv, "Base.Bag_FannyPackFront")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.MuldraughMap", "Base.RosewoodMap", "Base.RiversideMap", "Base.WestpointMap", "Base.MarchRidgeMap", "Base.Pencil"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-            end
+            local hInv = holder:getItemContainer()
+            local items = {"Base.MuldraughMap", "Base.RosewoodMap", "Base.RiversideMap", "Base.WestpointMap", "Base.MarchRidgeMap", "Base.Pencil"}
+            for _, item in ipairs(items) do giveItem(hInv, item) end
             if not player:getWornItem(holder:getBodyLocation()) then
                 player:setWornItem(holder:getBodyLocation(), holder)
             end
         end
+
+        local watch = giveItem(inv, "Base.WristWatch_Right_DigitalBlack")
         if watch and not player:getWornItem(watch:getBodyLocation()) then
             player:setWornItem(watch:getBodyLocation(), watch)
         end
     end
-    if player:hasTrait(ToadTraitsRegistries.drinker) then
-        if SandboxVars.MoreTraits.AlcoholicFreeDrink then
-            local item = inv:AddItem("Base.WhiskeyFull");
-            inv:addItemOnServer(item);
-        end
+
+    if player:hasTrait(ToadTraitsRegistries.drinker) and SandboxVars.MoreTraits.AlcoholicFreeDrink then
+        giveItem(inv, "Base.WhiskeyFull")
     end
+
     if player:hasTrait(CharacterTrait.TAILOR) then
-        local holder = inv:AddItem("Base.SewingKit");
+        local holder = giveItem(inv, "Base.SewingKit")
         if holder then
-            local holderInv = holder:getItemContainer();
-            if holderInv then
-                local items = {"Base.Scissors", "Base.Needle"}
-                for _, item in ipairs(items) do
-                    local i = holderInv:AddItem(item);
-                    holderInv:addItemOnServer(i);
-                end
-                for i = 1, 4 do
-                    local item = holderInv:AddItem("Base.Thread")
-                    if item then holderInv:addItemOnServer(item) end
-                end
-            end
+            local hInv = holder:getItemContainer()
+            giveItem(hInv, "Base.Scissors")
+            giveItem(hInv, "Base.Needle")
+            for i = 1, 4 do giveItem(hInv, "Base.Thread") end
         end
     end
+
     if player:hasTrait(CharacterTrait.SMOKER) and SandboxVars.MoreTraits.SmokerStart then
-        local items = {"Base.Cigarettes", "Base.Lighter"}
-        for _, item in ipairs(items) do
-            local i = inv:AddItem(item);
-            inv:addItemOnServer(i);
-        end
+        giveItem(inv, "Base.Cigarettes")
+        giveItem(inv, "Base.Lighter")
     end
 end
 
