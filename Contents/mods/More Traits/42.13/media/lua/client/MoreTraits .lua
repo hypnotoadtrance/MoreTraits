@@ -2591,8 +2591,8 @@ function FearfulUpdate(player, playerdata)
         local chance = 3 + (panic / 10);
 
         if player:hasTrait(CharacterTrait.COWARDLY) then chance = chance + 1 end
-        if player:hasTrait(ToadTraitsRegistries.lucky) then chance = chance - (luckimpact or 1.0) end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then chance = chance + (luckimpact or 1.0) end
+        if player:hasTrait(ToadTraitsRegistries.lucky) then chance = chance - luckimpact end
+        if player:hasTrait(ToadTraitsRegistries.unlucky) then chance = chance + luckimpact end
 
         if ZombRand(0, 1000) <= chance then
             local text = ""
