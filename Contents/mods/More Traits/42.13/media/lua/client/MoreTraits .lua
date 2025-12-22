@@ -2922,7 +2922,7 @@ function LeadFoot(player)
     if not shoes then return end
 
     local itemdata = shoes:getModData();
-    if not itemData then return end;
+    if not itemData then return end
 
     if itemdata.origStomp == nil then
         itemdata.origStomp = shoes:getStompPower();
