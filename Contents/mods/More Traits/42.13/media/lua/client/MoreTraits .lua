@@ -199,10 +199,7 @@ function ZombPatty_OnCreate(items, result, player)
     player:getModData().iTimesCannibal = times + 1;
 end
 
-local function addXPNoMultiplier(_player, _perk, _amount)
-    local perk = _perk;
-    local amount = _amount;
-    local player = _player;
+local function addXPNoMultiplier(player, perk, amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
@@ -3866,7 +3863,7 @@ end
 function OnCreatePlayer(_, player)
     local playerdata = player:getModData();
     if not playerdata then return end;
-    
+
     --reset any worn clothing to default state.
     local wornItems = player:getWornItems();
     for i = wornItems:size() - 1, 0, -1 do
