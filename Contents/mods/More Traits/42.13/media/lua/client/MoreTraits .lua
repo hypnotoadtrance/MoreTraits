@@ -814,77 +814,73 @@ function UnHighlightScrounger(player, playerdata)
     end
 end
 
-function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
-    local player = _player;
-    local containerObj;
-    local container;
-    if player:hasTrait(ToadTraitsRegistries.incomprehensive) then
-        local basechance = 10;
-        if SandboxVars.MoreTraits.IncomprehensiveChance then
-            basechance = SandboxVars.MoreTraits.IncomprehensiveChance;
-        end
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            basechance = basechance - 5 * (luckimpact or 1.0);
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            basechance = basechance + 5 * (luckimpact or 1.0);
-        end
-        for i, v in ipairs(_iSInventoryPage.backpacks) do
-            local tempcontainer = {};
-            if v.inventory:getParent() then
-                containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
-                    containerObj:transmitModData();
-                    container = containerObj:getContainer();
-                    if ZombRand(100) <= basechance then
-                        for i = 0, container:getItems():size() - 1 do
-                            local item = container:getItems():get(i);
-                            if item ~= nil then
-                                if tableContains(tempcontainer, item) == false then
-                                    local count = container:getNumberOfItem(item:getFullType());
-                                    --Add a Special Case for Cigarettes since they inherently create 20 when added.
-                                    if item:getFullType() == "Base.Cigarettes" then
-                                        count = math.floor(count / 20);
-                                    end
-                                    if count == 1 then
-                                        local bchance = 5;
-                                        if player:hasTrait(ToadTraitsRegistries.lucky) then
-                                            bchance = bchance - 5 * (luckimpact or 1.0);
-                                        end
-                                        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-                                            bchance = bchance + 5 * (luckimpact or 1.0);
-                                        end
-                                        if item:IsFood() then
-                                            bchance = bchance + 10;
-                                        end
-                                        if item:IsDrainable() then
-                                            bchance = bchance + 10;
-                                        end
-                                        if item:IsWeapon() then
-                                            bchance = bchance + 5;
-                                        end
-                                        if ZombRand(100) <= bchance then
-                                            table.insert(tempcontainer, item);
-                                        end
-                                    elseif count > 1 and count < 5 then
-                                        table.insert(tempcontainer, item);
-                                    elseif count >= 5 then
-                                        table.insert(tempcontainer, item);
-                                        table.insert(tempcontainer, item);
+function ToadTraitIncomprehensive(_iSInventoryPage, _state, player)
+    if not player:hasTrait(ToadTraitsRegistries.incomprehensive) then return end
+    
+    local baseChance = SandboxVars.MoreTraits.IncomprehensiveChance or 10
+    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance - (5 * luckimpact)
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance + (5 * luckimpact)
+    end
+
+    for _, v in ipairs(_iSInventoryPage.backpacks) do
+        local inventory = v.inventory
+        local containerObj = inventory:getParent()
+        
+        if containerObj and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") then
+            local modData = containerObj:getModData()
+            
+            if not modData.bScroungerorIncomprehensiveRolled and containerObj:getContainer() then
+                modData.bScroungerorIncomprehensiveRolled = true
+                containerObj:transmitModData()
+
+                if ZombRand(100) <= baseChance then
+                    local container = containerObj:getContainer()
+                    local items = container:getItems()
+                    local itemsToRemove = {}
+                    local processedTypes = {}
+
+                    for i = 0, items:size() - 1 do
+                        local item = items:get(i)
+                        local fullType = item:getFullType()
+
+                        if item and not processedTypes[fullType] then
+                            processedTypes[fullType] = true
+                            
+                            local count = container:getNumberOfItem(fullType)
+                            if fullType == "Base.Cigarettes" then count = math.floor(count / 20) end
+
+                            local shouldRemove = false
+                            if count == 1 then
+                                local bChance = 5
+                                if player:hasTrait(ToadTraitsRegistries.lucky) then bChance = bChance - (5 * luckimpact)
+                                elseif player:hasTrait(ToadTraitsRegistries.unlucky) then bChance = bChance + (5 * luckimpact) end
+                                
+                                if item:IsFood() or item:IsDrainable() then bChance = bChance + 10 end
+                                if item:IsWeapon() then bChance = bChance + 5 end
+                                if ZombRand(100) <= bChance then shouldRemove = true end
+                            elseif count > 1 then
+                                shouldRemove = true
+                            end
+
+                            if shouldRemove then
+                                table.insert(itemsToRemove, item)
+                                if count >= 5 then
+                                    local secondItem = container:FindAndReturn(fullType)
+                                    if secondItem and secondItem ~= item then
+                                        table.insert(itemsToRemove, secondItem)
                                     end
                                 end
                             end
                         end
                     end
-                    if tempcontainer ~= {} then
-                        for _, i in pairs(tempcontainer) do
-                            container:Remove(i);
-                            container:removeItemOnServer(i);
-                            if MT_Config:getOption("ScroungerAnnounce"):getValue() == true then
-                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. i:getName(), false, HaloTextHelper.getColorRed());
-                            end
+
+                    for _, item in ipairs(itemsToRemove) do
+                        if MT_Config:getOption("ScroungerAnnounce"):getValue() then
+                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. item:getName(), false, HaloTextHelper.getColorRed())
                         end
+                        container:Remove(item)
+                        if isClient() then sendRemoveItemFromContainer(container, item)
+                        else container:removeItemOnServer(item) end
                     end
                 end
             end
