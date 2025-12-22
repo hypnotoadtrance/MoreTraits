@@ -1897,10 +1897,9 @@ function amputee(player, justGotInfected)
     end
 end
 
-function actionhero(_actor, _target, _weapon, _damage)
+function actionhero(actor, target, weapon, damage)
     local player = getPlayer();
-    if not player or _actor ~= player then return; end
-    local weapon = _weapon;
+    if not player or actor ~= player then return; end
     if not weapon then return end;
     if not player:hasTrait(ToadTraitsRegistries.actionhero) then return; end
 
@@ -1909,7 +1908,7 @@ function actionhero(_actor, _target, _weapon, _damage)
     local enemies = player:getSpottedList();
     local critchance = 10;
     local multiplier = 0.1;
-    local damage = _damage * 0.5;
+    local damage = damage * 0.5;
 
     if enemies and enemies:size() > 0 then
         for i = 0, enemies:size() - 1 do
@@ -1934,11 +1933,13 @@ function actionhero(_actor, _target, _weapon, _damage)
     if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 5 * luckmod; end
     if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 5 * luckmod; end
 
-    if _target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then damage = damage * 5; end
+    if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
+        damage = damage * 5
+    end
 
     local extraDamage = (damage * multiplier) * 0.1;
-    _target:setHealth(_target:getHealth() - extraDamage);
-    if _target:getHealth() <= 0 then _target:Kill(player) end
+    target:setHealth(target:getHealth() - extraDamage);
+    if target:getHealth() <= 0 then target:Kill(player) end
 end
 
 -- function gimp()
