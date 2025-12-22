@@ -1808,11 +1808,11 @@ function albino(player, playerdata)
     local bodyDamage = player:getBodyDamage()
     local head = bodyDamage:getBodyPart(BodyPartType.Head)
     local modpain = playerdata.AlbinoTimeSpentOutside or 0
-    local stats = player:getStats()
     
     if player:isOutside() then
         local tod = getGameTime():getTimeOfDay()
         if tod > 8 and tod < 17 then
+            local stats = player:getStats()
             if stats:get(CharacterStat.PAIN) < 25 and not playerdata.bisAlbinoOutside then
                 if MT_Config:getOption("AlbinoAnnounce"):getValue() == true then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_albino"), false, HaloTextHelper.getColorRed())
