@@ -414,7 +414,7 @@ function initToadTraitsPerks(player)
     
     if SandboxVars.MoreTraits.LuckImpact then luckimpact = SandboxVars.MoreTraits.LuckImpact * 0.01 end
 
-    InitPlayerData(player)
+    InitPlayerData(player, playerdata)
     
     -- Luck Modifications
     if player:hasTrait(ToadTraitsRegistries.lucky) then
