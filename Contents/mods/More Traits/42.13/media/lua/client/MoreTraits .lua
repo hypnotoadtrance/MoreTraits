@@ -3873,7 +3873,7 @@ function OnCreatePlayer(_, player)
             itemdata.sState = nil;
         end
     end
-    InitPlayerData(player);
+    InitPlayerData(player, playerdata);
     MT_Config = PZAPI.ModOptions:getOptions("1299328280");
     print("More Traits - Mod Version On Which Player Was Created: " .. playerdata.MTModVersion)
     if getGameTime():getModData().MTModVersion == nil then
