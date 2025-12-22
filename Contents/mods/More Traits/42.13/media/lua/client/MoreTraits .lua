@@ -1804,9 +1804,8 @@ function actionhero(actor, target, weapon, damage)
         end
     end
 
-    local luckmod = (luckimpact or 1.0)
-    if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 5 * luckmod; end
-    if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 5 * luckmod; end
+    if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 5 * luckimpact; end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 5 * luckimpact; end
 
     if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
         damage = damage * 5
@@ -2246,11 +2245,10 @@ function graveRobber(_zombie)
     }
 
     local sandboxChance = SandboxVars.MoreTraits.GraveRobberChance or 1.0
-    local chance = sandboxChance * 10;    
-    local luckmod = (luckimpact or 1.0)
+    local chance = sandboxChance * 10;
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) then chance = chance + (2 * luckmod) end
-    if player:hasTrait(ToadTraitsRegistries.unlucky) then chance = chance - (2 * luckmod) end
+    if player:hasTrait(ToadTraitsRegistries.lucky) then chance = chance + (2 * luckimpact) end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then chance = chance - (2 * luckimpact) end
     if player:hasTrait(ToadTraitsRegistries.scrounger) then chance = chance + 2 end
     if player:hasTrait(ToadTraitsRegistries.incomprehensive) then chance = chance - 2 end
     
@@ -2284,8 +2282,7 @@ function Gourmand(_iSInventoryPage, _state, player)
 
     local basechance = 33
     if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (10 * luckimpact)
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (10 * luckimpact)
-    end
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (10 * luckimpact) end
 
     for _, v in ipairs(_iSInventoryPage.backpacks) do
         local inventory = v.inventory
