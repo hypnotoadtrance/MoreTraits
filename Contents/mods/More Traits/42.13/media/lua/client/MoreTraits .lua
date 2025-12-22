@@ -3354,76 +3354,63 @@ local function HungerCheck(player, playerdata)
     end
 end
 
-local function TerminatorGun(player, playerdata)
-    if player:getPrimaryHandItem() ~= nil then
-        if player:getPrimaryHandItem():getCategory() == "Weapon" then
-            if player:getPrimaryHandItem():getSubCategory() == "Firearm" then
-                local playerstats = player:getStats();
-                if player:hasTrait(ToadTraitsRegistries.terminator) then
-                    local curstress = playerstats:get(CharacterStat.STRESS);
-                    local curpanic = playerstats:get(CharacterStat.PANIC);
-                    if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-                        playerstats:set(CharacterStat.STRESS, math.max(0.01, curstress - 0.01))
-                        playerstats:set(CharacterStat.PANIC, curpanic - 10)
-                        if playerstats:get(CharacterStat.PANIC) < 0 then
-                            playerstats:set(CharacterStat.PANIC, 0);
-                        end
-                    end
-                end
-                if player:hasTrait(ToadTraitsRegistries.antigun) then
-                    if player:getCurrentState() == PlayerAimState.instance() or player:getCurrentState() == PlayerStrafeState.instance() then
-                        local curunhappiness = playerstats:get(CharacterStat.UNHAPPINESS)
-                        playerstats:set(CharacterStat.UNHAPPINESS, curunhappiness + 0.6);
-                    end
-                end
-                local item = player:getPrimaryHandItem();
-                local itemdata = item:getModData();
-                local mindamage = item:getMinDamage();
-                local maxdamage = item:getMaxDamage();
-                local aimingtime = item:getAimingTime();
-                local range = item:getMaxRange();
-                local jamchance = item:getJamGunChance();
-                if itemdata.MTstate == nil then
-                    itemdata.MTstate = "Normal";
-                    itemdata.OGrange = range;
-                    itemdata.OGaimingtime = aimingtime;
-                    itemdata.OGjamchance = jamchance;
-                    itemdata.OGmindmg = mindamage;
-                    itemdata.OGmaxdmg = maxdamage;
-                end
-                if itemdata.OGrange == nil then
-                    itemdata.OGrange = range;
-                    itemdata.OGaimingtime = aimingtime;
-                    itemdata.OGjamchance = jamchance;
-                    itemdata.OGmindmg = mindamage;
-                    itemdata.OGmaxdmg = maxdamage;
-                end
-                if player:hasTrait(ToadTraitsRegistries.terminator) and itemdata.MTstate ~= "Terminator" then
-                    item:setAimingTime(itemdata.OGaimingtime * 2);
-                    item:setMaxRange(itemdata.OGrange + 5);
-                    item:setJamGunChance(itemdata.OGjamchance / 2);
-                    item:setMinDamage(itemdata.OGmindmg * 1.25)
-                    item:setMaxDamage(itemdata.OGmaxdmg * 1.25)
-                    itemdata.MTstate = "Terminator";
-                end
-                if player:hasTrait(ToadTraitsRegistries.antigun) and itemdata.MTstate ~= "antigun" then
-                    item:setAimingTime(itemdata.OGaimingtime * 0.8);
-                    item:setMaxRange(itemdata.OGrange - 5);
-                    if item:getMaxRange() <= 5 then
-                        item:setMaxRange(5);
-                    end
-                    itemdata.MTstate = "antigun";
-                end
-                if player:hasTrait(ToadTraitsRegistries.terminator) == false and player:hasTrait(ToadTraitsRegistries.antigun) == false and itemdata.MTState ~= "Normal" then
-                    item:setAimingTime(itemdata.OGaimingtime);
-                    item:setMaxRange(itemdata.OGrange);
-                    item:setJamGunChance(itemdata.OGjamchance);
-                    item:setMinDamage(itemdata.OGmindmg)
-                    item:setMaxDamage(itemdata.OGmaxdmg)
-                    itemdata.MTstate = "Normal";
-                end
-            end
+local function TerminatorGun(player)
+    local item = player:getPrimaryHandItem()
+    if not item or item:getCategory() ~= "Weapon" or item:getSubCategory() ~= "Firearm" then return end
+
+    local itemdata = item:getModData()
+    if not itemdata then return end
+
+    local hasTerminator = player:hasTrait(ToadTraitsRegistries.terminator)
+    local hasAntigun = player:hasTrait(ToadTraitsRegistries.antigun)
+
+    if not itemdata.OGrange then
+        itemdata.OGrange = item:getMaxRange()
+        itemdata.OGaimingtime = item:getAimingTime()
+        itemdata.OGjamchance = item:getJamGunChance()
+        itemdata.OGmindmg = item:getMinDamage()
+        itemdata.OGmaxdmg = item:getMaxDamage()
+        itemdata.MTstate = "Normal"
+    end
+
+    local playerstate = player:getCurrentState()
+    local isAiming = playerstate == PlayerAimState.instance() or playerstate == PlayerStrafeState.instance()
+
+    if isAiming then
+        local playerstats = player:getStats()
+        local stress = CharacterStat.STRESS
+        local panic = CharacterStat.PANIC
+        local unhappiness = CharacterStat.UNHAPPINESS
+
+        if hasTerminator then
+            playerstats:set(stress, math.max(0, playerstats:get(stress) - 0.01))
+            playerstats:set(panic, math.max(0, playerstats:get(panic) - 10))
+        elseif hasAntigun then
+            playerstats:set(unhappiness, playerstats:get(unhappiness) + 0.6)
         end
+    end
+
+    if hasTerminator and itemdata.MTstate ~= "Terminator" then
+        item:setAimingTime(itemdata.OGaimingtime * 2)
+        item:setMaxRange(itemdata.OGrange + 5)
+        item:setJamGunChance(itemdata.OGjamchance / 2)
+        item:setMinDamage(itemdata.OGmindmg * 1.25)
+        item:setMaxDamage(itemdata.OGmaxdmg * 1.25)
+        itemdata.MTstate = "Terminator"
+
+    elseif hasAntigun and itemdata.MTstate ~= "antigun" then
+        item:setAimingTime(itemdata.OGaimingtime * 0.8)
+        item:setMaxRange(math.max(5, itemdata.OGrange - 5))
+        itemdata.MTstate = "antigun"
+
+    elseif not hasTerminator and not hasAntigun and itemdata.MTstate ~= "Normal" then
+        -- Reset to original values
+        item:setAimingTime(itemdata.OGaimingtime)
+        item:setMaxRange(itemdata.OGrange)
+        item:setJamGunChance(itemdata.OGjamchance)
+        item:setMinDamage(itemdata.OGmindmg)
+        item:setMaxDamage(itemdata.OGmaxdmg)
+        itemdata.MTstate = "Normal"
     end
 end
 
