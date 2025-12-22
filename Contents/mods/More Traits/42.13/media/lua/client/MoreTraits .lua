@@ -700,108 +700,118 @@ function ToadTraitParanoia(player, playerdata)
     end
 end
 
-function ToadTraitScrounger(_iSInventoryPage, _state, _player)
-    local player = _player;
-    local playerData = player:getModData();
-    local containerObj;
-    local container;
-    if player:hasTrait(ToadTraitsRegistries.scrounger) then
-        local basechance = 20;
-        local modifier = 1.3;
-        if SandboxVars.MoreTraits.ScroungerChance then
-            basechance = SandboxVars.MoreTraits.ScroungerChance;
-        end
-        if SandboxVars.MoreTraits.ScroungerLootModifier then
-            modifier = 1.0 + SandboxVars.MoreTraits.ScroungerLootModifier * 0.01;
-        end
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            basechance = basechance + 5 * (luckimpact or 1.0);
-            modifier = modifier + 0.1 * (luckimpact or 1.0);
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            basechance = basechance - 5 * (luckimpact or 1.0);
-            modifier = modifier - 0.1 * (luckimpact or 1.0);
-        end
-        for i, v in ipairs(_iSInventoryPage.backpacks) do
-            if v.inventory:getParent() then
-                containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bScroungerorIncomprehensiveRolled = true;
-                    containerObj:transmitModData();
-                    if playerData.ContainerTraitIllegal == true then
-                        playerData.ContainerTraitIllegal = false;
-                        return
-                    end
-                    if ZombRand(100) <= basechance then
-                        local tempcontainer = {};
-                        container = containerObj:getContainer();
-                        if container:getItems() then
-                            for i = 0, container:getItems():size() - 1 do
-                                local item = container:getItems():get(i);
-                                if item ~= nil then
-                                    if tableContains(tempcontainer, item:getFullType()) == false then
-                                        table.insert(tempcontainer, item:getFullType());
-                                        local count = container:getNumberOfItem(item:getFullType());
-                                        local n = 1;
-                                        local rolled = false;
-                                        --Add a Special Case for Cigarettes and Nails since they inherently create 20 when added.
-                                        if item:getFullType() == "Base.Cigarettes" or item:getFullType() == "Base.Nails" then
-                                            count = math.floor(count / 20);
-                                        end
-                                        local bchance = 10;
-                                        if SandboxVars.MoreTraits.ScroungerItemChance then
-                                            bchance = SandboxVars.MoreTraits.ScroungerItemChance;
-                                        end
-                                        if player:hasTrait(ToadTraitsRegistries.lucky) then
-                                            bchance = bchance + 5 * (luckimpact or 1.0);
-                                        end
-                                        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-                                            bchance = bchance - 5 * (luckimpact or 1.0);
-                                        end
-                                        if item:getCategory() == "Food" then
-                                            bchance = bchance + 10;
-                                        end
-                                        if item:IsDrainable() then
-                                            bchance = bchance + 10;
-                                        end
-                                        if item:IsWeapon() then
-                                            bchance = bchance + 5;
-                                        end
-                                        if count == 1 then
-                                            if ZombRand(100) <= bchance then
-                                                rolled = true;
-                                            end
-                                        elseif count > 1 and count < 5 then
-                                            n = math.floor(count * modifier);
-                                            rolled = true;
-                                        elseif count >= 5 then
-                                            n = math.floor((count * modifier) * 2)
-                                            rolled = true;
-                                        end
-                                        if rolled then
-                                            for iterator = 0, n - 1 do
-                                                local addedItem = container:AddItem(item:getFullType());
-                                                container:addItemOnServer(addedItem);
-                                            end
-                                            if MT_Config:getOption("ScroungerAnnounce"):getValue() == true then
-                                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
-                                            end
-                                            if MT_Config:getOption("ScroungerHighlight"):getValue() == true then
-                                                if not playerData.scroungerHighlightsTbl then
-                                                    playerData.scroungerHighlightsTbl = {}
-                                                end
-                                                playerData.scroungerHighlightsTbl[containerObj] = 0;
-                                                containerObj:setHighlighted(true, false);
-                                                containerObj:setHighlightColor(0.5, 1, 0.4, 1);
-                                            end
-                                        end
-                                    end
+function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.scrounger) then return end
+    
+    local baseChance = SandboxVars.MoreTraits.ScroungerChance or 20
+    local modifier = 1.0 + (SandboxVars.MoreTraits.ScroungerLootModifier or 30) * 0.01
+    local itemBaseChance = SandboxVars.MoreTraits.ScroungerItemChance or 10
+
+    if player:hasTrait(ToadTraitsRegistries.lucky) then
+        baseChance = baseChance + (5 * luckImpact)
+        modifier = modifier + (0.1 * luckImpact)
+        itemBaseChance = itemBaseChance + (5 * luckImpact)
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
+        baseChance = baseChance - (5 * luckImpact)
+        modifier = modifier - (0.1 * luckImpact)
+        itemBaseChance = itemBaseChance - (5 * luckImpact)
+    end
+
+    for _, v in ipairs(_iSInventoryPage.backpacks) do
+        local inventory = v.inventory
+        local containerObj = inventory:getParent()
+
+        if containerObj and inventory:getType() ~= "floor" then
+            local modData = containerObj:getModData()
+
+            -- Only roll if not already rolled, is a valid object, and not a corpse
+            if not modData.bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject")  and not instanceof(containerObj, "IsoDeadBody") then
+                
+                modData.bScroungerorIncomprehensiveRolled = true
+                containerObj:transmitModData()
+
+                if playerData.ContainerTraitIllegal then
+                    playerData.ContainerTraitIllegal = false
+                    return 
+                end
+
+                -- Roll for Scrounger Proc
+                if ZombRand(100) <= baseChance then
+                    local items = inventory:getItems()
+                    if not items or items:isEmpty() then return end
+
+                    local processedTypes = {}
+                    
+                    for i = 0, items:size() - 1 do
+                        local item = items:get(i)
+                        local fullType = item:getFullType()
+
+                        if not processedTypes[fullType] then
+                            processedTypes[fullType] = true
+                            
+                            local count = inventory:getNumberOfItem(fullType)
+                            
+                            --Add a Special Case for Cigarettes and Nails since they inherently create 20 when added.
+                            if fullType == "Base.Cigarettes" or fullType == "Base.Nails" then
+                                count = math.floor(count / 20)
+                            end
+
+                            local currentItemChance = itemBaseChance
+                            if item:getCategory() == "Food" or item:IsDrainable() then
+                                currentItemChance = currentItemChance + 10
+                            elseif item:IsWeapon() then
+                                currentItemChance = currentItemChance + 5
+                            end
+
+                            local n = 0
+                            local rolled = false
+
+                            if count == 1 then
+                                if ZombRand(100) <= currentItemChance then n, rolled = 1, true end
+                            elseif count > 1 and count < 5 then n, rolled = math.floor(count * modifier), true
+                            elseif count >= 5 then n, rolled = math.floor((count * modifier) * 2), true
+                            end
+
+                            if rolled and n > 0 then
+                                for j = 1, n do
+                                    local addedItem = inventory:AddItem(fullType)
+                                    inventory:addItemOnServer(addedItem)
+                                end
+
+                                -- Visual feedback
+                                if MT_Config:getOption("ScroungerAnnounce"):getValue() then
+                                    HaloTextHelper.addTextWithArrow(_player, getText("UI_trait_scrounger") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen())
+                                end
+
+                                if MT_Config:getOption("ScroungerHighlight"):getValue() then
+                                    playerData.scroungerHighlightsTbl = playerData.scroungerHighlightsTbl or {}
+                                    playerData.scroungerHighlightsTbl[containerObj] = 0
+                                    containerObj:setHighlighted(true, false)
+                                    containerObj:setHighlightColor(0.5, 1, 0.4, 1)
                                 end
                             end
                         end
                     end
-                end
+                end 
             end
+        end
+    end
+end
+
+function UnHighlightScrounger(player, playerdata)
+    if not MT_Config:getOption("ScroungerHighlight"):getValue() then return end
+    if not player:hasTrait(ToadTraitsRegistries.scrounger) then return end
+
+    playerdata.scroungerHighlightsTbl = playerdata.scroungerHighlightsTbl or {}
+    local highlights = playerdata.scroungerHighlightsTbl
+    local maxTime = MT_Config:getOption("ScroungerHighlightTime"):getValue() * 10
+    
+    for containerObj, timer in pairs(highlights) do
+        if timer >= maxTime then
+            containerObj:setHighlighted(false)
+            highlights[containerObj] = nil
+        else
+            highlights[containerObj] = timer + 1
         end
     end
 end
@@ -2764,7 +2774,7 @@ function ContainerEvents(_iSInventoryPage, _state)
         if not playerdata then return end;
 
         ToadTraitIncomprehensive(page, state, player);
-        ToadTraitScrounger(page, state, player);
+        ToadTraitScrounger(page, state, player, playerdata);
         ToadTraitVagabond(page, state, player, playerdata);
         Gourmand(page, state, player);
         ToadTraitAntique(page, state, player, playerdata);
