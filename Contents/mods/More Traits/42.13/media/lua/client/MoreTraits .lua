@@ -2877,8 +2877,8 @@ function UpdateWorkerSpeed(player)
     local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
     if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then return end
 
-    local isQuick = player:hasTrait(ToadTraitsRegistries.QuickWorker)
-    local isSlow = player:hasTrait(ToadTraitsRegistries.SlowWorker)
+    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
+    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
     if not (isQuick or isSlow) then return end
 
     local modifier = 0.5
