@@ -2685,8 +2685,8 @@ function setFoodState(food, state)
 end
 
 function FoodUpdate(player)
-    local inv = player:getInventory()
-    local items = inv:getItems()
+    local plyinv = player:getInventory()
+    local items = plyinv:getItems()
     local itemCount = items:size()
     
     local state = "Normal"
