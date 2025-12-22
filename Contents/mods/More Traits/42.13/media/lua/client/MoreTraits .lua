@@ -3747,6 +3747,7 @@ function MTAlcoholismMoodleTracker(_player, _playerdata)
         MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
     end
 end
+
 function MainPlayerUpdate(player)
     if not player then return end;
     local playerdata = player:getModData();
