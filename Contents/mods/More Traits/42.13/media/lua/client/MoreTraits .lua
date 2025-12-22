@@ -1543,16 +1543,14 @@ function bouncerupdate(player, playerdata)
     end
 end
 
-function martial(_actor, _target, _weapon, _damage)
+function martial(actor, target, weapon, damage)
     local player = getPlayer();
-    if not player or _actor ~= player then return; end
+    if not player or actor ~= player then return end
     if not player:hasTrait(ToadTraitsRegistries.martial) then return end
 
     local playerdata = player:getModData();
-    if not playerdata then return; end 
+    if not playerdata then return end 
 
-    local weapon = _weapon;
-    local damage = _damage;
     local stats = player:getStats();
     local endurance = stats:get(CharacterStat.ENDURANCE);
     local isBareHands = (weapon:getType() == "BareHands");
@@ -1567,34 +1565,28 @@ function martial(_actor, _target, _weapon, _damage)
         local blunt = player:getPerkLevel(Perks.SmallBlunt)
         local average = (strength + fitness) * 0.25
         local critchance = (5 + blunt) * scaling
-        local luckMod = (luckimpact or 1.0)
 
-        if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckMod end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckMod end
+        if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckimpact end
+        if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckimpact end
 
-        local damageLoss = 1.0
-        if endurance < 0.25 then 
-            damageLoss = 0.25 
-        elseif endurance < 0.5 then 
-            damageLoss = 0.5 
-        elseif endurance < 0.75 then 
-            damageLoss = 0.75 
+        local damageAdj = 1.0
+        if endurance < 0.25 then damageAdj = 0.25 
+        elseif endurance < 0.5 then damageAdj = 0.5 
+        elseif endurance < 0.75 then damageAdj = 0.75 
         end
 
-        if _target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
+        if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
             damage = damage * 4
         end
 
-        damage = damage * 0.1 * damageLoss * scaling
+        damage = damage * 0.1 * damageAdj * scaling
 
-        if not isServer() and MT_Config and MT_Config:getOption("MartialDamage"):getValue() then
+        if MT_Config:getOption("MartialDamage"):getValue() then
             HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), " ", HaloTextHelper.getColorGreen())
         end
 
-        _target:setHealth(_target:getHealth() - damage)
-        if _target:getHealth() <= 0 then
-            _target:Kill(player)
-        end
+        target:setHealth(target:getHealth() - damage)
+        if target:getHealth() <= 0 then target:Kill(player) end
 
         stats:set(CharacterStat.ENDURANCE, math.max(0, endurance - 0.002))
     end
