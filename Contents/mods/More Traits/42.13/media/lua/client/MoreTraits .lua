@@ -3647,87 +3647,90 @@ end
 
 function MTAlcoholismMoodle(_player, _playerdata)
     --Experimental MoodleFramework Support
-    local player = _player;
-    local playerdata = _playerdata;
-    if player:hasTrait(ToadTraitsRegistries.drinker) then
-        local stats = player:getStats();
-        local drunkness = stats:get(CharacterStat.INTOXICATION);
-        local anger = stats:get(CharacterStat.ANGER);
-        local stress = stats:get(CharacterStat.STRESS);
-        local hoursthreshold = 36;
-        local divider = 5;
-        local mf = MF;
-        local Alcoholism = MF.getMoodle("MTAlcoholism"):getValue();
-        if SandboxVars.MoreTraits.AlcoholicFrequency then
-            hoursthreshold = SandboxVars.MoreTraits.AlcoholicFrequency * 1.5;
-        end
-        if hoursthreshold <= 2 then
-            divider = 0.1;
-        elseif hoursthreshold <= 5 then
-            divider = 0.2;
-        elseif hoursthreshold <= 10 then
-            divider = 0.5;
-        elseif hoursthreshold <= 20 then
-            divider = 1;
-        end
-        local divcalc = playerdata.iHoursSinceDrink / divider
-        if playerdata.isMTAlcoholismInitialized == nil or playerdata.isMTAlcoholismInitialized == false then
-            MF.getMoodle("MTAlcoholism"):setValue(0.5);
-        end
-        if Alcoholism > 1.0 then
-            MF.getMoodle("MTAlcoholism"):setValue(1);
-        end
-        if Alcoholism < 0.0 then
-            MF.getMoodle("MTAlcoholism"):setValue(0);
-        end
-        if Alcoholism >= 0.7 then
-            stats:set(CharacterStat.ANGER, 0);
-            stats:set(CharacterStat.STRESS,0);
-            stats:set(CharacterStat.BOREDOM,0);
-            stats:set(CharacterStat.PANIC,0);
-            stats:set(CharacterStat.PAIN,0);
-            stats:set(CharacterStat.IDLENESS,0);
-            stats:set(CharacterStat.UNHAPPINESS,0);
-        end
-        if internalTick >= 29 then
-            if drunkness >= 20 then
-                MF.getMoodle("MTAlcoholism"):setChevronCount(3);
-                MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.004);
-                playerdata.iHoursSinceDrink = 0;
-            elseif drunkness >= 10 then
-                MF.getMoodle("MTAlcoholism"):setChevronCount(2);
-                MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.003);
-                playerdata.iHoursSinceDrink = 0;
-            elseif drunkness > 0 then
-                stats:set(CharacterStat.FATIGUE, stats:get(CharacterStat.FATIGUE) - 0.001);
-                MF.getMoodle("MTAlcoholism"):setValue(Alcoholism + 0.002);
-                MF.getMoodle("MTAlcoholism"):setChevronCount(1);
-                MF.getMoodle("MTAlcoholism"):setChevronIsUp(true);
-                playerdata.iHoursSinceDrink = 0;
-            else
-                MF.getMoodle("MTAlcoholism"):setChevronCount(0);
-                MF.getMoodle("MTAlcoholism"):setChevronIsUp(false);
-                if Alcoholism > 0.5 and internalTick >= 30 then
-                    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - 0.0001);
-                end
+    if not player:hasTrait(ToadTraitsRegistries.drinker) then return end
+    
+    local moodle = MF.getMoodle("MTAlcoholism")
+    local alcoholism = moodle:getValue()
+
+    if playerdata.isMTAlcoholismInitialized == nil then
+        moodle:setValue(0.5)
+        playerdata.isMTAlcoholismInitialized = true
+        alcoholism = 0.5
+    end
+
+    local hoursThreshold = 36
+    if SandboxVars.MoreTraits and SandboxVars.MoreTraits.AlcoholicFrequency then
+        hoursThreshold = SandboxVars.MoreTraits.AlcoholicFrequency * 1.5
+    end
+
+    local divider = 5
+    if hoursThreshold <= 2 then divider = 0.1
+    elseif hoursThreshold <= 5 then divider = 0.2
+    elseif hoursThreshold <= 10 then divider = 0.5
+    elseif hoursThreshold <= 20 then divider = 1
+    end
+
+    local stats = player:getStats()
+    if alcoholism >= 0.7 then
+        stats:set(CharacterStat.ANGER, 0)
+        stats:set(CharacterStat.STRESS, 0)
+        stats:set(CharacterStat.BOREDOM, 0)
+        stats:set(CharacterStat.PANIC, 0)
+        stats:set(CharacterStat.PAIN, 0)
+        stats:set(CharacterStat.IDLENESS, 0)
+        stats:set(CharacterStat.UNHAPPINESS, 0)
+    end
+
+    if internalTick >= 29 then
+        local drunkness = stats:get(CharacterStat.INTOXICATION)
+        local newValue = alcoholism
+
+        if drunkness >= 20 then
+            moodle:setChevronCount(3)
+            moodle:setChevronIsUp(true)
+            newValue = alcoholism + 0.004
+            playerdata.iHoursSinceDrink = 0
+        elseif drunkness >= 10 then
+            moodle:setChevronCount(2)
+            moodle:setChevronIsUp(true)
+            newValue = alcoholism + 0.003
+            playerdata.iHoursSinceDrink = 0
+        elseif drunkness > 0 then
+            stats:set(CharacterStat.FATIGUE, stats:get(CharacterStat.FATIGUE) - 0.001)
+            moodle:setChevronCount(1)
+            moodle:setChevronIsUp(true)
+            newValue = alcoholism + 0.002
+            playerdata.iHoursSinceDrink = 0
+        else
+            moodle:setChevronCount(0)
+            moodle:setChevronIsUp(false)
+            -- Passive decay if not drinking and above baseline
+            if alcoholism > 0.5 and internalTick >= 30 then
+                newValue = alcoholism - 0.0001
             end
         end
-        if internalTick == 30 then
-            if Alcoholism <= 0.3 then
-                if anger < 0.05 + (divcalc * 0.1) / 2 then
-                    stats:set(CharacterStat.ANGER, anger + 0.01);
-                end
+        moodle:setValue(math.max(0, math.min(1, newValue)))
+    end
+
+    if internalTick == 30 then
+        local divCalc = (playerdata.iHoursSinceDrink or 0) / divider
+
+        if alcoholism <= 0.3 then
+            local currentAnger = stats:get(CharacterStat.ANGER)
+            if currentAnger < 0.05 + (divCalc * 0.1) / 2 then
+                stats:set(CharacterStat.ANGER, currentAnger + 0.01)
             end
-            if Alcoholism <= 0.2 then
-                if stress < 0.15 + (divcalc * 0.1) / 2 then
-                    stats:set(CharacterStat.STRESS, stress + 0.01);
-                end
+        end
+
+        if alcoholism <= 0.2 then
+            local currentStress = stats:get(CharacterStat.STRESS)
+            if currentStress < 0.15 + (divCalc * 0.1) / 2 then
+                stats:set(CharacterStat.STRESS, currentStress + 0.01)
             end
         end
     end
 end
+
 function MTAlcoholismMoodleTracker(_player, _playerdata)
     --Experimental MoodleFramework Support
     local player = _player;
