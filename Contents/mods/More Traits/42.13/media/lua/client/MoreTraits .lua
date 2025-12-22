@@ -331,7 +331,7 @@ function initToadTraitsItems(player)
         if SandboxVars.MoreTraits.PreparedCarGasToggle then
             local holder2 = inv:AddItem("Base.PetrolCan");
             inv:addItemOnServer(holder2);
-            if holder2 then player:setSecondaryHandItem(holder); end
+            if holder2 then player:setSecondaryHandItem(holder2); end
         end
     elseif player:hasTrait(ToadTraitsRegistries.preparedcoordination) then
         local holder = inv:AddItem("Base.Bag_FannyPackFront");
