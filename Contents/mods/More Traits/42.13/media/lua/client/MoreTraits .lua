@@ -1687,89 +1687,34 @@ function progun(actor, weapon)
     end
 end
 
-function prospear(_actor, _target, _weapon, _damage)
+function tavernbrawler(actor, target, weapon, damage)
     local player = getPlayer();
-    if not player or _actor ~= player then return; end
-    if not player:hasTrait(ToadTraitsRegistries.prospear) then return end
-
-    if not _weapon then return; end
-    local weapon = _weapon;
-    local weapondata = weapon:getModData();
-    if not weapondata then return end;
-
-    local damage = _damage;
-    local spear = player:getPerkLevel(Perks.Spear);
-    local critchance = spear + 5;
-
-    local isSpear = false;
-    local categories = weapon.getCategories and weapon:getCategories();
-    local weaponType = weapon.getType and weapon:getType();
-    if (categories and categories:contains("Spear")) or (weapon:getCategory() == "Spear") then
-        isSpear = true;
-    elseif (weaponType and weaponType:contains("Spear")) or (weaponType:contains("Javelin")) then
-        isSpear = true;
-    end
-
-    if isSpear then
-        local luckMod = (luckimpact or 1.0)
-        if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckMod end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckMod end
-
-        if _target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
-            damage = damage * 2;
-        end
-
-        local extraDamage = (damage * 1.2) * 0.1;
-        _target:setHealth(_target:getHealth() - extraDamage);
-        if _target:getHealth() <= 0 then _target:Kill(player) end
-
-        if weapondata.iLastWeaponCond == nil then weapondata.iLastWeaponCond = weapon:getCondition(); end
-        if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
-            if weapon:getCondition() < weapon:getConditionMax() then weapon:setCondition(weapon:getCondition() + 1); end
-        end
-        weapondata.iLastWeaponCond = weapon:getCondition();
-    end
-end
-
-function tavernbrawler(_actor, _target, _weapon, _damage)
-    local player = getPlayer();
-    if not player or _actor ~= player then return; end
+    if not player or actor ~= player then return; end
     if not player:hasTrait(ToadTraitsRegistries.tavernbrawler) then return end
 
-    local weapon = _weapon;
-    if not weapon then return; end
     local weapondata = weapon:getModData();
-    if not weapondata then return end;
-    
-    local chance = 50;
-    local whitelist = { "ToolWeapon", "WeaponCrafted", "Cooking", "Household", "FirstAid", "Gardening", "Sports" };
-    local damage = _damage;
-    local multiplier = 1;
-    local isImprovisedWeapon = false;
-    local displayCategory = weapon:getDisplayCategory() or "";
+    if not weapondata then return end
 
-    if tableContains(whitelist, displayCategory) then
-        isImprovisedWeapon = true;
-    else
-        local categories = weapon.getCategories and weapon:getCategories();
-        if categories and categories:contains("Improvised") then
-            isImprovisedWeapon = true; 
-        end
+    local isImprovisedWeapon = false;
+    local whitelist = { "ToolWeapon", "WeaponCrafted", "Cooking", "Household", "FirstAid", "Gardening", "Sports" };
+    local displayCategory = weapon:getDisplayCategory() or "";
+    if tableContains(whitelist, displayCategory) then isImprovisedWeapon = true;
+    elseif weapon:isOfWeaponCategory(WeaponCategory.IMPROVISED) then isImprovisedWeapon = true; 
     end
 
-    if isImprovised then
-        local categories = weapon.getCategories and weapon:getCategories();
-        if categories and categories:contains("Spear") then
+    local chance = 50;
+    local multiplier = 1;
+    if isImprovisedWeapon then
+        if weapon:isOfWeaponCategory(WeaponCategory.SPEAR) then
             chance = 0;
             multiplier = 0.25;
         end
             
-        local luckmod = (luckimpact or 1.0)
-        if player:hasTrait(ToadTraitsRegistries.Lucky) then
-            chance = chance + (5 * luckMod);
+        if player:hasTrait(ToadTraitsRegistries.lucky) then
+            chance = chance + (5 * luckimpact);
             multiplier = multiplier + 0.1;
-        elseif player:hasTrait(ToadTraitsRegistries.Unlucky) then
-            chance = chance - (5 * luckMod);
+        elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
+            chance = chance - (5 * luckimpact);
             multiplier = multiplier - 0.1;
         end
         
@@ -1777,6 +1722,7 @@ function tavernbrawler(_actor, _target, _weapon, _damage)
             chance = chance + 25;
             multiplier = multiplier + 0.5;
         end
+
         if weapon:getConditionMax() <= 5 then
             chance = chance + 25;
             multiplier = multiplier + 0.5;
@@ -1785,9 +1731,9 @@ function tavernbrawler(_actor, _target, _weapon, _damage)
         chance = math.min(95, chance)
 
         local extraDamage = (damage * multiplier) * 0.1;
-        _target:setHealth(_target:getHealth() - extraDamage);
-        
-        if _target:getHealth() <= 0 then _target:Kill(player) end
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+
         if weapondata.iLastWeaponCond == nil then weapondata.iLastWeaponCond = weapon:getCondition(); end
         if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= chance then
             if weapon:getCondition() < weapon:getConditionMax() then weapon:setCondition(weapon:getCondition() + 1); end
