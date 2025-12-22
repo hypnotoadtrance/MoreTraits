@@ -3039,12 +3039,10 @@ function BatteringRam(player, playerData)
     end
 end
 
-local function mundane(_actor, _target, _weapon, _damage)
-    local weapon = _weapon
+local function mundane(actor, target, weapon, damage)
     if not weapon then return end
     local player = getPlayer()
-    if not player then return end
-    if not player or _actor ~= player then return; end
+    if not player or actor ~= player then return; end
     local weapondata = weapon:getModData()
     if not weapondata then return end
 
