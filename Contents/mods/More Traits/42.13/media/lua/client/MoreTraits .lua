@@ -3864,6 +3864,7 @@ end
 function OnCreatePlayer(_, player)
     --reset any worn clothing to default state.
     local playerdata = player:getModData();
+    if not playerdata then return end;
     local wornItems = player:getWornItems();
     for i = wornItems:size() - 1, 0, -1 do
         local item = wornItems:getItemByIndex(i);
