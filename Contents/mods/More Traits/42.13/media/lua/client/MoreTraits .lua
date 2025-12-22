@@ -1717,110 +1717,84 @@ function martial(_actor, _target, _weapon, _damage)
     end
 end
 
-function problunt(_actor, _target, _weapon, _damage)
+function promelee(actor, target, weapon, damage)
     local player = getPlayer();
-    if not player or _actor ~= player then return; end
-    if not player:hasTrait(ToadTraitsRegistries.problunt) then return end
+    if not player or actor ~= player then return end
+    local hasBladeTrait = player:hasTrait(ToadTraitsRegistries.problade)
+    local hasBluntTrait = player:hasTrait(ToadTraitsRegistries.problunt)
+    local hasSpearTrait = player:hasTrait(ToadTraitsRegistries.prospear)
+    if not hasBladeTrait and not hasBluntTrait and not hasSpearTrait then return end
 
-    if not _weapon then return; end
-    local weapon = _weapon;
     local weapondata = weapon:getModData();
-    if not weapondata then return end;
+    if not weapondata then return end
 
-    local damage = _damage;
-    local blunt = player:getPerkLevel(Perks.Blunt);
-    local smallBlunt = player:getPerkLevel(Perks.SmallBlunt)
-    local critchance = blunt + smallBlunt + 5;
+    local hasTrait = false
+    local critchance = 5
+
+    if hasBladeTrait then
+        local function isMatchingWeapon(weapon)
+            return weapon:isOfWeaponCategory(WeaponCategory.AXE) 
+                or weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLADE) 
+                or weapon:isOfWeaponCategory(WeaponCategory.LONG_BLADE)
+        end
+        if not isMatchingWeapon(weapon) then return end
+
+        local axe = player:getPerkLevel(Perks.Axe);
+        local blade = player:getPerkLevel(Perks.LongBlade);
+        local smallBlade = player:getPerkLevel(Perks.SmallBlade);
+        critchance = critchance + axe + blade + smallBlade
+        hasTrait = true
+    end    
     
-    local isBlunt = false;
-    local category = weapon:getCategory();
-    local weaponType = weapon:getType() or "";
-    local categories = weapon:getCategories();
+    if hasBluntTrait then
+        local function isMatchingWeapon(weapon)
+            return weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLUNT) 
+                or weapon:isOfWeaponCategory(WeaponCategory.BLUNT)
+        end
+        if not isMatchingWeapon(weapon) then return end
 
-    if category == "Blunt" or category == "SmallBlunt" then
-        isBlunt = true;
-    elseif categories and (categories:contains("Blunt") or categories:contains("SmallBlunt")) then
-        isBlunt = true;
-    elseif weaponType and (weaponType:contains("Blunt")) or (weaponType:contains("SmallBlunt")) then
-        isBlunt = true;
+        local blunt = player:getPerkLevel(Perks.Blunt);
+        local smallBlunt = player:getPerkLevel(Perks.SmallBlunt);
+        critchance = critchance + blunt + smallBlunt
+        hasTrait = true
     end
 
-    if isBlunt then
-        local luckMod = (luckimpact or 1.0)
-        if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckMod end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckMod end
-
-        if _target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
-            damage = damage * 2;
+    if hasSpearTrait then
+        local function isMatchingWeapon(weapon)
+            return weapon:isOfWeaponCategory(WeaponCategory.SPEAR)
         end
+        if not isMatchingWeapon(weapon) then return end
 
-        local extraDamage = (damage * 1.2) * 0.1;
-        _target:setHealth(_target:getHealth() - extraDamage);
-        if _target:getHealth() <= 0 then _target:Kill(player) end
-
-        if weapondata.iLastWeaponCond == nil then weapondata.iLastWeaponCond = weapon:getCondition(); end
-        if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
-            if weapon:getCondition() < weapon:getConditionMax() then
-                weapon:setCondition(weapon:getCondition() + 1);
-            end
-        end
-        weapondata.iLastWeaponCond = weapon:getCondition();
+        local spear = player:getPerkLevel(Perks.Spear);
+        critchance = critchance + spear
+        hasTrait = true
     end
+
+    if not hasTrait then return end
+
+    if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckimpact end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckimpact end
+
+    if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
+        damage = damage * 2;
+    end
+
+    local extraDamage = (damage * 1.2) * 0.1;
+    target:setHealth(target:getHealth() - extraDamage);
+    if target:getHealth() <= 0 then target:Kill(player) end
+
+    if weapondata.iLastWeaponCond == nil then weapondata.iLastWeaponCond = weapon:getCondition(); end
+
+    if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
+        if weapon:getCondition() < weapon:getConditionMax() then
+            weapon:setCondition(weapon:getCondition() + 1);
+        end
+    end
+    weapondata.iLastWeaponCond = weapon:getCondition();
 end
 
-function problade(_actor, _target, _weapon, _damage)
-    local player = getPlayer();
-    if not player or _actor ~= player then return; end
-    if not player:hasTrait(ToadTraitsRegistries.problade) then return end
-
-    if not _weapon then return; end
-    local weapon = _weapon;
-    local weapondata = weapon:getModData();
-    if not weapondata then return end;
-
-    local damage = _damage;
-    local axe = player:getPerkLevel(Perks.Axe);
-    local blade = player:getPerkLevel(Perks.LongBlade);
-    local smallBlade = player:getPerkLevel(Perks.SmallBlade);
-    local critchance = axe + blade + smallBlade + 5;
-
-    local isBlade = false;
-    local category = weapon:getCategory();
-    local weaponType = weapon:getType() or "";
-    --local categories = weapon:getCategories();
-
-    if category == "SmallBlade" or category == "Axe" or category == "LongBlade" then
-        isBlade = true;
-    --elseif categories and (categories:contains("SmallBlade") or categories:contains("Axe") or categories:contains("LongBlade")) then
-        --isBlade = true;
-    elseif weaponType and (weaponType:contains("Blade")) or (weaponType:contains("Axe")) or (weaponType:contains("Sword")) or (weaponType:contains("Knife")) then
-        isBlade = true;
-    end
-        
-    if isBlade then
-        local luckMod = (luckimpact or 1.0)
-        if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + 1 * luckMod end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - 1 * luckMod end
-
-        if _target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
-            damage = damage * 2;
-        end
-
-        local extraDamage = (damage * 1.2) * 0.1;
-        _target:setHealth(_target:getHealth() - extraDamage);
-        if _target:getHealth() <= 0 then _target:Kill(player) end
-
-        if weapondata.iLastWeaponCond == nil then weapondata.iLastWeaponCond = weapon:getCondition(); end
-        if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
-            if weapon:getCondition() < weapon:getConditionMax() then
-                weapon:setCondition(weapon:getCondition() + 1);
-            end
-        end
-        weapondata.iLastWeaponCond = weapon:getCondition();
-    end
-end
-
-function progun(_actor, _weapon)
+-- TODO CHECK THIS WORKS
+function progun(actor, weapon)
     local player = getPlayer();
     if not player or _actor ~= player then return; end
     if not player:hasTrait(ToadTraitsRegistries.progun) then return end
@@ -4196,9 +4170,7 @@ end
 --Events.OnPlayerMove.Add(fast);
 Events.OnPlayerMove.Add(NoodleLegs);
 Events.OnZombieDead.Add(graveRobber);
-Events.OnWeaponHitCharacter.Add(problunt);
-Events.OnWeaponHitCharacter.Add(problade);
-Events.OnWeaponHitCharacter.Add(prospear);
+Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);
 Events.OnWeaponHitCharacter.Add(tavernbrawler);
