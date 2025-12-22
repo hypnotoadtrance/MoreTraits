@@ -3754,9 +3754,12 @@ function MainPlayerUpdate(player)
     if not playerdata then return end;
 
     if internalTick >= 30 then
-        amputee(player, (playerdata.bWasInfected ~= player:getBodyDamage():isInfected()
-                and player:getBodyDamage():isInfected()));
-        playerdata.bWasInfected = player:getBodyDamage():isInfected();
+        local bodyDamage = player:getBodyDamage();
+        local isInfected = bodyDamage:isInfected();
+        local justGotInfected = (not playerdata.bWasInfected and isInfected);
+
+        amputee(player, justGotInfected);
+        playerdata.bWasInfected = isInfected;
         vehicleCheck(player);
         FoodUpdate(player);
         clothingUpdate(player);
