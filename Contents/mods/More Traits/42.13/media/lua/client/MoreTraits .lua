@@ -1215,48 +1215,6 @@ function Specialization(_player, _perk, _amount)
                     skip = true;
                 end
             end
-        end
-    end
-end
-
-function Blissful(player)
-    if not player:hasTrait(ToadTraitsRegistries.blissful) then return end
-    local stats = player:getStats()
-    local unhappiness = stats:get(CharacterStat.UNHAPPINESS);
-    local boredom = stats:get(CharacterStat.BOREDOM);
-    if unhappiness >= 10 then stats:set(CharacterStat.UNHAPPINESS, unhappiness - 0.01); end
-    if boredom >= 10 then stats:set(CharacterStat.BOREDOM, boredom - 0.005); end
-end
-
-function Specialization(_player, _perk, _amount)
-    local player = _player;
-    local perk = _perk;
-    local amount = _amount;
-    local newamount = 0;
-    local skip = false;
-    local modifier = 75;
-    local perklvl = player:getPerkLevel(_perk);
-    local perkxpmod = 1;
-    if SandboxVars.MoreTraits.SpecializationXPPercent then
-        modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
-    end
-    --shift decimal over two places for calculation purposes.
-    modifier = modifier * 0.01;
-    if perk == Perks.Fitness or perk == Perks.Strength then
-        skipxpadd = true;
-    end
-    if skipxpadd == false then
-        if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
-            if player:hasTrait(ToadTraitsRegistries.specweapons) then
-                if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specfood) then
-                if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
-                    skip = true;
-                end
-            end
             if player:hasTrait(ToadTraitsRegistries.specguns) then
                 if perk == Perks.Aiming or perk == Perks.Reloading then
                     skip = true;
