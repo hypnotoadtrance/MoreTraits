@@ -3837,7 +3837,7 @@ function EveryHours()
     RestfulSleeper(player, playerdata);
     ToadTraitDepressive(player, playerdata);
 
-    if playerdata.UnwaveringInjurySpeedChanged == false and player:hasTrait(ToadTraitsRegistries.unwavering) then
+    if player:hasTrait(ToadTraitsRegistries.unwavering) and not playerdata.UnwaveringInjurySpeedChanged then
         playerdata.UnwaveringInjurySpeedChanged = true;
         for n = 0, player:getBodyDamage():getBodyParts():size() - 1 do
             local i = player:getBodyDamage():getBodyParts():get(n);
