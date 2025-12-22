@@ -646,7 +646,6 @@ function ToadTraitButter(player)
     if player:hasTrait(ToadTraitsRegistries.butterfingers) and player:isPlayerMoving() then
         local basechance = 3;
         local chanceinx = SandboxVars.MoreTraits.ButterfingersChance or 2000;
-        local luckmod = (luckimpact or 1.0);
 
         if player:hasTrait(CharacterTrait.ALL_THUMBS) then basechance = basechance + 1; end
         if player:hasTrait(CharacterTrait.DEXTROUS) then basechance = basechance - 1; end
