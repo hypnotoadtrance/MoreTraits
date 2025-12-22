@@ -4056,8 +4056,8 @@ function MainPlayerUpdate(player)
         SuperImmune(player, playerdata);
         Immunocompromised(player, playerdata);
     end
-    MotionSickness(player);
-    MotionSicknessHealthLoss(player);
+    MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
+    MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     SecondWind(player, playerdata);
     indefatigable(player, playerdata);
     checkBloodTraits(player);
