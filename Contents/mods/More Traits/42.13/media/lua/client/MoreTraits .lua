@@ -1646,18 +1646,16 @@ function promelee(actor, target, weapon, damage)
     weapondata.iLastWeaponCond = weapon:getCondition();
 end
 
--- TODO CHECK THIS WORKS
 function progun(actor, weapon)
     local player = getPlayer();
-    if not player or _actor ~= player then return; end
+    if not player or actor ~= player then return; end
     if not player:hasTrait(ToadTraitsRegistries.progun) then return end
 
-    if not _weapon then return; end
-    local weapon = _weapon;
+    if not weapon then return end
     local weapondata = weapon:getModData();
-    if not weapondata then return end;
+    if not weapondata then return end
     
-    if not weapon.getMaxAmmo or not weapon.getCurrentAmmoCount then return; end
+    if not weapon.getMaxAmmo or not weapon.getCurrentAmmoCount then return end
     
     local maxCapacity = weapon:getMaxAmmo();
     local currentCapacity = weapon:getCurrentAmmoCount();
@@ -1666,21 +1664,13 @@ function progun(actor, weapon)
     local chance = aiming + reloading + 10;
     
     local isFirearm = false;
-    if weapon.isRanged() then
-        if weapon.getSubCategory and weapon:getSubCategory() == "Firearm" then
-            isFirearm = true;
-        elseif weapon.getType then
-            local weaponType = weapon:getType();
-            if weaponType and (weaponType:contains("Firearm") or weaponType:contains("Gun") or weaponType:contains("Pistol") or weaponType:contains("Rifle")) then
-                isFirearm = true;
-            end
-        end
+    if weapon:isRanged() then isFirearm = true;
+    elseif weapon.getSubCategory and weapon:getSubCategory() == "Firearm" then isFirearm = true;
     end
-    
+
     if isFirearm then
-        local luckMod = (luckimpact or 1.0)
-        if player:hasTrait(ToadTraitsRegistries.lucky) then chance = chance + 1 * luckMod end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then chance = chance - 1 * luckMod end
+        if player:hasTrait(ToadTraitsRegistries.lucky) then chance = chance + 1 * luckimpact end
+        if player:hasTrait(ToadTraitsRegistries.unlucky) then chance = chance - 1 * luckimpact end
 
         if weapondata.iLastWeaponCond == nil then weapondata.iLastWeaponCond = weapon:getCondition(); end
         if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
@@ -1690,7 +1680,7 @@ function progun(actor, weapon)
         if SandboxVars.MoreTraits.ProwessGunsAmmoRestore == true and ZombRand(0, 101) <= chance then
             if currentCapacity < maxCapacity and currentCapacity > 0 then
                 weapon:setCurrentAmmoCount(currentCapacity + 1);
-                if not isServer() and MT_Config and MT_Config:getOption("ProwessGunsAmmo"):getValue() == true then
+                if MT_Config:getOption("ProwessGunsAmmo"):getValue() == true then
                     HaloTextHelper.addText(player, getText("UI_progunammo"), "", HaloTextHelper.getColorGreen());
                 end
             end
