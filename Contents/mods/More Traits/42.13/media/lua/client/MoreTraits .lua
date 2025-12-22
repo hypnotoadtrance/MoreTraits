@@ -600,7 +600,7 @@ function MTPlayerHit(player, _, __)
                     else
                         table.insert(list, i)
                         if bodyPart:IsInfected() and not wasInfectedBefore and isInfected then
-                            playerData.EvasivePlayerInfected = true
+                            playerdata.EvasivePlayerInfected = true
                         end
                     end
                 end
