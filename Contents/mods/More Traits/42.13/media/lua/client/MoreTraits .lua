@@ -484,7 +484,6 @@ function initToadTraitsPerks(player)
         bodyDamage:setInfected(false)
     end
 
-    playerdata.fLastHP = nil
     MT_checkWeight(player)
 
     if player:hasTrait(ToadTraitsRegistries.burned) then
@@ -2945,14 +2944,12 @@ function GlassBody(player, playerData)
     if playerData.glassBodyLastHP == nil then
         playerData.glassBodyLastHP = currenthp;
         playerData.glassBodyInitialized = true;
-        print("Last HP: " .. playerData.glassBodyLastHP)
         return;
     end
 
     if playerData.glassBodyInitialized == true then
         playerData.glassBodyInitialized = false;
         playerData.glassBodyLastHP = currenthp; -- Update to current HP
-        print("Skipping first damage check after init")
         return;
     end
 
@@ -2972,14 +2969,13 @@ function GlassBody(player, playerData)
 
         local chance = 33;
         local woundstrength = 10;
-        local luckmod = (luckimpact or 1);
         
-        if player:hasTrait(ToadTraitsRegistries.Lucky) then
-            chance = chance - (5 * luckmod);
-            woundstrength = woundstrength - (5 * luckmod);
-        elseif player:hasTrait(ToadTraitsRegistries.Unlucky) then
-            chance = chance + (5 * luckmod);
-            woundstrength = woundstrength + (5 * luckmod);
+        if player:hasTrait(ToadTraitsRegistries.lucky) then
+            chance = chance - (5 * luckimpact);
+            woundstrength = woundstrength - (5 * luckimpact);
+        elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
+            chance = chance + (5 * luckimpact);
+            woundstrength = woundstrength + (5 * luckimpact);
         end
         
         chance = math.max(5, math.min(95, chance));
@@ -3002,9 +2998,6 @@ function GlassBody(player, playerData)
                 end
             end
         end
-        
-        -- Mettre à jour la HP de référence
-        playerdata.fLastHP = bodydamage:getOverallBodyHealth();
     end
     playerData.glassBodyLastHP = bodyDamage:getOverallBodyHealth();
 end
