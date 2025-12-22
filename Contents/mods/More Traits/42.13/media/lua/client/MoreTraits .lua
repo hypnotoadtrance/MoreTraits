@@ -2185,74 +2185,54 @@ local function SuperImmuneRecoveryProcess(player, playerdata)
     end
 end
 
-function SuperImmune(_player, _playerdata)
-    local player = _player;
-    local playerdata = _playerdata;
-    local bodydamage = player:getBodyDamage();
-    if player:hasTrait(ToadTraitsRegistries.superimmune) then
-        if bodydamage:isInfected() == true then
-            bodydamage:setInfected(false);
-            bodydamage:setInfectionMortalityDuration(-1);
-            bodydamage:setInfectionTime(-1);
-            bodydamage:setInfectionLevel(0);
-            local minimum = 10;
-            local maximum = 30;
-            if SandboxVars.MoreTraits.SuperImmuneMinDays then
-                minimum = SandboxVars.MoreTraits.SuperImmuneMinDays
-            end
-            if SandboxVars.MoreTraits.SuperImmuneMaxDays then
-                maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays
-            end
-            if minimum > maximum then
-                local value1 = minimum;
-                local value2 = maximum;
-                minimum = value2;
-                maximum = value1;
-            end
-            local TimeOfRecovery = 0;
-            if minimum == maximum + 1 then
-                TimeOfRecovery = minimum;
-            else
-                TimeOfRecovery = ZombRand(minimum, maximum + 1);
-            end
-            if player:hasTrait(CharacterTrait.FAST_HEALER) then
-                TimeOfRecovery = TimeOfRecovery - 5;
-            end
-            if player:hasTrait(CharacterTrait.SLOW_HEALER) then
-                TimeOfRecovery = TimeOfRecovery + 5;
-            end
-            if player:hasTrait(ToadTraitsRegistries.lucky) then
-                TimeOfRecovery = TimeOfRecovery - 2 * (luckimpact or 1.0);
-            end
-            if player:hasTrait(ToadTraitsRegistries.unlucky) then
-                TimeOfRecovery = TimeOfRecovery + 2 * (luckimpact or 1.0);
-            end
-            if TimeOfRecovery < minimum then
-                TimeOfRecovery = minimum;
-            end
-            if TimeOfRecovery > maximum then
-                TimeOfRecovery = maximum;
-            end
-            if playerdata.SuperImmuneHealedOnce == true and playerdata.SuperImmuneFirstInfectionBonus == true then
-                --Halve the time needed once it beat the virus once, since immune system
-                TimeOfRecovery = TimeOfRecovery / 2; --will know how to beat it.
-            end
-            if playerdata.SuperImmuneActive == false then
-                playerdata.SuperImmuneActive = true;
-            end
-            playerdata.SuperImmuneRecovery = playerdata.SuperImmuneRecovery + TimeOfRecovery;
-            if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
-                playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
-            end
+function SuperImmune(player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.superimmune) then return end
+
+    local bodyDamage = player:getBodyDamage();
+
+    if bodyDamage:isInfected() then
+        local stats = player:getStats();
+        bodyDamage:setInfected(false);
+        bodyDamage:setInfectionMortalityDuration(-1);
+        bodyDamage:setInfectionTime(-1);
+        stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+        stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+
+        local minimum = SandboxVars.MoreTraits.SuperImmuneMinDays or 10;
+        local maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays or 30;
+        if minimum > maximum then minimum, maximum = maximum, minimum end
+
+        local timeOfRecovery = 0;
+        if minimum == maximum + 1 then timeOfRecovery = minimum;
+        else timeOfRecovery = ZombRand(minimum, maximum + 1);
         end
-        for i = 0, bodydamage:getBodyParts():size() - 1 do
-            local b = bodydamage:getBodyParts():get(i);
-            if b:HasInjury() then
-                if b:isInfectedWound() then
-                    b:SetInfected(false);
-                    b:setInfectedWound(false);
-                end
-            end
+
+        if player:hasTrait(CharacterTrait.FAST_HEALER) then timeOfRecovery = timeOfRecovery - 5; end
+        if player:hasTrait(CharacterTrait.SLOW_SLOWER) then timeOfRecovery = timeOfRecovery + 5; end
+        if player:hasTrait(ToadTraitsRegistries.lucky) then timeOfRecovery = timeOfRecovery - 2 * luckimpact; end
+        if player:hasTrait(ToadTraitsRegistries.unlucky) then timeOfRecovery = timeOfRecovery + 2 * luckimpact; end
+        
+        timeOfRecovery = math.max(minimum, math.min(maximum, timeOfRecovery))
+
+        if playerdata.SuperImmuneHealedOnce and playerdata.SuperImmuneFirstInfectionBonus then
+            --Halve the time needed once it beat the virus once, since immune system
+            timeOfRecovery = timeOfRecovery / 2; --will know how to beat it.
+        end
+
+        playerdata.SuperImmuneActive = true
+        playerdata.SuperImmuneRecovery = (playerdata.SuperImmuneRecovery or 0) + timeOfRecovery
+
+        if SandboxVars.MoreTraits.SuperImmuneWeakness then
+            playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
+        end
+    end
+
+    local parts = bodyDamage:getBodyParts()
+    for i = 0, parts:size() - 1 do
+        local b = parts:get(i);
+        if b:HasInjury() and b:isInfectedWound() then
+            b:SetInfected(false);
+            b:setInfectedWound(false);
         end
     end
 end
