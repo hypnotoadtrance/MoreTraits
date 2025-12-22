@@ -4104,7 +4104,7 @@ function EveryOneMinute()
     HungerCheck(player, playerdata);
     RestfulSleeperWakeUp(player, playerdata);
     AlbinoTimer(player, playerdata);
-    TerminatorGun(player, playerdata);
+    TerminatorGun(player);
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess();
 
