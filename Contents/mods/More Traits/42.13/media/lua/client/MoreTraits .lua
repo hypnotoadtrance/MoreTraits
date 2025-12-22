@@ -3144,6 +3144,7 @@ local function SecondWindRecharge(player, playerdata)
     end
 end
 
+-- Unsure if needed due to new Motion Sensitive Trait
 local function MotionSickness(player)
     local playerdata = player:getModData();
     local playerstats = player:getStats();
@@ -3184,6 +3185,7 @@ local function MotionSickness(player)
     end
 end
 
+-- Unsure if needed due to new Motion Sensitive Trait
 local function MotionSicknessHealthLoss(player)
     local playerdata = player:getModData();
     local playerstats = player:getStats();
