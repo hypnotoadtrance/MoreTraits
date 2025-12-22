@@ -3848,9 +3848,10 @@ function EveryHours()
             part:setBurnSpeedModifier(part:getBurnSpeedModifier() + 60);
         end
     end
-    if player:hasTrait(ToadTraitsRegistries.ingenuitive) and playerdata.IngenuitiveActivated == false then
-        MT_LearnAllRecipes(player);
-        playerdata.IngenuitiveActivated = true;
+
+    if player:hasTrait(ToadTraitsRegistries.ingenuitive) and not playerdata.IngenuitiveActivated then
+        MT_LearnAllRecipes(player)
+        playerdata.IngenuitiveActivated = true
     end
     for i, v in ipairs(playerdata.InjuredBodyList) do
         local bodypart = player:getBodyDamage():getBodyParts():get(v);
