@@ -3875,11 +3875,10 @@ function EveryHours()
     end
 end
 
-local function EveryDay()
-    local player = getPlayer();
-    local playerdata = player:getModData();
-
-end
+-- local function EveryDay()
+--     local player = getPlayer();
+--     local playerdata = player:getModData();
+-- end
 
 function OnCreatePlayer(_, player)
     --reset any worn clothing to default state.
