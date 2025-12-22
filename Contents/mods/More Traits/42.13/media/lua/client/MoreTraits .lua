@@ -910,126 +910,74 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, _player)
     end
 end
 
-function ToadTraitAntique(_iSInventoryPage, _state, _player)
-    local items = {};
-    table.insert(items, "MoreTraits.AntiqueAxe");
-    table.insert(items, "MoreTraits.Thumper");
-    table.insert(items, "MoreTraits.ObsidianBlade");
-    table.insert(items, "MoreTraits.PackerBag");
-    table.insert(items, "MoreTraits.BloodyCrowbar");
-    table.insert(items, "MoreTraits.Slugger");
-    table.insert(items, "MoreTraits.AntiqueJacket");
-    table.insert(items, "MoreTraits.AntiqueVest");
-    table.insert(items, "MoreTraits.AntiqueBoots");
-    table.insert(items, "MoreTraits.AntiqueMag1");
-    table.insert(items, "MoreTraits.AntiqueMag2");
-    table.insert(items, "MoreTraits.AntiqueMag3");
-    table.insert(items, "MoreTraits.AntiqueSpear");
-    table.insert(items, "MoreTraits.AntiqueHammer");
-    table.insert(items, "MoreTraits.AntiqueKatana");
+local function ToadTraitAntique(_iSInventoryPage, _state, player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.antique) then return end
+
     local LootRespawn = SandboxVars.LootRespawn;
-    local HoursForLootRespawn = 0;
-    local AllowRespawn = true;
-    --NO SWITCH CASE XDDDDDDDDDDDDDDD
-    if LootRespawn == 1 then
-        AllowRespawn = false;
-    elseif LootRespawn == 2 then
-        HoursForLootRespawn = 24;
-    elseif LootRespawn == 3 then
-        HoursForLootRespawn = 168;
-    elseif LootRespawn == 4 then
-        HoursForLootRespawn = 720;
-    elseif LootRespawn == 5 then
-        HoursForLootRespawn = 1440;
+    local respawnMap = { [2] = 24, [3] = 168, [4] = 720, [5] = 1440 };
+    local HoursForLootRespawn = respawnMap[LootRespawn] or 0;
+    local AllowRespawn = LootRespawn ~= 1;
+    local basechance = 10;
+    local roll = SandboxVars.MoreTraits.AntiqueChance or 1500;
+
+    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (1 * luckimpact) end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (1 * luckimpact) end
+    if player:hasTrait(CharacterTrait.DEXTROUS) then basechance = basechance + 1 end
+    if player:hasTrait(CharacterTrait.ALL_THUMBS) then basechance = basechance - 1 end
+    if player:hasTrait(ToadTraitsRegistries.scrounger) then basechance = basechance + 1 end
+    if player:hasTrait(ToadTraitsRegistries.incomprehensive) then basechance = basechance - 1 end
+    if basechance < 1 then basechance = 1 end
+
+    local worldAgeHours = GameTime:getInstance():getWorldAgeHours();
+
+    local function attemptLootSpawn(obj, container)
+        if playerdata.ContainerTraitIllegal then
+            playerdata.ContainerTraitIllegal = false;
+            if AllowRespawn then
+                obj:getModData().AllowRespawn = false;
+                obj:transmitModData();
+            end
+            return
+        end
+
+        local antiqueItemsList = {
+            "MoreTraits.AntiqueAxe", "MoreTraits.Thumper", "MoreTraits.ObsidianBlade",
+            "MoreTraits.Bag_PackerBag", "MoreTraits.BloodyCrowbar", "MoreTraits.Slugger",
+            "MoreTraits.AntiqueJacket", "MoreTraits.AntiqueVest", "MoreTraits.AntiqueBoots",
+            "MoreTraits.AntiqueSpear", "MoreTraits.AntiqueHammer", "MoreTraits.AntiqueKatana",
+            "MoreTraits.AntiqueMag1", "MoreTraits.AntiqueMag2", "MoreTraits.AntiqueMag3",
+        };
+
+        local type = container:getType();
+        local isAllowedType = (type == "crate" or type == "metal_shelves");
+        local isAnywhere = SandboxVars.MoreTraits.AntiqueAnywhere == true;
+
+        if (isAllowedType or isAnywhere) and ZombRand(roll) <= basechance then
+            local randomItem = antiqueItemsList[ZombRand(#antiqueItemsList) + 1];
+            local item = container:AddItem(randomItem);
+            container:addItemOnServer(item);
+            print("Found antique item! " .. tostring(item:getName()));
+        end
     end
-    local length = 0
-    for k, v in pairs(items) do
-        length = length + 1;
-    end
-    local player = _player;
-    local playerdata = player:getModData();
-    local containerObj;
-    local container;
-    if player:hasTrait(ToadTraitsRegistries.antique) then
-        local basechance = 10;
-        local roll = 1500;
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            basechance = basechance + 1 * (luckimpact or 1.0);
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            basechance = basechance - 1 * (luckimpact or 1.0);
-        end
-        if player:hasTrait(CharacterTrait.ALL_THUMBS) then
-            basechance = basechance - 1;
-        end
-        if player:hasTrait(CharacterTrait.DEXTROUS) then
-            basechance = basechance + 1;
-        end
-        if player:hasTrait(ToadTraitsRegistries.scrounger) then
-            basechance = basechance + 1;
-        end
-        if player:hasTrait(ToadTraitsRegistries.incomprehensive) then
-            basechance = basechance - 1;
-        end
-        if basechance < 1 then
-            basechance = 1;
-        end
-        if SandboxVars.MoreTraits.AntiqueChance then
-            roll = SandboxVars.MoreTraits.AntiqueChance;
-        end
-        for j, v in ipairs(_iSInventoryPage.backpacks) do
-            if v.inventory:getParent() then
-                containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bAntiqueRolled = true;
-                    containerObj:getModData().bHoursWhenChecked = GameTime:getInstance():getWorldAgeHours();
+
+    for _, v in ipairs(_iSInventoryPage.backpacks) do
+        local inv = v.inventory;
+        if inv and inv:getParent() then
+            local containerObj = inv:getParent();
+            local modData = containerObj:getModData();
+
+            if instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                if not modData.bAntiqueRolled then
+                    modData.bAntiqueRolled = true;
+                    modData.bHoursWhenChecked = worldAgeHours;
+                    modData.AllowRespawn = true;
                     containerObj:transmitModData();
-                    container = containerObj:getContainer();
-                    if playerdata.ContainerTraitIllegal == true then
-                        playerdata.ContainerTraitIllegal = false;
-                        if AllowRespawn == true then
-                            containerObj:getModData().AllowRespawn = false;
-                            containerObj:transmitModData();
-                        end
-                        return
-                    end
-                    local allow = false;
-                    containerObj:getModData().AllowRespawn = true;
-                    containerObj:transmitModData();
-                    if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
-                        allow = true;
-                    end
-                    if SandboxVars.MoreTraits.AntiqueAnywhere == true then
-                        allow = true;
-                    end
-                    if ZombRand(roll) <= basechance and allow == true then
-                        local i = ZombRand(length) + 1;
-                        local item = container:AddItem(items[i])
-                        container:addItemOnServer(item);
-                        print("Found antique item! " .. tostring(item:getName()));
-                    end
-                elseif AllowRespawn == true and containerObj:getModData().bAntiqueRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() and containerObj:getModData().AllowRespawn == true then
-                    if (containerObj:getModData().bHoursWhenChecked + HoursForLootRespawn) <= GameTime:getInstance():getWorldAgeHours() then
-                        containerObj:getModData().bHoursWhenChecked = GameTime:getInstance():getWorldAgeHours();
+                    attemptLootSpawn(containerObj, containerObj:getContainer());
+                elseif AllowRespawn and modData.AllowRespawn and modData.bAntiqueRolled then
+                    if (modData.bHoursWhenChecked + HoursForLootRespawn) <= worldAgeHours then
+                        modData.bHoursWhenChecked = worldAgeHours;
                         containerObj:transmitModData();
-                        container = containerObj:getContainer();
-                        if playerdata.ContainerTraitIllegal == true then
-                            playerdata.ContainerTraitIllegal = false;
-                            return
-                        end
-                        local allow = false;
-                        if container:getType() == ("crate") or container:getType() == ("metal_shelves") then
-                            allow = true;
-                        end
-                        if SandboxVars.MoreTraits.AntiqueAnywhere == true then
-                            allow = true;
-                        end
-                        if ZombRand(roll) <= basechance and allow == true then
-                            local i = ZombRand(length) + 1;
-                            local item = container:AddItem(items[i])
-                            container:addItemOnServer(item);
-                            print("Found antique item! " .. tostring(item:getName()));
-                        end
+                        attemptLootSpawn(containerObj, containerObj:getContainer());
                     end
                 end
             end
@@ -1037,86 +985,62 @@ function ToadTraitAntique(_iSInventoryPage, _state, _player)
     end
 end
 
-function ToadTraitVagabond(_iSInventoryPage, _state, _player)
-    local items = {};
-    table.insert(items, "Base.BreadSlices");
-    table.insert(items, "Base.Pizza");
-    table.insert(items, "Base.Hotdog");
-    table.insert(items, "Base.Corndog");
-    table.insert(items, "Base.OpenBeans");
-    table.insert(items, "Base.CannedChiliOpen");
-    table.insert(items, "Base.WatermelonSmashed");
-    table.insert(items, "Base.DogfoodOpen");
-    table.insert(items, "Base.CannedCornedBeefOpen");
-    table.insert(items, "Base.CannedBologneseOpen");
-    table.insert(items, "Base.CannedCarrotsOpen");
-    table.insert(items, "Base.CannedCornOpen");
-    table.insert(items, "Base.CannedMushroomSoupOpen");
-    table.insert(items, "Base.CannedPeasOpen");
-    table.insert(items, "Base.CannedPotatoOpen");
-    table.insert(items, "Base.CannedSardinesOpen");
-    table.insert(items, "Base.CannedTomatoOpen");
-    table.insert(items, "Base.TinnedSoupOpen");
-    table.insert(items, "Base.TunaTinOpen");
-    table.insert(items, "Base.CannedFruitCocktailOpen");
-    table.insert(items, "Base.CannedPeachesOpen");
-    table.insert(items, "Base.CannedPineappleOpen");
-    table.insert(items, "Base.MushroomGeneric1");
-    table.insert(items, "Base.MushroomGeneric2");
-    table.insert(items, "Base.MushroomGeneric3");
-    table.insert(items, "Base.MushroomGeneric4");
-    table.insert(items, "Base.MushroomGeneric5");
-    table.insert(items, "Base.MushroomGeneric6");
-    table.insert(items, "Base.MushroomGeneric7");
+local function ToadTraitVagabond(_iSInventoryPage, _state, player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.vagabond) then return end
 
-    local length = 0
-    for k, v in pairs(items) do
-        length = length + 1;
-    end
-    local player = _player;
-    local playerdata = player:getModData();
-    local containerObj;
-    local container;
-    if player:hasTrait(ToadTraitsRegistries.vagabond) then
-        local basechance = 33;
-        if SandboxVars.MoreTraits.VagabondChance then
-            basechance = SandboxVars.MoreTraits.VagabondChance;
-        end
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            basechance = basechance + 5 * (luckimpact or 1.0);
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            basechance = basechance - 5 * (luckimpact or 1.0);
-        end
-        for i, v in ipairs(_iSInventoryPage.backpacks) do
-            if v.inventory:getParent() then
-                containerObj = v.inventory:getParent();
-                if not containerObj:getModData().bVagbondRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
-                    containerObj:getModData().bVagbondRolled = true;
-                    containerObj:transmitModData();
-                    if playerdata.ContainerTraitIllegal == true then
-                        playerdata.ContainerTraitIllegal = false;
-                        return
-                    end
-                    container = containerObj:getContainer();
-                    if container:getType() == ("bin") then
-                        local extra = 1;
-                        if SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot then
-                            extra = SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot;
-                        end
-                        local itterations = ZombRand(0, 2) + extra;
-                        for itt = 0, itterations do
-                            itt = itt + 1;
-                            local x = ZombRand(length) + 1;
-                            if x == 0 then
-                                x = 1;
-                            end
-                            if ZombRand(100) <= basechance then
-                                local item = container:AddItem(items[x]);
-                                container:addItemOnServer(item);
-                                if MT_Config:getOption("VagabondAnnounce"):getValue() == true then
-                                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond") .. " : " .. item:getName(), true, HaloTextHelper.getColorGreen());
-                                end
+    local items = {
+        "Base.BreadSlices", "Base.Pizza", "Base.Hotdog", "Base.Corndog",
+        "Base.OpenBeans", "Base.CannedChiliOpen", "Base.WatermelonSmashed",
+        "Base.DogfoodOpen", "Base.CannedCornedBeefOpen", "Base.CannedBologneseOpen",
+        "Base.CannedCarrotsOpen", "Base.CannedCornOpen", "Base.CannedMushroomSoupOpen",
+        "Base.CannedPeasOpen", "Base.CannedPotatoOpen", "Base.CannedSardinesOpen",
+        "Base.CannedTomatoOpen", "Base.TinnedSoupOpen", "Base.TunaTinOpen",
+        "Base.CannedFruitCocktailOpen", "Base.CannedPeachesOpen", "Base.CannedPineappleOpen",
+        "Base.MushroomGeneric1", "Base.MushroomGeneric2", "Base.MushroomGeneric3",
+        "Base.MushroomGeneric4", "Base.MushroomGeneric5", "Base.MushroomGeneric6",
+        "Base.MushroomGeneric7"
+    };
+
+    local basechance = SandboxVars.MoreTraits.VagabondChance or 33;
+
+    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (5 * luckimpact) end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (5 * luckimpact) end
+
+    for _, v in ipairs(_iSInventoryPage.backpacks) do
+        local inv = v.inventory;
+        if inv and inv:getParent() then
+            local containerObj = inv:getParent();
+            local modData = containerObj:getModData();
+
+            -- Check if container is a "bin" (trash can) and hasn't been rolled for Vagabond yet
+            if not modData.bVagbondRolled and instanceof(containerObj, "IsoObject") 
+            and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                
+                modData.bVagbondRolled = true;
+                containerObj:transmitModData();
+
+                if playerdata.ContainerTraitIllegal then
+                    playerdata.ContainerTraitIllegal = false;
+                    return
+                end
+
+                local container = containerObj:getContainer();
+                if container:getType() == "bin" then
+                    local extra = SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot or 1;
+                    local iterations = ZombRand(0, 3) + extra;
+
+                    for i = 1, iterations do
+                        if ZombRand(100) <= basechance then
+                            local x = ZombRand(#items) + 1;
+                            local item = container:AddItem(items[x]);
+                            container:addItemOnServer(item);
+
+                            -- Visual feedback
+                            if MT_Config:getOption("VagabondAnnounce"):getValue() then
+                                HaloTextHelper.addTextWithArrow(
+                                    player, getText("UI_trait_vagabond") .. " : " .. item:getName(), 
+                                    true, HaloTextHelper.getColorGreen()
+                                );
                             end
                         end
                     end
@@ -2953,11 +2877,14 @@ function ContainerEvents(_iSInventoryPage, _state)
     if state == "end" then
         local player = getPlayer();
         if not player then return end;
+        local playerdata = player:getModData();
+        if not playerdata then return end;
+
         ToadTraitIncomprehensive(page, state, player);
         ToadTraitScrounger(page, state, player);
-        ToadTraitVagabond(page, state, player);
+        ToadTraitVagabond(page, state, player, playerdata);
         Gourmand(page, state, player);
-        ToadTraitAntique(page, state, player);
+        ToadTraitAntique(page, state, player, playerdata);
     end
 end
 
