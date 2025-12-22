@@ -206,8 +206,7 @@ local function addXPNoMultiplier(_player, _perk, _amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
-local function InitPlayerData(player)
-    local playerdata = player:getModData()
+local function InitPlayerData(player, playerdata)
     for i, v in pairs(playerdatatable) do
         if playerdata[v[1]] == nil then
             playerdata[v[1]] = v[2]
