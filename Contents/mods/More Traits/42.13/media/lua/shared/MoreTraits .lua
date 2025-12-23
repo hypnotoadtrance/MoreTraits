@@ -3897,21 +3897,16 @@ function MTAlcoholismMoodle(player, playerdata)
     end
 end
 
-function MTAlcoholismMoodleTracker(_player, _playerdata)
+function MTAlcoholismMoodleTracker(player, playerdata)
     --Experimental MoodleFramework Support
-    local player = _player;
-    local playerdata = _playerdata;
-    if player:hasTrait(ToadTraitsRegistries.drinker) then
-        local hoursthreshold = 72;
-        local Alcoholism = MF.getMoodle("MTAlcoholism"):getValue();
-        if SandboxVars.MoreTraits.AlcoholicWithdrawal then
-            hoursthreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal;
-        end
-        playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
-        local hours = playerdata.iHoursSinceDrink;
-        local percent = (hours / hoursthreshold) * 0.05;
-        MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
-    end
+    if not player:hasTrait(ToadTraitsRegistries.drinker) then return end
+    local hoursthreshold = 72;
+    local Alcoholism = MF.getMoodle("MTAlcoholism"):getValue();
+    if SandboxVars.MoreTraits.AlcoholicWithdrawal then hoursthreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal; end
+    playerdata.iHoursSinceDrink = playerdata.iHoursSinceDrink + 1;
+    local hours = playerdata.iHoursSinceDrink;
+    local percent = (hours / hoursthreshold) * 0.05;
+    MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
 end
 
 function MainPlayerUpdate(player)
