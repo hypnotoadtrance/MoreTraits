@@ -968,16 +968,16 @@ local function ToadTraitAntique(_iSInventoryPage, _state, player, playerdata)
 end
 
 local vagabondItems = {
-        "Base.BreadSlices", "Base.Pizza", "Base.Hotdog", "Base.Corndog",
-        "Base.OpenBeans", "Base.CannedChiliOpen", "Base.WatermelonSmashed",
-        "Base.DogfoodOpen", "Base.CannedCornedBeefOpen", "Base.CannedBologneseOpen",
-        "Base.CannedCarrotsOpen", "Base.CannedCornOpen", "Base.CannedMushroomSoupOpen",
-        "Base.CannedPeasOpen", "Base.CannedPotatoOpen", "Base.CannedSardinesOpen",
-        "Base.CannedTomatoOpen", "Base.TinnedSoupOpen", "Base.TunaTinOpen",
-        "Base.CannedFruitCocktailOpen", "Base.CannedPeachesOpen", "Base.CannedPineappleOpen",
-        "Base.MushroomGeneric1", "Base.MushroomGeneric2", "Base.MushroomGeneric3",
-        "Base.MushroomGeneric4", "Base.MushroomGeneric5", "Base.MushroomGeneric6",
-        "Base.MushroomGeneric7"
+    "Base.BreadSlices", "Base.Pizza", "Base.Hotdog", "Base.Corndog",
+    "Base.OpenBeans", "Base.CannedChiliOpen", "Base.WatermelonSmashed",
+    "Base.DogfoodOpen", "Base.CannedCornedBeefOpen", "Base.CannedBologneseOpen",
+    "Base.CannedCarrotsOpen", "Base.CannedCornOpen", "Base.CannedMushroomSoupOpen",
+    "Base.CannedPeasOpen", "Base.CannedPotatoOpen", "Base.CannedSardinesOpen",
+    "Base.CannedTomatoOpen", "Base.TinnedSoupOpen", "Base.TunaTinOpen",
+    "Base.CannedFruitCocktailOpen", "Base.CannedPeachesOpen", "Base.CannedPineappleOpen",
+    "Base.MushroomGeneric1", "Base.MushroomGeneric2", "Base.MushroomGeneric3",
+    "Base.MushroomGeneric4", "Base.MushroomGeneric5", "Base.MushroomGeneric6",
+    "Base.MushroomGeneric7"
 }
 
 local function ToadTraitVagabond(page, player, playerdata)
