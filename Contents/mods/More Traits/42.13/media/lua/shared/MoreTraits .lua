@@ -3169,46 +3169,46 @@ local function SecondWindRecharge(player, playerdata)
     end
 end
 
--- Unsure if needed due to new Motion Sensitive Trait
-local function MotionSickness(player)
-    local playerdata = player:getModData();
-    local playerstats = player:getStats();
-    local Sickness = playerstats:get(CharacterStat.FOOD_SICKNESS);
-    if player:hasTrait(ToadTraitsRegistries.motionsickness) then
-        if player:isDriving() == true and Sickness < 90.0 then
-            local vehicle = player:getVehicle();
-            if not vehicle then
-                return
-            end
-            if playerdata.MotionActive == false then
-                playerdata.MotionActive = true;
-            end
-            local Speed = math.abs(vehicle:getCurrentSpeedKmHour())
-            if Speed < 16.0 then
-                return
-            elseif Speed >= 16.0 and Speed < 31.0 and Sickness < 21.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS, Sickness + 0.005);
-            elseif Speed >= 31.0 and Speed < 41.0 and Sickness < 26.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS, Sickness + 0.01);
-            elseif Speed >= 41.0 and Speed < 51.0 and Sickness < 38.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.02);
-            elseif Speed >= 51.0 and Speed < 56.0 and Sickness < 48.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.03);
-            elseif Speed >= 56.0 and Speed < 61.0 and Sickness < 73.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.04);
-            elseif Speed >= 61.0 and Speed < 91.0 and Sickness < 80.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.05);
-            elseif Speed >= 91.0 then
-                playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.1);
-            end
-        elseif not player:isDriving() and not playerstats:isIsFakeInfected() and Sickness ~= 0 then
-            if playerdata.MotionActive == true then
-                playerdata.MotionActive = false;
-            end
-            playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness - 0.1);
-        end
-    end
-end
+-- -- Unsure if needed due to new Motion Sensitive Trait
+-- local function MotionSickness(player)
+--     local playerdata = player:getModData();
+--     local playerstats = player:getStats();
+--     local Sickness = playerstats:get(CharacterStat.FOOD_SICKNESS);
+--     if player:hasTrait(ToadTraitsRegistries.motionsickness) then
+--         if player:isDriving() == true and Sickness < 90.0 then
+--             local vehicle = player:getVehicle();
+--             if not vehicle then
+--                 return
+--             end
+--             if playerdata.MotionActive == false then
+--                 playerdata.MotionActive = true;
+--             end
+--             local Speed = math.abs(vehicle:getCurrentSpeedKmHour())
+--             if Speed < 16.0 then
+--                 return
+--             elseif Speed >= 16.0 and Speed < 31.0 and Sickness < 21.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS, Sickness + 0.005);
+--             elseif Speed >= 31.0 and Speed < 41.0 and Sickness < 26.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS, Sickness + 0.01);
+--             elseif Speed >= 41.0 and Speed < 51.0 and Sickness < 38.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.02);
+--             elseif Speed >= 51.0 and Speed < 56.0 and Sickness < 48.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.03);
+--             elseif Speed >= 56.0 and Speed < 61.0 and Sickness < 73.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.04);
+--             elseif Speed >= 61.0 and Speed < 91.0 and Sickness < 80.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.05);
+--             elseif Speed >= 91.0 then
+--                 playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness + 0.1);
+--             end
+--         elseif not player:isDriving() and not playerstats:isIsFakeInfected() and Sickness ~= 0 then
+--             if playerdata.MotionActive == true then
+--                 playerdata.MotionActive = false;
+--             end
+--             playerstats:set(CharacterStat.FOOD_SICKNESS,Sickness - 0.1);
+--         end
+--     end
+-- end
 
 -- Unsure if needed due to new Motion Sensitive Trait
 local function MotionSicknessHealthLoss(player)
@@ -3722,8 +3722,8 @@ function MainPlayerUpdate(player)
         SuperImmune(player, playerdata);
         Immunocompromised(player, playerdata);
     end
-    MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
-    MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
+    -- MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
+    -- MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     SecondWind(player, playerdata);
     indefatigable(player, playerdata);
     checkBloodTraits(player);

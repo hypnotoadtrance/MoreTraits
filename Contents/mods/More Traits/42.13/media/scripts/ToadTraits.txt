@@ -221,7 +221,8 @@ module ToadTraits {
         Cost = 5,
         UIName = UI_trait_expertdriver,
         UIDescription = UI_trait_expertdriverdesc,
-        MutuallyExclusiveTraits = ToadTraits:motionsickness;ToadTraits:poordriver,
+        MutuallyExclusiveTraits = ToadTraits:poordriver,
+        /*MutuallyExclusiveTraits = ToadTraits:motionsickness;ToadTraits:poordriver,*/
     }
 
     character_trait_definition ToadTraits:fearful
@@ -453,7 +454,7 @@ module ToadTraits {
         XPBoosts = Fitness=1;SmallBlunt=1,
     }
 
-    character_trait_definition ToadTraits:motionsickness
+    /*character_trait_definition ToadTraits:motionsickness
     {
         IsProfessionTrait = false,
         DisabledInMultiplayer = false,
@@ -462,7 +463,7 @@ module ToadTraits {
         UIName = UI_trait_motionsickness,
         UIDescription = UI_trait_motionsicknessdesc,
         MutuallyExclusiveTraits = ToadTraits:expertdriver;ToadTraits:superimmune,
-    }
+    }*/
 
     character_trait_definition ToadTraits:mundane
     {
@@ -943,7 +944,8 @@ module ToadTraits {
         Cost = 10,
         UIName = UI_trait_superimmune,
         UIDescription = UI_trait_superimmunedesc,
-        MutuallyExclusiveTraits = ToadTraits:immunocompromised;ToadTraits:motionsickness;base:pronetoillness;base:resilient,
+        MutuallyExclusiveTraits = ToadTraits:immunocompromised;base:pronetoillness;base:resilient,
+        /*MutuallyExclusiveTraits = ToadTraits:immunocompromised;ToadTraits:motionsickness;base:pronetoillness;base:resilient,*/
     }
 
     character_trait_definition ToadTraits:swift
