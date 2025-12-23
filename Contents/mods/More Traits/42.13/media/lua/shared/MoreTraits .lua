@@ -217,14 +217,6 @@ local function addXPNoMultiplier(player, perk, amount)
     player:getXp():AddXPNoMultiplier(perk, amount);
 end
 
-local function InitPlayerData(player, playerdata)
-    for i, v in pairs(playerdatatable) do
-        if playerdata[v[1]] == nil then
-            playerdata[v[1]] = v[2]
-        end
-    end
-end
-
 function initToadTraitsItems(player)
     if isClient() then return end
     local inv = player:getInventory();
