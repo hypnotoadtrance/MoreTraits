@@ -696,33 +696,28 @@ function ToadTraitParanoia(player, playerdata)
     end
 end
 
-function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
+function ToadTraitScrounger(page, player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.scrounger) then return end
     
-    local baseChance = SandboxVars.MoreTraits.ScroungerChance or 20
     local modifier = 1.0 + (SandboxVars.MoreTraits.ScroungerLootModifier or 30) * 0.01
-    local itemBaseChance = SandboxVars.MoreTraits.ScroungerItemChance or 10
+    local baseChance = SandboxVars.MoreTraits.ScroungerItemChance or 10
 
     if player:hasTrait(ToadTraitsRegistries.lucky) then
-        baseChance = baseChance + (5 * luckimpact)
         modifier = modifier + (0.1 * luckimpact)
-        itemBaseChance = itemBaseChance + (5 * luckimpact)
+        baseChance = baseChance + (5 * luckimpact)
     elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
-        baseChance = baseChance - (5 * luckimpact)
         modifier = modifier - (0.1 * luckimpact)
-        itemBaseChance = itemBaseChance - (5 * luckimpact)
+        baseChance = baseChance - (5 * luckimpact)
     end
 
-    for _, v in ipairs(_iSInventoryPage.backpacks) do
+    for _, v in ipairs(page.backpacks) do
         local inventory = v.inventory
         local containerObj = inventory:getParent()
 
         if containerObj and inventory:getType() ~= "floor" then
             local modData = containerObj:getModData()
 
-            -- Only roll if not already rolled, is a valid object, and not a corpse
-            if not modData.bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject")  and not instanceof(containerObj, "IsoDeadBody") then
-                
+            if not modData.bScroungerorIncomprehensiveRolled and instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") then
                 modData.bScroungerorIncomprehensiveRolled = true
                 containerObj:transmitModData()
 
@@ -735,54 +730,48 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
                     local items = inventory:getItems()
                     if not items or items:isEmpty() then return end
 
-                    local processedTypes = {}
-                    
+                    local processedItems = {}
+                    local itemsToSpawn = {} -- List of strings to send to server
+
                     for i = 0, items:size() - 1 do
                         local item = items:get(i)
                         local fullType = item:getFullType()
 
-                        if not processedTypes[fullType] then
-                            processedTypes[fullType] = true
-                            
+                        if not processedItems[fullType] then
+                            processedItems[fullType] = true
                             local count = inventory:getNumberOfItem(fullType)
                             
-                            --Add a Special Case for Cigarettes and Nails since they inherently create 20 when added.
                             if fullType == "Base.CigaretteSingle" or fullType == "Base.Nails" then
                                 count = math.floor(count / 20)
                             end
 
-                            local currentItemChance = itemBaseChance
+                            local currentItemChance = baseChance
                             if item:getCategory() == "Food" or item:IsDrainable() then currentItemChance = currentItemChance + 10
                             elseif item:IsWeapon() then currentItemChance = currentItemChance + 5 end
 
                             local n = 0
-                            local rolled = false
-
                             if count == 1 then
-                                if ZombRand(100) <= currentItemChance then n, rolled = 1, true end
-                            elseif count > 1 and count < 5 then n, rolled = math.floor(count * modifier), true
-                            elseif count >= 5 then n, rolled = math.floor((count * modifier) * 2), true
+                                if ZombRand(100) <= currentItemChance then n = 1 end
+                            elseif count > 1 and count < 5 then n = math.floor(count * modifier)
+                            elseif count >= 5 then n = math.floor((count * modifier) * 2)
                             end
 
-                            if rolled and n > 0 then
+                            if n > 0 then
                                 for j = 1, n do
-                                    local addedItem = inventory:AddItem(fullType)
-                                    if isClient() then sendAddItemToContainer(inventory, addedItem)
-                                    else inventory:addItemOnServer(addedItem) end
+                                    if isClient() then table.insert(itemsToSpawn, fullType)
+                                    else inventory:AddItem(fullType) end
                                 end
 
                                 if not isServer() and MT_Config and MT_Config:getOption("ScroungerAnnounce"):getValue() then
                                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen())
                                 end
-
-                                if not isServer() and MT_Config and MT_Config:getOption("ScroungerHighlight"):getValue() then
-                                    playerdata.scroungerHighlightsTbl = playerdata.scroungerHighlightsTbl or {}
-                                    playerdata.scroungerHighlightsTbl[containerObj] = 0
-                                    containerObj:setHighlighted(true, false)
-                                    containerObj:setHighlightColor(0.5, 1, 0.4, 1)
-                                end
                             end
                         end
+                    end
+
+                    if isClient() and #itemsToSpawn > 0 then
+                        local args = { x = containerObj:getX(), y = containerObj:getY(), z = containerObj:getZ(), items = itemsToSpawn }
+                        sendClientCommand(player, 'ToadTraits', 'Scrounger', args)
                     end
                 end 
             end
@@ -818,15 +807,15 @@ function UnHighlightScrounger(player, playerdata)
     end
 end
 
-function ToadTraitIncomprehensive(_iSInventoryPage, _state, player)
+function ToadTraitIncomprehensive(page, player)
     if not player:hasTrait(ToadTraitsRegistries.incomprehensive) then return end
     
     local baseChance = SandboxVars.MoreTraits.IncomprehensiveChance or 10
-    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance - (5 * luckimpact)
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance + (5 * luckimpact)
-    end
 
-    for _, v in ipairs(_iSInventoryPage.backpacks) do
+    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance - (5 * luckimpact)
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance + (5 * luckimpact) end
+
+    for _, v in ipairs(page.backpacks) do
         local inventory = v.inventory
         local containerObj = inventory:getParent()
         
@@ -840,51 +829,60 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, player)
                 if ZombRand(100) <= baseChance then
                     local container = containerObj:getContainer()
                     local items = container:getItems()
-                    local itemsToRemove = {}
-                    local processedTypes = {}
+                    local processedItems = {}
+                    local itemsToRemove = {} 
 
                     for i = 0, items:size() - 1 do
                         local item = items:get(i)
-                        local fullType = item:getFullType()
+                        if item then
+                            local fullType = item:getFullType()
 
-                        if item and not processedTypes[fullType] then
-                            processedTypes[fullType] = true
-                            
-                            local count = container:getNumberOfItem(fullType)
-                            if fullType == "Base.Cigarettes" then count = math.floor(count / 20) end
-
-                            local shouldRemove = false
-                            if count == 1 then
-                                local bChance = 5
-                                if player:hasTrait(ToadTraitsRegistries.lucky) then bChance = bChance - (5 * luckimpact)
-                                elseif player:hasTrait(ToadTraitsRegistries.unlucky) then bChance = bChance + (5 * luckimpact) end
+                            if not processedItems[fullType] then   
+                                processedItems[fullType] = true
                                 
-                                if item:IsFood() or item:IsDrainable() then bChance = bChance + 10 end
-                                if item:IsWeapon() then bChance = bChance + 5 end
-                                if ZombRand(100) <= bChance then shouldRemove = true end
-                            elseif count > 1 then
-                                shouldRemove = true
-                            end
+                                local count = container:getNumberOfItem(fullType)
+                                if fullType == "Base.CigaretteSingle" or fullType == "Base.Nails" then 
+                                    count = math.floor(count / 20) 
+                                end
 
-                            if shouldRemove then
-                                table.insert(itemsToRemove, item)
-                                if count >= 5 then
-                                    local secondItem = container:FindAndReturn(fullType)
-                                    if secondItem and secondItem ~= item then
-                                        table.insert(itemsToRemove, secondItem)
+                                local removeCount = 0
+                                if count == 1 then
+                                    local bChance = 5
+                                    if player:hasTrait(ToadTraitsRegistries.lucky) then bChance = bChance - (5 * luckimpact)
+                                    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then bChance = bChance + (5 * luckimpact) end
+                                    
+                                    if item:IsFood() or item:IsDrainable() then bChance = bChance + 10 end
+                                    if item:IsWeapon() then bChance = bChance + 5 end
+                                    
+                                    if ZombRand(100) <= bChance then removeCount = 1 end
+                                elseif count > 1 then
+                                    removeCount = 1
+                                    if count >= 5 then removeCount = 2 end
+                                end
+
+                                if removeCount > 0 then
+                                    for j = 1, removeCount do
+                                        table.insert(itemsToRemove, fullType)
+                                    end
+
+                                    if not isServer() and MT_Config and MT_Config:getOption("ScroungerAnnounce"):getValue() then
+                                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. item:getName(), false, HaloTextHelper.getColorRed())
                                     end
                                 end
                             end
                         end
                     end
 
-                    for _, item in ipairs(itemsToRemove) do
-                        if not isServer() and MT_Config and MT_Config:getOption("ScroungerAnnounce"):getValue() then
-                            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. item:getName(), false, HaloTextHelper.getColorRed())
+                    if #itemsToRemove > 0 then
+                        if isClient() then
+                            local args = { x = containerObj:getX(), y = containerObj:getY(), z = containerObj:getZ(), items = itemsToRemove }
+                            sendClientCommand(player, 'ToadTraits', 'Incomprehensive', args)
+                        else
+                            for _, type in ipairs(itemsToRemove) do
+                                local itemObj = container:FindAndReturn(type)
+                                if itemObj then container:Remove(itemObj) end
+                            end
                         end
-                        container:Remove(item)
-                        if isClient() then sendRemoveItemFromContainer(container, item)
-                        else container:removeItemOnServer(item) end
                     end
                 end
             end
@@ -892,93 +890,84 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, player)
     end
 end
 
-local function ToadTraitAntique(_iSInventoryPage, _state, player, playerdata)
+local function ToadTraitAntique(page, player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.antique) then return end
 
     local LootRespawn = SandboxVars.LootRespawn;
     local respawnMap = { [2] = 24, [3] = 168, [4] = 720, [5] = 1440 };
     local HoursForLootRespawn = respawnMap[LootRespawn] or 0;
     local AllowRespawn = LootRespawn ~= 1;
-    local basechance = 10;
+    
+    local baseChance = 10;
     local roll = SandboxVars.MoreTraits.AntiqueChance or 1500;
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (1 * luckimpact) end
-    if player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (1 * luckimpact) end
-    if player:hasTrait(CharacterTrait.DEXTROUS) then basechance = basechance + 1 end
-    if player:hasTrait(CharacterTrait.ALL_THUMBS) then basechance = basechance - 1 end
-    if player:hasTrait(ToadTraitsRegistries.scrounger) then basechance = basechance + 1 end
-    if player:hasTrait(ToadTraitsRegistries.incomprehensive) then basechance = basechance - 1 end
-    if basechance < 1 then basechance = 1 end
+    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance + (1 * luckimpact) end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance - (1 * luckimpact) end
+    if player:hasTrait(CharacterTrait.DEXTROUS) then baseChance = baseChance + 1 end
+    if player:hasTrait(CharacterTrait.ALL_THUMBS) then baseChance = baseChance - 1 end
+    if player:hasTrait(ToadTraitsRegistries.scrounger) then baseChance = baseChance + 1 end
+    if player:hasTrait(ToadTraitsRegistries.incomprehensive) then baseChance = baseChance - 1 end
+    if baseChance < 1 then basechance = 1 end
 
     local worldAgeHours = GameTime:getInstance():getWorldAgeHours();
 
-    local function attemptLootSpawn(obj, container)
-        if playerdata.ContainerTraitIllegal then
-            playerdata.ContainerTraitIllegal = false;
-            if AllowRespawn then
-                obj:getModData().AllowRespawn = false;
-                obj:transmitModData();
-            end
-            return
-        end
-
-        local antiqueItemsList = {
-            "MoreTraits.AntiqueAxe", "MoreTraits.Thumper", "MoreTraits.ObsidianBlade",
-            "MoreTraits.Bag_PackerBag", "MoreTraits.BloodyCrowbar", "MoreTraits.Slugger",
-            "MoreTraits.AntiqueJacket", "MoreTraits.AntiqueVest", "MoreTraits.AntiqueBoots",
-            "MoreTraits.AntiqueSpear", "MoreTraits.AntiqueHammer", "MoreTraits.AntiqueKatana",
-            "MoreTraits.AntiqueMag1", "MoreTraits.AntiqueMag2", "MoreTraits.AntiqueMag3",
-        };
-
-        local type = container:getType();
-        local isAllowedType = (type == "crate" or type == "metal_shelves");
-        local isAnywhere = SandboxVars.MoreTraits.AntiqueAnywhere == true;
-
-        if (isAllowedType or isAnywhere) and ZombRand(roll) <= basechance then
-            local randomItem = antiqueItemsList[ZombRand(#antiqueItemsList) + 1];
-            local item = container:AddItem(randomItem);
-            container:addItemOnServer(item);
-            print("Found antique item! " .. tostring(item:getName()));
-        end
-    end
-
-    for _, v in ipairs(_iSInventoryPage.backpacks) do
+    for _, v in ipairs(page.backpacks) do
         local inv = v.inventory;
         if inv and inv:getParent() then
             local containerObj = inv:getParent();
             local modData = containerObj:getModData();
 
             if instanceof(containerObj, "IsoObject") and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
+                local shouldRoll = false
+                
                 if not modData.bAntiqueRolled then
                     modData.bAntiqueRolled = true;
                     modData.bHoursWhenChecked = worldAgeHours;
                     modData.AllowRespawn = true;
                     containerObj:transmitModData();
-                    attemptLootSpawn(containerObj, containerObj:getContainer());
+                    shouldRoll = true
                 elseif AllowRespawn and modData.AllowRespawn and modData.bAntiqueRolled then
                     if (modData.bHoursWhenChecked + HoursForLootRespawn) <= worldAgeHours then
                         modData.bHoursWhenChecked = worldAgeHours;
                         containerObj:transmitModData();
-                        attemptLootSpawn(containerObj, containerObj:getContainer());
+                        shouldRoll = true
+                    end
+                end
+
+                if shouldRoll then
+                    if playerdata.ContainerTraitIllegal then
+                        playerdata.ContainerTraitIllegal = false;
+                        if AllowRespawn then modData.AllowRespawn = false; containerObj:transmitModData(); end
+                        return
+                    end
+
+                    local container = containerObj:getContainer()
+                    local type = container:getType();
+                    local isAllowedType = (type == "crate" or type == "metal_shelves");
+                    local isAnywhere = SandboxVars.MoreTraits.AntiqueAnywhere == true;
+
+                    if (isAllowedType or isAnywhere) and ZombRand(roll) <= baseChance then
+                        local antiqueItemsList = {
+                            "MoreTraits.AntiqueAxe", "MoreTraits.Thumper", "MoreTraits.ObsidianBlade",
+                            "MoreTraits.Bag_PackerBag", "MoreTraits.BloodyCrowbar", "MoreTraits.Slugger",
+                            "MoreTraits.AntiqueJacket", "MoreTraits.AntiqueVest", "MoreTraits.AntiqueBoots",
+                            "MoreTraits.AntiqueSpear", "MoreTraits.AntiqueHammer", "MoreTraits.AntiqueKatana",
+                            "MoreTraits.AntiqueMag1", "MoreTraits.AntiqueMag2", "MoreTraits.AntiqueMag3",
+                        };
+                        
+                        local itemType = antiqueItemsList[ZombRand(#antiqueItemsList) + 1];
+                        if isClient() then
+                            local args = { x = containerObj:getX(), y = containerObj:getY(), z = containerObj:getZ(), items = {itemType} }
+                            sendClientCommand(player, 'ToadTraits', 'Antique', args)
+                        else
+                            container:AddItem(itemType)
+                        end
                     end
                 end
             end
         end
     end
-end
-
-local vagabondItems = {
-    "Base.BreadSlices", "Base.Pizza", "Base.Hotdog", "Base.Corndog",
-    "Base.OpenBeans", "Base.CannedChiliOpen", "Base.WatermelonSmashed",
-    "Base.DogfoodOpen", "Base.CannedCornedBeefOpen", "Base.CannedBologneseOpen",
-    "Base.CannedCarrotsOpen", "Base.CannedCornOpen", "Base.CannedMushroomSoupOpen",
-    "Base.CannedPeasOpen", "Base.CannedPotatoOpen", "Base.CannedSardinesOpen",
-    "Base.CannedTomatoOpen", "Base.TinnedSoupOpen", "Base.TunaTinOpen",
-    "Base.CannedFruitCocktailOpen", "Base.CannedPeachesOpen", "Base.CannedPineappleOpen",
-    "Base.MushroomGeneric1", "Base.MushroomGeneric2", "Base.MushroomGeneric3",
-    "Base.MushroomGeneric4", "Base.MushroomGeneric5", "Base.MushroomGeneric6",
-    "Base.MushroomGeneric7"
-}
+end 
 
 local function ToadTraitVagabond(page, player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.vagabond) then return end
@@ -1005,6 +994,19 @@ local function ToadTraitVagabond(page, player, playerdata)
                     local iterations = ZombRand(0, 3) + extra
                     local itemsFound = {} -- To track items for the Server Command
 
+                    local vagabondItems = {
+                        "Base.BreadSlices", "Base.Pizza", "Base.Hotdog", "Base.Corndog",
+                        "Base.OpenBeans", "Base.CannedChiliOpen", "Base.WatermelonSmashed",
+                        "Base.DogfoodOpen", "Base.CannedCornedBeefOpen", "Base.CannedBologneseOpen",
+                        "Base.CannedCarrotsOpen", "Base.CannedCornOpen", "Base.CannedMushroomSoupOpen",
+                        "Base.CannedPeasOpen", "Base.CannedPotatoOpen", "Base.CannedSardinesOpen",
+                        "Base.CannedTomatoOpen", "Base.TinnedSoupOpen", "Base.TunaTinOpen",
+                        "Base.CannedFruitCocktailOpen", "Base.CannedPeachesOpen", "Base.CannedPineappleOpen",
+                        "Base.MushroomGeneric1", "Base.MushroomGeneric2", "Base.MushroomGeneric3",
+                        "Base.MushroomGeneric4", "Base.MushroomGeneric5", "Base.MushroomGeneric6",
+                        "Base.MushroomGeneric7"
+                    }
+
                     for i = 1, iterations do
                         if ZombRand(100) <= baseChance then
                             local itemType = vagabondItems[ZombRand(#vagabondItems) + 1]
@@ -1026,7 +1028,6 @@ local function ToadTraitVagabond(page, player, playerdata)
                             x = containerObj:getX(),
                             y = containerObj:getY(),
                             z = containerObj:getZ(),
-                            baseChance = baseChance,
                             items = itemsFound
                         }
                         sendClientCommand(player, 'ToadTraits', 'Vagabond', args)
@@ -1352,8 +1353,8 @@ function hardytrait(player, playerdata)
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
         if not isServer() then 
             if MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
-            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
-end
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
+            end
         end
     elseif currentEndurance >= 1.0 and playerdata.iHardyEndurance < playerdata.iHardyMaxEndurance then
         stats:set(CharacterStat.ENDURANCE, currentEndurance - regenAmount);
@@ -1361,8 +1362,8 @@ end
         
         if not isServer() then
             if MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
-            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
-end
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
+            end
         else
             HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), "")
         end
@@ -2343,14 +2344,15 @@ function graveRobber(_zombie)
     end
 end
 
-function Gourmand(_iSInventoryPage, _state, player)
+function Gourmand(page, player)
     if not player:hasTrait(ToadTraitsRegistries.gourmand) then return end
 
-    local basechance = 33
-    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (10 * luckimpact)
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (10 * luckimpact) end
+    local baseChance = 33
 
-    for _, v in ipairs(_iSInventoryPage.backpacks) do
+    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance + (10 * luckimpact)
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance - (10 * luckimpact) end
+
+    for _, v in ipairs(page.backpacks) do
         local inventory = v.inventory
         local containerObj = inventory:getParent()
 
@@ -2363,33 +2365,34 @@ function Gourmand(_iSInventoryPage, _state, player)
 
                 local container = containerObj:getContainer()
                 local items = container:getItems()
-                local itemsToReplace = {}
+                local itemsToSwap = {}
 
                 for l = 0, items:size() - 1 do
                     local item = items:get(l)
-                    if item and item:getCategory() == "Food" then
-                        if item:isRotten() or not item:isFresh() then
-                            if ZombRand(100) < basechance then
-                                table.insert(itemsToReplace, item)
+                    if item and item:getCategory() == "Food" and (item:isRotten() or not item:isFresh()) then
+                        if ZombRand(100) < baseChance then
+                            table.insert(itemsToSwap, item:getFullType())
+                            
+                            if not isServer() and MT_Config and MT_Config:getOption("GourmandAnnounce"):getValue() then
+                                local text = getText("UI_trait_gourmand") .. ": " .. item:getName()
+                                HaloTextHelper.addTextWithArrow(player, text, true, HaloTextHelper.getColorGreen())
                             end
                         end
                     end
                 end
 
-                for _, oldItem in ipairs(itemsToReplace) do
-                    local itemType = oldItem:getFullType()
-                    container:Remove(oldItem)
-                    if isClient() then sendRemoveItemFromContainer(container, oldItem)
-                    else container:removeItemOnServer(oldItem); end
-
-                    local newItem = instanceItem(itemType)
-                    container:AddItem(newItem)
-                    if isClient() then sendAddItemToContainer(container, newItem)
-                    else container:addItemOnServer(newItem) end
-
-                    if not isServer() and MT_Config and MT_Config:getOption("GourmandAnnounce"):getValue() then
-                        local text = getText("UI_trait_gourmand") .. ": " .. newItem:getName()
-                        HaloTextHelper.addTextWithArrow(player, text, true, HaloTextHelper.getColorGreen())
+                if #itemsToSwap > 0 then
+                    if isClient() then
+                        local args = { x = containerObj:getX(), y = containerObj:getY(), z = containerObj:getZ(), items = itemsToSwap }
+                        sendClientCommand(player, 'ToadTraits', 'Gourmand', args)
+                    else
+                        for _, fullType in ipairs(itemsToSwap) do
+                            local oldItem = container:FindAndReturn(fullType)
+                            if oldItem then
+                                container:Remove(oldItem)
+                                container:AddItem(fullType)
+                            end
+                        end
                     end
                 end
             end
@@ -2749,20 +2752,19 @@ function GymGoerUpdate(player, playerdata)
     end
 end
 
-function ContainerEvents(_iSInventoryPage, _state)
-    local page = _iSInventoryPage;
-    local state = _state;
+function ContainerEvents (iSInventoryPage, state)
+    local page = iSInventoryPage
     if state == "end" then
         local player = getPlayer();
         if not player then return end;
         local playerdata = player:getModData();
         if not playerdata then return end;
 
-        ToadTraitIncomprehensive(page, state, player);
-        ToadTraitScrounger(page, state, player, playerdata);
-        ToadTraitVagabond(page, state, player, playerdata);
-        Gourmand(page, state, player);
-        ToadTraitAntique(page, state, player, playerdata);
+        ToadTraitIncomprehensive(page, player);
+        ToadTraitScrounger(page, player, playerdata);
+        ToadTraitVagabond(page, player, playerdata);
+        Gourmand(page, player);
+        ToadTraitAntique(page, player, playerdata);
     end
 end
 
