@@ -3210,30 +3210,30 @@ end
 --     end
 -- end
 
--- Unsure if needed due to new Motion Sensitive Trait
-local function MotionSicknessHealthLoss(player)
-    local playerdata = player:getModData();
-    local playerstats = player:getStats();
-    local MaxHealth = 35.0;
-    local Health = player:getBodyDamage():getOverallBodyHealth();
-    local Sickness = playerstats:get(CharacterStat.FOOD_SICKNESS);
-    if player:hasTrait(ToadTraitsRegistries.motionsickness) and playerdata.MotionActive == true then
-        if Health >= 100 - Sickness and Health > MaxHealth then
-            for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-                local b = player:getBodyDamage():getBodyParts():get(i);
-                if Sickness < 40.0 then
-                    return
-                elseif Sickness >= 40.0 and Sickness < 50.0 and Health > 90.0 then
-                    b:AddDamage(0.001 * GameSpeedMultiplier());
-                elseif Sickness >= 50.0 and Sickness < 75.0 and Health > 75.0 then
-                    b:AddDamage(0.002 * GameSpeedMultiplier());
-                elseif Sickness >= 75.0 then
-                    b:AddDamage(0.005 * GameSpeedMultiplier());
-                end
-            end
-        end
-    end
-end
+-- -- Unsure if needed due to new Motion Sensitive Trait
+-- local function MotionSicknessHealthLoss(player)
+--     local playerdata = player:getModData();
+--     local playerstats = player:getStats();
+--     local MaxHealth = 35.0;
+--     local Health = player:getBodyDamage():getOverallBodyHealth();
+--     local Sickness = playerstats:get(CharacterStat.FOOD_SICKNESS);
+--     if player:hasTrait(ToadTraitsRegistries.motionsickness) and playerdata.MotionActive == true then
+--         if Health >= 100 - Sickness and Health > MaxHealth then
+--             for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
+--                 local b = player:getBodyDamage():getBodyParts():get(i);
+--                 if Sickness < 40.0 then
+--                     return
+--                 elseif Sickness >= 40.0 and Sickness < 50.0 and Health > 90.0 then
+--                     b:AddDamage(0.001 * GameSpeedMultiplier());
+--                 elseif Sickness >= 50.0 and Sickness < 75.0 and Health > 75.0 then
+--                     b:AddDamage(0.002 * GameSpeedMultiplier());
+--                 elseif Sickness >= 75.0 then
+--                     b:AddDamage(0.005 * GameSpeedMultiplier());
+--                 end
+--             end
+--         end
+--     end
+-- end
 
 local function RestfulSleeper(player, playerdata)
     if not (player:hasTrait(ToadTraitsRegistries.restfulsleeper) and not player:isAsleep()) then return end
