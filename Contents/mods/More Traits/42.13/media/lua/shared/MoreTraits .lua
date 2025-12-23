@@ -670,17 +670,28 @@ function ToadTraitParanoia(player, playerdata)
 
         local triggerThreshold = 1 
         triggerThreshold = triggerThreshold + (stress * 2)
+
         if ZombRand(100) < triggerThreshold then
             local sm = getSoundManager()
             local surprised = sm:PlaySound("ZombieSurprisedPlayer", false, 0)
             if surprised then surprised:setVolume(0.05) end
+            
+            local newPanic = math.min(panic + 25, 100)
+            local newStress = math.min(stress + 0.1, 1.0)
 
-            stats:set(CharacterStat.PANIC, math.min(panic + 25, 100))
-            stats:set(CharacterStat.STRESS, math.min(stress + 0.1, 1.0))
+            if isClient() then
+                local args = { panic = newPanic, stress = newStress }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            else
+                stats:set(CharacterStat.PANIC, newPanic)
+                stats:set(CharacterStat.STRESS, newStress)
+            end
 
-            local breathSound = player:isFemale() and "female_heavybreathpanic" or "male_heavybreathpanic"
-            local breath = sm:PlaySound(breathSound, false, 5)
-            if breath then breath:setVolume(0.025) end
+            if not isServer() then
+                local breathSound = player:isFemale() and "female_heavybreathpanic" or "male_heavybreathpanic"
+                local breath = sm:PlaySound(breathSound, false, 5)
+                if breath then breath:setVolume(0.025) end
+            end
 
             playerdata.iParanoiaCooldown = 30
         end
@@ -1043,7 +1054,14 @@ function ToadTraitDepressive(player, playerdata)
     if ZombRand(100) < baseChance then
         local stats = player:getStats()
         local currentUnhappiness = stats:get(CharacterStat.UNHAPPINESS);
-        stats:set(CharacterStat.UNHAPPINESS, currentUnhappiness + 25);
+        local newUnhappiness = math.min(100, currentUnhappiness + 25)
+
+        if isClient() then
+            local args = { unhappiness = newUnhappiness }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.UNHAPPINESS, newUnhappiness);
+        end
         
         playerdata.bToadTraitDepressed = true
         print("Player is experiencing depression.");
@@ -1052,11 +1070,19 @@ end
 
 function CheckDepress(player, playerdata)
     local depressed = playerdata.bToadTraitDepressed;
-    if depressed == true then
+    if depressed then
         local stats = player:getStats()
         local unhappiness = stats:get(CharacterStat.UNHAPPINESS);
-        if unhappiness < 25 then playerdata.bToadTraitDepressed = false;
-        else stats:set(CharacterStat.UNHAPPINESS, unhappiness + 0.001);
+        if unhappiness < 25 then
+            playerdata.bToadTraitDepressed = false;
+        else
+            local newUnhappiness = math.max(0, unhappiness - 0.01);
+            if isClient() then
+                local args = { unhappiness = newUnhappiness }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            else
+                stats:set(CharacterStat.UNHAPPINESS, newUnhappiness);
+            end
         end
     end
 end
@@ -1082,11 +1108,32 @@ end
 
 function Blissful(player)
     if not player:hasTrait(ToadTraitsRegistries.blissful) then return end
+    
     local stats = player:getStats()
-    local unhappiness = stats:get(CharacterStat.UNHAPPINESS);
-    local boredom = stats:get(CharacterStat.BOREDOM);
-    if unhappiness >= 10 then stats:set(CharacterStat.UNHAPPINESS, unhappiness - 0.01); end
-    if boredom >= 10 then stats:set(CharacterStat.BOREDOM, boredom - 0.005); end
+    local unhappiness = stats:get(CharacterStat.UNHAPPINESS)
+    local boredom = stats:get(CharacterStat.BOREDOM)
+    
+    local args = {}
+    local updateStats = false
+
+    if unhappiness >= 10 then
+        args.unhappiness = unhappiness - 0.01
+        updateStats = true
+    end
+    
+    if boredom >= 10 then
+        args.boredom = boredom - 0.005
+        updateStats = true
+    end
+
+    if updateStats then
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+        else
+            if args.unhappiness then stats:set(CharacterStat.UNHAPPINESS, args.unhappiness) end
+            if args.boredom then stats:set(CharacterStat.BOREDOM, args.boredom) end
+        end
+    end
 end
 
 function Specialization(_player, _perk, _amount)
@@ -1263,8 +1310,15 @@ function indefatigable(player, playerdata)
                 bodyDamage:setInfected(false);
                 bodyDamage:setInfectionMortalityDuration(-1);
                 bodyDamage:setInfectionTime(-1);
-                stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-                stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+
+                if isClient() then
+                    local args = { zombie_fever = 0, zombie_infection = 0 }
+                    sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+                else
+                    stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+                    stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+                end
+
                 playerdata.indefatigablecuredinfection = true;
             end
         end
@@ -1329,34 +1383,43 @@ function hardytrait(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.hardy) then return end
 
     local stats = player:getStats()
-    local currentEndurance = stats:get(CharacterStat.ENDURANCE);
+    local currentEndurance = stats:get(CharacterStat.ENDURANCE)
     
     playerdata.iHardyEndurance = playerdata.iHardyEndurance or 0
     playerdata.iHardyMaxEndurance = 5
     
     local regenAmount = 0.05
-    if SandboxVars.MoreTraits.HardyEndurance then regenAmount = SandboxVars.MoreTraits.HardyEndurance / 500 end
+    if SandboxVars.MoreTraits.HardyEndurance then 
+        regenAmount = SandboxVars.MoreTraits.HardyEndurance / 500 
+    end
+
+    local args = {}
+    local updateStats = false
 
     if currentEndurance < 0.85 and playerdata.iHardyEndurance >= 1 then
-        local newEndurance = math.min(currentEndurance + regenAmount, 1.0)
-        stats:set(CharacterStat.ENDURANCE, newEndurance);
-        
+        args.endurance = math.min(currentEndurance + regenAmount, 1.0)
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
-        if not isServer() then 
-            if MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
-                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
-            end
-        end
-    elseif currentEndurance >= 1.0 and playerdata.iHardyEndurance < playerdata.iHardyMaxEndurance then
-        stats:set(CharacterStat.ENDURANCE, currentEndurance - regenAmount);
-        playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1
+        updateStats = true
         
-        if not isServer() then
-            if MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
-                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
-            end
+        if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
+        end
+
+    elseif currentEndurance >= 1.0 and playerdata.iHardyEndurance < playerdata.iHardyMaxEndurance then
+        args.endurance = currentEndurance - regenAmount
+        playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1
+        updateStats = true
+        
+        if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
+        end
+    end
+
+    if updateStats then
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
         else
-            HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), "")
+            if args.endurance then stats:set(CharacterStat.ENDURANCE, args.endurance) end
         end
     end
 end
@@ -1365,9 +1428,8 @@ function drinkerupdate(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.drinker) then return end
 
     local stats = player:getStats()
-    local drunkness = stats:get(CharacterStat.INTOXICATION);
+    local drunkness = stats:get(CharacterStat.INTOXICATION)
     local hoursSinceDrink = playerdata.iHoursSinceDrink or 0
-    
     local hoursThreshold = (SandboxVars.MoreTraits.AlcoholicFrequency or 24) * 1.5
     local divider = 5
     
@@ -1378,6 +1440,8 @@ function drinkerupdate(player, playerdata)
     end
 
     local withdrawalIntensity = hoursSinceDrink / divider
+    local args = {}
+    local updateStats = false
 
     if drunkness >= 10 then
         if not playerdata.bSatedDrink then
@@ -1385,31 +1449,50 @@ function drinkerupdate(player, playerdata)
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicsatisfied"), true, HaloTextHelper.getColorGreen())
         end
         playerdata.iHoursSinceDrink = 0
-        stats:set(CharacterStat.ANGER, 0)
-        stats:set(CharacterStat.STRESS, 0)
+        args.anger = 0
+        args.stress = 0
+        updateStats = true
     end
 
     if drunkness > 0 then
         if internalTick and internalTick >= 25 then
-            stats:set(CharacterStat.FATIGUE, math.max(0, stats:get(CharacterStat.FATIGUE) - 0.01));
+            args.fatigue = math.max(0, stats:get(CharacterStat.FATIGUE) - 0.01)
+            updateStats = true
         end
     end
 
     if not playerdata.bSatedDrink then
         if hoursSinceDrink > hoursThreshold then
             local currentPain = stats:get(CharacterStat.PAIN)
-            stats:set(CharacterStat.PAIN, (math.min(100, currentPain + (withdrawalIntensity * 0.1))));
+            args.pain = math.min(100, currentPain + (withdrawalIntensity * 0.1))
+            updateStats = true
         end
 
         if internalTick == 30 then
             local anger = stats:get(CharacterStat.ANGER)
             local stress = stats:get(CharacterStat.STRESS)
-
             local angerLimit = 0.05 + (withdrawalIntensity * 0.1) / 3
             local stressLimit = 0.15 + (withdrawalIntensity * 0.1) / 2
             
-            if anger < angerLimit then stats:set(CharacterStat.ANGER, anger + 0.01) end
-            if stress < stressLimit then stats:stress(CharacterStat.STRESS, stress + 0.01) end
+            if anger < angerLimit then 
+                args.anger = anger + 0.01 
+                updateStats = true
+            end
+            if stress < stressLimit then 
+                args.stress = stress + 0.01 
+                updateStats = true
+            end
+        end
+    end
+
+    if updateStats then
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+        else
+            if args.anger then stats:set(CharacterStat.ANGER, args.anger) end
+            if args.stress then stats:set(CharacterStat.STRESS, args.stress) end
+            if args.fatigue then stats:set(CharacterStat.FATIGUE, args.fatigue) end
+            if args.pain then stats:set(CharacterStat.PAIN, args.pain) end
         end
     end
 end
@@ -1468,9 +1551,10 @@ function drinkerpoison(player, playerdata)
     if isSuffering and playerdata.iWithdrawalCooldown <= 0 then
         print("Player is suffering from alcohol withdrawal.")
         HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicwithdrawal"), false, HaloTextHelper.getColorRed())
-
+        
+        local poisonLevel = 0
         if SandboxVars.MoreTraits.NonlethalAlcoholic then
-            stats:set(CharacterStat.POISON, 20)
+            poisonLevel = 20
         else
             local hourThreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal or 72
             local divider = 5
@@ -1482,7 +1566,13 @@ function drinkerpoison(player, playerdata)
             elseif hourThreshold <= 48 then divider = 5
             end
             
-            local poisonLevel = playerdata.iHoursSinceDrink / divider
+            poisonLevel = math.min(100, playerdata.iHoursSinceDrink / divider)
+        end
+
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', { poison = poisonLevel })
+        else
+            local stats = player:getStats()
             stats:set(CharacterStat.POISON, poisonLevel)
         end
 
@@ -1571,7 +1661,14 @@ function martial(actor, target, weapon, damage)
         target:setHealth(target:getHealth() - damage)
         if target:getHealth() <= 0 then target:Kill(player) end
 
-        stats:set(CharacterStat.ENDURANCE, math.max(0, endurance - 0.002))
+        local newEndurance = math.max(0, endurance - 0.002)
+
+        if isClient() then
+            local args = { endurance = newEndurance }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.ENDURANCE, newEndurance)
+        end
     end
 end
 
@@ -1819,8 +1916,13 @@ function amputee(player, justGotInfected)
                 bodyDamage:setInfected(false);
                 bodyDamage:setInfectionMortalityDuration(-1);
                 bodyDamage:setInfectionTime(-1);
-                stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-                stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+                if isClient() then
+                    local args = { zombie_fever = 0, zombie_infection = 0 }
+                    sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+                else
+                    stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+                    stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+                end
             end
         end
     end
@@ -2123,8 +2225,13 @@ function SuperImmune(player, playerdata)
         bodyDamage:setInfected(false);
         bodyDamage:setInfectionMortalityDuration(-1);
         bodyDamage:setInfectionTime(-1);
-        stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-        stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+        if isClient() then
+            local args = { zombie_fever = 0, zombie_infection = 0 }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+            stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+        end
 
         local minimum = SandboxVars.MoreTraits.SuperImmuneMinDays or 10;
         local maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays or 30;
@@ -2872,7 +2979,6 @@ function GlassBody(player, playerData)
     local bodyDamage = player:getBodyDamage();
     local currenthp = bodyDamage:getOverallBodyHealth();
     local multiplier = getGameTime():getMultiplier();
-    local playerData = player:getModData();
 
     if playerData.glassBodyLastHP == nil then
         playerData.glassBodyLastHP = currenthp;
@@ -3147,38 +3253,44 @@ end
 local function SecondWind(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.secondwind) or playerdata.secondwinddisabled then return end
 
-    local stats = player:getStats();
-    local endurance = stats:get(CharacterStat.ENDURANCE);
-    local fatigue = stats:get(CharacterStat.FATIGUE);
+    local stats = player:getStats()
+    local endurance = stats:get(CharacterStat.ENDURANCE)
+    local fatigue = stats:get(CharacterStat.FATIGUE)
 
     if endurance < 0.5 or fatigue > 0.8 then
-        local enemies = player:getSpottedList();
+        local enemies = player:getSpottedList()
         if enemies:size() < 3 then return end
 
-        local zombiesNearPlayer = 0;
+        local zombiesNearPlayer = 0
         for i = 0, enemies:size() - 1 do
-            local enemy = enemies:get(i);
+            local enemy = enemies:get(i)
             if enemy:isZombie() and enemy:DistTo(player) <= 5 then
-                zombiesNearPlayer = zombiesNearPlayer + 1;
+                zombiesNearPlayer = zombiesNearPlayer + 1
             end
-
             if zombiesNearPlayer > 2 then break end
         end
 
         if zombiesNearPlayer > 2 then
-            stats:set(CharacterStat.ENDURANCE, 1);
-            playerdata.iHardyEndurance = 5;
-
+            local args = { endurance = 1.0 }
+            
             if fatigue > 0.4 then
+                args.fatigue = 0.4
                 if fatigue > 0.6 then
-                    playerdata.secondwindrecoveredfatigue = true;
+                    playerdata.secondwindrecoveredfatigue = true
                 end
-                stats:set(CharacterStat.FATIGUE, 0.4);
             end
-            playerdata.secondwindcooldown = 0;
-            playerdata.secondwinddisabled = true;
 
-            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen());
+            if isClient() then
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+            else
+                stats:set(CharacterStat.ENDURANCE, args.endurance)
+                if args.fatigue then stats:set(CharacterStat.FATIGUE, args.fatigue) end
+            end
+
+            playerdata.iHardyEndurance = 5
+            playerdata.secondwindcooldown = 0
+            playerdata.secondwinddisabled = true
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen())
         end
     end
 end
@@ -3279,8 +3391,14 @@ local function RestfulSleeper(player, playerdata)
     local reduction = 0.05
     if fatigue >= 0.6 then reduction = 0.2
     elseif fatigue >= 0.2 then reduction = 0.1 end
+    local newFatigue = math.max(0, fatigue - reduction)
 
-    stats:set(CharacterStat.FATIGUE, math.max(0, fatigue - reduction))
+    if isClient() then
+        local args = { fatigue = newFatigue }
+        sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+    else
+        stats:set(CharacterStat.FATIGUE, newFatigue)
+    end
 end
 
 local function RestfulSleeperWakeUp(player, playerdata)
@@ -3332,9 +3450,14 @@ local function HungerCheck(player, playerdata)
         playerdata.SuperImmuneMinutesWellFed = 0
         playerdata.SuperImmuneInfections = 0
         playerdata.SuperImmuneLethal = false
-        stats:set(CharacterStat.SICKNESS, 0);
-        stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-        stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+        if isClient() then
+            local args = { sickness = 0, zombie_fever = 0, zombie_infection = 0 }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.SICKNESS, 0);
+            stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+            stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+        end
         return 
     end
 
@@ -3366,17 +3489,32 @@ local function TerminatorGun(player)
     local isAiming = playerstate == PlayerAimState.instance() or playerstate == PlayerStrafeState.instance()
 
     if isAiming then
-        local playerstats = player:getStats()
-        local stress = CharacterStat.STRESS
-        local panic = CharacterStat.PANIC
-        local unhappiness = CharacterStat.UNHAPPINESS
+        local stats = player:getStats()
+        local stress = stats:get(CharacterStat.STRESS)
+        local panic = stats:get(CharacterStat.PANIC)
+        local unhappiness = stats:get(CharacterStat.UNHAPPINESS)
+        local args = {}
+        local updateStats = false
 
         if hasTerminator then
-            playerstats:set(stress, math.max(0, playerstats:get(stress) - 0.01))
-            playerstats:set(panic, math.max(0, playerstats:get(panic) - 10))
+            args.stress = math.max(0, stress - 0.01)
+            args.panic = math.max(0, panic - 10)
+            updateStats = true
         elseif hasAntigun then
-            playerstats:set(unhappiness, playerstats:get(unhappiness) + 0.6)
+            args.unhappiness = math.min(100, unhappiness + 0.6)
+            updateqStats = true
         end
+
+        if updateStats then
+            if isClient() then
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            else
+                if args.panic then stats:set(CharacterStat.PANIC, args.panic) end
+                if args.stress then stats:set(CharacterStat.STRESS, args.stress) end
+                if args.unhappiness then stats:set(CharacterStat.UNHAPPINESS, args.unhappiness) end
+            end
+        end
+
     end
 
     if hasTerminator and itemdata.MTstate ~= "Terminator" then
@@ -3431,7 +3569,7 @@ local function IdealWeight(player, playerdata)
     
     if playerdata.OldCalories == nil then
         playerdata.OldCalories = currentCalories
-        return -- Skip the first tick to establish a baseline
+        return
     end
 
     local oldCalories = playerdata.OldCalories
@@ -3456,7 +3594,13 @@ local function QuickRest(player, playerdata)
     if endurance < 1 and isSitting then
         local newEndurance = math.min(1.0, endurance + 0.001)
 
-        stats:set(CharacterStat.ENDURANCE, newEndurance)
+        if isClient() then
+            local args = { endurance = newEndurance }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.ENDURANCE, newEndurance)
+        end
+
         playerdata.QuickRestEndurance = newEndurance
         playerdata.QuickRestActive = true
         return
@@ -3508,8 +3652,14 @@ local function BurnWardPatient(player, playerdata)
         local intensity = 1 - (closestDist / distance)
         local panicGain = math.max(0, SandboxVars.MoreTraits.BurnedPanic * intensity)
         local stressGain = math.max(0, (SandboxVars.MoreTraits.BurnedStress / 1000) * intensity)
-        stats:set(CharacterStat.PANIC, panicGain);
-        stats:set(CharacterStat.STRESS, stressGain);
+
+        if isClient() then
+            local args = { panic = panicGain, stress = stressGain }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.PANIC, panicGain);
+            stats:set(CharacterStat.STRESS, stressGain);
+        end
     end
 end
 
@@ -3656,13 +3806,18 @@ function MTAlcoholismMoodle(player, playerdata)
 
     local stats = player:getStats()
     if alcoholism >= 0.7 then
-        stats:set(CharacterStat.ANGER, 0)
-        stats:set(CharacterStat.STRESS, 0)
-        stats:set(CharacterStat.BOREDOM, 0)
-        stats:set(CharacterStat.PANIC, 0)
-        stats:set(CharacterStat.PAIN, 0)
-        stats:set(CharacterStat.IDLENESS, 0)
-        stats:set(CharacterStat.UNHAPPINESS, 0)
+        if isClient() then
+            local args = { anger = 0, stress = 0, boredom = 0, panic = 0, pain = 0, idleness = 0, unhappiness = 0 }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+        else
+            stats:set(CharacterStat.ANGER, 0)
+            stats:set(CharacterStat.STRESS, 0)
+            stats:set(CharacterStat.BOREDOM, 0)
+            stats:set(CharacterStat.PANIC, 0)
+            stats:set(CharacterStat.PAIN, 0)
+            stats:set(CharacterStat.IDLENESS, 0)
+            stats:set(CharacterStat.UNHAPPINESS, 0)
+        end
     end
 
     if internalTick >= 29 then
