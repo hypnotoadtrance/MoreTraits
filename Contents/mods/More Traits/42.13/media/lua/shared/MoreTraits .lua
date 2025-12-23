@@ -17,7 +17,7 @@ Ever since the animations update, the previous calculations stopped working, and
 I have been unable to find a workaround.
 --]]
 --Global Variables
-MT_Config = PZAPI.ModOptions:getOptions("1299328280");
+MT_Config = nil;
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
@@ -78,6 +78,19 @@ playerdatatable[50] = { "isSleeping", false };
 playerdatatable[51] = { "QuickRestActive", false };
 playerdatatable[52] = { "QuickRestEndurance", -1 };
 playerdatatable[53] = { "QuickRestFinished", false };
+
+-- Support for Server/Client behaviour. This shouldn't load on the Serverside
+local function initMTConfig()
+    -- Only try to load PZAPI config if we're on client side
+    if PZAPI and PZAPI.ModOptions then
+        MT_Config = PZAPI.ModOptions:getOptions("1299328280")
+        print("More Traits: Config initialized successfully!")
+        return true
+    else
+        print("More Traits: PZAPI not available (expected on server side)")
+        return false
+    end
+end
 
 local function GetXPModifier(player, perk)
     local m = 1.0
@@ -723,11 +736,11 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
                                     else inventory:addItemOnServer(addedItem) end
                                 end
 
-                                if MT_Config:getOption("ScroungerAnnounce"):getValue() then
+                                if not isServer() and MT_Config and MT_Config:getOption("ScroungerAnnounce"):getValue() then
                                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_scrounger") .. ": " .. item:getName(), true, HaloTextHelper.getColorGreen())
                                 end
 
-                                if MT_Config:getOption("ScroungerHighlight"):getValue() then
+                                if not isServer() and MT_Config and MT_Config:getOption("ScroungerHighlight"):getValue() then
                                     playerdata.scroungerHighlightsTbl = playerdata.scroungerHighlightsTbl or {}
                                     playerdata.scroungerHighlightsTbl[containerObj] = 0
                                     containerObj:setHighlighted(true, false)
@@ -743,17 +756,27 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
 end
 
 function UnHighlightScrounger(player, playerdata)
-    if not MT_Config:getOption("ScroungerHighlight"):getValue() then return end
     if not player:hasTrait(ToadTraitsRegistries.scrounger) then return end
+
+    local highlight = false
+    local highlightTime = 1
+    
+    if not isServer() and MT_Config then
+        highlight = MT_Config:getOption("ScroungerHighlight"):getValue()
+        highlightTime = MT_Config:getOption("ScroungerHighlightTime"):getValue()
+    end
+
+    if not isServer() and not highlight then return end
 
     playerdata.scroungerHighlightsTbl = playerdata.scroungerHighlightsTbl or {}
     local highlights = playerdata.scroungerHighlightsTbl
-    local maxTime = MT_Config:getOption("ScroungerHighlightTime"):getValue() * 10
-    
+    local maxTime = highlightTime * 10
+
+    local remove = {}
     for containerObj, timer in pairs(highlights) do
         if timer >= maxTime then
             containerObj:setHighlighted(false)
-            highlights[containerObj] = nil
+            table.insert(remove, containerObj)
         else
             highlights[containerObj] = timer + 1
         end
@@ -821,7 +844,7 @@ function ToadTraitIncomprehensive(_iSInventoryPage, _state, player)
                     end
 
                     for _, item in ipairs(itemsToRemove) do
-                        if MT_Config:getOption("ScroungerAnnounce"):getValue() then
+                        if not isServer() and MT_Config and MT_Config:getOption("ScroungerAnnounce"):getValue() then
                             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive") .. " : " .. item:getName(), false, HaloTextHelper.getColorRed())
                         end
                         container:Remove(item)
@@ -966,7 +989,7 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, player, playerdata)
                             end
 
                             -- Visual feedback
-                            if item and MT_Config:getOption("VagabondAnnounce"):getValue() then
+                            if item and not isServer() and MT_Config and MT_Config:getOption("VagabondAnnounce"):getValue() then
                                 HaloTextHelper.addTextWithArrow(
                                     player, getText("UI_trait_vagabond") .. " : " .. item:getName(), 
                                     true, HaloTextHelper.getColorGreen()
@@ -1293,14 +1316,14 @@ function hardytrait(player, playerdata)
         stats:set(CharacterStat.ENDURANCE, newEndurance);
         
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
-        if MT_Config:getOption("HardyNotifier"):getValue() == true then
+        if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
         end
     elseif currentEndurance >= 1.0 and playerdata.iHardyEndurance < playerdata.iHardyMaxEndurance then
         stats:set(CharacterStat.ENDURANCE, currentEndurance - regenAmount);
         playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1
         
-        if MT_Config:getOption("HardyNotifier"):getValue() == true then
+        if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
         else
             HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), "")
@@ -1389,7 +1412,7 @@ function drinkertick(player, playerdata)
             end
         end
     else
-        if MT_Config:getOption("DrinkNotifier"):getValue() == true then
+        if not isServer() and MT_Config and MT_Config:getOption("DrinkNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_alcoholicneed"), false, HaloTextHelper.getColorRed())
         end
     end
@@ -1511,7 +1534,7 @@ function martial(actor, target, weapon, damage)
 
         damage = damage * 0.1 * damageAdj * scaling
 
-        if MT_Config:getOption("MartialDamage"):getValue() then
+        if not isServer() and MT_Config and MT_Config:getOption("MartialDamage"):getValue() then
             HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), " ", HaloTextHelper.getColorGreen())
         end
 
@@ -1610,7 +1633,7 @@ function progun(actor, weapon)
         if SandboxVars.MoreTraits.ProwessGunsAmmoRestore == true and ZombRand(0, 101) <= chance then
             if currentCapacity < maxCapacity and currentCapacity > 0 then
                 weapon:setCurrentAmmoCount(currentCapacity + 1);
-                if MT_Config:getOption("ProwessGunsAmmo"):getValue() == true then
+                if not isServer() and MT_Config and MT_Config:getOption("ProwessGunsAmmo"):getValue() then
                     HaloTextHelper.addText(player, getText("UI_progunammo"), "", HaloTextHelper.getColorGreen());
                 end
             end
@@ -1690,7 +1713,7 @@ function albino(player, playerdata)
         if tod > 8 and tod < 17 then
             local stats = player:getStats()
             if stats:get(CharacterStat.PAIN) < 25 and not playerdata.bisAlbinoOutside then
-                if MT_Config:getOption("AlbinoAnnounce"):getValue() == true then
+                if not isServer() and MT_Config and MT_Config:getOption("AlbinoAnnounce"):getValue() then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_albino"), false, HaloTextHelper.getColorRed())
                 end
                 playerdata.bisAlbinoOutside = true
@@ -2039,7 +2062,7 @@ local function SuperImmuneRecoveryProcess(player, playerdata)
                     playerdata.SuperImmuneInfections = 0;
                 else
                     --Once illness fully recovers
-                    if MT_Config:getOption("SuperImmuneAnnounce"):getValue() == true then
+                    if not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
                         HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen());
                     end
                     playerdata.SuperImmuneTextSaid = false;
@@ -2051,7 +2074,7 @@ local function SuperImmuneRecoveryProcess(player, playerdata)
                     playerdata.SuperImmuneInfections = 0;
                     playerdata.SuperImmuneLethal = false;
                 end
-                if MT_Config:getOption("SuperImmuneAnnounce"):getValue() == true and playerdata.SuperImmuneTextSaid == false then
+                if not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() and not playerdata.SuperImmuneTextSaid then
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
                     playerdata.SuperImmuneTextSaid = true;
                 end
@@ -2256,7 +2279,7 @@ function graveRobber(_zombie)
     chance = math.max(1, chance)
 
     if ZombRand(0, 1001) <= chance then
-        if MT_Config:getOption("GraveRobberAnnounce"):getValue() == true then
+        if not isServer() and MT_Config and MT_Config:getOption("GraveRobberAnnounce"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_graverobber"), true, HaloTextHelper.getColorGreen());
         end
 
@@ -2326,7 +2349,7 @@ function Gourmand(_iSInventoryPage, _state, player)
                     if isClient() then sendAddItemToContainer(container, newItem)
                     else container:addItemOnServer(newItem) end
 
-                    if MT_Config:getOption("GourmandAnnounce"):getValue() then
+                    if not isServer() and MT_Config and MT_Config:getOption("GourmandAnnounce"):getValue() then
                         local text = getText("UI_trait_gourmand") .. ": " .. newItem:getName()
                         HaloTextHelper.addTextWithArrow(player, text, true, HaloTextHelper.getColorGreen())
                     end
@@ -3824,7 +3847,7 @@ function OnCreatePlayer(_, player)
         end
     end
     InitPlayerData(player, playerdata);
-    MT_Config = PZAPI.ModOptions:getOptions("1299328280");
+    if not isServer() then MT_Config = PZAPI.ModOptions:getOptions("1299328280"); end
     print("More Traits - Mod Version On Which Player Was Created: " .. playerdata.MTModVersion)
     if getGameTime():getModData().MTModVersion == nil then
         getGameTime():getModData().MTModVersion = "Before 15 January 2023"
@@ -3840,6 +3863,7 @@ function OnInitWorld()
 end
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
+Events.OnGameStart.Add(initMTConfig);
 Events.OnPlayerMove.Add(NoodleLegs);
 Events.OnZombieDead.Add(graveRobber);
 Events.OnWeaponHitCharacter.Add(promelee);
