@@ -3442,7 +3442,13 @@ local function RestfulSleeperWakeUp(player, playerdata)
 
     if playerdata.HasSlept then
         if fatigue > (playerdata.FatigueWhenSleeping or 0) then
-            stats:set(CharacterStat.FATIGUE, playerdata.FatigueWhenSleeping)
+            if isClient() then
+                local args = { fatigue = playerdata.FatigueWhenSleeping }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            else
+                stats:set(CharacterStat.FATIGUE, playerdata.FatigueWhenSleeping)
+            end
+            
         end
 
         playerdata.HasSlept = false
