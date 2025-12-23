@@ -1350,15 +1350,19 @@ function hardytrait(player, playerdata)
         stats:set(CharacterStat.ENDURANCE, newEndurance);
         
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
-        if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
+        if not isServer() then 
+            if MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
+end
         end
     elseif currentEndurance >= 1.0 and playerdata.iHardyEndurance < playerdata.iHardyMaxEndurance then
         stats:set(CharacterStat.ENDURANCE, currentEndurance - regenAmount);
         playerdata.iHardyEndurance = playerdata.iHardyEndurance + 1
         
-        if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
+        if not isServer() then
+            if MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, true, HaloTextHelper.getColorGreen())
+end
         else
             HaloTextHelper.addText(player, getText("UI_trait_hardyrest"), "")
         end
