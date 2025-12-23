@@ -17,7 +17,11 @@ Ever since the animations update, the previous calculations stopped working, and
 I have been unable to find a workaround.
 --]]
 --Global Variables
-MT_Config = nil;
+if not isServer() then
+    if PZAPI and PZAPI.ModOptions then
+        MT_Config = PZAPI.ModOptions:getOptions("1299328280")
+    end
+end
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
