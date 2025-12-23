@@ -2117,95 +2117,90 @@ function vehicleCheck(player)
 end
 
 local function SuperImmuneRecoveryProcess(player, playerdata)
-    local SuperImmuneMinutesWellFed = playerdata.SuperImmuneMinutesWellFed;
-    local SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount;
-    local MinutesPerDay = 1440;
-    if player:hasTrait(ToadTraitsRegistries.superimmune) then
-        if playerdata.SuperImmuneActive == true then
-            local Illness = player:getBodyDamage():getFakeInfectionLevel();
-            local Recovery = playerdata.SuperImmuneRecovery;
-            local TimeElapsed = playerdata.SuperImmuneMinutesPassed;
-            local maximum = 30;
-            if SandboxVars.MoreTraits.SuperImmuneMaxDays then
-                maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays
-            end
-            if Recovery > maximum then
-                Recovery = maximum;
-            end
-            local SpeedrunTime = 1;
-            if SandboxVars.MoreTraits.QuickSuperImmune == true then
-                SpeedrunTime = 6;
-            end
-            if Recovery * MinutesPerDay >= TimeElapsed then
-                if playerdata.SuperImmuneTextSaid == true then
-                    playerdata.SuperImmuneTextSaid = false;
-                end
-                if TimeElapsed > 360 then
-                    if (Recovery * MinutesPerDay) / 2 >= TimeElapsed then
-                        Illness = Illness - (((25 - ZombRand(10, 46)) / 600) * SpeedrunTime); --You can decrease illness up to 1.5 or increase it up to 2 per hour
-                    else
-                        --Once half the required time passes, your immunity system starts gaining victory
-                        Illness = Illness - (((25 - ZombRand(5, 36)) / 600) * SpeedrunTime); -- You can decrease illness up to 2 or increase it up to 1 per hour
-                    end --The random illness reduction and gain is to simulate your immune system fighting the virus.
-                else
-                    Illness = Illness + ((ZombRand(100, 501) / 6000) * SpeedrunTime); --Immune system doesn't notice the virus until 6 hours in
-                end
-                if player:hasTrait(CharacterTrait.FAST_HEALER) then
-                    Illness = Illness - ((0.25 / 60) * SpeedrunTime);
-                end
-                if player:hasTrait(CharacterTrait.SLOW_HEALER) then
-                    Illness = Illness + ((0.25 / 60) * SpeedrunTime);
-                end
-                if Illness < 26 then
-                    --Prevent illness from going too low or too high
-                    Illness = Illness + (0.166 * SpeedrunTime);
-                end
-                if Illness > 89 and playerdata.SuperImmuneLethal == false then
-                    Illness = Illness - (0.333 * SpeedrunTime);
-                end
-                playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + (1 * SpeedrunTime);
-                playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount + SuperImmuneMinutesWellFed;
-                Illness = Illness - (playerdata.SuperImmuneMinutesWellFed / 50);
-                playerdata.SuperImmuneMinutesWellFed = 0;
-                player:getBodyDamage():setFakeInfectionLevel(Illness);
-                if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
-                    playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + (1 * SpeedrunTime);
-                    playerdata.SuperImmuneAbsoluteWellFedAmount = SuperImmuneAbsoluteWellFedAmount - 60;
-                end
-                if isDebugEnabled() then
-                    player:Say("Time to recovery: " .. (Recovery * 1440 - TimeElapsed) .. " minutes, or " .. (Recovery * 24 - math.floor(TimeElapsed / 60)) .. " hours");
-                end
+    if not player:hasTrait(ToadTraitsRegistries.superimmune) then return end
+    if not playerdata.SuperImmuneActive then return end
+
+    local stats = player:getStats();
+    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
+    local recoveryDays = math.min(playerdata.SuperImmuneRecovery or 10, SandboxVars.MoreTraits.SuperImmuneMaxDays or 30);
+    local minutesPerDay = 1440;
+    local timeElapsed = playerdata.SuperImmuneMinutesPassed or 0
+    local speedRun = playerdata.QuickSuperImmune and 6 or 1
+    
+    if (recoveryDays * minutesPerDay) >= timeElapsed then
+        playerdata.SuperImmuneTextSaid = false
+
+        local illnessChange = 0
+        if timeElapsed <= 360 then
+            illnessChange = ZombRand(100, 501) / 6000
+        else
+            local isLateStage = timeElapsed >= (recoveryDays * minutesPerDay) / 2
+            local low = isLateStage and 5 or 10
+            local high = isLateStage and 36 or 46
+            illnessChange = (25 - ZombRand(low, high)) / 600
+        end
+        
+        illness = illness - (illnessChange * speedRun)
+
+        local healerValue = 0
+        if player:hasTrait(CharacterTrait.FAST_HEALER) then healerValue = -0.25 / 60
+        elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then healerValue = 0.25 / 60 end
+        illness = illness + (healerValue * speedRun)
+        
+        if illness < 26 then illness = illness + (0.166 * speedRun) end
+        if illness > 89 and not playerdata.SuperImmuneLethal then 
+            illness = illness - (0.333 * speedRun) 
+        end
+
+        illness = illness - (playerdata.SuperImmuneMinutesWellFed / 50)
+        playerdata.SuperImmuneAbsoluteWellFedAmount = (playerdata.SuperImmuneAbsoluteWellFedAmount or 0) + playerdata.SuperImmuneMinutesWellFed
+        playerdata.SuperImmuneMinutesWellFed = 0
+        playerdata.SuperImmuneMinutesPassed = timeElapsed + speedRun
+
+        if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
+            playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + speedRun
+            playerdata.SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount - 60
+        end
+
+        stats:set(CharacterStat.ZOMBIE_FEVER, illness)
+
+        if isDebugEnabled() then
+            player:Say("Time to recovery: " .. (recoveryDays * 1440 - timeElapsed) .. " mins");
+        end
+    else
+        if illness > 0 then
+            local breakRate = 1.0
+            if player:hasTrait(CharacterTrait.FAST_HEALER) then breakRate = 1.5
+            elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then breakRate = 0.75 end
+            
+            illness = math.max(0, illness - (breakRate / 60))
+
+            if isClient() then
+                local args = { zombie_fever = illness }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
             else
-                if Illness > 0 or Illness ~= 0 then
-                    --Recover from illness completely over-time once recovery time ends.
-                    if player:hasTrait(CharacterTrait.FAST_HEALER) then
-                        Illness = Illness - (1.5 / 60); --0.7 to 2.5 days
-                    elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then
-                        Illness = Illness - (0.75 / 60); --1.4 to 5 days
-                    else
-                        Illness = Illness - (1 / 60); --1 to 3.7 days
-                    end
-                    player:getBodyDamage():setFakeInfectionLevel(Illness);
-                    playerdata.SuperImmuneInfections = 0;
-                else
-                    --Once illness fully recovers
-                    if not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
-                        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen());
-                    end
-                    playerdata.SuperImmuneTextSaid = false;
-                    playerdata.SuperImmuneActive = false;
-                    playerdata.SuperImmuneMinutesPassed = 0;
-                    playerdata.SuperImmuneRecovery = 0;
-                    playerdata.SuperImmuneHealedOnce = true;
-                    playerdata.SuperImmuneAbsoluteWellFedAmount = 0;
-                    playerdata.SuperImmuneInfections = 0;
-                    playerdata.SuperImmuneLethal = false;
-                end
-                if not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() and not playerdata.SuperImmuneTextSaid then
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen());
-                    playerdata.SuperImmuneTextSaid = true;
-                end
+                stats:set(CharacterStat.ZOMBIE_FEVER, illness)
             end
+
+            playerdata.SuperImmuneInfections = 0
+        else
+            if not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen())
+            end
+            
+            playerdata.SuperImmuneActive = false
+            playerdata.SuperImmuneMinutesPassed = 0
+            playerdata.SuperImmuneRecovery = 0
+            playerdata.SuperImmuneHealedOnce = true
+            playerdata.SuperImmuneAbsoluteWellFedAmount = 0
+            playerdata.SuperImmuneInfections = 0
+            playerdata.SuperImmuneLethal = false
+            playerdata.SuperImmuneTextSaid = false
+        end
+
+        if not playerdata.SuperImmuneTextSaid and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen())
+            playerdata.SuperImmuneTextSaid = true
         end
     end
 end
@@ -2268,60 +2263,62 @@ function SuperImmune(player, playerdata)
 end
 
 local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
-    local MaxHealth = 10;
-    local Health = player:getBodyDamage():getOverallBodyHealth();
-    local Stress = player:getStats():get(CharacterStat.STRESS);
-    local Illness = player:getStats():get(CharacterStat.SICKNESS);
-    local stop = false;
-    if player:hasTrait(ToadTraitsRegistries.superimmune) then
-        if playerdata.SuperImmuneActive then
-            if player:hasTrait(ToadTraitsRegistries.indefatigable) then
-                MaxHealth = 22;
-            end
-            if SandboxVars.MoreTraits.SuperImmuneWeakness == true then
-                local limit = 4;
-                if playerdata.SuperImmuneHealedOnce == true then
-                    limit = 5;
-                end
-                if player:hasTrait(CharacterTrait.FAST_HEALER) then
-                    limit = limit + 1;
-                elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then
-                    limit = limit - 1;
-                end
-                if playerdata.SuperImmuneInfections >= limit then
-                    MaxHealth = 0;
-                    playerdata.SuperImmuneLethal = true;
-                else
-                    playerdata.SuperImmuneLethal = false;
-                end
-            end
-            if Health >= 100 - Illness and Health > MaxHealth then
-                for i = 0, player:getBodyDamage():getBodyParts():size() - 1 do
-                    local b = player:getBodyDamage():getBodyParts():get(i);
-                    if Health >= (100 - Illness) * 1.5 then
-                        b:AddDamage(0.2 * GameSpeedMultiplier()); --Simulate Max Health Loss
-                        stop = true;
-                    end
-                    if stop == false then
-                        if Illness < 25 then
-                            b:AddDamage(0.002 * GameSpeedMultiplier());
-                        end
-                        if Illness > 25 and Illness < 50 then
-                            b:AddDamage(0.005 * GameSpeedMultiplier());
-                        end
-                        if Illness >= 50 then
-                            b:AddDamage(0.01 * GameSpeedMultiplier());
-                        end
-                        if Illness >= 50 and Health > 60 then
-                            b:AddDamage(0.1 * GameSpeedMultiplier()); --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
-                        end
-                    end
-                end
-            end
-            if Illness > 10 then
-                if internalTick >= 25 and Stress <= Illness * 3 then
-                    player:getStats():set(CharacterStat.STRESS, Stress + 0.001 * GameSpeedMultiplier());
-                end
+    if not player:hasTrait(ToadTraitsRegistries.superimmune) then return end
+    if not playerdata.SuperImmuneActive then return end
+
+    local bodyDamage = player:getBodyDamage();
+    local stats = player:getStats();
+    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
+    local currentHealth = bodyDamage:getOverallBodyHealth();
+
+    local maxHealth = 10;
+    if player:hasTrait(ToadTraitsRegistries.Indefatigable) then maxHealth = 22; end
+
+    if SandboxVars.MoreTraits.SuperImmuneWeakness then
+        local limit = 4;
+
+        if playerdata.SuperImmuneHealedOnce then limit = 5; end
+
+        if player:hasTrait(CharacterTrait.FAST_HEALER) then limit = limit + 1;
+        elseif player:hasTrait(CharacterTrait.SLOW_SLOWER) then limit = limit - 1; end
+
+        if (playerdata.SuperImmuneInfections or 0) >= limit then
+            maxHealth = 0;
+            playerdata.SuperImmuneLethal = true;
+        else
+            playerdata.SuperImmuneLethal = false;
+        end
+    end
+
+    local targetHealth = 100 - illness
+    local multiplier = GameSpeedMultiplier()
+
+    if currentHealth > targetHealth and currentHealth > maxHealth then
+        local parts = bodyDamage:getBodyParts()
+        local damageAmount = 0.002;
+
+        if illness >= 50 then damageAmount = 0.01
+        elseif illness >= 25 then damageAmount = 0.005 end
+
+        --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
+        if illness >= 50 and currentHealth > 60 then damageAmount = damageAmount + 0.05 end
+
+        --Simulate Max Health Loss
+        if currentHealth >= targetHealth * 1.5 then damageAmount = damageAmount + 0.1 end
+
+        local randomBodyPart = parts:get(ZombRand(0, parts:size() - 1))
+        randomBodyPart:AddDamage(damageAmount * multiplier)
+    end
+
+    if illness > 10 then
+        local stress = stats:get(CharacterStat.STRESS);
+        if internalTick >= 25 and stress <= (illness / 100) then
+            local newStress = math.min(1.0, stress + (0.0001 * multiplier))
+            if isClient() then
+                local args = { stress = newStress }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            else
+                stats:set(CharacterStat.STRESS, newStress)
             end
         end
     end
