@@ -969,10 +969,7 @@ local function ToadTraitAntique(_iSInventoryPage, _state, player, playerdata)
     end
 end
 
-local function ToadTraitVagabond(_iSInventoryPage, _state, player, playerdata)
-    if not player:hasTrait(ToadTraitsRegistries.vagabond) then return end
-
-    local items = {
+local vagabondItems = {
         "Base.BreadSlices", "Base.Pizza", "Base.Hotdog", "Base.Corndog",
         "Base.OpenBeans", "Base.CannedChiliOpen", "Base.WatermelonSmashed",
         "Base.DogfoodOpen", "Base.CannedCornedBeefOpen", "Base.CannedBologneseOpen",
@@ -983,56 +980,59 @@ local function ToadTraitVagabond(_iSInventoryPage, _state, player, playerdata)
         "Base.MushroomGeneric1", "Base.MushroomGeneric2", "Base.MushroomGeneric3",
         "Base.MushroomGeneric4", "Base.MushroomGeneric5", "Base.MushroomGeneric6",
         "Base.MushroomGeneric7"
-    };
+}
 
-    local basechance = SandboxVars.MoreTraits.VagabondChance or 33;
+local function ToadTraitVagabond(page, player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.vagabond) then return end
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance + (5 * luckimpact) end
-    if player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance - (5 * luckimpact) end
+    local baseChance = SandboxVars.MoreTraits.VagabondChance or 33
+    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance + (5 * luckimpact) end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance - (5 * luckimpact) end
 
-    for _, v in ipairs(_iSInventoryPage.backpacks) do
-        local inv = v.inventory;
+    for _, v in ipairs(page.backpacks) do
+        local inv = v.inventory
         if inv and inv:getParent() then
-            local containerObj = inv:getParent();
-            local modData = containerObj:getModData();
+            local containerObj = inv:getParent()
+            local modData = containerObj:getModData()
 
             -- Check if container is a "bin" (trash can) and hasn't been rolled for Vagabond yet
             if not modData.bVagbondRolled and instanceof(containerObj, "IsoObject") 
             and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                 
-                modData.bVagbondRolled = true;
-                containerObj:transmitModData();
-
-                if playerdata.ContainerTraitIllegal then
-                    playerdata.ContainerTraitIllegal = false;
-                    return
-                end
-
-                local container = containerObj:getContainer();
+                local container = containerObj:getContainer()
                 if container:getType() == "bin" then
-                    local extra = SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot or 1;
-                    local iterations = ZombRand(0, 3) + extra;
+                    modData.bVagbondRolled = true
+                    containerObj:transmitModData()
+
+                    local extra = SandboxVars.MoreTraits.VagabondGuaranteedExtraLoot or 1
+                    local iterations = ZombRand(0, 3) + extra
+                    local itemsFound = {} -- To track items for the Server Command
 
                     for i = 1, iterations do
-                        if ZombRand(100) <= basechance then
-                            local x = ZombRand(#items) + 1;
-                            local itemType = items[x];
-                            local item = nil;
-
-                            if itemType then
-                                item = container:AddItem(itemType);
-                                if isClient() then sendAddItemToContainer(container, item);
-                                else container:addItemOnServer(item); end
+                        if ZombRand(100) <= baseChance then
+                            local itemType = vagabondItems[ZombRand(#vagabondItems) + 1]
+                            local itemName = getScriptManager():getItem(itemType):getDisplayName()
+                            
+                            if isClient() then table.insert(itemsFound, itemType)
+                            else container:AddItem(itemType) -- SP: Add it directly to the container
                             end
 
-                            -- Visual feedback
-                            if item and not isServer() and MT_Config and MT_Config:getOption("VagabondAnnounce"):getValue() then
-                                HaloTextHelper.addTextWithArrow(
-                                    player, getText("UI_trait_vagabond") .. " : " .. item:getName(), 
-                                    true, HaloTextHelper.getColorGreen()
-                                );
+                            if itemName and MT_Config and MT_Config:getOption("VagabondAnnounce"):getValue() then
+                                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond") .. " : " .. itemName, true, HaloTextHelper.getColorGreen())
                             end
                         end
+                    end
+
+                    -- We're informing the server of the items
+                    if isClient() and #itemsFound > 0 then
+                        local args = {
+                            x = containerObj:getX(),
+                            y = containerObj:getY(),
+                            z = containerObj:getZ(),
+                            baseChance = baseChance,
+                            items = itemsFound
+                        }
+                        sendClientCommand(player, 'ToadTraits', 'Vagabond', args)
                     end
                 end
             end
