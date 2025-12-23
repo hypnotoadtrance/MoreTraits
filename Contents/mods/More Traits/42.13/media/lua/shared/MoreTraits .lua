@@ -3833,9 +3833,10 @@ end
 --     local playerdata = player:getModData();
 -- end
 
-function OnCreatePlayer(_, player)
+function OnCreatePlayer(playerindex, player)
+    if not player then return end
     local playerdata = player:getModData();
-    if not playerdata then return end;
+    if not playerdata then return end
 
     --reset any worn clothing to default state.
     local wornItems = player:getWornItems();
@@ -3849,9 +3850,7 @@ function OnCreatePlayer(_, player)
     InitPlayerData(player, playerdata);
     if not isServer() then MT_Config = PZAPI.ModOptions:getOptions("1299328280"); end
     print("More Traits - Mod Version On Which Player Was Created: " .. playerdata.MTModVersion)
-    if getGameTime():getModData().MTModVersion == nil then
-        getGameTime():getModData().MTModVersion = "Before 15 January 2023"
-    end
+    if getGameTime():getModData().MTModVersion == nil then getGameTime():getModData().MTModVersion = "Before 15 January 2023" end
     print("More Traits - Mod Version On Which Save Was Created: " .. getGameTime():getModData().MTModVersion);
     print("More Traits - Current Mod Version: " .. MTModVersion)
 end
