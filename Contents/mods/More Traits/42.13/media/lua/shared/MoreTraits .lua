@@ -3860,6 +3860,16 @@ function OnInitWorld()
         getGameTime():getModData().MTModVersion = MTModVersion;
     end
 end
+
+function onNewGame(player)
+    if not player then return end
+    local playerdata = player:getModData();
+    if not playerdata then return end
+
+    initToadTraitsItems(player);
+    initToadTraitsPerks(player, playerdata);
+end
+
 --Events.OnPlayerMove.Add(gimp);
 --Events.OnPlayerMove.Add(fast);
 Events.OnGameStart.Add(initMTConfig);
@@ -3885,8 +3895,7 @@ else
     Events.EveryTenMinutes.Add(MT_checkWeight);
 end
 Events.EveryHours.Add(EveryHours);
-Events.OnNewGame.Add(initToadTraitsPerks);
-Events.OnNewGame.Add(initToadTraitsItems);
+Events.OnNewGame.Add(onNewGame);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
