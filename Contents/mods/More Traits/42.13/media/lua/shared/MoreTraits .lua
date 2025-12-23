@@ -993,7 +993,6 @@ local function ToadTraitVagabond(page, player, playerdata)
             local containerObj = inv:getParent()
             local modData = containerObj:getModData()
 
-            -- Check if container is a "bin" (trash can) and hasn't been rolled for Vagabond yet
             if not modData.bVagbondRolled and instanceof(containerObj, "IsoObject") 
             and not instanceof(containerObj, "IsoDeadBody") and containerObj:getContainer() then
                 
@@ -1042,14 +1041,14 @@ function ToadTraitDepressive(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.depressive) then return end
     if playerdata.bToadTraitDepressed then return end
 
-    local basechance = 2
+    local baseChance = 2
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) then basechance = basechance - (1 * luckimpact)
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then basechance = basechance + (1 * luckimpact) end
+    if player:hasTrait(ToadTraitsRegistries.lucky) then baseChance = baseChance - (1 * luckimpact)
+    elseif player:hasTrait(ToadTraitsRegistries.unlucky) then baseChance = baseChance + (1 * luckimpact) end
 
-    if player:hasTrait(ToadTraitsRegistries.selfdestructive) then basechance = basechance + 1 end
+    if player:hasTrait(ToadTraitsRegistries.selfdestructive) then baseChance = baseChance + 1 end
 
-    if ZombRand(100) < basechance then
+    if ZombRand(100) < baseChance then
         local stats = player:getStats()
         local currentUnhappiness = stats:get(CharacterStat.UNHAPPINESS);
         stats:set(CharacterStat.UNHAPPINESS, currentUnhappiness + 25);
