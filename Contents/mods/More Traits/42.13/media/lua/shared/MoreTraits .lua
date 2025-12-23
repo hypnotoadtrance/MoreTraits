@@ -265,9 +265,7 @@ function initToadTraitsItems(player)
     elseif player:hasTrait(ToadTraitsRegistries.preparedweapon) then
         local items = {"Base.BaseballBat_Can", "Base.HuntingKnife"}
         for _, item in ipairs(items) do
-            local i = instanceItem(item);
-            inv:AddItem(i);
-            sendAddItemToContainer(inv, i);
+            inv:AddItem(item);
         end   
     elseif player:hasTrait(ToadTraitsRegistries.preparedmedical) then
         local holder = inv:AddItem("Base.FirstAidKit");
