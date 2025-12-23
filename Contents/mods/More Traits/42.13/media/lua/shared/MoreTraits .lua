@@ -92,19 +92,21 @@ local function initMTConfig()
     end
 end
 
-local function GetXPModifier(player, perk)
-    local m = 1.0
+-- local function GetXPModifier(player, perk)
+--     if not player then return 1.0 end
+--     if not player:hasTrait(ToadTraitsRegistries.gymgoer) then return 1.0 end
+    
+--     if perk == Perks.Fitness or perk == Perks.Strength then
+--         local m = 1.0
+--         if player:getCurrentState() == FitnessState.instance() then
+--             local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200
+--             m = m + ((gymMod * 0.01) - 1) * 0.1
+--         end
+--         return m
+--     end
 
-    -- GymGoer bonus UNIQUEMENT
-    if player:hasTrait(ToadTraitsRegistries.gymgoer)
-        and (perk == Perks.Fitness or perk == Perks.Strength)
-        and player:getCurrentState() == FitnessState.instance() then
-            local gymMod = SandboxVars.MoreTraits.GymGoerPercent or 200
-            m = m + ((gymMod * 0.01) - 1) * 0.1
-    end
-
-    return m
-end
+--     return 1.0
+-- end
 
 -- Fonction AddXP
 local function AddXP(player, perk, amount)
