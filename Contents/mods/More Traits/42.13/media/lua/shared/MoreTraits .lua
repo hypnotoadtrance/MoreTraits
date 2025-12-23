@@ -709,16 +709,13 @@ function ToadTraitScrounger(_iSInventoryPage, _state, player, playerdata)
                             local count = inventory:getNumberOfItem(fullType)
                             
                             --Add a Special Case for Cigarettes and Nails since they inherently create 20 when added.
-                            if fullType == "Base.Cigarettes" or fullType == "Base.Nails" then
+                            if fullType == "Base.CigaretteSingle" or fullType == "Base.Nails" then
                                 count = math.floor(count / 20)
                             end
 
                             local currentItemChance = itemBaseChance
-                            if item:getCategory() == "Food" or item:IsDrainable() then
-                                currentItemChance = currentItemChance + 10
-                            elseif item:IsWeapon() then
-                                currentItemChance = currentItemChance + 5
-                            end
+                            if item:getCategory() == "Food" or item:IsDrainable() then currentItemChance = currentItemChance + 10
+                            elseif item:IsWeapon() then currentItemChance = currentItemChance + 5 end
 
                             local n = 0
                             local rolled = false
