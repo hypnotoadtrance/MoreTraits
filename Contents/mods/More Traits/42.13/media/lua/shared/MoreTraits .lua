@@ -216,6 +216,7 @@ function initToadTraitsItems(player)
 
     local function syncItem(container, item)
         if not item then return end
+        -- Maybe we need to do both?
         if isClient() then sendAddItemToContainer(container, item)
         else container:addItemOnServer(item) end
     end
@@ -2269,7 +2270,11 @@ function graveRobber(_zombie)
                 if roll <= entry.chance then
                     local selection = entry.items[ZombRand(#entry.items) + 1]
                     local item = inv:AddItem(selection)
-                    if item then inv:addItemOnServer(item) end
+                    
+                    if item then
+                        if isClient() then sendAddItemToContainer(inv, item)
+                        else inv:addItemOnServer(item) end
+                    end
                     break;
                 end
             end
