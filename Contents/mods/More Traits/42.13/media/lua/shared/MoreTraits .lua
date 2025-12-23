@@ -1026,12 +1026,7 @@ local function ToadTraitVagabond(page, player, playerdata)
 
                     -- We're informing the server of the items
                     if isClient() and #itemsFound > 0 then
-                        local args = {
-                            x = containerObj:getX(),
-                            y = containerObj:getY(),
-                            z = containerObj:getZ(),
-                            items = itemsFound
-                        }
+                        local args = { x = containerObj:getX(), y = containerObj:getY(), z = containerObj:getZ(), items = itemsFound }
                         sendClientCommand(player, 'ToadTraits', 'Vagabond', args)
                     end
                 end
