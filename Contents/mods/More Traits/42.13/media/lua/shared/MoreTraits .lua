@@ -27,72 +27,67 @@ internalTick = 0;
 luckimpact = 1.0;
 MTModVersion = 42.13; --REMEMBER TO MANUALLY INCREASE
 isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
-playerdatatable = {};
-playerdatatable[0] = { "MTModVersion", MTModVersion };
-playerdatatable[1] = { "secondwinddisabled", false };
-playerdatatable[2] = { "secondwindrecoveredfatigue", false };
-playerdatatable[3] = { "secondwindcooldown", 0 };
-playerdatatable[4] = { "bToadTraitDepressed", false };
-playerdatatable[5] = { "indefatigablecooldown", 0 };
-playerdatatable[6] = { "indefatigablecuredinfection", false };
-playerdatatable[7] = { "indefatigabledisabled", false };
-playerdatatable[8] = { "bindefatigable", false };
-playerdatatable[9] = { "IndefatigableHasBeenDraggedDown", false };
-playerdatatable[10] = { "bSatedDrink", true };
-playerdatatable[11] = { "iHoursSinceDrink", 0 };
-playerdatatable[12] = { "iTimesCannibal", 0 };
-playerdatatable[13] = { "fPreviousHealthFromFoodTimer", 1000 };
-playerdatatable[14] = { "bWasInfected", false };
-playerdatatable[15] = { "iHardyEndurance", 5 };
-playerdatatable[16] = { "iHardyMaxEndurance", 5 };
-playerdatatable[17] = { "iHardyInterval", 1000 };
-playerdatatable[18] = { "iWithdrawalCooldown", 24 };
-playerdatatable[19] = { "iParanoiaCooldown", 10 };
-playerdatatable[20] = { "SuperImmuneRecovery", 0 };
-playerdatatable[21] = { "SuperImmuneActive", false };
-playerdatatable[22] = { "SuperImmuneMinutesPassed", 0 };
-playerdatatable[23] = { "SuperImmuneTextSaid", false };
-playerdatatable[24] = { "SuperImmuneHealedOnce", false };
-playerdatatable[25] = { "SuperImmuneMinutesWellFed", 0 };
-playerdatatable[26] = { "SuperImmuneAbsoluteWellFedAmount", 0 };
-playerdatatable[27] = { "SuperImmuneInfections", 0 };
-playerdatatable[28] = { "SuperImmuneLethal", false };
-playerdatatable[29] = { "MotionActive", false };
-playerdatatable[30] = { "HasSlept", false };
-playerdatatable[31] = { "FatigueWhenSleeping", 0 };
-playerdatatable[32] = { "NeckHadPain", false };
-playerdatatable[33] = { "ContainerTraitIllegal", false };
-playerdatatable[34] = { "ContainerTraitPlayerCurrentPositionX", 0 };
-playerdatatable[35] = { "ContainerTraitPlayerCurrentPositionY", 0 };
-playerdatatable[36] = { "AlbinoTimeSpentOutside", 0 };
-playerdatatable[37] = { "isMTAlcoholismInitialized", false };
-playerdatatable[38] = { "iBouncercooldown", 0 };
-playerdatatable[39] = { "bisInfected", false };
-playerdatatable[40] = { "bisAlbinoOutside", false };
-playerdatatable[41] = { "bToadTraitDepressed", false };
-playerdatatable[42] = { "bWasJustSprinting", false };
-playerdatatable[43] = { "InjuredBodyList", {} };
-playerdatatable[44] = { "UnwaveringInjurySpeedChanged", false };
-playerdatatable[45] = { "OldCalories", 810 };
-playerdatatable[46] = { "IngenuitiveActivated", false };
-playerdatatable[47] = { "EvasivePlayerInfected", false };
-playerdatatable[48] = { "TraitInjuredBodyList", {} };
-playerdatatable[49] = { "fLastHP", 0 };
-playerdatatable[50] = { "isSleeping", false };
-playerdatatable[51] = { "QuickRestActive", false };
-playerdatatable[52] = { "QuickRestEndurance", -1 };
-playerdatatable[53] = { "QuickRestFinished", false };
 
--- Support for Server/Client behaviour. This shouldn't load on the Serverside
-local function initMTConfig()
-    -- Only try to load PZAPI config if we're on client side
-    if PZAPI and PZAPI.ModOptions then
-        MT_Config = PZAPI.ModOptions:getOptions("1299328280")
-        print("More Traits: Config initialized successfully!")
-        return true
-    else
-        print("More Traits: PZAPI not available (expected on server side)")
-        return false
+local playerDefaultData = {
+MTModVersion = MTModVersion,
+secondwinddisabled = false,
+secondwindrecoveredfatigue = false,
+secondwindcooldown = 0,
+bToadTraitDepressed = false,
+indefatigablecooldown = 0,
+indefatigablecuredinfection = false,
+indefatigabledisabled = false,
+bindefatigable = false,
+IndefatigableHasBeenDraggedDown = false,
+bSatedDrink = true,
+iHoursSinceDrink = 0,
+iTimesCannibal = 0,
+fPreviousHealthFromFoodTimer = 1000,
+bWasInfected = false,
+iHardyEndurance = 5,
+iHardyMaxEndurance = 5,
+iHardyInterval = 1000,
+iWithdrawalCooldown = 24,
+iParanoiaCooldown = 10,
+SuperImmuneRecovery = 0,
+SuperImmuneActive = false,
+SuperImmuneMinutesPassed = 0,
+SuperImmuneTextSaid = false,
+SuperImmuneHealedOnce = false,
+SuperImmuneMinutesWellFed = 0,
+SuperImmuneAbsoluteWellFedAmount = 0,
+SuperImmuneInfections = 0,
+SuperImmuneLethal = false,
+MotionActive = false,
+HasSlept = false,
+FatigueWhenSleeping = 0,
+NeckHadPain = false,
+ContainerTraitIllegal = false,
+ContainerTraitPlayerCurrentPositionX = 0,
+ContainerTraitPlayerCurrentPositionY = 0,
+AlbinoTimeSpentOutside = 0,
+isMTAlcoholismInitialized = false,
+iBouncercooldown = 0,
+bisInfected = false,
+bisAlbinoOutside = false,
+bWasJustSprinting = false,
+InjuredBodyList = {},
+UnwaveringInjurySpeedChanged = false,
+OldCalories = 810,
+IngenuitiveActivated = false,
+EvasivePlayerInfected = false,
+    TraitInjuredBodyList = {},
+    isSleeping = false,
+    QuickRestActive = false,
+    QuickRestEndurance = -1,
+    QuickRestFinished = false,
+}
+
+local function InitPlayerData(player, playerdata)
+    for key, defaultValue in pairs(playerDefaultData) do
+        if playerdata[key] == nil then
+            playerdata[key] = defaultValue
+        end
     end
 end
 
