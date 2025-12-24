@@ -3989,7 +3989,7 @@ function EveryHours()
     local playerdata = player:getModData();
     if not playerdata then return end;
 
-    if not isMoodleFrameWorkEnabled then drinkertick(player, playerData);
+    if not isMoodleFrameWorkEnabled then drinkertick(player, playerdata);
     else MTAlcoholismMoodleTracker(player, playerdata); end
 
     drinkerpoison(player, playerdata);
