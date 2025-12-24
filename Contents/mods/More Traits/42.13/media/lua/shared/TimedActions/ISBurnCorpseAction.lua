@@ -3,20 +3,19 @@ require "TimedActions/ISBaseTimedAction"
 ISBurnCorpseAction = ISBaseTimedAction:derive("ISBurnCorpseAction");
 
 function ISBurnCorpseAction:isValid()
-    if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
+    if self.character:hasTrait(ToadTraitsRegistries.burned) and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
         HaloTextHelper.addText(self.character, getText("UI_burnedstop"), HaloTextHelper.getColorRed());
         return false
     end
-    if self.corpse:getStaticMovingObjectIndex() < 0 then
+
+    if self.corpse:getStaticMovingObjectIndex() < 0 or
+            not self.lighter or not self.petrol or
+            not self.character:isPrimaryHandItem(self.lighter) or
+            not self.character:isSecondaryHandItem(self.petrol) or
+            self.petrol:getFluidContainer():getAmount() < ZomboidGlobals.BurnCorpsePetrolAmount then
         return false
     end
-    if not self.lighter then
-        self.lighter = self.character:getPrimaryHandItem();
-    end
-    if not self.petrol then
-        self.petrol = self.character:getSecondaryHandItem();
-    end
-    if isClient() and self.petrol and self.lighter then
+    if isClient() then
         return self.character:getInventory():containsID(self.petrol:getID()) and self.character:getInventory():containsID(self.lighter:getID());
     else
         return self.character:getInventory():contains(self.petrol) and self.character:getInventory():contains(self.lighter);
@@ -26,7 +25,7 @@ end
 function ISBurnCorpseAction:update()
     self.lighter:setJobDelta(self:getJobDelta());
     self.petrol:setJobDelta(self:getJobDelta());
-
+    
     self.character:faceThisObject(self.corpse);
 end
 
@@ -39,7 +38,7 @@ function ISBurnCorpseAction:start()
     self.lighter:setJobDelta(0.0);
     self.petrol:setJobType(getText("IGUI_JobType_Burn"));
     self.petrol:setJobDelta(0.0);
-
+    
     self:setActionAnim(CharacterActionAnims.Pour);
     -- Don't call setOverrideHandModels() with self.petrol, the right-hand mask
     -- will bork the animation.
@@ -66,14 +65,6 @@ end
 
 function ISBurnCorpseAction:complete()
     self.character:burnCorpse(self.corpse);
-
-    if not self.lighter then
-        self.lighter = self.character:getPrimaryHandItem();
-    end
-    if not self.petrol then
-        self.petrol = self.character:getSecondaryHandItem();
-    end
-
     self.petrol:getFluidContainer():adjustAmount(self.petrol:getFluidContainer():getAmount() - ZomboidGlobals.BurnCorpsePetrolAmount);
     self.lighter:UseAndSync();
 
@@ -87,9 +78,11 @@ function ISBurnCorpseAction:getDuration()
     return 110
 end
 
-function ISBurnCorpseAction:new (character, corpse)
+function ISBurnCorpseAction:new (character, corpse, lighter, petrol)
     local o = ISBaseTimedAction.new(self, character)
     o.corpse = corpse;
     o.maxTime = o:getDuration();
+    o.lighter = lighter
+    o.petrol = petrol
     return o
 end

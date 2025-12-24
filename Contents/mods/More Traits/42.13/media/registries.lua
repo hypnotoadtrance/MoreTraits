@@ -86,7 +86,7 @@ ToadTraitsRegistries.quickrest = CharacterTrait.register("ToadTraits:quickrest")
 ---------------------------------------------------------
 ToadTraitsRegistries.antigun = CharacterTrait.register("ToadTraits:antigun")
 ToadTraitsRegistries.noodlelegs = CharacterTrait.register("ToadTraits:noodlelegs")
-ToadTraitsRegistries.motionsickness = CharacterTrait.register("ToadTraits:motionsickness")
+-- ToadTraitsRegistries.motionsickness = CharacterTrait.register("ToadTraits:motionsickness") -- Removed as Vanilla now has Motion Sensitive
 ToadTraitsRegistries.paranoia = CharacterTrait.register("ToadTraits:paranoia")
 ToadTraitsRegistries.packmouse = CharacterTrait.register("ToadTraits:packmouse")
 ToadTraitsRegistries.injured = CharacterTrait.register("ToadTraits:injured")

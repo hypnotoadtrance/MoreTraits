@@ -1,16 +1,14 @@
---***********************************************************
---**                    ROBERT JOHNSON                     **
---***********************************************************
-
 require "TimedActions/ISBaseTimedAction"
+ToadTraits = require("ToadTraits/Registries")
 
 ISLightFromPetrol = ISBaseTimedAction:derive("ISLightFromPetrol");
 
 function ISLightFromPetrol:isValid()
-	if self.character:HasTrait("burned") and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
+	if self.character:hasTrait(ToadTraitsRegistries.burned) and self.character:getModData().MTModVersion >= 3 and SandboxVars.MoreTraits.BurnedFireAversion == true then
 		HaloTextHelper.addText(self.character, getText("UI_burnedstop"), HaloTextHelper.getColorRed());
 		return
 	end
+
 	self.campfire:updateFromIsoObject()
 	local playerInv = self.character:getInventory()
 	return self.campfire:getObject() ~= nil and	self.campfire.fuelAmt > 0
@@ -37,34 +35,34 @@ end
 
 function ISLightFromPetrol:stop()
 	ISBaseTimedAction.stop(self);
-	self.petrol:setJobDelta(0.0);
+    self.petrol:setJobDelta(0.0);
 end
 
 function ISLightFromPetrol:perform()
 	self.petrol:getContainer():setDrawDirty(true);
-	self.petrol:setJobDelta(0.0);
+    self.petrol:setJobDelta(0.0);
 
-	-- needed to remove from queue / start next.
+    -- needed to remove from queue / start next.
 	ISBaseTimedAction.perform(self);
 end
 
 function ISLightFromPetrol:complete()
-	self.petrol:getFluidContainer():adjustAmount(self.petrol:getFluidContainer():getAmount() - ZomboidGlobals.LightFromPetrolAmount);
+    self.petrol:getFluidContainer():adjustAmount(self.petrol:getFluidContainer():getAmount() - ZomboidGlobals.LightFromPetrolAmount);
 	self.lighter:UseAndSync()
 
 	local campfire = SCampfireSystem.instance:getLuaObjectAt(self.campfire.x, self.campfire.y, self.campfire.z)
-	if campfire then
-		campfire:lightFire()
-	end
+    if campfire then
+        campfire:lightFire()
+    end
 
-	return true
+    return true
 end
 
 function ISLightFromPetrol:getDuration()
-	if self.character:isTimedActionInstant() then
-		return 1
-	end
-	return self.maxTime;
+    if self.character:isTimedActionInstant() then
+        return 1
+    end
+    return self.maxTime;
 end
 
 function ISLightFromPetrol:new(character, campfire, lighter, petrol, maxTime)

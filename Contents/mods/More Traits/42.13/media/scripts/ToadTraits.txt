@@ -1,1061 +1,1048 @@
-module ToadTraits
-{
+module ToadTraits {
+
+    character_trait_definition ToadTraits:actionhero
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:actionhero,
+        Cost = 8,
+        UIName = UI_trait_actionhero,
+        UIDescription = UI_trait_actionherodesc,
+    }
+
+    character_trait_definition ToadTraits:albino
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:albino,
+        Cost = -5,
+        UIName = UI_trait_albino,
+        UIDescription = UI_trait_albinodesc,
+        MutuallyExclusiveTraits = ToadTraits:badteeth,
+    }
+
+    character_trait_definition ToadTraits:amputee
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:amputee,
+        Cost = -16,
+        UIName = UI_trait_amputee,
+        UIDescription = UI_trait_amputeedesc,
+    }
+
+    character_trait_definition ToadTraits:anemic
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:anemic,
+        Cost = -4,
+        UIName = UI_trait_anemic,
+        UIDescription = UI_trait_anemicdesc,
+        MutuallyExclusiveTraits = ToadTraits:thickblood,
+    }
+
+    character_trait_definition ToadTraits:antigun
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:antigun,
+        Cost = -6,
+        UIName = UI_trait_antigun,
+        UIDescription = UI_trait_antigundesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpshooter;ToadTraits:progun;ToadTraits:specguns;ToadTraits:terminator,
+    }
+
+    character_trait_definition ToadTraits:antique
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:antique,
+        Cost = 6,
+        UIName = UI_trait_antique,
+        UIDescription = UI_trait_antiquedesc,
+        XPBoosts = Scavenging=1,
+    }
+
+    character_trait_definition ToadTraits:ascetic
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:ascetic,
+        Cost = -4,
+        UIName = UI_trait_ascetic,
+        UIDescription = UI_trait_asceticdesc,
+        MutuallyExclusiveTraits = ToadTraits:gourmand,
+    }
+
+    character_trait_definition ToadTraits:badteeth
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:badteeth,
+        Cost = -3,
+        UIName = UI_trait_badteeth,
+        UIDescription = UI_trait_badteethdesc,
+        MutuallyExclusiveTraits = ToadTraits:albino,
+    }
+
+    character_trait_definition ToadTraits:batteringram
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:batteringram,
+        Cost = 7,
+        UIName = UI_trait_batteringram,
+        UIDescription = UI_trait_batteringramdesc,
+    }
+
+    character_trait_definition ToadTraits:bladetwirl
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:bladetwirl,
+        Cost = 5,
+        UIName = UI_trait_bladetwirl,
+        UIDescription = UI_trait_bladetwirldesc,
+        XPBoosts = LongBlade=1;SmallBlade=1,
+    }
+
+    character_trait_definition ToadTraits:blissful
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:blissful,
+        Cost = 3,
+        UIName = UI_trait_blissful,
+        UIDescription = UI_trait_blissfuldesc,
+        MutuallyExclusiveTraits = ToadTraits:depressive;ToadTraits:selfdestructive;base:smoker,
+    }
+
+    character_trait_definition ToadTraits:blunttwirl
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:blunttwirl,
+        Cost = 5,
+        UIName = UI_trait_blunttwirl,
+        UIDescription = UI_trait_blunttwirldesc,
+        XPBoosts = SmallBlunt=1;Blunt=1,
+    }
+
+    character_trait_definition ToadTraits:bouncer
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:bouncer,
+        Cost = 5,
+        UIName = UI_trait_bouncer,
+        UIDescription = UI_trait_bouncerdesc,
+        XPBoosts = Strength=1;SmallBlunt=1,
+    }
+
+    character_trait_definition ToadTraits:broke
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:broke,
+        Cost = -8,
+        UIName = UI_trait_broke,
+        UIDescription = UI_trait_brokedesc,
+    }
+
+    character_trait_definition ToadTraits:burned
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:burned,
+        Cost = -20,
+        UIName = UI_trait_burned,
+        UIDescription = UI_trait_burneddesc,
+    }
+
+    character_trait_definition ToadTraits:butterfingers
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:butterfingers,
+        Cost = -12,
+        UIName = UI_trait_butterfingers,
+        UIDescription = UI_trait_butterfingersdesc,
+    }
+
+    character_trait_definition ToadTraits:depressive
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:depressive,
+        Cost = -4,
+        UIName = UI_trait_depressive,
+        UIDescription = UI_trait_depressivedesc,
+        MutuallyExclusiveTraits = ToadTraits:blissful,
+    }
+
+    character_trait_definition ToadTraits:deprived
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:deprived,
+        Cost = -6,
+        UIName = UI_trait_deprived,
+        UIDescription = UI_trait_depriveddesc,
+        MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:drinker
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:drinker,
+        Cost = -14,
+        UIName = UI_trait_drinker,
+        UIDescription = UI_trait_drinkerdesc,
+    }
+
+    character_trait_definition ToadTraits:evasive
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:evasive,
+        Cost = 8,
+        UIName = UI_trait_evasive,
+        UIDescription = UI_trait_evasivedesc,
+        XPBoosts = Nimble=1,
+    }
+
+    character_trait_definition ToadTraits:expertdriver
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:expertdriver,
+        Cost = 5,
+        UIName = UI_trait_expertdriver,
+        UIDescription = UI_trait_expertdriverdesc,
+        MutuallyExclusiveTraits = ToadTraits:poordriver,
+        /*MutuallyExclusiveTraits = ToadTraits:motionsickness;ToadTraits:poordriver,*/
+    }
+
+    character_trait_definition ToadTraits:fearful
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:fearful,
+        Cost = -7,
+        UIName = UI_trait_fearful,
+        UIDescription = UI_trait_fearfuldesc,
+        MutuallyExclusiveTraits = base:brave;base:desensitized,
+    }
+
+    character_trait_definition ToadTraits:fitted
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:fitted,
+        Cost = 4,
+        UIName = UI_trait_fitted,
+        UIDescription = UI_trait_fitteddesc,
+    }
+
+    character_trait_definition ToadTraits:flexible
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:flexible,
+        Cost = 3,
+        UIName = UI_trait_flexible,
+        UIDescription = UI_trait_flexibledesc,
+        XPBoosts = Nimble=1,
+        MutuallyExclusiveTraits = base:obese,
+    }
+
+    character_trait_definition ToadTraits:generator
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:generator,
+        Cost = 2,
+        UIName = UI_trait_generator,
+        UIDescription = UI_trait_generatordesc,
+        GrantedRecipes = Generator,
+        MutuallyExclusiveTraits = ToadTraits:ingenuitive,
+    }
+
+    character_trait_definition ToadTraits:glassbody
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:glassbody,
+        Cost = -10,
+        UIName = UI_trait_glassbody,
+        UIDescription = UI_trait_glassbodydesc,
+    }
+
+    character_trait_definition ToadTraits:gordanite
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:gordanite,
+        Cost = 6,
+        UIName = UI_trait_gordanite,
+        UIDescription = UI_trait_gordanitedesc,
+        XPBoosts = Blunt=1,
+    }
+
+    character_trait_definition ToadTraits:gourmand
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:gourmand,
+        Cost = 4,
+        UIName = UI_trait_gourmand,
+        UIDescription = UI_trait_gourmanddesc,
+        XPBoosts = Cooking=1,
+        MutuallyExclusiveTraits = ToadTraits:ascetic,
+    }
+
+    character_trait_definition ToadTraits:graverobber
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:graverobber,
+        Cost = 7,
+        UIName = UI_trait_graverobber,
+        UIDescription = UI_trait_graverobberdesc,
+        XPBoosts = Scavenging=1,
+    }
+
+    character_trait_definition ToadTraits:grunt
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:grunt,
+        Cost = 4,
+        UIName = UI_trait_grunt,
+        UIDescription = UI_trait_gruntdesc,
+        XPBoosts = Woodwork=1;SmallBlunt=1;Masonry=1;Blacksmith=1,
+    }
+
     character_trait_definition ToadTraits:gunspecialist
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:gunspecialist,
-       Cost = 8,
-       UIName = UI_trait_gunspecialist,
-       UIDescription = UI_trait_gunspecialistdesc,
-       XPBoosts = Aiming=2;Reloading=2,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:gunspecialist,
+        Cost = 8,
+        UIName = UI_trait_gunspecialist,
+        UIDescription = UI_trait_gunspecialistdesc,
+        XPBoosts = Aiming=2;Reloading=2,
     }
-    
-    character_trait_definition ToadTraits:preparedfood
+
+    character_trait_definition ToadTraits:gymgoer
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedfood,
-       Cost = 1,
-       UIName = UI_trait_preparedfood,
-       UIDescription = UI_trait_preparedfooddesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:gymgoer,
+        Cost = 5,
+        UIName = UI_trait_gymgoer,
+        UIDescription = UI_trait_gymgoerdesc,
+        XPBoosts = Strength=1;Fitness=1,
+    }
+
+    character_trait_definition ToadTraits:hardy
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:hardy,
+        Cost = 6,
+        UIName = UI_trait_hardy,
+        UIDescription = UI_trait_hardydesc,
+    }
+
+    character_trait_definition ToadTraits:idealweight
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:idealweight,
+        Cost = 4,
+        UIName = UI_trait_idealweight,
+        UIDescription = UI_trait_idealweightdesc,
+        MutuallyExclusiveTraits = base:emaciated;base:obese;base:overweight;base:underweight;base:very underweight;base:weightgain;base:weightloss,
+    }
+
+    character_trait_definition ToadTraits:immunocompromised
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:immunocompromised,
+        Cost = -10,
+        UIName = UI_trait_immunocompromised,
+        UIDescription = UI_trait_immunocompromiseddesc,
+        MutuallyExclusiveTraits = base:resilient;ToadTraits:superimmune,
+    }
+
+    character_trait_definition ToadTraits:incomprehensive
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:incomprehensive,
+        Cost = -10,
+        UIName = UI_trait_incomprehensive,
+        UIDescription = UI_trait_incomprehensivedesc,
+        MutuallyExclusiveTraits = ToadTraits:scrounger,
+    }
+
+    character_trait_definition ToadTraits:indefatigable
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:indefatigable,
+        Cost = 10,
+        UIName = UI_trait_indefatigable,
+        UIDescription = UI_trait_indefatigabledesc,
+    }
+
+    character_trait_definition ToadTraits:ingenuitive
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:ingenuitive,
+        Cost = 9,
+        UIName = UI_trait_ingenuitive,
+        UIDescription = UI_trait_ingenuitivedesc,
+        GrantedRecipes = Generator;MakeMildewCure;MakeAphidsCure;MakeFliesCureFromCigarettes;MakeFliesCureFromLooseTobacco;MakeFliesCureFromChewingTobacco;MakeCakeBatter;MakePieDough;MakeBreadDough;Herbalist;MakeSnareTrap;MakeStickTrap;MakeWoodenBoxTrap;MakeTrapBox;MakeCageTrap;Basic Mechanics;Intermediate Mechanics;Advanced Mechanics;MakeFishingRod;FixFishingRod;MakeChum;GetWireBack;MakeFishingNet;MakeRemoteControllerV1;MakeRemoteControllerV2;MakeRemoteControllerV3;MakeRemoteTrigger;MakeTimer;CraftMakeshiftRadio;CraftMakeshiftHAMRadio;CraftMakeshiftWalkieTalkie;MakeImprovisedFlashlight;MakeImprovisedLantern;MakeImprovisedLighter;MakeAerosolBomb;MakeFlameBomb;MakePipeBomb;MakeNoisegenerator;MakeSmokeBomb;MakeFirecracker;MakeSnareTrap;MakeStickTrap;MakeFishingRod;FixFishingRod,
+        MutuallyExclusiveTraits = ToadTraits:generator,
+    }
+
+    character_trait_definition ToadTraits:injured
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:injured,
+        Cost = -4,
+        UIName = UI_trait_injured,
+        UIDescription = UI_trait_injureddesc,
+    }
+
+    character_trait_definition ToadTraits:leadfoot
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:leadfoot,
+        Cost = 2,
+        UIName = UI_trait_leadfoot,
+        UIDescription = UI_trait_leadfootdesc,
+    }
+
+    character_trait_definition ToadTraits:lucky
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:lucky,
+        Cost = 4,
+        UIName = UI_trait_lucky,
+        UIDescription = UI_trait_luckydesc,
+        MutuallyExclusiveTraits = ToadTraits:unlucky,
+    }
+
+    character_trait_definition ToadTraits:martial
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:martial,
+        Cost = 5,
+        UIName = UI_trait_martial,
+        UIDescription = UI_trait_martialdesc,
+        XPBoosts = Fitness=1;SmallBlunt=1,
+    }
+
+    /*character_trait_definition ToadTraits:motionsickness
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:motionsickness,
+        Cost = -6,
+        UIName = UI_trait_motionsickness,
+        UIDescription = UI_trait_motionsicknessdesc,
+        MutuallyExclusiveTraits = ToadTraits:expertdriver;ToadTraits:superimmune,
+    }*/
+
+    character_trait_definition ToadTraits:mundane
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:mundane,
+        Cost = -9,
+        UIName = UI_trait_mundane,
+        UIDescription = UI_trait_mundanedesc,
+    }
+
+    character_trait_definition ToadTraits:natural
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:natural,
+        Cost = 4,
+        UIName = UI_trait_natural,
+        UIDescription = UI_trait_naturaldesc,
+        XPBoosts = Cooking=1;PlantScavenging=1,
+    }
+
+    character_trait_definition ToadTraits:noodlelegs
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noodlelegs,
+        Cost = -6,
+        UIName = UI_trait_noodlelegs,
+        UIDescription = UI_trait_noodlelegsdesc,
+    }
+
+    character_trait_definition ToadTraits:noxpaxe
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpaxe,
+        Cost = 3,
+        UIName = UI_trait_noxpaxe,
+        UIDescription = UI_trait_noxpaxedesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
+    }
+
+    character_trait_definition ToadTraits:noxpfirstaid
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpfirstaid,
+        Cost = 3,
+        UIName = UI_trait_noxpfirstaid,
+        UIDescription = UI_trait_noxpfirstaiddesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
+    }
+
+    character_trait_definition ToadTraits:noxpmaintenance
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpmaintenance,
+        Cost = 3,
+        UIName = UI_trait_noxpmaintenance,
+        UIDescription = UI_trait_noxpmaintenancedesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpshooter;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
+    }
+
+    character_trait_definition ToadTraits:noxpshooter
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpshooter,
+        Cost = 3,
+        UIName = UI_trait_noxpshooter,
+        UIDescription = UI_trait_noxpshooterdesc,
+        MutuallyExclusiveTraits = ToadTraits:antigun;ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpsneaky;ToadTraits:noxptechnician,
+    }
+
+    character_trait_definition ToadTraits:noxpsneaky
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxpsneaky,
+        Cost = 3,
+        UIName = UI_trait_noxpsneaky,
+        UIDescription = UI_trait_noxpsneakydesc,
+        MutuallyExclusiveTraits = base:conspicuous;ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxptechnician,
+    }
+
+    character_trait_definition ToadTraits:noxptechnician
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:noxptechnician,
+        Cost = 3,
+        UIName = UI_trait_noxptechnician,
+        UIDescription = UI_trait_noxptechniciandesc,
+        MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:noxpshooter;ToadTraits:noxpsneaky,
+    }
+
+    character_trait_definition ToadTraits:olympian
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:olympian,
+        Cost = 5,
+        UIName = UI_trait_olympian,
+        UIDescription = UI_trait_olympiandesc,
+        XPBoosts = Sprinting=1;Fitness=1,
+        MutuallyExclusiveTraits = base:jogger;base:unfit,
+    }
+
+    character_trait_definition ToadTraits:packmouse
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:packmouse,
+        Cost = -7,
+        UIName = UI_trait_packmouse,
+        UIDescription = UI_trait_packmousedesc,
+        MutuallyExclusiveTraits = ToadTraits:packmule,
+    }
+
+    character_trait_definition ToadTraits:packmule
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:packmule,
+        Cost = 7,
+        UIName = UI_trait_packmule,
+        UIDescription = UI_trait_packmuledesc,
+        MutuallyExclusiveTraits = ToadTraits:packmouse,
+    }
+
+    character_trait_definition ToadTraits:paranoia
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:paranoia,
+        Cost = -4,
+        UIName = UI_trait_paranoia,
+        UIDescription = UI_trait_paranoiadesc,
+    }
+
+    character_trait_definition ToadTraits:poordriver
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:poordriver,
+        Cost = -5,
+        UIName = UI_trait_poordriver,
+        UIDescription = UI_trait_poordriverdesc,
+        MutuallyExclusiveTraits = ToadTraits:expertdriver,
     }
 
     character_trait_definition ToadTraits:preparedammo
     {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedammo,
-       Cost = 1,
-       UIName = UI_trait_preparedammo,
-       UIDescription = UI_trait_preparedammodesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
-    }	
-	
-	character_trait_definition ToadTraits:preparedmedical
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedmedical,
-       Cost = 1,
-       UIName = UI_trait_preparedmedical,
-       UIDescription = UI_trait_preparedmedicaldesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedfood;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
-    }
-	
-	character_trait_definition ToadTraits:preparedrepair
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedrepair,
-       Cost = 1,
-       UIName = UI_trait_preparedrepair,
-       UIDescription = UI_trait_preparedrepairdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedfood;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
-    }
-	
-	character_trait_definition ToadTraits:preparedcamp
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedcamp,
-       Cost = 1,
-       UIName = UI_trait_preparedcamp,
-       UIDescription = UI_trait_preparedcampdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedfood;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
-    }
-	
-	character_trait_definition ToadTraits:preparedweapon
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedweapon,
-       Cost = 1,
-       UIName = UI_trait_preparedweapon,
-       UIDescription = UI_trait_preparedweapondesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedfood,
-    }
-	
-	character_trait_definition ToadTraits:preparedpack
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedpack,
-       Cost = 1,
-       UIName = UI_trait_preparedpack,
-       UIDescription = UI_trait_preparedpackdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedweapon,
-    }
-	
-	character_trait_definition ToadTraits:preparedcar
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedcar,
-       Cost = 1,
-       UIName = UI_trait_preparedcar,
-       UIDescription = UI_trait_preparedcardesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedfood;ToadTraits:preparedcoordination;ToadTraits:preparedpack;ToadTraits:preparedweapon,
-    }
-	
-	character_trait_definition ToadTraits:preparedcoordination
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:preparedcoordination,
-       Cost = 1,
-       UIName = UI_trait_preparedcoordination,
-       UIDescription = UI_trait_preparedcoordinationdesc,
-	   MutuallyExclusiveTraits = ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedfood;ToadTraits:preparedpack;ToadTraits:preparedweapon,
-    }
-	
-	character_trait_definition ToadTraits:swift
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:swift,
-       Cost = 2,
-       UIName = UI_trait_swift,
-       UIDescription = UI_trait_swiftdesc,
-       XPBoosts = Lightfoot=1,
-    }
-	
-	character_trait_definition ToadTraits:ingenuitive
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:ingenuitive,
-       Cost = 9,
-       UIName = UI_trait_ingenuitive,
-       UIDescription = UI_trait_ingenuitivedesc,
-       GrantedRecipes = Generator;Make Mildew Cure;Make Flies Cure;Make Cake Batter;Make Pie Dough;Make Bread Dough;Herbalist;Make Stick Trap;Make Snare Trap;Make Wooden Cage Trap;Make Trap Box;Make Cage Trap;Basic Mechanics;Intermediate Mechanics;Advanced Mechanics;Make Fishing Rod;Fix Fishing Rod;Get Wire Back;Make Fishing Net;Make Remote Controller V1;Make Remote Controller V2;Make Remote Controller V3;Make Remote Trigger;Make Timer;Craft Makeshift Radio;Craft Makeshift HAM Radio;Craft Makeshift Walkie Talkie;Make Aerosol bomb;Make Flame bomb;Make Pipe bomb;Make Noise generator;Make Smoke Bomb;Make Metal Walls;Make Metal Fences;Make Metal Containers;Make Metal Sheet;Make Small Metal Sheet;Make Metal Roof,
-    }
-	
-	character_trait_definition ToadTraits:generator
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:generator,
-       Cost = 2,
-       UIName = UI_trait_generator,
-       UIDescription = UI_trait_generatordesc,
-       GrantedRecipes = Generator, 
-	   MutuallyExclusiveTraits = ToadTraits:ingenuitive,
-    }
-	
-	character_trait_definition ToadTraits:olympian
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:olympian,
-       Cost = 5,
-       UIName = UI_trait_olympian,
-       UIDescription = UI_trait_olympiandesc,
-       XPBoosts = Fitness=1;Sprinting=1,
-	   MutuallyExclusiveTraits = base:unfit;base:jogger,
-    }
-	
-	character_trait_definition ToadTraits:bouncer
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:bouncer,
-       Cost = 5,
-       UIName = UI_trait_bouncer,
-       UIDescription = UI_trait_bouncerdesc,
-       XPBoosts = Strength=1;SmallBlunt=1,
-    }
-	
-	character_trait_definition ToadTraits:martial
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:martial,
-       Cost = 5,
-       UIName = UI_trait_martial,
-       UIDescription = UI_trait_martialdesc,
-       XPBoosts = Fitness=1;SmallBlunt=1,
-    }
-	
-	character_trait_definition ToadTraits:flexible
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:flexible,
-       Cost = 3,
-       UIName = UI_trait_flexible,
-       UIDescription = UI_trait_flexibledesc,
-       XPBoosts = Nimble=1,
-	   MutuallyExclusiveTraits = base:obese,
-    }
-	
-	character_trait_definition ToadTraits:grunt
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:grunt,
-       Cost = 4,
-       UIName = UI_trait_grunt,
-       UIDescription = UI_trait_gruntdesc,
-       XPBoosts = Woodwork=1;SmallBlunt=1;Masonry=1;Blacksmith=1,
-    }
-	
-	character_trait_definition ToadTraits:quiet
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:quiet,
-       Cost = 2,
-       UIName = UI_trait_quiet,
-       UIDescription = UI_trait_quietdesc,
-       XPBoosts = Sneak=1;Lightfoot=1,
-	   MutuallyExclusiveTraits = base:clumsy,
-    }
-	
-	character_trait_definition ToadTraits:tinkerer
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:tinkerer,
-       Cost = 5,
-       UIName = UI_trait_tinkerer,
-       UIDescription = UI_trait_tinkererdesc,
-       XPBoosts = Electricity=1;Mechanics=1;Tailoring=1;FlintKnapping=1;Carving=1,
-    }
-	
-	character_trait_definition ToadTraits:scrapper
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:scrapper,
-       Cost = 3,
-       UIName = UI_trait_scrapper,
-       UIDescription = UI_trait_scrapperdesc,
-       XPBoosts = MetalWelding=1;Maintenance=1;Blacksmith=1,
-	   GrantedRecipes = Make Metal Pipe;Make Metal Sheet,
-    }
-	
-	character_trait_definition ToadTraits:wildsman
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:wildsman,
-       Cost = 8,
-       UIName = UI_trait_wildsman,
-       UIDescription = UI_trait_wildsmandesc,
-       XPBoosts = Fishing=1;Trapping=1;PlantScavenging=1;Spear=1;Tracking=1;Carving=1;FlintKnapping=1,
-	   GrantedRecipes = Make Stick Trap;Make Snare Trap;Make Fishing Rod;Fix Fishing Rod,
-    }
-	
-	character_trait_definition ToadTraits:natural
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:natural,
-       Cost = 4,
-       UIName = UI_trait_natural,
-       UIDescription = UI_trait_naturaldesc,
-       XPBoosts = Cooking=1;PlantScavenging=1,
-    }
-	
-	character_trait_definition ToadTraits:bladetwirl
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:bladetwirl,
-       Cost = 5,
-       UIName = UI_trait_bladetwirl,
-       UIDescription = UI_trait_bladetwirldesc,
-       XPBoosts = LongBlade=1;SmallBlade=1,
-    }
-	
-	character_trait_definition ToadTraits:blunttwirl
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:blunttwirl,
-       Cost = 5,
-       UIName = UI_trait_blunttwirl,
-       UIDescription = UI_trait_blunttwirldesc,
-       XPBoosts = Blunt=1;SmallBlunt=1,
-    }
-	
-	character_trait_definition ToadTraits:scrounger
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:scrounger,
-       Cost = 5,
-       UIName = UI_trait_scrounger,
-       UIDescription = UI_trait_scroungerdesc,
-    }
-	
-	character_trait_definition ToadTraits:antique
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:antique,
-       Cost = 6,
-       UIName = UI_trait_antique,
-       UIDescription = UI_trait_antiquedesc,
-    }
-	
-	character_trait_definition ToadTraits:evasive
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:evasive,
-       Cost = 8,
-       UIName = UI_trait_evasive,
-       UIDescription = UI_trait_evasivedesc,
-       XPBoosts = Nimble=1,
-    }
-	
-	character_trait_definition ToadTraits:blissful
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:blissful,
-       Cost = 3,
-       UIName = UI_trait_blissful,
-       UIDescription = UI_trait_blissfuldesc,
-	   MutuallyExclusiveTraits = ToadTraits:depressive;ToadTraits:selfdestructive;base:smoker,
-    }
-	
-	character_trait_definition ToadTraits:specweapons
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:specweapons,
-       Cost = 12,
-       UIName = UI_trait_specweapons,
-       UIDescription = UI_trait_specweaponsdesc,
-       XPBoosts = Axe=2;Spear=2;Blunt=2;SmallBlunt=2;SmallBlade=2;LongBlade=2;Maintenance=2,
-	   MutuallyExclusiveTraits = ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specaid,
-    }
-	
-	character_trait_definition ToadTraits:speccrafting
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:speccrafting,
-       Cost = 12,
-       UIName = UI_trait_speccrafting,
-       UIDescription = UI_trait_speccraftingdesc,
-       XPBoosts = Woodwork=2;Electricity=2;MetalWeldingt=2;Mechanics=2;Tailoring=2;Carving=2;FlintKnapping=2;Blacksmith=2;Masonry=2;Pottery=2;Glassmaking=2,
-	   MutuallyExclusiveTraits = ToadTraits:specweapons;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specaid,
-    }
-	
-	character_trait_definition ToadTraits:specfood
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:specfood,
-       Cost = 12,
-       UIName = UI_trait_specfood,
-       UIDescription = UI_trait_specfooddesc,
-       XPBoosts = Cooking=2;Trapping=2;PlantScavenging=2;Farming=2;Fishing=2;Butchering=2;Tracking=2;Husbandry=2,
-	   MutuallyExclusiveTraits = ToadTraits:speccrafting;ToadTraits:specweapons;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specaid,
-    }
-	
-	character_trait_definition ToadTraits:specguns
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:specguns,
-       Cost = 12,
-       UIName = UI_trait_specguns,
-       UIDescription = UI_trait_specgunsdesc,
-       XPBoosts = Aiming=4;Reloading=4;Tracking=4,
-	   MutuallyExclusiveTraits = ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specweapons;ToadTraits:specmove;ToadTraits:specaid,
-    }
-	
-	character_trait_definition ToadTraits:specmove
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:specmove,
-       Cost = 12,
-       UIName = UI_trait_specmove,
-       UIDescription = UI_trait_specmovedesc,
-       XPBoosts = Lightfoot=4;Sprinting=4;Sneak=4;Nimble=4,
-	   MutuallyExclusiveTraits = ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specweapons;ToadTraits:specaid, 
-    }
-	
-	character_trait_definition ToadTraits:specaid
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:specaid,
-       Cost = 12,
-       UIName = UI_trait_specaid,
-       UIDescription = UI_trait_specaiddesc,
-       XPBoosts = Doctor=8,
-	   GrantedRecipes = Improvise Bandage;Improvise Suture;Improvise Splint;Improvise Disinfectant;Improvise Suture Holder;Improvise Painkillers;Improvise Antibiotics;Improvise Antidepressants;Improvise Betablockers;Improvise Sleeping Pills,
-	   MutuallyExclusiveTraits = ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specweapons,
-    }
-   
-    character_trait_definition ToadTraits:gordanite
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:gordanite,
-       Cost = 6,
-       UIName = UI_trait_gordanite,
-       UIDescription = UI_trait_gordanitedesc,
-       XPBoosts = Blunt=1,
-    }
-	
-	character_trait_definition ToadTraits:indefatigable
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:indefatigable,
-       Cost = 10,
-       UIName = UI_trait_indefatigable,
-       UIDescription = UI_trait_indefatigabledesc,
-    }
-	
-	character_trait_definition ToadTraits:hardy
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:hardy,
-       Cost = 6,
-       UIName = UI_trait_hardy,
-       UIDescription = UI_trait_hardydesc,
-    }
-	
-	character_trait_definition ToadTraits:problunt
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:problunt,
-       Cost = 7,
-       UIName = UI_trait_problunt,
-       UIDescription = UI_trait_probluntdesc,
-	   XPBoosts = Blunt=1;SmallBlunt=1,
-	   MutuallyExclusiveTraits = ToadTraits:problade;ToadTraits:progun;ToadTraits:prospear,
-    }
-	
-	character_trait_definition ToadTraits:problade
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:problade,
-       Cost = 7,
-       UIName = UI_trait_problade,
-       UIDescription = UI_trait_probladedesc,
-	   XPBoosts = LongBlade=1;SmallBlade=1;Axe=1,
-	   MutuallyExclusiveTraits = ToadTraits:problunt;ToadTraits:progun;ToadTraits:prospear,
-    }
-	
-	character_trait_definition ToadTraits:progun
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:progun,
-       Cost = 7,
-       UIName = UI_trait_progun,
-       UIDescription = UI_trait_progundesc,
-	   XPBoosts = Aiming=1;Reloading=1,
-	   MutuallyExclusiveTraits = ToadTraits:problade;ToadTraits:problunt;ToadTraits:prospear,
-    }
-	
-	character_trait_definition ToadTraits:prospear
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:prospear,
-       Cost = 7,
-       UIName = UI_trait_prospear,
-       UIDescription = UI_trait_prospeardesc,
-	   XPBoosts = Spear=2,
-	   MutuallyExclusiveTraits = ToadTraits:problade;ToadTraits:progun;ToadTraits:problunt,
-    }
-	
-	character_trait_definition ToadTraits:actionhero
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:actionhero,
-       Cost = 8,
-       UIName = UI_trait_actionhero,
-       UIDescription = UI_trait_actionherodesc,
-    }
-	
-	character_trait_definition ToadTraits:thickblood
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:thickblood,
-       Cost = 4,
-       UIName = UI_trait_thickblood,
-       UIDescription = UI_trait_thickblooddesc,
-       MutuallyExclusiveTraits = ToadTraits:anemic,
-    }
-	
-	character_trait_definition ToadTraits:expertdriver
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:expertdriver,
-       Cost = 5,
-       UIName = UI_trait_expertdriver,
-       UIDescription = UI_trait_expertdriverdesc,
-	   MutuallyExclusiveTraits = ToadTraits:poordriver,
-    }
-	
-	character_trait_definition ToadTraits:superimmune
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:superimmune,
-       Cost = 10,
-       UIName = UI_trait_superimmune,
-       UIDescription = UI_trait_superimmunedesc, 
-	   MutuallyExclusiveTraits = base:resilient;ToadTraits:immunocompromised;base:ProneToIllness,
-    }
-	
-	character_trait_definition ToadTraits:packmule
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:packmule,
-       Cost = 7,
-       UIName = UI_trait_packmule,
-       UIDescription = UI_trait_packmuledesc,
-	   MutuallyExclusiveTraits = ToadTraits:packmouse,
-    }
-	
-	character_trait_definition ToadTraits:graverobber
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:graverobber,
-       Cost = 7,
-       UIName = UI_trait_graverobber,
-       UIDescription = UI_trait_graverobberdesc,
-    }
-	
-	character_trait_definition ToadTraits:gourmand
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:gourmand,
-       Cost = 4,
-       UIName = UI_trait_gourmand,
-       UIDescription = UI_trait_gourmanddesc,
-	   XPBoosts = Cooking=1,
-	   MutuallyExclusiveTraits = ToadTraits:ascetic,
-    }
-	
-	character_trait_definition ToadTraits:gymgoer
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:gymgoer,
-       Cost = 5,
-       UIName = UI_trait_gymgoer,
-       UIDescription = UI_trait_gymgoerdesc,
-	   XPBoosts = Strength=1;Fitness=1,
-    }
-	
-	character_trait_definition ToadTraits:leadfoot
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:leadfoot,
-       Cost = 2,
-       UIName = UI_trait_leadfoot,
-       UIDescription = UI_trait_leadfootdesc,
-    }
-	
-	character_trait_definition ToadTraits:vagabond
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:vagabond,
-       Cost = 3,
-       UIName = UI_trait_vagabond,
-       UIDescription = UI_trait_vagabonddesc,
-    }
-	
-	character_trait_definition ToadTraits:quickworker
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:quickworker,
-       Cost = 9,
-       UIName = UI_trait_quickworker,
-       UIDescription = UI_trait_quickworkerdesc,
-	   MutuallyExclusiveTraits = ToadTraits:slowworker,
-    }
-	
-	character_trait_definition ToadTraits:batteringram
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:batteringram,
-       Cost = 7,
-       UIName = UI_trait_batteringram,
-       UIDescription = UI_trait_batteringramdesc,
-    }
-	
-	character_trait_definition ToadTraits:fitted
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:fitted,
-       Cost = 4,
-       UIName = UI_trait_fitted,
-       UIDescription = UI_trait_fitteddesc,
-    }
-	
-	character_trait_definition ToadTraits:tavernbrawler
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:tavernbrawler,
-       Cost = 3,
-       UIName = UI_trait_tavernbrawler,
-       UIDescription = UI_trait_tavernbrawlerdesc,
-    }
-	
-	character_trait_definition ToadTraits:secondwind
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:secondwind,
-       Cost = 10,
-       UIName = UI_trait_secondwind,
-       UIDescription = UI_trait_secondwinddesc,
-	   XPBoosts = Fitness=1,
-    }
-	
-	character_trait_definition ToadTraits:restfulsleeper
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:restfulsleeper,
-       Cost = 6,
-       UIName = UI_trait_restfulsleeper,
-       UIDescription = UI_trait_restfulsleeperdesc,
-	   MutuallyExclusiveTraits = base:insomniac,
-    }
-	
-	character_trait_definition ToadTraits:noxpshooter
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpshooter,
-       Cost = 3,
-       UIName = UI_trait_noxpshooter,
-       UIDescription = UI_trait_noxpshooterdesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance,
-    }
-	
-	character_trait_definition ToadTraits:noxptechnician
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxptechnician,
-       Cost = 3,
-       UIName = UI_trait_noxptechnician,
-       UIDescription = UI_trait_noxptechniciandesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpaxe;ToadTraits:noxpshooter;ToadTraits:noxpmaintenance;ToadTraits:noxpfirstaid,
-    }
-	
-	character_trait_definition ToadTraits:noxpaxe
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpaxe,
-       Cost = 3,
-       UIName = UI_trait_noxpaxe,
-       UIDescription = UI_trait_noxpaxedesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpmaintenance;ToadTraits:noxpfirstaid,
-    }
-	
-	character_trait_definition ToadTraits:noxpfirstaid
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpfirstaid,
-       Cost = 3,
-       UIName = UI_trait_noxpfirstaid,
-       UIDescription = UI_trait_noxpfirstaiddesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxpmaintenance,
-    }
-	
-	character_trait_definition ToadTraits:noxpmaintenance
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpmaintenance,
-       Cost = 3,
-       UIName = UI_trait_noxpmaintenance,
-       UIDescription = UI_trait_noxpmaintenancedesc,
-    }
-	
-	character_trait_definition ToadTraits:noxpsneaky
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noxpsneaky,
-       Cost = 3,
-       UIName = UI_trait_noxpsneaky,
-       UIDescription = UI_trait_noxpsneakydesc,
-	   MutuallyExclusiveTraits = ToadTraits:noxptechnician;ToadTraits:noxpshooter;ToadTraits:noxpaxe;ToadTraits:noxpfirstaid;ToadTraits:noxpmaintenance;ToadTraits:conspicuous,
-    }
-	
-	character_trait_definition ToadTraits:terminator
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:terminator,
-       Cost = 14,
-       UIName = UI_trait_terminator,
-       UIDescription = UI_trait_terminatordesc,
-    }
-	
-	character_trait_definition ToadTraits:unwavering
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:unwavering,
-       Cost = 6,
-       UIName = UI_trait_unwavering,
-       UIDescription = UI_trait_unwaveringdesc,
-    }
-	
-	character_trait_definition ToadTraits:idealweight
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:idealweight,
-       Cost = 4,
-       UIName = UI_trait_idealweight,
-       UIDescription = UI_trait_idealweightdesc,
-	   MutuallyExclusiveTraits = base:overweight;base:underweight;base:very underweight;base:Obese;base:emaciated;base:weightgain;base:weightloss,
-    }
-	
-	character_trait_definition ToadTraits:quickrest
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:quickrest,
-       Cost = 3,
-       UIName = UI_trait_quickrest,
-       UIDescription = UI_trait_quickrestdesc,
-    }
-	
-	character_trait_definition ToadTraits:antigun
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:antigun,
-       Cost = -6,
-       UIName = UI_trait_antigun,
-       UIDescription = UI_trait_antigundesc,
-	   MutuallyExclusiveTraits = ToadTraits:terminator;ToadTraits:progun;ToadTraits:noxpshooter,
-    }
-	
-	character_trait_definition ToadTraits:noodlelegs
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:noodlelegs,
-       Cost = -6,
-       UIName = UI_trait_noodlelegs,
-       UIDescription = UI_trait_noodlelegsdesc,
-    }
-	
-	character_trait_definition ToadTraits:motionsickness
-    {
-       IsProfessionTrait = true,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:motionsickness,
-       Cost = -6,
-       UIName = UI_trait_motionsickness,
-       UIDescription = UI_trait_motionsicknessdesc,
-	   MutuallyExclusiveTraits = ToadTraits:superimmune,
-    }
-	
-	character_trait_definition ToadTraits:paranoia
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:paranoia,
-       Cost = -4,
-       UIName = UI_trait_paranoia,
-       UIDescription = UI_trait_paranoiadesc,
-    }
-	
-	character_trait_definition ToadTraits:packmouse
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:packmouse,
-       Cost = -7,
-       UIName = UI_trait_packmouse,
-       UIDescription = UI_trait_packmousedesc,
-    }
-	
-	character_trait_definition ToadTraits:injured
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:injured,
-       Cost = -4,
-       UIName = UI_trait_injured,
-       UIDescription = UI_trait_injureddesc,
-    }
-	
-	character_trait_definition ToadTraits:drinker
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:drinker,
-       Cost = -14,
-       UIName = UI_trait_drinker,
-       UIDescription = UI_trait_drinkerdesc,
-    }
-	
-	character_trait_definition ToadTraits:broke
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:broke,
-       Cost = -8,
-       UIName = UI_trait_broke,
-       UIDescription = UI_trait_brokedesc,
-    }
-	
-	character_trait_definition ToadTraits:butterfingers
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:butterfingers,
-       Cost = -12,
-       UIName = UI_trait_butterfingers,
-       UIDescription = UI_trait_butterfingersdesc,
-    }
-	
-	character_trait_definition ToadTraits:incomprehensive
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:incomprehensive,
-       Cost = -10,
-       UIName = UI_trait_incomprehensive,
-       UIDescription = UI_trait_incomprehensivedesc,
-    }
-	
-	character_trait_definition ToadTraits:depressive
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:depressive,
-       Cost = -4,
-       UIName = UI_trait_depressive,
-       UIDescription = UI_trait_depressivedesc,
-    }
-	
-	character_trait_definition ToadTraits:selfdestructive
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:selfdestructive,
-       Cost = -4,
-       UIName = UI_trait_selfdestructive,
-       UIDescription = UI_trait_selfdestructivedesc,
-    }
-	
-	character_trait_definition ToadTraits:badteeth
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:badteeth,
-       Cost = -3,
-       UIName = UI_trait_badteeth,
-       UIDescription = UI_trait_badteethdesc,
-	   MutuallyExclusiveTraits = ToadTraits:albino,
-    }
-	
-	character_trait_definition ToadTraits:albino
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:albino,
-       Cost = -5,
-       UIName = UI_trait_albino,
-       UIDescription = UI_trait_albinodesc,
-    }
-	
-	character_trait_definition ToadTraits:amputee
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:amputee,
-       Cost = -16,
-       UIName = UI_trait_amputee,
-       UIDescription = UI_trait_amputeedesc,
-    }
-	
-	character_trait_definition ToadTraits:poordriver
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:poordriver,
-       Cost = -5,
-       UIName = UI_trait_poordriver,
-       UIDescription = UI_trait_poordriverdesc,
-	   MutuallyExclusiveTraits = ToadTraits:expertdriver,
-    }
-	
-	character_trait_definition ToadTraits:anemic
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:anemic,
-       Cost = -4,
-       UIName = UI_trait_anemic,
-       UIDescription = UI_trait_anemicdesc,
-       MutuallyExclusiveTraits = ToadTraits:thickblood,
-    }
-	
-	character_trait_definition ToadTraits:immunocompromised
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:immunocompromised,
-       Cost = -10,
-       UIName = UI_trait_immunocompromised,
-       UIDescription = UI_trait_immunocompromiseddesc,
-	   MutuallyExclusiveTraits = base:resilient,
-    }
-	
-	character_trait_definition ToadTraits:ascetic
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:ascetic,
-       Cost = -4,
-       UIName = UI_trait_ascetic,
-       UIDescription = UI_trait_asceticdesc,
-    }
-	
-	character_trait_definition ToadTraits:fearful
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:fearful,
-       Cost = -7,
-       UIName = UI_trait_fearful,
-       UIDescription = UI_trait_fearfuldesc,
-	   MutuallyExclusiveTraits = base:Desensitized;base:Brave,
-    }
-	
-	character_trait_definition ToadTraits:glassbody
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:glassbody,
-       Cost = -10,
-       UIName = UI_trait_glassbody,
-       UIDescription = UI_trait_glassbodydesc,
-    }
-	
-	character_trait_definition ToadTraits:slowworker
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:slowworker,
-       Cost = -9,
-       UIName = UI_trait_slowworker,
-       UIDescription = UI_trait_slowworkerdesc,
-    }
-	
-	character_trait_definition ToadTraits:mundane
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:mundane,
-       Cost = -9,
-       UIName = UI_trait_mundane,
-       UIDescription = UI_trait_mundanedesc,
-    }
-	
-	character_trait_definition ToadTraits:deprived
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:deprived,
-       Cost = -6,
-       UIName = UI_trait_deprived,
-       UIDescription = UI_trait_depriveddesc,
-       MutuallyExclusiveTraits = ToadTraits:preparedfood;ToadTraits:preparedammo;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedcamp;ToadTraits:preparedweapon;ToadTraits:preparedpack;ToadTraits:preparedcar;ToadTraits:preparedcoordination,
-    }
-	
-	character_trait_definition ToadTraits:burned
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:burned,
-       Cost = -20,
-       UIName = UI_trait_burned,
-       UIDescription = UI_trait_burneddesc,
-    }
-	character_trait_definition ToadTraits:lucky
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:lucky,
-       Cost = 4,
-       UIName = UI_trait_lucky,
-       UIDescription = UI_trait_luckydesc,
-       MutuallyExclusiveTraits = ToadTraits:unlucky,
-    }
-	character_trait_definition ToadTraits:unlucky
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:unlucky,
-       Cost = -4,
-       UIName = UI_trait_unlucky,
-       UIDescription = UI_trait_unluckydesc,
-       MutuallyExclusiveTraits = ToadTraits:lucky,
-    }
-	character_trait_definition ToadTraits:lightdrinker
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:lightdrinker,
-       Cost = -2,
-       UIName = UI_trait_lightdrink,
-       UIDescription = UI_trait_lightdrinkdesc,
-       MutuallyExclusiveTraits = ToadTraits:heavydrinker,
-    }
-	character_trait_definition ToadTraits:heavydrinker
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:heavydrinker,
-       Cost = 3,
-       UIName = UI_trait_harddrink,
-       UIDescription = UI_trait_harddrinkdesc,
-       MutuallyExclusiveTraits = ToadTraits:lightdrinker,
-    }
-	character_trait_definition ToadTraits:brooding
-    {
-       IsProfessionTrait = false,
-       DisabledInMultiplayer = false,
-       CharacterTrait = ToadTraits:brooding,
-       Cost = -2,
-       UIName = UI_trait_brooding,
-       UIDescription = UI_trait_broodingdesc,
-       MutuallyExclusiveTraits = ToadTraits:blissful,
-    }
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedammo,
+        Cost = 1,
+        UIName = UI_trait_preparedammo,
+        UIDescription = UI_trait_preparedammodesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedcamp
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedcamp,
+        Cost = 1,
+        UIName = UI_trait_preparedcamp,
+        UIDescription = UI_trait_preparedcampdesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedcar
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedcar,
+        Cost = 1,
+        UIName = UI_trait_preparedcar,
+        UIDescription = UI_trait_preparedcardesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedcoordination
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedcoordination,
+        Cost = 1,
+        UIName = UI_trait_preparedcoordination,
+        UIDescription = UI_trait_preparedcoordinationdesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedfood
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedfood,
+        Cost = 1,
+        UIName = UI_trait_preparedfood,
+        UIDescription = UI_trait_preparedfooddesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedmedical
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedmedical,
+        Cost = 1,
+        UIName = UI_trait_preparedmedical,
+        UIDescription = UI_trait_preparedmedicaldesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedpack;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedpack
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedpack,
+        Cost = 1,
+        UIName = UI_trait_preparedpack,
+        UIDescription = UI_trait_preparedpackdesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedrepair;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedrepair
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedrepair,
+        Cost = 1,
+        UIName = UI_trait_preparedrepair,
+        UIDescription = UI_trait_preparedrepairdesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedweapon,
+    }
+
+    character_trait_definition ToadTraits:preparedweapon
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:preparedweapon,
+        Cost = 1,
+        UIName = UI_trait_preparedweapon,
+        UIDescription = UI_trait_preparedweapondesc,
+        MutuallyExclusiveTraits = ToadTraits:deprived;ToadTraits:preparedammo;ToadTraits:preparedcamp;ToadTraits:preparedcar;ToadTraits:preparedcoordination;ToadTraits:preparedfood;ToadTraits:preparedmedical;ToadTraits:preparedpack;ToadTraits:preparedrepair,
+    }
+
+    character_trait_definition ToadTraits:problade
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:problade,
+        Cost = 7,
+        UIName = UI_trait_problade,
+        UIDescription = UI_trait_probladedesc,
+        XPBoosts = SmallBlade=1;LongBlade=1;Axe=1,
+        MutuallyExclusiveTraits = ToadTraits:problunt;ToadTraits:progun;ToadTraits:prospear,
+    }
+
+    character_trait_definition ToadTraits:problunt
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:problunt,
+        Cost = 7,
+        UIName = UI_trait_problunt,
+        UIDescription = UI_trait_probluntdesc,
+        XPBoosts = SmallBlunt=1;Blunt=1,
+        MutuallyExclusiveTraits = ToadTraits:problade;ToadTraits:progun;ToadTraits:prospear,
+    }
+
+    character_trait_definition ToadTraits:progun
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:progun,
+        Cost = 7,
+        UIName = UI_trait_progun,
+        UIDescription = UI_trait_progundesc,
+        XPBoosts = Aiming=1;Reloading=1,
+        MutuallyExclusiveTraits = ToadTraits:antigun;ToadTraits:problade;ToadTraits:problunt;ToadTraits:prospear,
+    }
+
+    character_trait_definition ToadTraits:prospear
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:prospear,
+        Cost = 7,
+        UIName = UI_trait_prospear,
+        UIDescription = UI_trait_prospeardesc,
+        XPBoosts = Spear=2,
+        MutuallyExclusiveTraits = ToadTraits:problade;ToadTraits:problunt;ToadTraits:progun,
+    }
+
+    character_trait_definition ToadTraits:quickrest
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:quickrest,
+        Cost = 3,
+        UIName = UI_trait_quickrest,
+        UIDescription = UI_trait_quickrestdesc,
+    }
+
+    character_trait_definition ToadTraits:quickworker
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:quickworker,
+        Cost = 9,
+        UIName = UI_trait_quickworker,
+        UIDescription = UI_trait_quickworkerdesc,
+        MutuallyExclusiveTraits = ToadTraits:slowworker,
+    }
+
+    character_trait_definition ToadTraits:quiet
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:quiet,
+        Cost = 2,
+        UIName = UI_trait_quiet,
+        UIDescription = UI_trait_quietdesc,
+        XPBoosts = Sneak=1;Lightfoot=1,
+        MutuallyExclusiveTraits = base:clumsy,
+    }
+
+    character_trait_definition ToadTraits:restfulsleeper
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:restfulsleeper,
+        Cost = 6,
+        UIName = UI_trait_restfulsleeper,
+        UIDescription = UI_trait_restfulsleeperdesc,
+        MutuallyExclusiveTraits = base:insomniac,
+    }
+
+    character_trait_definition ToadTraits:scrapper
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:scrapper,
+        Cost = 3,
+        UIName = UI_trait_scrapper,
+        UIDescription = UI_trait_scrapperdesc,
+        XPBoosts = MetalWelding=1;Maintenance=1;Blacksmith=1,
+    }
+
+    character_trait_definition ToadTraits:scrounger
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:scrounger,
+        Cost = 5,
+        UIName = UI_trait_scrounger,
+        UIDescription = UI_trait_scroungerdesc,
+        MutuallyExclusiveTraits = ToadTraits:incomprehensive,
+    }
+
+    character_trait_definition ToadTraits:secondwind
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:secondwind,
+        Cost = 10,
+        UIName = UI_trait_secondwind,
+        UIDescription = UI_trait_secondwinddesc,
+        XPBoosts = Fitness=1,
+    }
+
+    character_trait_definition ToadTraits:selfdestructive
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:selfdestructive,
+        Cost = -4,
+        UIName = UI_trait_selfdestructive,
+        UIDescription = UI_trait_selfdestructivedesc,
+        MutuallyExclusiveTraits = ToadTraits:blissful,
+    }
+
+    character_trait_definition ToadTraits:slowworker
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:slowworker,
+        Cost = -9,
+        UIName = UI_trait_slowworker,
+        UIDescription = UI_trait_slowworkerdesc,
+        MutuallyExclusiveTraits = ToadTraits:quickworker,
+    }
+
+    character_trait_definition ToadTraits:specaid
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:specaid,
+        Cost = 12,
+        UIName = UI_trait_specaid,
+        UIDescription = UI_trait_specaiddesc,
+        XPBoosts = Doctor=8,
+        GrantedRecipes = Improvise Bandage;Improvise Suture;Improvise Splint;Improvise Suture Holder;Improvise Disinfectant;Improvise Painkillers;Improvise Antibiotics;Improvise Antidepressants;Improvise Betablockers;Improvise Sleeping Pills,
+        MutuallyExclusiveTraits = ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specweapons,
+    }
+
+    character_trait_definition ToadTraits:speccrafting
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:speccrafting,
+        Cost = 12,
+        UIName = UI_trait_speccrafting,
+        UIDescription = UI_trait_speccraftingdesc,
+        XPBoosts = Woodwork=2;Electricity=2;MetalWelding=2;Mechanics=2;Tailoring=2;Carving=2;FlintKnapping=2;Blacksmith=2;Masonry=2;Pottery=2;Glassmaking=2,
+        MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specweapons,
+    }
+
+    character_trait_definition ToadTraits:specfood
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:specfood,
+        Cost = 12,
+        UIName = UI_trait_specfood,
+        UIDescription = UI_trait_specfooddesc,
+        XPBoosts = Cooking=2;Trapping=2;PlantScavenging=2;Farming=2;Fishing=2;Butchering=2;Tracking=2;Husbandry=2,
+        MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specweapons,
+    }
+
+    character_trait_definition ToadTraits:specguns
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:specguns,
+        Cost = 12,
+        UIName = UI_trait_specguns,
+        UIDescription = UI_trait_specgunsdesc,
+        XPBoosts = Aiming=4;Reloading=4;Tracking=4,
+        MutuallyExclusiveTraits = ToadTraits:antigun;ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specmove;ToadTraits:specweapons,
+    }
+
+    character_trait_definition ToadTraits:specmove
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:specmove,
+        Cost = 12,
+        UIName = UI_trait_specmove,
+        UIDescription = UI_trait_specmovedesc,
+        XPBoosts = Lightfoot=4;Sprinting=4;Sneak=4;Nimble=4,
+        MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specweapons,
+    }
+
+    character_trait_definition ToadTraits:specweapons
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:specweapons,
+        Cost = 12,
+        UIName = UI_trait_specweapons,
+        UIDescription = UI_trait_specweaponsdesc,
+        XPBoosts = Axe=2;Spear=2;SmallBlunt=2;Blunt=2;LongBlade=2;SmallBlade=2;Maintenance=2,
+        MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove,
+    }
+
+    character_trait_definition ToadTraits:superimmune
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:superimmune,
+        Cost = 10,
+        UIName = UI_trait_superimmune,
+        UIDescription = UI_trait_superimmunedesc,
+        MutuallyExclusiveTraits = ToadTraits:immunocompromised;base:pronetoillness;base:resilient,
+        /*MutuallyExclusiveTraits = ToadTraits:immunocompromised;ToadTraits:motionsickness;base:pronetoillness;base:resilient,*/
+    }
+
+    character_trait_definition ToadTraits:swift
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:swift,
+        Cost = 2,
+        UIName = UI_trait_swift,
+        UIDescription = UI_trait_swiftdesc,
+        XPBoosts = Lightfoot=1,
+    }
+
+    character_trait_definition ToadTraits:tavernbrawler
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:tavernbrawler,
+        Cost = 3,
+        UIName = UI_trait_tavernbrawler,
+        UIDescription = UI_trait_tavernbrawlerdesc,
+    }
+
+    character_trait_definition ToadTraits:terminator
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:terminator,
+        Cost = 14,
+        UIName = UI_trait_terminator,
+        UIDescription = UI_trait_terminatordesc,
+        MutuallyExclusiveTraits = ToadTraits:antigun,
+    }
+
+    character_trait_definition ToadTraits:thickblood
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:thickblood,
+        Cost = 4,
+        UIName = UI_trait_thickblood,
+        UIDescription = UI_trait_thickblooddesc,
+        MutuallyExclusiveTraits = ToadTraits:anemic,
+    }
+
+    character_trait_definition ToadTraits:tinkerer
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:tinkerer,
+        Cost = 5,
+        UIName = UI_trait_tinkerer,
+        UIDescription = UI_trait_tinkererdesc,
+        XPBoosts = Electricity=1;Mechanics=1;Tailoring=1;FlintKnapping=1;Carving=1,
+    }
+
+    character_trait_definition ToadTraits:unlucky
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:unlucky,
+        Cost = -4,
+        UIName = UI_trait_unlucky,
+        UIDescription = UI_trait_unluckydesc,
+        MutuallyExclusiveTraits = ToadTraits:lucky,
+    }
+
+    character_trait_definition ToadTraits:unwavering
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:unwavering,
+        Cost = 6,
+        UIName = UI_trait_unwavering,
+        UIDescription = UI_trait_unwaveringdesc,
+    }
+
+    character_trait_definition ToadTraits:vagabond
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:vagabond,
+        Cost = 3,
+        UIName = UI_trait_vagabond,
+        UIDescription = UI_trait_vagabonddesc,
+        XPBoosts = Scavenging=1,
+    }
+
+    character_trait_definition ToadTraits:wildsman
+    {
+        IsProfessionTrait = false,
+        DisabledInMultiplayer = false,
+        CharacterTrait = ToadTraits:wildsman,
+        Cost = 8,
+        UIName = UI_trait_wildsman,
+        UIDescription = UI_trait_wildsmandesc,
+        XPBoosts = Fishing=1;Trapping=1;PlantScavenging=1;Spear=1;Tracking=1;Carving=1;FlintKnapping=1,
+    }
+
 }
