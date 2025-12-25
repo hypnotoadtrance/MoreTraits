@@ -2403,9 +2403,6 @@ local function graveRobber(page, player)
                     if player:hasTrait(ToadTraitsRegistries.incomprehensive) then chance = chance - 2 end
 
                     chance = math.max(1, chance)
-                    
-                    -- TEST OVERRIDE: Set to 10000 for guaranteed success during testing
-                    local chance = 10000 
 
                     if ZombRand(0, 1001) <= chance then
                         local itemsFound = {}
