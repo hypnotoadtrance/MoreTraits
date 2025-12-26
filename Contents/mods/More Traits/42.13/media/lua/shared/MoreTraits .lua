@@ -2272,7 +2272,7 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
     local currentHealth = bodyDamage:getOverallBodyHealth();
 
     local maxHealth = 10;
-    if player:hasTrait(ToadTraitsRegistries.Indefatigable) then maxHealth = 22; end
+    if player:hasTrait(ToadTraitsRegistries.indefatigable) then maxHealth = 22; end
 
     if SandboxVars.MoreTraits.SuperImmuneWeakness then
         local limit = 4;
