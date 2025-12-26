@@ -2233,7 +2233,7 @@ function SuperImmune(player, playerdata)
         end
 
         if player:hasTrait(CharacterTrait.FAST_HEALER) then timeOfRecovery = timeOfRecovery - 5; end
-        if player:hasTrait(CharacterTrait.SLOW_SLOWER) then timeOfRecovery = timeOfRecovery + 5; end
+        if player:hasTrait(CharacterTrait.SLOW_HEALER) then timeOfRecovery = timeOfRecovery + 5; end
         if player:hasTrait(ToadTraitsRegistries.lucky) then timeOfRecovery = timeOfRecovery - 2 * luckimpact; end
         if player:hasTrait(ToadTraitsRegistries.unlucky) then timeOfRecovery = timeOfRecovery + 2 * luckimpact; end
         
