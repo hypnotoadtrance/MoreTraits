@@ -677,7 +677,7 @@ function MTPlayerHit(player, _, __)
     end
 
     if player:hasTrait(ToadTraitsRegistries.glassbody) then
-        GlassBody(player, playerData)
+        GlassBody(player, playerdata)
     end
 end
 
