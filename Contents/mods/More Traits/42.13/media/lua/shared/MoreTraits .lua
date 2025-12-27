@@ -141,7 +141,7 @@ local function levelPerkByAmount(player, perk, amount)
         args.perk = perk
         args.currentlevel = currentlevel
         args.targetlevel = targetlevel
-        sendClientCommand(player, 'ToadTraits', 'UpdateXPTolevel', args)
+        sendClientCommand(player, 'ToadTraits', 'UpdateXPToLevel', args)
     else
         for i = currentLevel + 1, targetLevel do
             player:LevelPerk(perk)

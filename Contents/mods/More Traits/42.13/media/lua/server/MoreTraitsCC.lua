@@ -206,7 +206,7 @@ local function onClientCommands(module, command, player, args)
     if command == 'UpdateXP' then
         UpdateXP(player, args, command)
     end
-    if command == 'UpdateXPTolevel' then
+    if command == 'UpdateXPToLevel' then
         UpdateXPToLevel(player, args, command)
 
     end
