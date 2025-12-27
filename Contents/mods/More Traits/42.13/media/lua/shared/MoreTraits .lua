@@ -385,9 +385,7 @@ function initToadTraitsItems(player)
     end
 
     if player:hasTrait(ToadTraitsRegistries.drinker) and SandboxVars.MoreTraits.AlcoholicFreeDrink then
-        if SandboxVars.MoreTraits.AlcoholicFreeDrink then
-            inv:AddItem("Base.Whiskey");
-        end
+        inv:AddItem("Base.Whiskey");
     end
 
     if player:hasTrait(CharacterTrait.TAILOR) then
