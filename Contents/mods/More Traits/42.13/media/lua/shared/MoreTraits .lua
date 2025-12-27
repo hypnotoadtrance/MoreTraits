@@ -1538,7 +1538,7 @@ function badteethtrait(player, playerdata)
         end
         playerdata.lastBadTeethUpdate = currentTime
     end
-    
+
     playerdata.fBadTeethLastSentPain = playerdata.fBadTeethLastSentPain or 0
     
     if healthTimer > 1000 and healthTimer > playerdata.fPreviousHealthFromFoodTimer then
