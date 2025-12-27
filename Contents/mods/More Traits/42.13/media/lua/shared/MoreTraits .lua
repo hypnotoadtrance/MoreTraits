@@ -1900,6 +1900,7 @@ function martial(actor, target, weapon, damage)
         else
             stats:set(CharacterStat.ENDURANCE, newEndurance)
         end
+        AddXP(player, Perks.SmallBlunt, damage * 2 * blunt)
     end
 end
 
