@@ -158,14 +158,38 @@ local function UpdateStats(player, args, command)
 
     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
-local function UpdateXPToLevel(player, args, command)
-    local xp = player:getXp()
-    for i = args.currentLevel + 1, args.targetLevel do
-        player:LevelPerk(args.perk)
-        xp:setXPToLevel(args.perk, i)
+
+local function ProcessBodyPartPain(player, args, command)
+    if not args.bodyPart then
+        return
     end
-    print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
+    local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(args.bodyPart))
+    if bodyPart then
+        bodyPart:setAdditionalPain(args.pain)
+    end
 end
+
+-- local function UpdateXP(player, args, command)
+--     local xp = player:getXp()
+--     local perk = Perks[args.perk] -- Cannot pass a string value to this function so we convert it back to PerkFactory
+
+--     if args.multiplier then
+--         xp:AddXP(perk, args.amount, false, false, false)
+--     else
+--         xp:AddXPNoMultiplier(perk, args.amount)
+--     end
+--     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
+-- end
+
+-- local function UpdateXPToLevel(player, args, command)
+--     local xp = player:getXp()
+--     for i = args.currentLevel + 1, args.targetLevel do
+--         player:LevelPerk(args.perk)
+--         xp:setXPToLevel(args.perk, i)
+--     end
+--     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
+-- end
+
 local function onClientCommands(module, command, player, args)
     if module ~= 'ToadTraits' then
         return
@@ -198,13 +222,17 @@ local function onClientCommands(module, command, player, args)
     if command == 'UpdateStats' then
         UpdateStats(player, args, command)
     end
-    if command == 'UpdateXP' then
-        UpdateXP(player, args, command)
-    end
-    if command == 'UpdateXPToLevel' then
-        UpdateXPToLevel(player, args, command)
 
+    if command == 'BodyPartPain' then
+        ProcessBodyPartPain(player, args, command)
     end
+
+    -- if command == 'UpdateXP' then
+    --     UpdateXP(player, args, command)
+    -- end
+    -- if command == 'UpdateXPToLevel' then
+    --     UpdateXPToLevel(player, args, command)
+    -- end
 end
 
 Events.OnClientCommand.Add(onClientCommands)

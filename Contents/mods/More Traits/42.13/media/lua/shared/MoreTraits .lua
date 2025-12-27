@@ -1523,20 +1523,39 @@ function indefatigablecounter(player, playerdata)
 end
 
 function badteethtrait(player, playerdata)
-    if not player:hasTrait(ToadTraitsRegistries.badteeth) then
-        return
-    end
-
+    -- if not player:hasTrait(ToadTraitsRegistries.badteeth) then return end
     local bodyDamage = player:getBodyDamage()
     local healthTimer = bodyDamage:getHealthFromFoodTimer()
 
-    if healthTimer > 1000 and healthTimer > playerdata.fPreviousHealthFromFoodTimer then
-        local head = bodyDamage:getBodyPart(BodyPartType.Head)
-        local painIncrease = (healthTimer - playerdata.fPreviousHealthFromFoodTimer) * 0.01
-        local newPain = head:getAdditionalPain() + painIncrease
-        head:setAdditionalPain(math.min(newPain, 100))
+    -- MP Performance Optimization: Added in a delay to prevent spam on the serverside
+    if isClient() then
+        local currentTime = getTimestampMs()
+        playerdata.lastBadTeethUpdate = playerdata.lastBadTeethUpdate or 0
+        
+        if currentTime < playerdata.lastBadTeethUpdate + 1000 then 
+            playerdata.fPreviousHealthFromFoodTimer = healthTimer
+            return 
+        end
+        playerdata.lastBadTeethUpdate = currentTime
     end
+    
+    playerdata.fBadTeethLastSentPain = playerdata.fBadTeethLastSentPain or 0
+    
+    if healthTimer > 1000 and healthTimer > playerdata.fPreviousHealthFromFoodTimer then
+        local painIncrease = (healthTimer - playerdata.fPreviousHealthFromFoodTimer) * 0.01
+        local head = bodyDamage:getBodyPart(BodyPartType.Head)
+        local newPain = math.min(head:getAdditionalPain() + painIncrease, 100)
 
+        if isClient() then
+            if math.abs(newPain - playerdata.fBadTeethLastSentPain) >= 1 then
+                local headPart = BodyPartType.ToIndex(BodyPartType.Head)
+                sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = newPain })
+                playerdata.fBadTeethLastSentPain = newPain
+            end
+        else
+            head:setAdditionalPain(newPain)
+        end
+    end
     playerdata.fPreviousHealthFromFoodTimer = healthTimer
 end
 
