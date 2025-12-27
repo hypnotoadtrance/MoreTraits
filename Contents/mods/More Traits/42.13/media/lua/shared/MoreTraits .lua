@@ -2051,7 +2051,7 @@ function tavernbrawler(actor, target, weapon, damage)
     end
 
     local isImprovisedWeapon = false;
-    local whitelist = { "ToolWeapon", "WeaponCrafted", "Cooking", "Household", "FirstAid", "Gardening", "Sports", "MaterialWeapon", "JunkWeapon", "InstrumentWeapon" };
+    local whitelist = { "ToolWeapon", "WeaponCrafted", "CookingWeapon", "Household", "FirstAidWeapon", "GardeningWeapon", "SportsWeapon", "MaterialWeapon", "JunkWeapon", "InstrumentWeapon" };
     local displayCategory = weapon:getDisplayCategory() or "";
     if tableContains(whitelist, displayCategory) then
         isImprovisedWeapon = true;
