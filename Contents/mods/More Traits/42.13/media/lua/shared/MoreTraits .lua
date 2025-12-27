@@ -2135,6 +2135,14 @@ function albino(player, playerdata)
     local head = bodyDamage:getBodyPart(BodyPartType.Head)
     local modpain = playerdata.AlbinoTimeSpentOutside or 0
 
+    if isClient() then
+        local currentTime = getTimestampMs()
+        playerdata.lastAlbinoUpdate = playerdata.lastAlbinoUpdate or 0
+        if currentTime < playerdata.lastAlbinoUpdate + 1000 then return end
+        playerdata.lastAlbinoUpdate = currentTime
+    end
+
+    local finalPain = 0
     if player:isOutside() then
         local tod = getGameTime():getTimeOfDay()
         if tod > 8 and tod < 17 then
@@ -2149,19 +2157,25 @@ function albino(player, playerdata)
             local primary = player:getPrimaryHandItem()
             local secondary = player:getSecondaryHandItem()
             local hasUmbrella = (primary and UMBRELLA_TYPES[primary:getType()]) or
-                    (secondary and UMBRELLA_TYPES[secondary:getType()])
-            local pain = hasUmbrella and (modpain / 1.5) or modpain
-            head:setAdditionalPain(pain)
+                                (secondary and UMBRELLA_TYPES[secondary:getType()])
+            finalPain = hasUmbrella and (modpain / 1.5) or modpain
         else
-            if modpain > 0 then
-                head:setAdditionalPain(modpain / 2)
-            end
+            if modpain > 0 then finalPain = modpain / 2 end
         end
     else
         playerdata.bisAlbinoOutside = false
-        if modpain > 0 then
-            head:setAdditionalPain(modpain / 4)
+        if modpain > 0 then finalPain = modpain / 4 end
+    end
+
+    if isClient() then
+        playerdata.fAlbinoLastSentPain = playerdata.fAlbinoLastSentPain or 0
+        if math.abs(finalPain - playerdata.fAlbinoLastSentPain) >= 1 then
+            local headPart = BodyPartType.ToIndex(BodyPartType.Head)
+            sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = finalPain })
+            playerdata.fAlbinoLastSentPain = finalPain
         end
+    else
+        head:setAdditionalPain(finalPain)
     end
 end
 
