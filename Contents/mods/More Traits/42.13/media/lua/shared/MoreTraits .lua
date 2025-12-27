@@ -109,27 +109,13 @@ end
 
 -- Fonction AddXP
 local function AddXP(player, perk, amount)
-    if isClient() then
-        local args = {}
-        args.perk = perk
-        args.amount = amount
-        args.multiplier = true
-        sendClientCommand(player, 'ToadTraits', 'UpdateXP', args)
-    else
-        player:getXp():AddXP(perk, amount, false, false, false);
-    end
-
+    -- Arguments: player, perkObject, amount, noMultiplier
+    sendAddXp(player, perk, amount, false);  -- Covers both SP and MP
 end
+
 local function addXPNoMultiplier(player, perk, amount)
-    if isClient() then
-        local args = {}
-        args.perk = perk
-        args.amount = amount
-        args.multiplier = false
-        sendClientCommand(player, 'ToadTraits', 'UpdateXP', args)
-    else
-        player:getXp():AddXPNoMultiplier(perk, amount);
-    end
+    -- Arguments: player, perkObject, amount, noMultiplier
+    sendAddXp(player, perk, amount, true);   -- Covers both SP and MP
 end
 
 -- Helper function to level up perks safely and grant XP to the next level
