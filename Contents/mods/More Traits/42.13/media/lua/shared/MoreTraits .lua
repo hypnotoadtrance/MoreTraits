@@ -405,7 +405,7 @@ function initToadTraitsItems(player)
 
     if player:hasTrait(ToadTraitsRegistries.drinker) and SandboxVars.MoreTraits.AlcoholicFreeDrink then
         if SandboxVars.MoreTraits.AlcoholicFreeDrink then
-            inv:AddItem("Base.WhiskeyFull");
+            inv:AddItem("Base.Whiskey");
         end
     end
 
@@ -429,7 +429,7 @@ function initToadTraitsItems(player)
     if player:hasTrait(CharacterTrait.SMOKER) and SandboxVars.MoreTraits.SmokerStart then
         local items = { "Base.CigarettePack", "Base.Lighter" }
         for _, item in ipairs(items) do
-            holderInv:AddItem(item);
+            inv:AddItem(item);
         end
     end
 end
