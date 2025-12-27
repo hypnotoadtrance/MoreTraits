@@ -131,24 +131,19 @@ local function addXPNoMultiplier(player, perk, amount)
         player:getXp():AddXPNoMultiplier(perk, amount);
     end
 end
+
 -- Helper function to level up perks safely and grant XP to the next level
+-- Currently this function is only used within initToadTraitsPerks and this should be executed by the server
 local function levelPerkByAmount(player, perk, amount)
     local currentLevel = player:getPerkLevel(perk)
     local targetLevel = math.min(10, currentLevel + amount)
 
-    if isClient() then
-        local args = {}
-        args.perk = perk
-        args.currentlevel = currentlevel
-        args.targetlevel = targetlevel
-        sendClientCommand(player, 'ToadTraits', 'UpdateXPToLevel', args)
-    else
-        for i = currentLevel + 1, targetLevel do
-            player:LevelPerk(perk)
-            player:getXp():setXPToLevel(perk, i)
-        end
+    for i = currentLevel + 1, targetLevel do
+        player:LevelPerk(perk)
+        player:getXp():setXPToLevel(perk, i)
     end
 end
+
 local function GameSpeedMultiplier()
     local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
     local multiplier = 1;
