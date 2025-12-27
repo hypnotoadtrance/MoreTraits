@@ -3954,7 +3954,12 @@ local function RestfulSleeperWakeUp(player, playerdata)
         if not playerdata.NeckHadPain then
             local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)
             if neck:getAdditionalPain() > 0 then
-                neck:setAdditionalPain(0)
+                if isClient() then
+                    local neckPart = BodyPartType.ToIndex(BodyPartType.Neck)
+                    sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = neckPart, pain = 0 })
+                else
+                    neck:setAdditionalPain(0)
+                end
             end
         end
     end
