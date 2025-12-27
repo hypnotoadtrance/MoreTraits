@@ -1545,12 +1545,16 @@ function hardytrait(player, playerdata)
         return
     end
 
+    -- Added in delay to do a check every second to avoid spam
+    local currentTime = getTimestampMs()
+    playerdata.lastHardyUpdate = playerdata.lastHardyUpdate or 0
+    if currentTime < playerdata.lastHardyUpdate + 1000 then
+        return
+    end
+    playerdata.lastHardyUpdate = currentTime
+
     local stats = player:getStats()
     local currentEndurance = stats:get(CharacterStat.ENDURANCE)
-
-    playerdata.iHardyEndurance = playerdata.iHardyEndurance or 0
-    playerdata.iHardyMaxEndurance = 5
-
     local regenAmount = 0.05
     if SandboxVars.MoreTraits.HardyEndurance then
         regenAmount = SandboxVars.MoreTraits.HardyEndurance / 500
@@ -1563,7 +1567,7 @@ function hardytrait(player, playerdata)
         args.endurance = math.min(currentEndurance + regenAmount, 1.0)
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
         updateStats = true
-
+        
         if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
         end
@@ -1582,9 +1586,7 @@ function hardytrait(player, playerdata)
         if isClient() then
             sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
         else
-            if args.endurance then
-                stats:set(CharacterStat.ENDURANCE, args.endurance)
-            end
+            stats:set(CharacterStat.ENDURANCE, args.endurance)
         end
     end
 end

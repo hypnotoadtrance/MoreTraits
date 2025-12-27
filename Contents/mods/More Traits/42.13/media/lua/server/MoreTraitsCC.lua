@@ -152,16 +152,10 @@ local function UpdateStats(player, args, command)
     if args.poison then
         stats:set(CharacterStat.POISON, args.poison)
     end
-
-    print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
-end
-local function UpdateXP(player, args, command)
-    local xp = player:getXp()
-    if args.multiplier then
-        xp:AddXP(perk, amount, false, false, false)
-    else
-        xp:AddXPNoMultiplier(args.perk, args.amount)
+    if args.endurance then
+        stats:set(CharacterStat.ENDURANCE, args.endurance)
     end
+
     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
 local function UpdateXPToLevel(player, args, command)
@@ -200,6 +194,7 @@ local function onClientCommands(module, command, player, args)
     if command == 'GraveRobber' then
         ProcessGraveRobber(player, args)
     end
+
     if command == 'UpdateStats' then
         UpdateStats(player, args, command)
     end
