@@ -1,3 +1,8 @@
+[h1]IMPORTANT: Build 42.13 [/h1]
+Build 42.13 Multiplayer is not yet compatible or guaranteed to work. Playing as an administrator or disabling all anti-cheat may help resolve client-server disagreements, but this is not recommended.
+
+Singleplayer functionality is most important to ensure things are at least working first, then porting to multiplayer will be happening.
+
 [h1]IMPORTANT: Build 41.68 and Higher [/h1]
 Due to false-flags for anti-cheat, it is recommended to disable anti-cheat when hosting a server with this mod. You can try enabling some anti-cheats, but your mileage may vary.
 
@@ -64,27 +69,19 @@ Vaikke
 Domestos
 Spring
 hi117
-DarkSlayerEX
-[url=https://steamcommunity.com/profiles/76561198152820942]MusicManiac[/url] - dynamic traits
 curveo
 Josko
+FallenxSowerby
 
 Translations:
 Simplified Chinese, by EndsM
-Traditional Chinese, by 紅茶老師
+Traditional Chinese, by ????
 Russian, by Xenu47, Hea
 German, by Marcv0dka
 Portuguese , by Cinissh
 Korean, by teray
 French, by MonsterKillers1973
 Turkish, by Sariserpito, Atlantic
-Spanish, by franz
+Spanish, by franz, HawK
 Polish, by Tony
-Italian, by Lore11, Art Tippet
-Brazillian Portuguese, by MatLuz
-
-Workshop ID: 1299328280
-Mod ID: ToadTraits
-Mod ID: ToadTraitsDisablePrepared
-Mod ID: ToadTraitsDisableSpec
-Mod ID: ToadTraitsDynamic
+Italian, by Lore11
