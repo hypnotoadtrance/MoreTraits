@@ -3425,7 +3425,7 @@ function LeadFoot(player)
     end
 
     local itemdata = shoes:getModData();
-    if not itemData then
+    if not itemdata then
         return
     end
 
