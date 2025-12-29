@@ -21,6 +21,8 @@ local specializationTraits = {
 }
 
 local function removeTraits()
+    if isModActivated("\\1299328280/ToadTraitsDisablePrepared") == false and isModActivated("\\1299328280/ToadTraitsDisableSpec") == false then return end
+    
     local traitDefs = CharacterTraitDefinition.characterTraitDefinitions
     local traitsToRemove = {}
 
