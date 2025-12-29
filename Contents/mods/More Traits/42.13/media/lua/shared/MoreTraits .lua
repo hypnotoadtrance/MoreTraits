@@ -2915,7 +2915,7 @@ end
 
 function setFoodState(food, state, player)
     --States: "Gourmand", "Normal", "Ascetic"
-        local itemdata = food:getModData();
+    local itemdata = food:getModData();
     local curUnhappyChange = food:getUnhappyChange();
     local curBoredomChange = food:getBoredomChange();
     local curHungChange = food:getHungChange();
