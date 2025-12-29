@@ -2727,7 +2727,6 @@ for i = 1, activeModIDs:size() do
 end
 
 function MT_checkWeight(player)
-    local player = getPlayer();
     if not player then
         return
     end ;
