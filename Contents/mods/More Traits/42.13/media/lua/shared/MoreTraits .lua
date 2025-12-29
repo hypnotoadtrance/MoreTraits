@@ -4671,4 +4671,4 @@ Events.OnNewGame.Add(onNewGame);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
-Events.EveryDays.Add(EveryDay);
+-- Events.EveryDays.Add(EveryDay); -- Currently unused
