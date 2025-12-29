@@ -4,22 +4,25 @@ ToadTraitsRegistries = {}
 ----                GOOD TRAITS                      ----
 ---------------------------------------------------------
 ToadTraitsRegistries.gunspecialist = CharacterTrait.register("ToadTraits:gunspecialist")
-if getActivatedMods():contains("\\1299328280/ToadTraitsDisablePrepared") == false then
-    ToadTraitsRegistries.preparedfood = CharacterTrait.register("ToadTraits:preparedfood")
-    ToadTraitsRegistries.preparedammo = CharacterTrait.register("ToadTraits:preparedammo")
-    ToadTraitsRegistries.preparedmedical = CharacterTrait.register("ToadTraits:preparedmedical")
-    ToadTraitsRegistries.preparedrepair = CharacterTrait.register("ToadTraits:preparedrepair")
-    ToadTraitsRegistries.preparedcamp = CharacterTrait.register("ToadTraits:preparedcamp")
-    ToadTraitsRegistries.preparedweapon = CharacterTrait.register("ToadTraits:preparedweapon")
-    ToadTraitsRegistries.preparedpack = CharacterTrait.register("ToadTraits:preparedpack")
-    ToadTraitsRegistries.preparedcar = CharacterTrait.register("ToadTraits:preparedcar")
-    ToadTraitsRegistries.preparedcoordination = CharacterTrait.register("ToadTraits:preparedcoordination")
-end
+
+--- Prepared Traits --- 
+ToadTraitsRegistries.preparedfood = CharacterTrait.register("ToadTraits:preparedfood")
+ToadTraitsRegistries.preparedammo = CharacterTrait.register("ToadTraits:preparedammo")
+ToadTraitsRegistries.preparedmedical = CharacterTrait.register("ToadTraits:preparedmedical")
+ToadTraitsRegistries.preparedrepair = CharacterTrait.register("ToadTraits:preparedrepair")
+ToadTraitsRegistries.preparedcamp = CharacterTrait.register("ToadTraits:preparedcamp")
+ToadTraitsRegistries.preparedweapon = CharacterTrait.register("ToadTraits:preparedweapon")
+ToadTraitsRegistries.preparedpack = CharacterTrait.register("ToadTraits:preparedpack")
+ToadTraitsRegistries.preparedcar = CharacterTrait.register("ToadTraits:preparedcar")
+ToadTraitsRegistries.preparedcoordination = CharacterTrait.register("ToadTraits:preparedcoordination")
+
 ToadTraitsRegistries.swift = CharacterTrait.register("ToadTraits:swift")
 ToadTraitsRegistries.ingenuitive = CharacterTrait.register("ToadTraits:ingenuitive")
+
 if getActivatedMods():contains("DynamicTraits") == false then
     ToadTraitsRegistries.generator = CharacterTrait.register("ToadTraits:generator")
 end
+
 ToadTraitsRegistries.olympian = CharacterTrait.register("ToadTraits:olympian")
 ToadTraitsRegistries.bouncer = CharacterTrait.register("ToadTraits:bouncer")
 ToadTraitsRegistries.martial = CharacterTrait.register("ToadTraits:martial")
@@ -32,20 +35,23 @@ ToadTraitsRegistries.wildsman = CharacterTrait.register("ToadTraits:wildsman")
 ToadTraitsRegistries.natural = CharacterTrait.register("ToadTraits:natural")
 ToadTraitsRegistries.bladetwirl = CharacterTrait.register("ToadTraits:bladetwirl")
 ToadTraitsRegistries.blunttwirl = CharacterTrait.register("ToadTraits:blunttwirl")
+
 if getActivatedMods():contains("ScavengingSkill") == false and getActivatedMods():contains("ScavengingSkillFixed") == false then
-ToadTraitsRegistries.scrounger = CharacterTrait.register("ToadTraits:scrounger")
+    ToadTraitsRegistries.scrounger = CharacterTrait.register("ToadTraits:scrounger")
 end
+
 ToadTraitsRegistries.antique = CharacterTrait.register("ToadTraits:antique")
 ToadTraitsRegistries.evasive = CharacterTrait.register("ToadTraits:evasive")
 ToadTraitsRegistries.blissful = CharacterTrait.register("ToadTraits:blissful")
-if getActivatedMods():contains("\\1299328280/ToadTraitsDisableSpec") == false then
-    ToadTraitsRegistries.specweapons = CharacterTrait.register("ToadTraits:specweapons")
-    ToadTraitsRegistries.speccrafting = CharacterTrait.register("ToadTraits:speccrafting")
-    ToadTraitsRegistries.specfood = CharacterTrait.register("ToadTraits:specfood")
-    ToadTraitsRegistries.specguns = CharacterTrait.register("ToadTraits:specguns")
-    ToadTraitsRegistries.specmove = CharacterTrait.register("ToadTraits:specmove")
-    ToadTraitsRegistries.specaid = CharacterTrait.register("ToadTraits:specaid")
-end
+
+--- Specialization Traits ---
+ToadTraitsRegistries.specweapons = CharacterTrait.register("ToadTraits:specweapons")
+ToadTraitsRegistries.speccrafting = CharacterTrait.register("ToadTraits:speccrafting")
+ToadTraitsRegistries.specfood = CharacterTrait.register("ToadTraits:specfood")
+ToadTraitsRegistries.specguns = CharacterTrait.register("ToadTraits:specguns")
+ToadTraitsRegistries.specmove = CharacterTrait.register("ToadTraits:specmove")
+ToadTraitsRegistries.specaid = CharacterTrait.register("ToadTraits:specaid")
+
 ToadTraitsRegistries.gordanite = CharacterTrait.register("ToadTraits:gordanite")
 ToadTraitsRegistries.indefatigable = CharacterTrait.register("ToadTraits:indefatigable")
 ToadTraitsRegistries.hardy = CharacterTrait.register("ToadTraits:hardy")
@@ -55,9 +61,11 @@ ToadTraitsRegistries.progun = CharacterTrait.register("ToadTraits:progun")
 ToadTraitsRegistries.prospear = CharacterTrait.register("ToadTraits:prospear")
 ToadTraitsRegistries.actionhero = CharacterTrait.register("ToadTraits:actionhero")
 ToadTraitsRegistries.thickblood = CharacterTrait.register("ToadTraits:thickblood")
+
 if getActivatedMods():contains("DrivingSkill") == false then
     ToadTraitsRegistries.expertdriver = CharacterTrait.register("ToadTraits:expertdriver")
 end
+
 ToadTraitsRegistries.superimmune = CharacterTrait.register("ToadTraits:superimmune")
 ToadTraitsRegistries.packmule = CharacterTrait.register("ToadTraits:packmule")
 ToadTraitsRegistries.graverobber = CharacterTrait.register("ToadTraits:graverobber")
@@ -81,6 +89,7 @@ ToadTraitsRegistries.terminator = CharacterTrait.register("ToadTraits:terminator
 ToadTraitsRegistries.unwavering = CharacterTrait.register("ToadTraits:unwavering")
 ToadTraitsRegistries.idealweight = CharacterTrait.register("ToadTraits:idealweight")
 ToadTraitsRegistries.quickrest = CharacterTrait.register("ToadTraits:quickrest")
+
 ---------------------------------------------------------
 ----                BAD TRAITS                       ----
 ---------------------------------------------------------
