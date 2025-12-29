@@ -119,7 +119,6 @@ local function addXPNoMultiplier(player, perk, amount)
 end
 
 -- Helper function to level up perks safely and grant XP to the next level
--- Currently this function is only used within initToadTraitsPerks and this should be executed by the server
 local function levelPerkByAmount(player, perk, amount)
     local currentLevel = player:getPerkLevel(perk)
     local targetLevel = math.min(10, currentLevel + amount)
@@ -3893,7 +3892,7 @@ local function RestfulSleeper(player, playerdata)
     local stats = player:getStats()
     local fatigue = stats:get(CharacterStat.FATIGUE)
     local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)
-    
+
     playerdata.HasSlept = true
     playerdata.NeckHadPain = neck:getAdditionalPain() > 0
     playerdata.FatigueWhenSleeping = fatigue
