@@ -109,46 +109,26 @@ end
 
 -- Fonction AddXP
 local function AddXP(player, perk, amount)
-    if isClient() then
-        local args = {}
-        args.perk = perk
-        args.amount = amount
-        args.multiplier = true
-        sendClientCommand(player, 'ToadTraits', 'UpdateXP', args)
-    else
-        player:getXp():AddXP(perk, amount, false, false, false);
-    end
+    -- Arguments: player, perkObject, amount, noMultiplier
+    sendAddXp(player, perk, amount, false);  -- Covers both SP and MP
+end
 
-end
 local function addXPNoMultiplier(player, perk, amount)
-    if isClient() then
-        local args = {}
-        args.perk = perk
-        args.amount = amount
-        args.multiplier = false
-        sendClientCommand(player, 'ToadTraits', 'UpdateXP', args)
-    else
-        player:getXp():AddXPNoMultiplier(perk, amount);
-    end
+    -- Arguments: player, perkObject, amount, noMultiplier
+    sendAddXp(player, perk, amount, true);   -- Covers both SP and MP
 end
+
 -- Helper function to level up perks safely and grant XP to the next level
 local function levelPerkByAmount(player, perk, amount)
     local currentLevel = player:getPerkLevel(perk)
     local targetLevel = math.min(10, currentLevel + amount)
 
-    if isClient() then
-        local args = {}
-        args.perk = perk
-        args.currentlevel = currentlevel
-        args.targetlevel = targetlevel
-        sendClientCommand(player, 'ToadTraits', 'UpdateXPToLevel', args)
-    else
-        for i = currentLevel + 1, targetLevel do
-            player:LevelPerk(perk)
-            player:getXp():setXPToLevel(perk, i)
-        end
+    for i = currentLevel + 1, targetLevel do
+        player:LevelPerk(perk)
+        player:getXp():setXPToLevel(perk, i)
     end
 end
+
 local function GameSpeedMultiplier()
     local gamespeed = UIManager.getSpeedControls():getCurrentGameSpeed();
     local multiplier = 1;
@@ -404,9 +384,7 @@ function initToadTraitsItems(player)
     end
 
     if player:hasTrait(ToadTraitsRegistries.drinker) and SandboxVars.MoreTraits.AlcoholicFreeDrink then
-        if SandboxVars.MoreTraits.AlcoholicFreeDrink then
-            inv:AddItem("Base.Whiskey");
-        end
+        inv:AddItem("Base.Whiskey");
     end
 
     if player:hasTrait(CharacterTrait.TAILOR) then
@@ -1037,7 +1015,7 @@ local function ToadTraitAntique(page, player, playerdata)
         baseChance = baseChance - 1
     end
     if baseChance < 1 then
-        basechance = 1
+        baseChance = 1
     end
 
     local worldAgeHours = GameTime:getInstance():getWorldAgeHours();
@@ -1103,7 +1081,7 @@ local function ToadTraitAntique(page, player, playerdata)
     end
 end
 
-local function ToadTraitVagabond(page, player, playerdata)
+local function ToadTraitVagabond(page, player)
     if not player:hasTrait(ToadTraitsRegistries.vagabond) then
         return
     end
@@ -1528,20 +1506,39 @@ function indefatigablecounter(player, playerdata)
 end
 
 function badteethtrait(player, playerdata)
-    if not player:hasTrait(ToadTraitsRegistries.badteeth) then
-        return
-    end
-
+    -- if not player:hasTrait(ToadTraitsRegistries.badteeth) then return end
     local bodyDamage = player:getBodyDamage()
     local healthTimer = bodyDamage:getHealthFromFoodTimer()
 
-    if healthTimer > 1000 and healthTimer > playerdata.fPreviousHealthFromFoodTimer then
-        local head = bodyDamage:getBodyPart(BodyPartType.Head)
-        local painIncrease = (healthTimer - playerdata.fPreviousHealthFromFoodTimer) * 0.01
-        local newPain = head:getAdditionalPain() + painIncrease
-        head:setAdditionalPain(math.min(newPain, 100))
+    -- MP Performance Optimization: Added in a delay to prevent spam on the serverside
+    if isClient() then
+        local currentTime = getTimestampMs()
+        playerdata.lastBadTeethUpdate = playerdata.lastBadTeethUpdate or 0
+        
+        if currentTime < playerdata.lastBadTeethUpdate + 1000 then 
+            playerdata.fPreviousHealthFromFoodTimer = healthTimer
+            return 
+        end
+        playerdata.lastBadTeethUpdate = currentTime
     end
 
+    playerdata.fBadTeethLastSentPain = playerdata.fBadTeethLastSentPain or 0
+    
+    if healthTimer > 1000 and healthTimer > playerdata.fPreviousHealthFromFoodTimer then
+        local painIncrease = (healthTimer - playerdata.fPreviousHealthFromFoodTimer) * 0.01
+        local head = bodyDamage:getBodyPart(BodyPartType.Head)
+        local newPain = math.min(head:getAdditionalPain() + painIncrease, 100)
+
+        if isClient() then
+            if math.abs(newPain - playerdata.fBadTeethLastSentPain) >= 1 then
+                local headPart = BodyPartType.ToIndex(BodyPartType.Head)
+                sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = newPain })
+                playerdata.fBadTeethLastSentPain = newPain
+            end
+        else
+            head:setAdditionalPain(newPain)
+        end
+    end
     playerdata.fPreviousHealthFromFoodTimer = healthTimer
 end
 
@@ -1550,12 +1547,16 @@ function hardytrait(player, playerdata)
         return
     end
 
+    -- Added in delay to do a check every second to avoid spam
+    local currentTime = getTimestampMs()
+    playerdata.lastHardyUpdate = playerdata.lastHardyUpdate or 0
+    if currentTime < playerdata.lastHardyUpdate + 1000 then
+        return
+    end
+    playerdata.lastHardyUpdate = currentTime
+
     local stats = player:getStats()
     local currentEndurance = stats:get(CharacterStat.ENDURANCE)
-
-    playerdata.iHardyEndurance = playerdata.iHardyEndurance or 0
-    playerdata.iHardyMaxEndurance = 5
-
     local regenAmount = 0.05
     if SandboxVars.MoreTraits.HardyEndurance then
         regenAmount = SandboxVars.MoreTraits.HardyEndurance / 500
@@ -1568,7 +1569,7 @@ function hardytrait(player, playerdata)
         args.endurance = math.min(currentEndurance + regenAmount, 1.0)
         playerdata.iHardyEndurance = playerdata.iHardyEndurance - 1
         updateStats = true
-
+        
         if not isServer() and MT_Config and MT_Config:getOption("HardyNotifier"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardyendurance") .. " : " .. playerdata.iHardyEndurance, false, HaloTextHelper.getColorRed())
         end
@@ -1587,9 +1588,7 @@ function hardytrait(player, playerdata)
         if isClient() then
             sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
         else
-            if args.endurance then
-                stats:set(CharacterStat.ENDURANCE, args.endurance)
-            end
+            stats:set(CharacterStat.ENDURANCE, args.endurance)
         end
     end
 end
@@ -2119,6 +2118,14 @@ function albino(player, playerdata)
     local head = bodyDamage:getBodyPart(BodyPartType.Head)
     local modpain = playerdata.AlbinoTimeSpentOutside or 0
 
+    if isClient() then
+        local currentTime = getTimestampMs()
+        playerdata.lastAlbinoUpdate = playerdata.lastAlbinoUpdate or 0
+        if currentTime < playerdata.lastAlbinoUpdate + 1000 then return end
+        playerdata.lastAlbinoUpdate = currentTime
+    end
+
+    local finalPain = 0
     if player:isOutside() then
         local tod = getGameTime():getTimeOfDay()
         if tod > 8 and tod < 17 then
@@ -2133,19 +2140,25 @@ function albino(player, playerdata)
             local primary = player:getPrimaryHandItem()
             local secondary = player:getSecondaryHandItem()
             local hasUmbrella = (primary and UMBRELLA_TYPES[primary:getType()]) or
-                    (secondary and UMBRELLA_TYPES[secondary:getType()])
-            local pain = hasUmbrella and (modpain / 1.5) or modpain
-            head:setAdditionalPain(pain)
+                                (secondary and UMBRELLA_TYPES[secondary:getType()])
+            finalPain = hasUmbrella and (modpain / 1.5) or modpain
         else
-            if modpain > 0 then
-                head:setAdditionalPain(modpain / 2)
-            end
+            if modpain > 0 then finalPain = modpain / 2 end
         end
     else
         playerdata.bisAlbinoOutside = false
-        if modpain > 0 then
-            head:setAdditionalPain(modpain / 4)
+        if modpain > 0 then finalPain = modpain / 4 end
+    end
+
+    if isClient() then
+        playerdata.fAlbinoLastSentPain = playerdata.fAlbinoLastSentPain or 0
+        if math.abs(finalPain - playerdata.fAlbinoLastSentPain) >= 1 then
+            local headPart = BodyPartType.ToIndex(BodyPartType.Head)
+            sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = finalPain })
+            playerdata.fAlbinoLastSentPain = finalPain
         end
+    else
+        head:setAdditionalPain(finalPain)
     end
 end
 
@@ -2161,8 +2174,8 @@ local function AlbinoTimer(player, playerdata)
             if playerdata.AlbinoTimeSpentOutside < 40 then
                 local primary = player:getPrimaryHandItem()
                 local secondary = player:getSecondaryHandItem()
-                local hasUmbrella = (primary and UMBRELLAS[primary:getType()]) or
-                        (secondary and UMBRELLAS[secondary:getType()])
+                local hasUmbrella = (primary and UMBRELLA_TYPES[primary:getType()]) or
+                        (secondary and UMBRELLA_TYPES[secondary:getType()])
                 local increment = hasUmbrella and 0.5 or 1
                 playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + increment
             end
@@ -2351,11 +2364,11 @@ function checkBloodTraits(player)
                 local isNeck = (b:getType() == BodyPartType.Neck)
                 local adjust = 2
                 if isAnemic and isNeck then
-                    local adjust = adjust * 0.1
+                    adjust = adjust * 0.1
                     b:ReduceHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
                 elseif isThick and isNeck then
-                    local adjust = adjust * 0.002
+                    adjust = adjust * 0.002
                     b:AddHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
                 end
@@ -2713,7 +2726,6 @@ for i = 1, activeModIDs:size() do
 end
 
 function MT_checkWeight(player)
-    local player = getPlayer();
     if not player then
         return
     end ;
@@ -2899,9 +2911,8 @@ function Gourmand(page, player)
     end
 end
 
-function setFoodState(food, state)
+function setFoodState(food, state, player)
     --States: "Gourmand", "Normal", "Ascetic"
-    local player = getPlayer();
     local itemdata = food:getModData();
     local curUnhappyChange = food:getUnhappyChange();
     local curBoredomChange = food:getBoredomChange();
@@ -3196,16 +3207,16 @@ function FearfulUpdate(player, playerdata)
 end
 
 function GymGoer(player, perk, amount)
-    local playerData = player:getModData()
+    local playerdata = player:getModData()
     if not playerdata then
         return
     end ;
-    if playerData.GymGoerProcessing then
+    if playerdata.GymGoerProcessing then
         return
     end
 
     if player:hasTrait(ToadTraitsRegistries.gymgoer) and (perk == Perks.Fitness or perk == Perks.Strength) and player:getCurrentState() == FitnessState.instance() then
-        playerData.GymGoerProcessing = true
+        playerdata.GymGoerProcessing = true
 
         local modifier = SandboxVars.MoreTraits.GymGoerPercent or 200
         local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1
@@ -3213,7 +3224,7 @@ function GymGoer(player, perk, amount)
 
         AddXP(player, perk, bonusAmount)
 
-        playerData.GymGoerProcessing = false
+        playerdata.GymGoerProcessing = false
     end
 end
 
@@ -3279,7 +3290,7 @@ function ContainerEvents (iSInventoryPage, state)
 
         ToadTraitIncomprehensive(page, player);
         ToadTraitScrounger(page, player, playerdata);
-        ToadTraitVagabond(page, player, playerdata);
+        ToadTraitVagabond(page, player);
         Gourmand(page, player);
         ToadTraitAntique(page, player, playerdata);
         graveRobber(page, player)
@@ -3411,7 +3422,7 @@ function LeadFoot(player)
     end
 
     local itemdata = shoes:getModData();
-    if not itemData then
+    if not itemdata then
         return
     end
 
@@ -3878,13 +3889,14 @@ local function RestfulSleeper(player, playerdata)
         return
     end
 
+    local stats = player:getStats()
+    local fatigue = stats:get(CharacterStat.FATIGUE)
     local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)
+
     playerdata.HasSlept = true
     playerdata.NeckHadPain = neck:getAdditionalPain() > 0
     playerdata.FatigueWhenSleeping = fatigue
 
-    local stats = player:getStats()
-    local fatigue = stats:get(CharacterStat.FATIGUE)
     local reduction = 0.05
     if fatigue >= 0.6 then
         reduction = 0.2
@@ -3938,7 +3950,12 @@ local function RestfulSleeperWakeUp(player, playerdata)
         if not playerdata.NeckHadPain then
             local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)
             if neck:getAdditionalPain() > 0 then
-                neck:setAdditionalPain(0)
+                if isClient() then
+                    local neckPart = BodyPartType.ToIndex(BodyPartType.Neck)
+                    sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = neckPart, pain = 0 })
+                else
+                    neck:setAdditionalPain(0)
+                end
             end
         end
     end
@@ -4452,7 +4469,7 @@ function MainPlayerUpdate(player)
         FearfulUpdate(player, playerdata);
     elseif internalTick == 10 then
         SuperImmune(player, playerdata);
-        Immunocompromised(player, playerdata);
+        Immunocompromised(player);
     end
     -- MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     -- MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
@@ -4652,4 +4669,4 @@ Events.OnNewGame.Add(onNewGame);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
-Events.EveryDays.Add(EveryDay);
+-- Events.EveryDays.Add(EveryDay); -- Currently unused

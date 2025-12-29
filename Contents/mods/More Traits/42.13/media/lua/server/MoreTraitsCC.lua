@@ -47,7 +47,7 @@ local function ProcessTraitLootRemoval(player, args, modData)
                     sendRemoveItemFromContainer(container, item)
                 end
             end
-            object:getModData()[modDataKey] = true
+            object:getModData()[modData] = true
             object:transmitModData()
             break
         end
@@ -152,26 +152,44 @@ local function UpdateStats(player, args, command)
     if args.poison then
         stats:set(CharacterStat.POISON, args.poison)
     end
+    if args.endurance then
+        stats:set(CharacterStat.ENDURANCE, args.endurance)
+    end
 
     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
-local function UpdateXP(player, args, command)
-    local xp = player:getXp()
-    if args.multiplier then
-        xp:AddXP(perk, amount, false, false, false)
-    else
-        xp:AddXPNoMultiplier(args.perk, args.amount)
+
+local function ProcessBodyPartPain(player, args, command)
+    if not args.bodyPart then
+        return
     end
-    print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
-end
-local function UpdateXPToLevel(player, args, command)
-    local xp = player:getXp()
-    for i = args.currentLevel + 1, args.targetLevel do
-        player:LevelPerk(args.perk)
-        xp:setXPToLevel(args.perk, i)
+    local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(args.bodyPart))
+    if bodyPart then
+        bodyPart:setAdditionalPain(args.pain)
     end
-    print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
+
+-- local function UpdateXP(player, args, command)
+--     local xp = player:getXp()
+--     local perk = Perks[args.perk] -- Cannot pass a string value to this function so we convert it back to PerkFactory
+
+--     if args.multiplier then
+--         xp:AddXP(perk, args.amount, false, false, false)
+--     else
+--         xp:AddXPNoMultiplier(perk, args.amount)
+--     end
+--     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
+-- end
+
+-- local function UpdateXPToLevel(player, args, command)
+--     local xp = player:getXp()
+--     for i = args.currentLevel + 1, args.targetLevel do
+--         player:LevelPerk(args.perk)
+--         xp:setXPToLevel(args.perk, i)
+--     end
+--     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
+-- end
+
 local function onClientCommands(module, command, player, args)
     if module ~= 'ToadTraits' then
         return
@@ -200,16 +218,21 @@ local function onClientCommands(module, command, player, args)
     if command == 'GraveRobber' then
         ProcessGraveRobber(player, args)
     end
+
     if command == 'UpdateStats' then
         UpdateStats(player, args, command)
     end
-    if command == 'UpdateXP' then
-        UpdateXP(player, args, command)
-    end
-    if command == 'UpdateXPToLevel' then
-        UpdateXPToLevel(player, args, command)
 
+    if command == 'BodyPartPain' then
+        ProcessBodyPartPain(player, args, command)
     end
+
+    -- if command == 'UpdateXP' then
+    --     UpdateXP(player, args, command)
+    -- end
+    -- if command == 'UpdateXPToLevel' then
+    --     UpdateXPToLevel(player, args, command)
+    -- end
 end
 
 Events.OnClientCommand.Add(onClientCommands)
