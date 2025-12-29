@@ -2365,11 +2365,11 @@ function checkBloodTraits(player)
                 local isNeck = (b:getType() == BodyPartType.Neck)
                 local adjust = 2
                 if isAnemic and isNeck then
-                    local adjust = adjust * 0.1
+                    adjust = adjust * 0.1
                     b:ReduceHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
                 elseif isThick and isNeck then
-                    local adjust = adjust * 0.002
+                    adjust = adjust * 0.002
                     b:AddHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
                 end
