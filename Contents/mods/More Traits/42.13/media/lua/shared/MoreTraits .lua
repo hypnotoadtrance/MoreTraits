@@ -1016,7 +1016,7 @@ local function ToadTraitAntique(page, player, playerdata)
         baseChance = baseChance - 1
     end
     if baseChance < 1 then
-        basechance = 1
+        baseChance = 1
     end
 
     local worldAgeHours = GameTime:getInstance():getWorldAgeHours();
