@@ -2175,8 +2175,8 @@ local function AlbinoTimer(player, playerdata)
             if playerdata.AlbinoTimeSpentOutside < 40 then
                 local primary = player:getPrimaryHandItem()
                 local secondary = player:getSecondaryHandItem()
-                local hasUmbrella = (primary and UMBRELLAS[primary:getType()]) or
-                        (secondary and UMBRELLAS[secondary:getType()])
+                local hasUmbrella = (primary and UMBRELLA_TYPES[primary:getType()]) or
+                        (secondary and UMBRELLA_TYPES[secondary:getType()])
                 local increment = hasUmbrella and 0.5 or 1
                 playerdata.AlbinoTimeSpentOutside = playerdata.AlbinoTimeSpentOutside + increment
             end
