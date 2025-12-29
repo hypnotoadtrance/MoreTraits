@@ -47,7 +47,7 @@ local function ProcessTraitLootRemoval(player, args, modData)
                     sendRemoveItemFromContainer(container, item)
                 end
             end
-            object:getModData()[modDataKey] = true
+            object:getModData()[modData] = true
             object:transmitModData()
             break
         end
