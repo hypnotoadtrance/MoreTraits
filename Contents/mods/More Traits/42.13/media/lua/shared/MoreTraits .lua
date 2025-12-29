@@ -4471,7 +4471,7 @@ function MainPlayerUpdate(player)
         FearfulUpdate(player, playerdata);
     elseif internalTick == 10 then
         SuperImmune(player, playerdata);
-        Immunocompromised(player, playerdata);
+        Immunocompromised(player);
     end
     -- MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     -- MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
