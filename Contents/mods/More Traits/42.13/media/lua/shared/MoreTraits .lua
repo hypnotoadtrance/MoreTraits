@@ -1082,7 +1082,7 @@ local function ToadTraitAntique(page, player, playerdata)
     end
 end
 
-local function ToadTraitVagabond(page, player, playerdata)
+local function ToadTraitVagabond(page, player)
     if not player:hasTrait(ToadTraitsRegistries.vagabond) then
         return
     end
@@ -3292,7 +3292,7 @@ function ContainerEvents (iSInventoryPage, state)
 
         ToadTraitIncomprehensive(page, player);
         ToadTraitScrounger(page, player, playerdata);
-        ToadTraitVagabond(page, player, playerdata);
+        ToadTraitVagabond(page, player);
         Gourmand(page, player);
         ToadTraitAntique(page, player, playerdata);
         graveRobber(page, player)
