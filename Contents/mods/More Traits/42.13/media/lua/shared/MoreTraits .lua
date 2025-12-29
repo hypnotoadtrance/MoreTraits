@@ -3891,13 +3891,14 @@ local function RestfulSleeper(player, playerdata)
         return
     end
 
+    local stats = player:getStats()
+    local fatigue = stats:get(CharacterStat.FATIGUE)
     local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)
+    
     playerdata.HasSlept = true
     playerdata.NeckHadPain = neck:getAdditionalPain() > 0
     playerdata.FatigueWhenSleeping = fatigue
 
-    local stats = player:getStats()
-    local fatigue = stats:get(CharacterStat.FATIGUE)
     local reduction = 0.05
     if fatigue >= 0.6 then
         reduction = 0.2
