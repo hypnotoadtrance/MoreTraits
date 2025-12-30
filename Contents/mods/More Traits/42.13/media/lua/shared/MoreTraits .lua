@@ -1,21 +1,20 @@
---require('NPCs/MainCreationMethods');
-require("Items/Distributions");
-require("Items/ProceduralDistributions");
+-- require('NPCs/MainCreationMethods');
+-- require("Items/Distributions");
+-- require("Items/ProceduralDistributions");
 
-if getActivatedMods():contains("MoodleFramework") == true then
-    require("MF_ISMoodle");
-    MF.createMoodle("MTAlcoholism");
-end
 --[[
 TODO Figure out what is causing stat synchronization issues
 When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subtracting stats doesn't
 seem to work properly. This also effects Hardy, Alcoholic (removing stress when drinking alcohol doesn't work in MP)
 TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
-TODO Reimplement Fast and Slow traits
-Ever since the animations update, the previous calculations stopped working, and despite hours wracking my brain,
-I have been unable to find a workaround.
 --]]
+
+if getActivatedMods():contains("MoodleFramework") == true then
+    require("MF_ISMoodle");
+    MF.createMoodle("MTAlcoholism");
+end
+
 --Global Variables
 if not isServer() then
     if PZAPI and PZAPI.ModOptions then
