@@ -2349,7 +2349,7 @@ end
 function checkBloodTraits(player)
     local isAnemic = player:hasTrait(ToadTraitsRegistries.anemic)
     local isThick = player:hasTrait(ToadTraitsRegistries.thickblood)
-    if not isAnemic or not isThick then
+    if not isAnemic and not isThick then
         return
     end
 
@@ -2360,13 +2360,15 @@ function checkBloodTraits(player)
             local b = parts:get(i)
             if b:bleeding() and not b:IsBleedingStemmed() then
                 local isNeck = (b:getType() == BodyPartType.Neck)
-                local adjust = 2
-                if isAnemic and isNeck then
-                    adjust = adjust * 0.1
+                local isHead = (b:getType() == BodyPartType.Head)
+                if isAnemic then
+                    local adjust = 0.02
+                    if isNeck or isHead then adjust = adjust * 2 end
                     b:ReduceHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
-                elseif isThick and isNeck then
-                    adjust = adjust * 0.002
+                elseif isThick then
+                    local adjust = 0.008
+                    if isNeck or isHead then adjust = adjust * 2 end
                     b:AddHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
                 end
