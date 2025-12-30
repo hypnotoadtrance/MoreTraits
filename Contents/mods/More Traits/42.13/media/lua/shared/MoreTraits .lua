@@ -1,21 +1,20 @@
---require('NPCs/MainCreationMethods');
-require("Items/Distributions");
-require("Items/ProceduralDistributions");
+-- require('NPCs/MainCreationMethods');
+-- require("Items/Distributions");
+-- require("Items/ProceduralDistributions");
 
-if getActivatedMods():contains("MoodleFramework") == true then
-    require("MF_ISMoodle");
-    MF.createMoodle("MTAlcoholism");
-end
 --[[
 TODO Figure out what is causing stat synchronization issues
 When playing in Singleplayer, traits like Blissful work just fine. But in Multiplayer, subtracting stats doesn't
 seem to work properly. This also effects Hardy, Alcoholic (removing stress when drinking alcohol doesn't work in MP)
 TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
-TODO Reimplement Fast and Slow traits
-Ever since the animations update, the previous calculations stopped working, and despite hours wracking my brain,
-I have been unable to find a workaround.
 --]]
+
+if getActivatedMods():contains("MoodleFramework") == true then
+    require("MF_ISMoodle");
+    MF.createMoodle("MTAlcoholism");
+end
+
 --Global Variables
 if not isServer() then
     if PZAPI and PZAPI.ModOptions then
@@ -497,8 +496,6 @@ function initToadTraitsPerks(player, playerdata)
         table.insert(playerdata.TraitInjuredBodyList, BodyPartType.ToIndex(BodyPartType.LowerLeg_R))
         bodyDamage:setInfected(false)
     end
-
-    MT_checkWeight(player)
 
     if player:hasTrait(ToadTraitsRegistries.burned) then
         for i = 0, bodyDamage:getBodyParts():size() - 1 do
@@ -2289,69 +2286,53 @@ function actionhero(actor, target, weapon, damage)
     end
 end
 
--- function gimp()
---     local player = getPlayer();
---     local playerdata = player:getModData();
---     local modifier = 0.85;
---     if player:hasTrait(ToadTraitsRegistries.gimp) and player:isLocalPlayer() then
---         if playerdata.fToadTraitsPlayerX ~= nil and playerdata.fToadTraitsPlayerY ~= nil then
---             local oldx = playerdata.fToadTraitsPlayerX;
---             local oldy = playerdata.fToadTraitsPlayerY;
---             local newx = player:getX();
---             local newy = player:getY();
---             local xdif = (newx - oldx);
---             local ydif = (newy - oldy);
---             if xdif > 5 or xdif < -5 or ydif > 5 or ydif < -5 then
---                 playerdata.fToadTraitsPlayerX = player:getX();
---                 playerdata.fToadTraitsPlayerY = player:getY();
+-- This is going to need some proper testing to determine what should be acceptable values for both traits as well as the actual cost to these traits
+-- As well as if this is actually updating for other MP clients
+-- OnPlayerMove doesn't seem to work for this in MP so we're moving this to OnPlayerUpdate (Build 42.13.1). This may change in the future
+local FastGimpVector = Vector2.new(0, 0)
+local function MT_FastGimpTraits(player, tickCounter)
+    if not player or not player:isPlayerMoving() then return end
+    -- Early cut off to avoid calls for those without the traits
+    if not player:hasTrait(ToadTraitsRegistries.fast) and not player:hasTrait(ToadTraitsRegistries.gimp) then return end
 
---                 return
---             end
---             player:setX((oldx + xdif * modifier));
---             player:setY((oldy + ydif * modifier));
---         end
---         playerdata.fToadTraitsPlayerX = player:getX();
---         playerdata.fToadTraitsPlayerY = player:getY();
---     end
--- end
+    local modifier  = 0
 
--- function fast()
---     local player = getPlayer();
---     local playerdata = player:getModData();
---     local vector = player:getMoveForwardVec();
---     local length = vector:getLength();
---     local modifier = 2.15;
---     if player:hasTrait(ToadTraitsRegistries.fast) then
---         if playerdata.fToadTraitsPlayerX ~= nil and playerdata.fToadTraitsPlayerY ~= nil then
---             local oldx = playerdata.fToadTraitsPlayerX;
---             local oldy = playerdata.fToadTraitsPlayerY;
---             local newx = player:getX();
---             local newy = player:getY();
---             local xdif = (newx - oldx);
---             local ydif = (newy - oldy);
---             if xdif > 5 or xdif < -5 or ydif > 5 or ydif < -5 then
---                 playerdata.fToadTraitsPlayerX = player:getX();
---                 playerdata.fToadTraitsPlayerY = player:getY();
+    if player:hasTrait(ToadTraitsRegistries.fast) then
+        if player:isSprinting() then
+            modifier = 0.75
+        elseif player:isRunning() then
+            modifier = 0.5
+        elseif player:isWalking() then
+            modifier = 0.25
+        end
+    elseif player:hasTrait(ToadTraitsRegistries.gimp) then
+        if player:isSprinting() then
+            modifier = -0.25
+        elseif player:isRunning() then
+            modifier = -0.5
+        elseif player:isWalking() then
+            modifier = -0.75
+        end
+    end
 
---                 return
---             end
---             if xdif ~= 0 or xdif ~= 0 or ydif ~= 0 or ydif ~= 0 then
---                 player:setX((oldx + xdif * modifier));
---                 player:setY((oldy + ydif * modifier));
---                 playerdata.fToadTraitsPlayerX = player:getX();
---                 playerdata.fToadTraitsPlayerY = player:getY();
---             end
---         else
---             playerdata.fToadTraitsPlayerX = player:getX();
---             playerdata.fToadTraitsPlayerY = player:getY();
---         end
---     end
--- end
+    if modifier == 0 then return end
+
+    player:getDeferredMovement(FastGimpVector)
+
+    FastGimpVector:setX(FastGimpVector:getX() * modifier)
+    FastGimpVector:setY(FastGimpVector:getY() * modifier)
+
+    if isClient() and tickCounter % 10 == 0 then
+        sendClientCommand(player, 'ToadTraits', 'UpdateServerSpeed', { xSpeed = FastGimpVector:getX(), ySpeed = FastGimpVector:getY() })
+    end
+    
+    player:Move(FastGimpVector)
+end
 
 function checkBloodTraits(player)
     local isAnemic = player:hasTrait(ToadTraitsRegistries.anemic)
     local isThick = player:hasTrait(ToadTraitsRegistries.thickblood)
-    if not isAnemic or not isThick then
+    if not isAnemic and not isThick then
         return
     end
 
@@ -2362,13 +2343,15 @@ function checkBloodTraits(player)
             local b = parts:get(i)
             if b:bleeding() and not b:IsBleedingStemmed() then
                 local isNeck = (b:getType() == BodyPartType.Neck)
-                local adjust = 2
-                if isAnemic and isNeck then
-                    adjust = adjust * 0.1
+                local isHead = (b:getType() == BodyPartType.Head)
+                if isAnemic then
+                    local adjust = 0.02
+                    if isNeck or isHead then adjust = adjust * 2 end
                     b:ReduceHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
-                elseif isThick and isNeck then
-                    adjust = adjust * 0.002
+                elseif isThick then
+                    local adjust = 0.008
+                    if isNeck or isHead then adjust = adjust * 2 end
                     b:AddHealth(adjust)
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
                 end
@@ -2730,31 +2713,32 @@ function MT_checkWeight(player)
         return
     end ;
 
-    local strength = player:getPerkLevel(Perks.Strength);
-    local muleBase = SandboxVars.MoreTraits.WeightPackMule or 10;
-    local mouseBase = SandboxVars.MoreTraits.WeightPackMouse or 6;
-    local defaultBase = SandboxVars.MoreTraits.WeightDefault or 8;
-    local global = SandboxVars.MoreTraits.WeightGlobalMod or 0;
     local targetWeight = 0;
+    targetWeight = targetWeight + (SandboxVars.MoreTraits.WeightGlobalMod or 0);
 
     if player:hasTrait(ToadTraitsRegistries.packmule) then
-        targetWeight = muleBase + math.floor(strength / 5);
+        local strength = player:getPerkLevel(Perks.Strength);
+        targetWeight = (SandboxVars.MoreTraits.WeightPackMule or 14) + math.floor(strength / 5)
     elseif player:hasTrait(ToadTraitsRegistries.packmouse) then
-        targetWeight = mouseBase;
+        targetWeight = SandboxVars.MoreTraits.WeightPackMouse or 10
     else
-        targetWeight = defaultBase;
+        targetWeight = SandboxVars.MoreTraits.WeightDefault or 12
     end
+
+    if targetWeight > 50 then targetWeight = 50; end
 
     if getActivatedMods():contains("DracoExpandedTraits") and player:hasTrait(DracoExpandedTraits.Hoarder) then
-        player:setMaxWeightBase(math.floor(player:getMaxWeightBase() * 1.25))
+        targetWeight = math.floor(targetWeight * 1.25)
     end
 
-    targetWeight = targetWeight + global;
-
-    if targetWeight > 50 then
-        targetWeight = 50;
+    -- We want the Server to handle the weight correction for MP
+    if player:getMaxWeightBase() ~= targetWeight then
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'MT_updateWeight', { weight = targetWeight })
+        else
+            player:setMaxWeightBase(targetWeight)
+        end
     end
-    player:setMaxWeightBase(targetWeight)
 end
 
 local function graveRobber(page, player)
@@ -3705,6 +3689,10 @@ local function NoodleLegs(player)
         return
     end
 
+    if not player:isPlayerMoving() then
+        return
+    end
+
     local isRunning = player:isRunning();
     local isSprinting = player:isSprinting();
     if not (isRunning or isSprinting) then
@@ -3713,8 +3701,6 @@ local function NoodleLegs(player)
 
     local sprinting = player:getPerkLevel(Perks.Sprinting);
     local nimble = player:getPerkLevel(Perks.Nimble);
-
-    local nimbleChance = 100;
     local tripChance = 500001 + (nimble * 12500) + (sprinting * 12500);
 
     if player:hasTrait(CharacterTrait.GRACEFUL) then
@@ -3734,7 +3720,7 @@ local function NoodleLegs(player)
         tripChance = tripChance * 0.6;
     end
 
-    if ZombRand(0, tripChance) <= nimbleChance then
+    if ZombRand(0, tripChance) <= 100 then
         local side = ZombRand(2) == 0 and "left" or "right"
         player:setBumpFallType("FallForward");
         player:setBumpType(side);
@@ -4494,6 +4480,8 @@ function MainPlayerUpdate(player)
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
+    MT_FastGimpTraits(player, internalTick)
+    NoodleLegs(player)
     internalTick = internalTick + 1;
     if internalTick > 30 then
         --Reset internalTick every 30 ticks
@@ -4522,9 +4510,23 @@ function EveryOneMinute()
     TerminatorGun(player);
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess(player, playerdata);
+    
+    if getActivatedMods():contains("DracoExpandedTraits") then
+        MT_checkWeight(player)
+    end
 
     if playerdata.QuickRestFinished == true then
         HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), "", HaloTextHelper.getColorGreen());
+    end
+end
+
+function EveryTenMinutes()
+    local player = getPlayer();
+    if not player then
+        return
+    end ;
+    if not getActivatedMods():contains("DracoExpandedTraits") then
+        MT_checkWeight(player)
     end
 end
 
@@ -4588,11 +4590,6 @@ function EveryHours()
     end
 end
 
--- local function EveryDay()
---     local player = getPlayer();
---     local playerdata = player:getModData();
--- end
-
 function OnCreatePlayer(playerindex, player)
     if not player then
         return
@@ -4642,9 +4639,6 @@ function onNewGame(player)
     initToadTraitsPerks(player, playerdata);
 end
 
---Events.OnPlayerMove.Add(gimp);
---Events.OnPlayerMove.Add(fast);
-Events.OnPlayerMove.Add(NoodleLegs);
 Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);
@@ -4656,17 +4650,12 @@ Events.AddXP.Add(GymGoer);
 Events.AddXP.Add(antigunxpdecrease);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
+Events.EveryTenMinutes.Add(EveryTenMinutes);
+Events.EveryHours.Add(EveryHours);
 Events.OnInitWorld.Add(OnInitWorld);
+Events.OnNewGame.Add(onNewGame);
+Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
 Events.OnEquipPrimary.Add(MTOnEquip)
-if getActivatedMods():contains("DracoExpandedTraits") then
-    Events.EveryOneMinute.Add(MT_checkWeight);
-else
-    Events.EveryTenMinutes.Add(MT_checkWeight);
-end
-Events.EveryHours.Add(EveryHours);
-Events.OnNewGame.Add(onNewGame);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
-Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
--- Events.EveryDays.Add(EveryDay); -- Currently unused

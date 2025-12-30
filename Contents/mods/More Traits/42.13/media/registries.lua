@@ -127,3 +127,7 @@ ToadTraitsRegistries.lightdrinker = CharacterTrait.register("ToadTraits:lightdri
 ToadTraitsRegistries.heavydrinker = CharacterTrait.register("ToadTraits:heavydrinker")
 --Re-enable Brooding.
 ToadTraitsRegistries.brooding = CharacterTrait.register("ToadTraits:brooding")
+
+--- Fast / Gimp Traits (Testing) --- 
+ToadTraitsRegistries.fast = CharacterTrait.register("ToadTraits:fast")
+ToadTraitsRegistries.gimp = CharacterTrait.register("ToadTraits:gimp")
