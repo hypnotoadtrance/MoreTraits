@@ -2323,7 +2323,7 @@ local function MT_FastGimpTraits(player, tickCounter)
     FastGimpVector:setY(FastGimpVector:getY() * modifier)
 
     if isClient() and tickCounter % 10 == 0 then
-        sendClientCommand(player, 'ToadTraits', 'UpdateServerSpeed', { xSpeed = FastGimpVector:getX(), ySpeed = FastGimpVector:getY() })
+        sendClientCommand(player, 'ToadTraits', 'FastGimp', { xSpeed = FastGimpVector:getX(), ySpeed = FastGimpVector:getY() })
     end
     
     player:Move(FastGimpVector)
