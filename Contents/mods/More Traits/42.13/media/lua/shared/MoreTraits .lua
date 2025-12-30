@@ -498,8 +498,6 @@ function initToadTraitsPerks(player, playerdata)
         bodyDamage:setInfected(false)
     end
 
-    MT_checkWeight(player)
-
     if player:hasTrait(ToadTraitsRegistries.burned) then
         for i = 0, bodyDamage:getBodyParts():size() - 1 do
             local b = bodyDamage:getBodyParts():get(i)
@@ -2730,31 +2728,32 @@ function MT_checkWeight(player)
         return
     end ;
 
-    local strength = player:getPerkLevel(Perks.Strength);
-    local muleBase = SandboxVars.MoreTraits.WeightPackMule or 10;
-    local mouseBase = SandboxVars.MoreTraits.WeightPackMouse or 6;
-    local defaultBase = SandboxVars.MoreTraits.WeightDefault or 8;
-    local global = SandboxVars.MoreTraits.WeightGlobalMod or 0;
     local targetWeight = 0;
+    targetWeight = targetWeight + (SandboxVars.MoreTraits.WeightGlobalMod or 0);
 
     if player:hasTrait(ToadTraitsRegistries.packmule) then
-        targetWeight = muleBase + math.floor(strength / 5);
+        local strength = player:getPerkLevel(Perks.Strength);
+        targetWeight = (SandboxVars.MoreTraits.WeightPackMule or 14) + math.floor(strength / 5)
     elseif player:hasTrait(ToadTraitsRegistries.packmouse) then
-        targetWeight = mouseBase;
+        targetWeight = SandboxVars.MoreTraits.WeightPackMouse or 10
     else
-        targetWeight = defaultBase;
+        targetWeight = SandboxVars.MoreTraits.WeightDefault or 12
     end
+
+    if targetWeight > 50 then targetWeight = 50; end
 
     if getActivatedMods():contains("DracoExpandedTraits") and player:hasTrait(DracoExpandedTraits.Hoarder) then
-        player:setMaxWeightBase(math.floor(player:getMaxWeightBase() * 1.25))
+        targetWeight = math.floor(targetWeight * 1.25)
     end
 
-    targetWeight = targetWeight + global;
-
-    if targetWeight > 50 then
-        targetWeight = 50;
+    -- We want the Server to handle the weight correction for MP
+    if player:getMaxWeightBase() ~= targetWeight then
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'MT_updateWeight', { weight = targetWeight })
+        else
+            player:setMaxWeightBase(targetWeight)
+        end
     end
-    player:setMaxWeightBase(targetWeight)
 end
 
 local function graveRobber(page, player)
@@ -4522,9 +4521,23 @@ function EveryOneMinute()
     TerminatorGun(player);
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess(player, playerdata);
+    
+    if getActivatedMods():contains("DracoExpandedTraits") then
+        MT_checkWeight(player)
+    end
 
     if playerdata.QuickRestFinished == true then
         HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), "", HaloTextHelper.getColorGreen());
+    end
+end
+
+function EveryTenMinutes()
+    local player = getPlayer();
+    if not player then
+        return
+    end ;
+    if not getActivatedMods():contains("DracoExpandedTraits") then
+        MT_checkWeight(player)
     end
 end
 
@@ -4587,11 +4600,6 @@ function EveryHours()
         end
     end
 end
-
--- local function EveryDay()
---     local player = getPlayer();
---     local playerdata = player:getModData();
--- end
 
 function OnCreatePlayer(playerindex, player)
     if not player then
@@ -4656,17 +4664,12 @@ Events.AddXP.Add(GymGoer);
 Events.AddXP.Add(antigunxpdecrease);
 Events.OnPlayerUpdate.Add(MainPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
+Events.EveryTenMinutes.Add(EveryTenMinutes);
+Events.EveryHours.Add(EveryHours);
 Events.OnInitWorld.Add(OnInitWorld);
+Events.OnNewGame.Add(onNewGame);
+Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
 Events.OnEquipPrimary.Add(MTOnEquip)
-if getActivatedMods():contains("DracoExpandedTraits") then
-    Events.EveryOneMinute.Add(MT_checkWeight);
-else
-    Events.EveryTenMinutes.Add(MT_checkWeight);
-end
-Events.EveryHours.Add(EveryHours);
-Events.OnNewGame.Add(onNewGame);
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
-Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.LevelPerk.Add(FixSpecialization);
--- Events.EveryDays.Add(EveryDay); -- Currently unused

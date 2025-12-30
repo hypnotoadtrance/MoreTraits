@@ -156,10 +156,10 @@ local function UpdateStats(player, args, command)
         stats:set(CharacterStat.ENDURANCE, args.endurance)
     end
 
-    print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
+    -- print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
 
-local function ProcessBodyPartPain(player, args, command)
+local function ProcessBodyPartPain(player, args)
     if not args.bodyPart then
         return
     end
@@ -167,6 +167,14 @@ local function ProcessBodyPartPain(player, args, command)
     if bodyPart then
         bodyPart:setAdditionalPain(args.pain)
     end
+end
+
+local function ProcessUpdateWeight(player, args)
+    if not args.weight then
+        return
+    end
+    print("Server setting the weight now")
+    player:setMaxWeightBase(args.weight)
 end
 
 -- local function UpdateXP(player, args, command)
@@ -224,7 +232,12 @@ local function onClientCommands(module, command, player, args)
     end
 
     if command == 'BodyPartPain' then
-        ProcessBodyPartPain(player, args, command)
+        ProcessBodyPartPain(player, args)
+    end
+
+    if command == 'MT_updateWeight' then
+        print("Server Updating Weight")
+        ProcessUpdateWeight(player, args)
     end
 
     -- if command == 'UpdateXP' then
