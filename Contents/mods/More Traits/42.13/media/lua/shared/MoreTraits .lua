@@ -2287,64 +2287,48 @@ function actionhero(actor, target, weapon, damage)
     end
 end
 
--- function gimp()
---     local player = getPlayer();
---     local playerdata = player:getModData();
---     local modifier = 0.85;
---     if player:hasTrait(ToadTraitsRegistries.gimp) and player:isLocalPlayer() then
---         if playerdata.fToadTraitsPlayerX ~= nil and playerdata.fToadTraitsPlayerY ~= nil then
---             local oldx = playerdata.fToadTraitsPlayerX;
---             local oldy = playerdata.fToadTraitsPlayerY;
---             local newx = player:getX();
---             local newy = player:getY();
---             local xdif = (newx - oldx);
---             local ydif = (newy - oldy);
---             if xdif > 5 or xdif < -5 or ydif > 5 or ydif < -5 then
---                 playerdata.fToadTraitsPlayerX = player:getX();
---                 playerdata.fToadTraitsPlayerY = player:getY();
+-- This is going to need some proper testing to determine what should be acceptable values for both traits as well as the actual cost to these traits
+-- As well as if this is actually updating for other MP clients
+-- OnPlayerMove doesn't seem to work for this in MP so we're moving this to OnPlayerUpdate (Build 42.13.1). This may change in the future
+local FastGimpVector = Vector2.new(0, 0)
+local function MT_FastGimpTraits(player, tickCounter)
+    if not player or not player:isPlayerMoving() then return end
+    -- Early cut off to avoid calls for those without the traits
+    if not player:hasTrait(ToadTraitsRegistries.fast) and not player:hasTrait(ToadTraitsRegistries.gimp) then return end
 
---                 return
---             end
---             player:setX((oldx + xdif * modifier));
---             player:setY((oldy + ydif * modifier));
---         end
---         playerdata.fToadTraitsPlayerX = player:getX();
---         playerdata.fToadTraitsPlayerY = player:getY();
---     end
--- end
+    local modifier  = 0
 
--- function fast()
---     local player = getPlayer();
---     local playerdata = player:getModData();
---     local vector = player:getMoveForwardVec();
---     local length = vector:getLength();
---     local modifier = 2.15;
---     if player:hasTrait(ToadTraitsRegistries.fast) then
---         if playerdata.fToadTraitsPlayerX ~= nil and playerdata.fToadTraitsPlayerY ~= nil then
---             local oldx = playerdata.fToadTraitsPlayerX;
---             local oldy = playerdata.fToadTraitsPlayerY;
---             local newx = player:getX();
---             local newy = player:getY();
---             local xdif = (newx - oldx);
---             local ydif = (newy - oldy);
---             if xdif > 5 or xdif < -5 or ydif > 5 or ydif < -5 then
---                 playerdata.fToadTraitsPlayerX = player:getX();
---                 playerdata.fToadTraitsPlayerY = player:getY();
+    if player:hasTrait(ToadTraitsRegistries.fast) then
+        if player:isSprinting() then
+            modifier = 0.75
+        elseif player:isRunning() then
+            modifier = 0.5
+        elseif player:isWalking() then
+            modifier = 0.25
+        end
+    elseif player:hasTrait(ToadTraitsRegistries.gimp) then
+        if player:isSprinting() then
+            modifier = -0.25
+        elseif player:isRunning() then
+            modifier = -0.5
+        elseif player:isWalking() then
+            modifier = -0.75
+        end
+    end
 
---                 return
---             end
---             if xdif ~= 0 or xdif ~= 0 or ydif ~= 0 or ydif ~= 0 then
---                 player:setX((oldx + xdif * modifier));
---                 player:setY((oldy + ydif * modifier));
---                 playerdata.fToadTraitsPlayerX = player:getX();
---                 playerdata.fToadTraitsPlayerY = player:getY();
---             end
---         else
---             playerdata.fToadTraitsPlayerX = player:getX();
---             playerdata.fToadTraitsPlayerY = player:getY();
---         end
---     end
--- end
+    if modifier == 0 then return end
+
+    player:getDeferredMovement(FastGimpVector)
+
+    FastGimpVector:setX(FastGimpVector:getX() * modifier)
+    FastGimpVector:setY(FastGimpVector:getY() * modifier)
+
+    if isClient() and tickCounter % 10 == 0 then
+        sendClientCommand(player, 'ToadTraits', 'UpdateServerSpeed', { xSpeed = FastGimpVector:getX(), ySpeed = FastGimpVector:getY() })
+    end
+    
+    player:Move(FastGimpVector)
+end
 
 function checkBloodTraits(player)
     local isAnemic = player:hasTrait(ToadTraitsRegistries.anemic)
@@ -4495,6 +4479,7 @@ function MainPlayerUpdate(player)
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
+    MT_FastGimpTraits(player, internalTick)
     internalTick = internalTick + 1;
     if internalTick > 30 then
         --Reset internalTick every 30 ticks
@@ -4652,9 +4637,6 @@ function onNewGame(player)
     initToadTraitsPerks(player, playerdata);
 end
 
---Events.OnPlayerMove.Add(gimp);
---Events.OnPlayerMove.Add(fast);
-Events.OnPlayerMove.Add(NoodleLegs);
 Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);

@@ -173,8 +173,15 @@ local function ProcessUpdateWeight(player, args)
     if not args.weight then
         return
     end
-    print("Server setting the weight now")
     player:setMaxWeightBase(args.weight)
+end
+
+local FastGimpVector = Vector2.new(0, 0)
+local function ProcessFastGimp(player, args)
+    if not args.xSpeed and args.ySpeed then return end
+    FastGimpVector:setX(args.xSpeed)
+    FastGimpVector:setY(args.ySpeed)
+    player:Move(FastGimpVector)
 end
 
 -- local function UpdateXP(player, args, command)
@@ -236,8 +243,11 @@ local function onClientCommands(module, command, player, args)
     end
 
     if command == 'MT_updateWeight' then
-        print("Server Updating Weight")
         ProcessUpdateWeight(player, args)
+    end
+
+    if command == 'FastGimp' then
+        ProcessFastGimp(player, args)
     end
 
     -- if command == 'UpdateXP' then
