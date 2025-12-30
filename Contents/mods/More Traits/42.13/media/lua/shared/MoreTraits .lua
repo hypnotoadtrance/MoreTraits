@@ -3689,6 +3689,10 @@ local function NoodleLegs(player)
         return
     end
 
+    if not player:isPlayerMoving() then
+        return
+    end
+
     local isRunning = player:isRunning();
     local isSprinting = player:isSprinting();
     if not (isRunning or isSprinting) then
@@ -3697,8 +3701,6 @@ local function NoodleLegs(player)
 
     local sprinting = player:getPerkLevel(Perks.Sprinting);
     local nimble = player:getPerkLevel(Perks.Nimble);
-
-    local nimbleChance = 100;
     local tripChance = 500001 + (nimble * 12500) + (sprinting * 12500);
 
     if player:hasTrait(CharacterTrait.GRACEFUL) then
@@ -3718,7 +3720,7 @@ local function NoodleLegs(player)
         tripChance = tripChance * 0.6;
     end
 
-    if ZombRand(0, tripChance) <= nimbleChance then
+    if ZombRand(0, tripChance) <= 100 then
         local side = ZombRand(2) == 0 and "left" or "right"
         player:setBumpFallType("FallForward");
         player:setBumpType(side);
@@ -4479,6 +4481,7 @@ function MainPlayerUpdate(player)
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
     MT_FastGimpTraits(player, internalTick)
+    NoodleLegs(player)
     internalTick = internalTick + 1;
     if internalTick > 30 then
         --Reset internalTick every 30 ticks
