@@ -1503,7 +1503,7 @@ function indefatigablecounter(player, playerdata)
 end
 
 function badteethtrait(player, playerdata)
-    -- if not player:hasTrait(ToadTraitsRegistries.badteeth) then return end
+    if not player:hasTrait(ToadTraitsRegistries.badteeth) then return end
     local bodyDamage = player:getBodyDamage()
     local healthTimer = bodyDamage:getHealthFromFoodTimer()
 
