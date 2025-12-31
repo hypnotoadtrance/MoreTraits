@@ -116,56 +116,80 @@ end
 local function UpdateStats(player, args, command)
     local stats = player:getStats()
 
-    if args.panic then
+    if args.panic ~= nil then
         stats:set(CharacterStat.PANIC, args.panic)
     end
-    if args.stress then
+    if args.stress ~= nil then
         stats:set(CharacterStat.STRESS, args.stress)
     end
-    if args.fatigue then
+    if args.fatigue ~= nil then
         stats:set(CharacterStat.FATIGUE, args.fatigue)
     end
-    if args.pain then
+    if args.pain ~= nil then
         stats:set(CharacterStat.PAIN, args.pain)
     end
-    if args.boredom then
+    if args.boredom ~= nil then
         stats:set(CharacterStat.BOREDOM, args.boredom)
     end
-    if args.unhappiness then
+    if args.unhappiness ~= nil then
         stats:set(CharacterStat.UNHAPPINESS, args.unhappiness)
     end
-    if args.zombie_fever then
+    if args.zombie_fever ~= nil then
         stats:set(CharacterStat.ZOMBIE_FEVER, args.zombie_fever)
     end
-    if args.zombie_infection then
+    if args.zombie_infection ~= nil then
         stats:set(CharacterStat.ZOMBIE_INFECTION, args.zombie_infection)
+        if args.zombie_infection == 0 and args.clear_wounds then
+            local bodyDamage = player:getBodyDamage()
+            bodyDamage:setInfected(false)
+            bodyDamage:setInfectionMortalityDuration(-1)
+            bodyDamage:setInfectionTime(-1)
+
+            local parts = bodyDamage:getBodyParts()
+            for i = 0, parts:size() - 1 do
+                local b = parts:get(i);
+                if b:HasInjury() and b:isInfectedWound() then
+                    b:SetInfected(false);
+                    b:setInfectedWound(false);
+                end
+            end
+        end
     end
-    if args.sickness then
+    if args.sickness ~= nil then
         stats:set(CharacterStat.SICKNESS, args.sickness)
     end
-    if args.anger then
+    if args.anger ~= nil then
         stats:set(CharacterStat.ANGER, args.anger)
     end
-    if args.idleness then
+    if args.idleness ~= nil then
         stats:set(CharacterStat.IDLENESS, args.idleness)
     end
-    if args.poison then
+    if args.poison ~= nil then
         stats:set(CharacterStat.POISON, args.poison)
     end
-    if args.endurance then
+    if args.endurance ~= nil then
         stats:set(CharacterStat.ENDURANCE, args.endurance)
     end
 
     -- print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
 
-local function ProcessBodyPartPain(player, args)
+local function ProcessBodyPartMechanics(player, args)
     if not args.bodyPart then
         return
     end
+
     local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(args.bodyPart))
-    if bodyPart then
-        bodyPart:setAdditionalPain(args.pain)
+    if not bodyPart then
+        return
+    end
+
+    if args.partPain ~= nil then
+        bodyPart:setAdditionalPain(args.partPain)
+    end
+
+    if args.partDamage ~= nil then
+        bodyPart:AddDamage(args.partDamage)
     end
 end
 
@@ -238,8 +262,8 @@ local function onClientCommands(module, command, player, args)
         UpdateStats(player, args, command)
     end
 
-    if command == 'BodyPartPain' then
-        ProcessBodyPartPain(player, args)
+    if command == 'BodyPartMechanics' then
+        ProcessBodyPartMechanics(player, args)
     end
 
     if command == 'MT_updateWeight' then
