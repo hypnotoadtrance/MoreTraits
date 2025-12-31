@@ -3191,25 +3191,30 @@ function FearfulUpdate(player, playerdata)
 end
 
 function GymGoer(player, perk, amount)
+    if amount <= 0 or not player:hasTrait(ToadTraitsRegistries.gymgoer) then
+        return
+    end
+
+    local isFitnessState = (FitnessState and player:getCurrentState() == FitnessState.instance())
+    if perk ~= Perks.Fitness and perk ~= Perks.Strength and not isFitnessState then
+        return
+    end
+
     local playerdata = player:getModData()
-    if not playerdata then
-        return
-    end ;
-    if playerdata.GymGoerProcessing then
-        return
-    end
+    if not playerdata then return end
+    if playerdata.GymGoerProcessing then return end
 
-    if player:hasTrait(ToadTraitsRegistries.gymgoer) and (perk == Perks.Fitness or perk == Perks.Strength) and player:getCurrentState() == FitnessState.instance() then
-        playerdata.GymGoerProcessing = true
+    playerdata.GymGoerProcessing = true
 
-        local modifier = SandboxVars.MoreTraits.GymGoerPercent or 200
-        local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1
+    local modifier = (SandboxVars.MoreTraits.GymGoerPercent or 200)
+    local bonusMultiplier = (modifier * 0.01) - 1 
+    
+    if bonusMultiplier > 0 then
         local bonusAmount = amount * bonusMultiplier
-
         AddXP(player, perk, bonusAmount)
-
-        playerdata.GymGoerProcessing = false
     end
+
+    playerdata.GymGoerProcessing = false
 end
 
 function GymGoerUpdate(player, playerdata)
