@@ -1529,7 +1529,7 @@ function badteethtrait(player, playerdata)
         if isClient() then
             if math.abs(newPain - playerdata.fBadTeethLastSentPain) >= 1 then
                 local headPart = BodyPartType.ToIndex(BodyPartType.Head)
-                sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = newPain })
+                sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = headPart, partPain = newPain })
                 playerdata.fBadTeethLastSentPain = newPain
             end
         else
@@ -2151,7 +2151,7 @@ function albino(player, playerdata)
         playerdata.fAlbinoLastSentPain = playerdata.fAlbinoLastSentPain or 0
         if math.abs(finalPain - playerdata.fAlbinoLastSentPain) >= 1 then
             local headPart = BodyPartType.ToIndex(BodyPartType.Head)
-            sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = finalPain })
+            sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = headPart, partPain = finalPain })
             playerdata.fAlbinoLastSentPain = finalPain
         end
     else
@@ -3963,7 +3963,7 @@ local function RestfulSleeperWakeUp(player, playerdata)
             if neck:getAdditionalPain() > 0 then
                 if isClient() then
                     local neckPart = BodyPartType.ToIndex(BodyPartType.Neck)
-                    sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = neckPart, pain = 0 })
+                    sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = neckPart, partPain = 0 })
                 else
                     neck:setAdditionalPain(0)
                 end
