@@ -3242,16 +3242,13 @@ function GymGoerUpdate(player, playerdata)
     local noExerciseFatigue = SandboxVars.MoreTraits.GymGoerNoExerciseFatigue
     if not (trait and noExerciseFatigue) then
         return
-    end ;
-
-    local bodyDamage = player:getBodyDamage();
-    local fitness = player:getFitness();
+    end
 
     if not playerdata.GymGoerStiffnessList then
         playerdata.GymGoerStiffnessList = { 0, 0, 0, 0 }
     end
 
-    local stiffnessList = playerdata.GymGoerStiffnessList
+    local fitness = player:getFitness();
     local muscleGroups = {
         [1] = {
             val = fitness:getCurrentExeStiffnessInc("arms"),
@@ -3271,6 +3268,7 @@ function GymGoerUpdate(player, playerdata)
         }
     }
 
+    local stiffnessList = playerdata.GymGoerStiffnessList
     for i, group in ipairs(muscleGroups) do
         local currentStiffness = group.val
         local recordedStiffness = stiffnessList[i]
@@ -3278,6 +3276,7 @@ function GymGoerUpdate(player, playerdata)
         if currentStiffness > recordedStiffness or currentStiffness == 0 then
             stiffnessList[i] = currentStiffness
         elseif currentStiffness < (recordedStiffness / 2) then
+            local bodyDamage = player:getBodyDamage();
             for _, partType in ipairs(group.parts) do
                 bodyDamage:getBodyPart(partType):setStiffness(0)
             end
