@@ -4504,7 +4504,7 @@ function MainPlayerUpdate(player)
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
-    MT_FastGimpTraits(player, internalTick)
+    MT_FastGimpTraits(player)
     NoodleLegs(player)
     internalTick = internalTick + 1;
     if internalTick > 30 then
