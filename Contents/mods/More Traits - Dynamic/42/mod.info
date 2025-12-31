@@ -1,8 +1,0 @@
-name=More Traits - Dynamic Traits
-poster=generic.png
-icon=icon.png
-versionMin=41.0
-description=If this submod is enabled, Dynamic perks will be enabled. If this mod is disabled, none of the perks in this mod are dynamic. Sandbox settings are present.
-id=1299328280/ToadTraitsDynamic
-require=\1299328280/ToadTraits,\KillCount
-Authors=MusicManiac
