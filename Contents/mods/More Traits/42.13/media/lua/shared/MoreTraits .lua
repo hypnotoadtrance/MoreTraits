@@ -2290,7 +2290,7 @@ end
 -- As well as if this is actually updating for other MP clients
 -- OnPlayerMove doesn't seem to work for this in MP so we're moving this to OnPlayerUpdate (Build 42.13.1). This may change in the future
 local FastGimpVector = Vector2.new(0, 0)
-local function MT_FastGimpTraits(player, tickCounter)
+local function MT_FastGimpTraits(player)
     if not player or not player:isPlayerMoving() then return end
     -- Early cut off to avoid calls for those without the traits
     if not player:hasTrait(ToadTraitsRegistries.fast) and not player:hasTrait(ToadTraitsRegistries.gimp) then return end
@@ -2322,7 +2322,7 @@ local function MT_FastGimpTraits(player, tickCounter)
     FastGimpVector:setX(FastGimpVector:getX() * modifier)
     FastGimpVector:setY(FastGimpVector:getY() * modifier)
 
-    if isClient() and tickCounter % 10 == 0 then
+    if isClient() and internalTick % 10 == 0 then
         sendClientCommand(player, 'ToadTraits', 'FastGimp', { xSpeed = FastGimpVector:getX(), ySpeed = FastGimpVector:getY() })
     end
     
