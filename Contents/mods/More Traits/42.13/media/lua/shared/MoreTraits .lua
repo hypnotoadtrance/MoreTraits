@@ -4796,6 +4796,9 @@ function onNewGame(player)
     initToadTraitsPerks(player, playerdata);
 end
 
+-- Amputee at current
+Events.OnEquipPrimary.Add(OnEquipPrimary); 
+Events.OnEquipSecondary.Add(OnEquipSecondary); 
 Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);
