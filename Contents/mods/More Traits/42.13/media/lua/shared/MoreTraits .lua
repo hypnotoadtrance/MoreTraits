@@ -581,30 +581,40 @@ function MTPlayerHit(player, _, __)
 
                         HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen())
 
-                        if bodyPart:IsInfected() and not wasInfectedBefore and isInfected then
-                            bodyPart:SetInfected(false)
-                            bodyDamage:setInfected(false)
-                            bodyDamage:setInfectionMortalityDuration(-1)
-                            bodyDamage:setInfectionTime(-1)
-                            bodyDamage:setInfectionGrowthRate(0)
-                        end
+                        if isClient() then
+                            local args = {
+                                bodyPart = bodyPart, wasInfectedBefore = wasInfectedBefore,
+                                isInfected = isInfected
+                            }
+                            sendClientCommand(player, 'ToadTraits', 'EvasiveDodge', args)
+                        else
+                            if bodyPart:IsInfected() and not wasInfectedBefore and isInfected then
+                                bodyPart:SetInfected(false)
+                                bodyDamage:setInfected(false)
+                                bodyDamage:setInfectionMortalityDuration(-1)
+                                bodyDamage:setInfectionTime(-1)
+                                bodyDamage:setInfectionGrowthRate(0)
+                            end
 
-                        -- Heal the injury immediately
-                        bodyPart:setBleedingTime(0)
-                        bodyPart:setBleeding(false)
+                            if bodyPart:bleeding() then
+                                bodyPart:setBleedingTime(0)
+                                bodyPart:setBleeding(false)
+                            end
 
-                        if bodyPart:scratched() then
-                            bodyPart:setScratchTime(0)
-                            bodyPart:setScratched(false, false)
-                        end
+                            if bodyPart:scratched() then
+                                bodyPart:setScratchTime(0)
+                                bodyPart:setScratched(false, false)
+                            end
 
-                        if bodyPart:isCut() then
-                            bodyPart:setCutTime(0)
-                            bodyPart:setCut(false, false)
-                        end
+                            if bodyPart:isCut() then
+                                bodyPart:setCutTime(0)
+                                bodyPart:setCut(false, false)
+                            end
 
-                        if bodyPart:bitten() then
-                            bodyPart:RestoreToFullHealth()
+                            if bodyPart:bitten() then
+                                bodyPart:setBitten(false, false)
+                                bodyPart:setHealth(100.0)
+                            end
                         end
                     else
                         table.insert(list, i)
@@ -623,13 +633,19 @@ function MTPlayerHit(player, _, __)
                 local bodyPart = bodyParts:get(i)
                 if bodyPart:HasInjury() and not tableContains(list, i) then
                     table.insert(list, i)
-                    local immunoChance = SandboxVars.MoreTraits.ImmunoChance or 0
-                    triedImmuno = true
+                    
+                    local immunoChance = SandboxVars.MoreTraits.ImmunoChance or 25
+                    if bodyDamage:isInfected() then return end
 
                     if ZombRand(1, 101) <= immunoChance then
-                        bodyDamage:setInfected(true)
+                        if isClient() then
+                            sendClientCommand(player, 'ToadTraits', 'InfectPlayer', {})
+                        else
+                            bodyDamage:setInfected(true)
+                        end
+                        triedImmuno = true
                     end
-                    break
+                    break 
                 end
             end
         end

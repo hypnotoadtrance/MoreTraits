@@ -192,8 +192,8 @@ local function ProcessBodyPartMechanics(player, args)
         if args.partDamage ~= nil then
             bodyPart:AddDamage(args.partDamage)
         end
-        if args.stiffness ~= nil then
-            bodyPart:setStiffness(args.stiffness)
+        if args.partStiffness ~= nil then
+            bodyPart:setStiffness(args.partStiffness)
         end
     end
 end
@@ -225,6 +225,65 @@ local function ProcessImmunocompromised(player, args)
         if b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
             b:setWoundInfectionLevel(infectionValue + args.infectionIncrease);
         end
+    end
+end
+
+local function ProcessGlassBody(player, args)
+    local bodyDamage = player:getBodyDamage()
+
+    if args.extraDamage ~= nil then
+        bodyDamage:ReduceGeneralHealth(args.extraDamage)
+    end
+
+    local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(args.partIndex))
+    if bodyPart then
+        if args.fractureTime > 0 then
+            if bodyPart:getFractureTime() <= 0 then
+                bodyPart:setFractureTime(args.fractureTime)
+            end
+        elseif args.doScratch then
+            bodyPart:setScratched(true, true)
+        end
+    end
+end
+
+local function ProcessInfectPlayer(player)
+    local bodyDamage = player:getBodyDamage()
+    bodyDamage:setInfected(true)
+end
+
+local function ProcessEvasive(player, args)
+    local bodyDamage = player:getBodyDamage()
+    local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(args.partIndex))
+    
+    if not bodyPart then return end;
+
+    if bodyPart:IsInfected() and not args.wasInfectedBefore and args.isInfected then
+        bodyPart:SetInfected(false)
+        bodyDamage:setInfected(false)
+        bodyDamage:setInfectionMortalityDuration(-1)
+        bodyDamage:setInfectionTime(-1)
+        bodyDamage:setInfectionGrowthRate(0)
+    end
+    
+    if bodyPart:bleeding() then
+        bodyPart:setBleedingTime(0)
+        bodyPart:setBleeding(false)
+    end
+
+    if bodyPart:scratched() then
+        bodyPart:setScratchTime(0)
+        bodyPart:setScratched(false, false)
+    end
+
+    if bodyPart:isCut() then
+        bodyPart:setCutTime(0)
+        bodyPart:setCut(false, false)
+    end
+
+    if bodyPart:bitten() then
+        bodyPart:setBitten(false, false)
+        bodyPart:setHealth(100.0)
     end
 end
 
@@ -300,6 +359,14 @@ local function onClientCommands(module, command, player, args)
 
     if command == 'GlassBody' then
         ProcessGlassBody(player, args)
+    end
+
+    if command == 'InfectPlayer' then
+        ProcessInfectPlayer(player)
+    end
+
+    if command == 'EvasiveDodge' then
+        ProcessEvasive(player, args)
     end
 end
 
