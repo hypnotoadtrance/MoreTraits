@@ -294,12 +294,13 @@ local function onClientCommands(module, command, player, args)
         ProcessFastGimp(player, args)
     end
 
-    -- if command == 'UpdateXP' then
-    --     UpdateXP(player, args, command)
-    -- end
-    -- if command == 'UpdateXPToLevel' then
-    --     UpdateXPToLevel(player, args, command)
-    -- end
+    if command == 'Immunocompromised' then
+        ProcessImmunocompromised(player, args)
+    end
+
+    if command == 'GlassBody' then
+        ProcessGlassBody(player, args)
+    end
 end
 
 Events.OnClientCommand.Add(onClientCommands)

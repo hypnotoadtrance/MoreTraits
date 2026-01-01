@@ -3527,22 +3527,37 @@ function GlassBody(player, playerData)
         chance = math.max(5, math.min(95, chance));
         woundstrength = math.max(5, math.min(25, woundstrength));
 
-        local extraDamageMultiplier = 2;
-        bodyDamage:ReduceGeneralHealth(difference * extraDamageMultiplier);
+        local damage = difference * 2;
+        local fractureTime = 0;
+        local scratched = false;
+        local targetBodyPart = -1;
 
         if ZombRand(100) <= chance then
-            local partIndex = ZombRand(0, 17);
-            local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(partIndex));
-            if bodyPart then
-                if difference > 0.33 then
-                    local fracture = bodyPart:getFractureTime();
-                    if not fracture or fracture <= 0 then
-                        bodyPart:setFractureTime(ZombRand(20) + woundstrength);
-                    end
-                elseif difference > 0.1 then
-                    bodyPart:setScratched(true, true);
+            targetBodyPart = ZombRand(0, 17);
+            if difference > 0.33 then
+                fractureTime = ZombRand(20) + woundstrength;
+            elseif difference > 0.1 then
+                scratched = true;
+            end
+        end
+
+        if targetBodyPart == -1 then return end
+
+        if isClient() then
+            local args = {
+                damage = damage, partIndex = targetBodyPart,
+                fractureTime = fractureTime, scratched = scratched
+            }
+            sendClientCommand(player, 'ToadTraits', 'GlassBody', args)
+        else
+            bodyDamage:ReduceGeneralHealth(damage);
+            local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(targetBodyPart));
+            if fractureTime > 0 then
+                if bodyPart:getFractureTime() <= 0 then
+                    bodyPart:setFractureTime(fractureTime)
                 end
             end
+            if scratched then bodyPart:setScratched(true, true) end
         end
     end
     playerData.glassBodyLastHP = bodyDamage:getOverallBodyHealth();
