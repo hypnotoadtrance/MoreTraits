@@ -106,15 +106,9 @@ end
 --     return 1.0
 -- end
 
--- Fonction AddXP
-local function AddXP(player, perk, amount)
+local function AddXP(player, perk, amount, noMultiplier)
     -- Arguments: player, perkObject, amount, noMultiplier
-    sendAddXp(player, perk, amount, false);  -- Covers both SP and MP
-end
-
-local function addXPNoMultiplier(player, perk, amount)
-    -- Arguments: player, perkObject, amount, noMultiplier
-    sendAddXp(player, perk, amount, true);   -- Covers both SP and MP
+    sendAddXp(player, perk, amount, noMultiplier or false);  -- Covers both SP and MP
 end
 
 -- Helper function to level up perks safely and grant XP to the next level
