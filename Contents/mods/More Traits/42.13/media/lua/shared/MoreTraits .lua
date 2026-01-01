@@ -4168,9 +4168,11 @@ local function CheckForPlayerBuiltContainer(player, playerdata)
 end
 
 local function antigunxpdecrease(player, perk, amount)
-    if player:hasTrait(ToadTraitsRegistries.antigun) and perk == Perks.Aiming then
-        AddXP(player, perk, 0 - (amount * 0.25));
+    if not player:hasTrait(ToadTraitsRegistries.antigun) and perk ~= Perks.Aiming then
+        return
     end
+
+    AddXP(player, perk, 0 - (amount * 0.25));
 end
 
 local function IdealWeight(player, playerdata)
