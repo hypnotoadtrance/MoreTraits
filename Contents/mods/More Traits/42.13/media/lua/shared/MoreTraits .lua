@@ -4665,6 +4665,8 @@ function EveryOneMinute()
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess(player, playerdata);
     Immunocompromised(player);
+    CheckSelfHarm(player);
+    checkBloodTraits(player);
     
     if getActivatedMods():contains("DracoExpandedTraits") then
         MT_checkWeight(player)
