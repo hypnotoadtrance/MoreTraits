@@ -187,16 +187,23 @@ local function ProcessBodyPartMechanics(player, args)
 
     for _, index in ipairs(PartIndexes) do
         local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(index))
-        if not bodyPart then return end
 
-        if args.partPain ~= nil then
-            bodyPart:setAdditionalPain(args.partPain)
-        end
-        if args.partDamage ~= nil then
-            bodyPart:AddDamage(args.partDamage)
-        end
-        if args.partStiffness ~= nil then
-            bodyPart:setStiffness(args.partStiffness)
+        if bodyPart then
+            if args.partPain ~= nil then
+                bodyPart:setAdditionalPain(args.partPain)
+            end
+            if args.partDamage ~= nil then
+                bodyPart:AddDamage(args.partDamage)
+            end
+            if args.partStiffness ~= nil then
+                bodyPart:setStiffness(args.partStiffness)
+            end
+            if args.partAdd ~= nil then
+                bodyPart:AddHealth(args.partHealthAdd)
+            end
+            if args.partReduce ~= nil then
+                bodyPart:ReduceHealth(args.partHealthReduce)
+            end
         end
     end
 end

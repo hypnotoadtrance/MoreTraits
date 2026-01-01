@@ -2398,7 +2398,7 @@ local function MT_FastGimpTraits(player)
     player:Move(FastGimpVector)
 end
 
-function checkBloodTraits(player)
+local function checkBloodTraits(player)
     local isAnemic = player:hasTrait(ToadTraitsRegistries.anemic)
     local isThick = player:hasTrait(ToadTraitsRegistries.thickblood)
     if not isAnemic and not isThick then
@@ -2406,26 +2406,53 @@ function checkBloodTraits(player)
     end
 
     local bodyDamage = player:getBodyDamage()
-    if bodyDamage:getNumPartsBleeding() > 0 then
-        local parts = bodyDamage:getBodyParts()
-        for i = 0, parts:size() - 1 do
-            local b = parts:get(i)
-            if b:bleeding() and not b:IsBleedingStemmed() then
-                local isNeck = (b:getType() == BodyPartType.Neck)
-                local isHead = (b:getType() == BodyPartType.Head)
-                if isAnemic then
-                    local adjust = 0.02
-                    if isNeck or isHead then adjust = adjust * 2 end
-                    b:ReduceHealth(adjust)
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
-                elseif isThick then
-                    local adjust = 0.008
-                    if isNeck or isHead then adjust = adjust * 2 end
-                    b:AddHealth(adjust)
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
-                end
+    if bodyDamage:getNumPartsBleeding() <= 0 then return end
+
+    local parts = bodyDamage:getBodyParts()
+    local anemicParts = {}
+    local thickParts = {}
+
+    for i = 0, parts:size() - 1 do
+        local b = parts:get(i)
+        if b:bleeding() and not b:IsBleedingStemmed() then
+            local isNeck = (b:getType() == BodyPartType.Neck)
+            local isHead = (b:getType() == BodyPartType.Head)
+
+            if isAnemic then
+                local adjust = 0.4
+                if isNeck or isHead then adjust = adjust * 2 end
+                table.insert(anemicParts, {part = i, amount = adjust})
+            elseif isThick then
+                local adjust = 0.15
+                if isNeck or isHead then adjust = adjust * 2 end
+                table.insert(thickParts, {part = i, amount = adjust})
             end
         end
+    end
+
+    if #anemicParts > 0 then
+        if isClient() then
+            for _, data in ipairs(anemicParts) do
+                sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = data.part, partHealthReduce = data.amount })
+            end
+        else
+            for _, data in ipairs(anemicParts) do
+                parts:get(data.part):ReduceHealth(data.amount)
+            end
+        end
+        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
+    end
+    if #thickParts > 0 then
+        if isClient() then
+            for _, data in ipairs(thickParts) do
+                sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = data.part, partHealthAdd = data.amount })
+            end
+        else
+            for _, data in ipairs(thickParts) do
+                parts:get(data.part):AddHealth(data.amount)
+            end
+        end
+        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
     end
 end
 
