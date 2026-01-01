@@ -1221,18 +1221,28 @@ function CheckSelfHarm(player)
         return
     end
 
-    local modifier = 3 - (player:hasTrait(ToadTraitsRegistries.depressive) and 1 or 0)
     local stats = player:getStats()
     local unhappiness = stats:get(CharacterStat.UNHAPPINESS);
-    local bodyDamage = player:getBodyDamage();
-    local bodyParts = bodyDamage:getBodyParts();
+    local bodyDamage = player:getBodyDamage()
+    local modifier = 3 - (player:hasTrait(ToadTraitsRegistries.depressive) and 1 or 0)
+    local healthCap = 100 - (unhappiness / modifier)
 
-    if unhappiness >= 25 then
-        if bodyDamage:getOverallBodyHealth() >= (100 - unhappiness / modifier) then
-            for i = 0, bodyParts:size() - 1 do
-                local b = bodyParts:get(i);
-                b:AddDamage(0.001 * GameSpeedMultiplier());
+    if unhappiness >= 25 and bodyDamage:getOverallBodyHealth() > healthCap then
+        local damageAmount = 0.15
+        local partIndexes = {}
+        local parts = bodyDamage:getBodyParts()
+        local partsSize = parts:size()
+
+        for i = 0, partsSize - 1 do
+            table.insert(partIndexes, i)
+            if not isClient() then
+                parts:get(i):AddDamage(damageAmount)
             end
+        end
+
+        if isClient() then
+            local args = { bodyParts = partIndexes, partDamage = damageAmount }
+            sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
         end
     end
 end

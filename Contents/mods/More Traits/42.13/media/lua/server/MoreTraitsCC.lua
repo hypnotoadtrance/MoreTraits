@@ -178,7 +178,7 @@ local function ProcessBodyPartMechanics(player, args)
     local PartIndexes = {}
     if type(args.bodyParts) == "table" then
         PartIndexes = args.bodyParts
-    elseif args.bodyPart then
+    elseif args.bodyPart ~= nil then
         table.insert(PartIndexes, args.bodyPart)
     end
 
