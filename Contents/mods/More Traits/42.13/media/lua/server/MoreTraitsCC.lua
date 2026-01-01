@@ -208,6 +208,19 @@ local function ProcessFastGimp(player, args)
     player:Move(FastGimpVector)
 end
 
+local function ProcessImmunocompromised(player, args)
+    if not args.infectionIncrease then
+        return
+    end
+    local parts = player:getBodyDamage():getBodyParts();
+    for i = 0, parts:size() - 1 do
+        local b = parts:get(i);
+        if b:HasInjury() and b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
+            b:setWoundInfectionLevel(b:getWoundInfectionLevel() + args.infectionIncrease);
+        end
+    end
+end
+
 -- local function UpdateXP(player, args, command)
 --     local xp = player:getXp()
 --     local perk = Perks[args.perk] -- Cannot pass a string value to this function so we convert it back to PerkFactory

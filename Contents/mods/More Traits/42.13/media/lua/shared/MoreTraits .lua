@@ -2722,12 +2722,19 @@ function Immunocompromised(player)
     end
 
     local bodyDamage = player:getBodyDamage();
-    local parts = bodyDamage:getBodyParts();
+    -- Early exit if there is no actual injuries
+    if not bodyDamage:HasInjury() then return end
 
-    for i = 0, parts:size() - 1 do
-        local b = parts:get(i);
-        if b:HasInjury() and b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
-            b:setWoundInfectionLevel(b:getWoundInfectionLevel() + 0.001);
+    local infectionIncrease = 0.05
+    if isClient() then
+        sendClientCommand(player, 'ToadTraits', 'Immunocompromised', { infectionIncrease = infectionIncrease })
+    else
+        local parts = bodyDamage:getBodyParts();
+        for i = 0, parts:size() - 1 do
+            local b = parts:get(i);
+            if b:HasInjury() and b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
+                b:setWoundInfectionLevel(b:getWoundInfectionLevel() + infectionIncrease);
+            end
         end
     end
 end
