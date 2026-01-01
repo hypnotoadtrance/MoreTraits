@@ -175,21 +175,26 @@ local function UpdateStats(player, args, command)
 end
 
 local function ProcessBodyPartMechanics(player, args)
-    if not args.bodyPart then
-        return
+    local PartIndexes = {}
+    if type(args.bodyParts) == "table" then
+        PartIndexes = args.bodyParts
+    elseif args.bodyPart then
+        table.insert(PartIndexes, args.bodyPart)
     end
 
-    local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(args.bodyPart))
-    if not bodyPart then
-        return
-    end
+    for _, index in ipairs(PartIndexes) do
+        local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(index))
+        if not bodyPart then return end
 
-    if args.partPain ~= nil then
-        bodyPart:setAdditionalPain(args.partPain)
-    end
-
-    if args.partDamage ~= nil then
-        bodyPart:AddDamage(args.partDamage)
+        if args.partPain ~= nil then
+            bodyPart:setAdditionalPain(args.partPain)
+        end
+        if args.partDamage ~= nil then
+            bodyPart:AddDamage(args.partDamage)
+        end
+        if args.stiffness ~= nil then
+            bodyPart:setStiffness(args.stiffness)
+        end
     end
 end
 

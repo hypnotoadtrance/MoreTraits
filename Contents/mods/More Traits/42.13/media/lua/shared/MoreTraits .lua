@@ -3303,10 +3303,19 @@ function GymGoerUpdate(player, playerdata)
         if currentStiffness > recordedStiffness or currentStiffness == 0 then
             stiffnessList[i] = currentStiffness
         elseif currentStiffness < (recordedStiffness / 2) then
-            local bodyDamage = player:getBodyDamage();
-            for _, partType in ipairs(group.parts) do
-                bodyDamage:getBodyPart(partType):setStiffness(0)
+            if isClient() then
+                local bodyParts = {}
+                for _, partType in ipairs(group.parts) do
+                    table.insert(bodyParts, partType:getIndex())
+                end
+                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, stiffness = 0 })
+            else
+                for _, partType in ipairs(group.parts) do
+                    local part = player:getBodyDamage():getBodyPart(partType)
+                    part:setStiffness(0)
+                end
             end
+            stiffnessList[i] = 0
         end
     end
 end
