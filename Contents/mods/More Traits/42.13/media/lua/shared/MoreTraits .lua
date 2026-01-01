@@ -2229,43 +2229,69 @@ local function AlbinoTimer(player, playerdata)
     end
 end
 
+local function OnEquipPrimary(player, item)
+    if item == nil then return end
+
+    if player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation") then
+        if item and item ~= nil and (item:isTwoHandWeapon() or item:isRequiresEquippedBothHands()) then
+            player:setPrimaryHandItem(nil);
+            HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), HaloTextHelper.getColorRed());
+        end
+    end
+end
+
+local function OnEquipSecondary(player, item)
+    if item == nil then return end
+
+    if player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation") then
+        if item and item ~= nil then
+            player:setSecondaryHandItem(nil);
+            HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), HaloTextHelper.getColorRed());
+        end
+    end
+end
+
 function amputee(player, justGotInfected)
-    if not player:hasTrait(ToadTraitsRegistries.amputee) then
+    if not player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation") then
         return
     end
-    if getActivatedMods():contains("Amputation") then
-        return
-    end ;
 
-    local handitem = player:getSecondaryHandItem();
-    if handitem ~= nil and handitem:getType() ~= "BareHands" then
-        player:setSecondaryHandItem(nil);
-        -- player:dropHandItems();
+    local bodyDamage = player:getBodyDamage()
+    if not justGotInfected and bodyDamage:getOverallBodyHealth() >= 100 then
+        return
     end
 
-    local bodyDamage = player:getBodyDamage();
     local parts = {
-        bodyDamage:getBodyPart(BodyPartType.UpperArm_L),
-        bodyDamage:getBodyPart(BodyPartType.ForeArm_L),
-        bodyDamage:getBodyPart(BodyPartType.Hand_L)
+        BodyPartType.UpperArm_L,
+        BodyPartType.ForeArm_L,
+        BodyPartType.Hand_L
     }
 
-    for _, part in ipairs(parts) do
+    local needToHeal = false
+    for _, partType in ipairs(parts) do
+        local part = bodyDamage:getBodyPart(partType)
         if part:HasInjury() then
-            part:RestoreToFullHealth();
+            needToHeal = true
+            if not isClient() then
+                part:RestoreToFullHealth()
+            end
+        end
+    end
 
+    if needToHeal or justGotInfected then
+        if isClient() then
+            local args = { zombie_fever = 0, zombie_infection = 0,
+                clear_wounds = true, amputee = true
+            }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+        else
             if justGotInfected then
-                local stats = player:getStats();
-                bodyDamage:setInfected(false);
-                bodyDamage:setInfectionMortalityDuration(-1);
-                bodyDamage:setInfectionTime(-1);
-                if isClient() then
-                    local args = { zombie_fever = 0, zombie_infection = 0 }
-                    sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
-                else
-                    stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-                    stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
-                end
+                local stats = player:getStats()
+                bodyDamage:setInfected(false)
+                bodyDamage:setInfectionMortalityDuration(-1)
+                bodyDamage:setInfectionTime(-1)
+                stats:set(CharacterStat.ZOMBIE_FEVER, 0)
+                stats:set(CharacterStat.ZOMBIE_INFECTION, 0)
             end
         end
     end

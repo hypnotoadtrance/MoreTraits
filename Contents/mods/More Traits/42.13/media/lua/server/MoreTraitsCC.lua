@@ -152,7 +152,10 @@ local function UpdateStats(player, args, command)
                     b:SetInfected(false);
                     b:setInfectedWound(false);
                 end
-            end
+                if args.amputee then
+                    b:RestoreToFullHealth();
+                end
+            end 
         end
     end
     if args.sickness ~= nil then
