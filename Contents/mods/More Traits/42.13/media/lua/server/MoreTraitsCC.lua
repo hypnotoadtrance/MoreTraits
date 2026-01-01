@@ -215,8 +215,10 @@ local function ProcessImmunocompromised(player, args)
     local parts = player:getBodyDamage():getBodyParts();
     for i = 0, parts:size() - 1 do
         local b = parts:get(i);
-        if b:HasInjury() and b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
-            b:setWoundInfectionLevel(b:getWoundInfectionLevel() + args.infectionIncrease);
+        local infectionValue = b:getWoundInfectionLevel()
+        if infectionValue >= 10.0 then return end
+        if b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
+            b:setWoundInfectionLevel(infectionValue + args.infectionIncrease);
         end
     end
 end
