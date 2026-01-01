@@ -4502,7 +4502,6 @@ function MainPlayerUpdate(player)
         FearfulUpdate(player, playerdata);
     elseif internalTick == 10 then
         SuperImmune(player, playerdata);
-        Immunocompromised(player);
     end
     -- MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     -- MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
@@ -4557,6 +4556,7 @@ function EveryOneMinute()
     TerminatorGun(player);
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess(player, playerdata);
+    Immunocompromised(player);
     
     if getActivatedMods():contains("DracoExpandedTraits") then
         MT_checkWeight(player)
