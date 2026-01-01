@@ -1257,118 +1257,133 @@ function Blissful(player)
     end
 end
 
-function Specialization(_player, _perk, _amount)
-    local player = _player;
-    local perk = _perk;
-    local amount = _amount;
-    local newamount = 0;
-    local skip = false;
-    local modifier = 75;
-    local perklvl = player:getPerkLevel(_perk);
-    local perkxpmod = 1;
-    if SandboxVars.MoreTraits.SpecializationXPPercent then
-        modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
-    end
-    --shift decimal over two places for calculation purposes.
-    modifier = modifier * 0.01;
-    if perk == Perks.Fitness or perk == Perks.Strength then
-        skipxpadd = true;
-    end
-    if skipxpadd == false then
-        if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
-            if player:hasTrait(ToadTraitsRegistries.specweapons) then
-                if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specfood) then
-                if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specguns) then
-                if perk == Perks.Aiming or perk == Perks.Reloading then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specmove) then
-                if perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sprinting or perk == Perks.Sneak then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.speccrafting) then
-                if perk == Perks.Woodwork or perk == Perks.Electricity or perk == Perks.MetalWelding or perk == Perks.Mechanics or perk == Perks.Tailoring then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specaid) then
-                if perk == Perks.Doctor then
-                    skip = true;
-                end
-            end
-            newamount = amount * modifier;
-            local currentxp = player:getXp():getXP(perk);
-            local correctamount = currentxp - newamount
-            local testxp = currentxp - amount;
-            --Check if the newxp amount would give the player a negative level.
-            --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
-            if skip == false then
-                if perklvl == 0 and testxp <= 0 then
-                    skip = true;
-                elseif perklvl == 1 and testxp <= 75 then
-                    skip = true;
-                elseif perklvl == 2 and testxp <= 150 then
-                    skip = true;
-                elseif perklvl == 3 and testxp <= 300 then
-                    skip = true;
-                elseif perklvl == 4 and testxp <= 750 then
-                    skip = true;
-                elseif perklvl == 5 and testxp <= 1500 then
-                    skip = true;
-                elseif perklvl == 6 and testxp <= 3000 then
-                    skip = true;
-                elseif perklvl == 7 and testxp <= 4500 then
-                    skip = true;
-                elseif perklvl == 8 and testxp <= 6000 then
-                    skip = true;
-                elseif perklvl == 9 and testxp <= 7500 then
-                    skip = true;
-                elseif perklvl == 10 and testxp <= 9000 then
-                    skip = true;
-                end
-            end
-            if skip == false then
-                local xpforlevel = perk:getXpForLevel(perklvl) + 50;
-                while player:getXp():getXP(perk) > correctamount do
-                    local curxp = player:getXp():getXP(perk);
-                    if xpforlevel >= curxp then
-                        break ;
-                    else
-                        AddXP(player, perk, -1 * 0.1);
-                    end
-                end
-            end
-        end
-    else
-        skipxpadd = false;
-    end
-end
---[[
-function Specialization(player, perk, amount)
-    -- Ignorer Fitness et Strength (gérés par GymGoer)
-    if perk == Perks.Fitness or perk == Perks.Strength then return end
+-- function Specialization(_player, _perk, _amount)
+--     local player = _player;
+--     local perk = _perk;
+--     local amount = _amount;
+--     local newamount = 0;
+--     local skip = false;
+--     local modifier = 75;
+--     local perklvl = player:getPerkLevel(_perk);
+--     local perkxpmod = 1;
+--     if SandboxVars.MoreTraits.SpecializationXPPercent then
+--         modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
+--     end
+--     --shift decimal over two places for calculation purposes.
+--     modifier = modifier * 0.01;
+--     if perk == Perks.Fitness or perk == Perks.Strength then
+--         skipxpadd = true;
+--     end
+--     if skipxpadd == false then
+--         if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
+--             if player:hasTrait(ToadTraitsRegistries.specweapons) then
+--                 if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specfood) then
+--                 if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specguns) then
+--                 if perk == Perks.Aiming or perk == Perks.Reloading then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specmove) then
+--                 if perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sprinting or perk == Perks.Sneak then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.speccrafting) then
+--                 if perk == Perks.Woodwork or perk == Perks.Electricity or perk == Perks.MetalWelding or perk == Perks.Mechanics or perk == Perks.Tailoring then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specaid) then
+--                 if perk == Perks.Doctor then
+--                     skip = true;
+--                 end
+--             end
+--             newamount = amount * modifier;
+--             local currentxp = player:getXp():getXP(perk);
+--             local correctamount = currentxp - newamount
+--             local testxp = currentxp - amount;
+--             --Check if the newxp amount would give the player a negative level.
+--             --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
+--             if skip == false then
+--                 if perklvl == 0 and testxp <= 0 then
+--                     skip = true;
+--                 elseif perklvl == 1 and testxp <= 75 then
+--                     skip = true;
+--                 elseif perklvl == 2 and testxp <= 150 then
+--                     skip = true;
+--                 elseif perklvl == 3 and testxp <= 300 then
+--                     skip = true;
+--                 elseif perklvl == 4 and testxp <= 750 then
+--                     skip = true;
+--                 elseif perklvl == 5 and testxp <= 1500 then
+--                     skip = true;
+--                 elseif perklvl == 6 and testxp <= 3000 then
+--                     skip = true;
+--                 elseif perklvl == 7 and testxp <= 4500 then
+--                     skip = true;
+--                 elseif perklvl == 8 and testxp <= 6000 then
+--                     skip = true;
+--                 elseif perklvl == 9 and testxp <= 7500 then
+--                     skip = true;
+--                 elseif perklvl == 10 and testxp <= 9000 then
+--                     skip = true;
+--                 end
+--             end
+--             if skip == false then
+--                 local xpforlevel = perk:getXpForLevel(perklvl) + 50;
+--                 while player:getXp():getXP(perk) > correctamount do
+--                     local curxp = player:getXp():getXP(perk);
+--                     if xpforlevel >= curxp then
+--                         break ;
+--                     else
+--                         AddXP(player, perk, -1 * 0.1);
+--                     end
+--                 end
+--             end
+--         end
+--     else
+--         skipxpadd = false;
+--     end
+-- end
 
-    -- Table des traits de spécialisation et des perks concernés
+function Specialization(player, perk, amount)
+    if skipxpadd or amount <= 0 then return end
+    if perk == Perks.Fitness or perk == Perks.Strength then return end
+    if player:getPerkLevel(perk) >= 10 then return end
+
     local specs = {
-        specweapons = {Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade, Perks.Maintenance, Perks.SmallBlunt, Perks.Spear},
-        specfood = {Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping, Perks.Fishing},
-        specguns = {Perks.Aiming, Perks.Reloading},
-        specmove = {Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak},
-        speccrafting = {Perks.Woodwork, Perks.Electricity, Perks.MetalWelding, Perks.Mechanics, Perks.Tailoring},
-        specaid = {Perks.Doctor}
+        [ToadTraitsRegistries.specweapons] = {
+            Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade,
+            Perks.Maintenance, Perks.SmallBlunt, Perks.Spear
+        },
+        [ToadTraitsRegistries.specfood] = {
+            Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping,
+            Perks.Fishing, Perks.Foraging, Perks.Tracking, Perks.Husbandry, Perks.Butchering
+        },
+        [ToadTraitsRegistries.specguns] = {
+            Perks.Aiming, Perks.Reloading
+        },
+        [ToadTraitsRegistries.specmove] = {
+            Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak
+        },
+        [ToadTraitsRegistries.speccrafting] = {
+            Perks.Blacksmith, Perks.Woodwork, Perks.Carving, Perks.Electricity, Perks.MetalWelding,
+            Perks.Mechanics, Perks.Tailoring, Perks.Glassmaking, Perks.Masonry, Perks.Pottery,
+            Perks.FlintKnapping
+        },
+        [ToadTraitsRegistries.specaid] = {
+            Perks.Doctor
+        }
     }
 
-    -- Vérifier si le joueur possède au moins un trait "spec*"
     local hasSpec = false
     for trait in pairs(specs) do
         if player:hasTrait(trait) then
@@ -1378,7 +1393,7 @@ function Specialization(player, perk, amount)
     end
     if not hasSpec then return end
 
-    -- Si le perk correspond à une spécialisation du joueur, on ne fait rien
+    -- Exit if they are specialized in this perk (granting full XP)
     for trait, perks in pairs(specs) do
         if player:hasTrait(trait) then
             for _, p in ipairs(perks) do
@@ -1387,12 +1402,20 @@ function Specialization(player, perk, amount)
         end
     end
 
-    -- Appliquer la pénalité d'XP
+    -- Otherwise they should only be getting 25% of the actual XP earned.
     local modifier = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01
     local xpToRemove = amount - (amount * modifier)
-    AddXP(player, perk, -xpToRemove)
+    local currentXP = player:getXp():getXP(perk)
+
+    -- Ensure we don't remove more XP than the player currently has
+    if xpToRemove > currentXP then
+        xpToRemove = currentXP 
+    end
+
+    skipxpadd = true
+    AddXP(player, perk, -xpToRemove, false)
+    skipxpadd = false
 end
---]]
 
 function indefatigable(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.indefatigable) then
