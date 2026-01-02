@@ -1283,76 +1283,6 @@ function Blissful(player)
     end
 end
 
-function unwavering(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then return end
-    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
-	
-	if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then return end
-	
-    local weapondata = weapon:getModData();
-    if not weapondata then return end
-    
-    local stats = player:getStats()
-	local endurance = stats:get(CharacterStat.ENDURANCE)
-	local fatigue = stats:get(CharacterStat.FATIGUE)
-	local pain = stats:get(CharacterStat.PAIN)
-	
-	if endurance >= 25 then
-	    local extraDamage = (damage * 5.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if fatigue >= 0.6 then
-	    local extraDamage = (damage * 5.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if pain >= 20 then
-	    local extraDamage = (damage * 5.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if endurance >= 50 then
-	    local extraDamage = (damage * 10.0) * 0.1;  
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if fatigue >= 0.7 then
-	    local extraDamage = (damage * 10.0) * 0.1;  
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if pain >= 50 then
-	    local extraDamage = (damage * 10.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if endurance >= 75 then
-	    local extraDamage = (damage * 20.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if fatigue >= 0.8 then
-	    local extraDamage = (damage * 20.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if pain >= 75 then
-	    local extraDamage = (damage * 20.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-end
-
 -- function Specialization(_player, _perk, _amount)
 --     local player = _player;
 --     local perk = _perk;
@@ -1937,6 +1867,40 @@ function bouncerupdate(player, playerdata)
                 end
             end
         end
+    end
+end
+
+local function unwavering(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
+    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
+    
+    if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then 
+        return 
+    end
+
+    local stats = player:getStats()
+    local endurance = stats:get(CharacterStat.ENDURANCE)
+    local fatigue = stats:get(CharacterStat.FATIGUE)
+    local pain = stats:get(CharacterStat.PAIN)
+
+    local extraDamageMult = 0
+    
+    if endurance <= 0.25 or fatigue >= 0.8 or pain >= 75 then
+        extraDamageMult = 20.0
+    elseif endurance <= 0.50 or fatigue >= 0.7 or pain >= 50 then
+        extraDamageMult = 10.0
+    elseif endurance <= 0.75 or fatigue >= 0.6 or pain >= 20 then
+        extraDamageMult = 5.0
+    end
+
+    if extraDamageMult <= 0 then return end
+
+    local extraDamage = damage * extraDamageMult
+    
+    target:setHealth(target:getHealth() - extraDamage)
+    if target:getHealth() <= 0 then 
+        target:Kill(player) 
     end
 end
 
