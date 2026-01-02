@@ -4605,9 +4605,7 @@ function MainPlayerUpdate(player)
     -- MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     SecondWind(player, playerdata);
     indefatigable(player, playerdata);
-    checkBloodTraits(player);
     CheckDepress(player, playerdata);
-    CheckSelfHarm(player);
     Blissful(player);
     hardytrait(player, playerdata);
     if isMoodleFrameWorkEnabled == false then
