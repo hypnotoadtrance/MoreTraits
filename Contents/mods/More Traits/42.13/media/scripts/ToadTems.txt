@@ -71,7 +71,7 @@ module MoreTraits
 		Tooltip = Tooltip_MoreTraits_AntiqueAxe,
 		TwoHandWeapon = true,
 		WeaponSprite = StoneAxe,
-		Tags = base:cutplant;base:choptree;base:cutplant;base:killanimal;base:sharpenable,
+		Tags = base:choptree;base:cutplant;base:killanimal;base:sharpenable,
         Sharpness = 1.0,
 		HeadCondition = 100,
 		OnBreak = OnBreak.AxeStone,
