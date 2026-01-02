@@ -71,8 +71,8 @@ module MoreTraits
 		Tooltip = Tooltip_MoreTraits_AntiqueAxe,
 		TwoHandWeapon = true,
 		WeaponSprite = StoneAxe,
-		Tags = base:choptree;base:cutplant;base:killanimal,
-
+		Tags = base:cutplant;base:choptree;base:cutplant;base:killanimal,
+        Sharpness = 1.0,
 		HeadCondition = 100,
 		OnBreak = OnBreak.AxeStone,
         HeadConditionLowerChanceMultiplier = 1,
@@ -585,7 +585,7 @@ module MoreTraits
 		ConditionLowerChanceOneIn = 100,
 		PushBackMod = 0.5,
 		SubCategory = Swinging,
-		ConditionMax = 10,
+		ConditionMax = 20,
 		MaxHitCount = 4,
 		DoorDamage = 12,
 		SwingAnim = Bat,
@@ -609,6 +609,9 @@ module MoreTraits
 		DamageMakeHole = TRUE,
 		TwoHandWeapon = TRUE,
 		WeaponLength = 0.4,
+        Sharpness = 1.0,
+        OnBreak = OnBreak.Katana,
+		Tags = base:ignorezombiedensity;base:hasmetal;base:fullblade;base:sharpenable,
 		AttachmentType = BigBlade,
 	}
 }
