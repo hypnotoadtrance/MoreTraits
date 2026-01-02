@@ -1259,12 +1259,12 @@ function Blissful(player)
     local args = {}
     local updateStats = false
 
-    if unhappiness >= 10 then
+    if unhappiness >= 0 then
         args.unhappiness = unhappiness - 0.01
         updateStats = true
     end
 
-    if boredom >= 10 then
+    if boredom >= 0 then
         args.boredom = boredom - 0.005
         updateStats = true
     end
@@ -1280,6 +1280,76 @@ function Blissful(player)
                 stats:set(CharacterStat.BOREDOM, args.boredom)
             end
         end
+    end
+end
+
+function unwavering(actor, target, weapon, damage)
+    local player = getPlayer();
+    if not player or actor ~= player then return end
+    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
+	
+	if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then return end
+	
+    local weapondata = weapon:getModData();
+    if not weapondata then return end
+    
+    local stats = player:getStats()
+	local endurance = stats:get(CharacterStat.ENDURANCE)
+	local fatigue = stats:get(CharacterStat.FATIGUE)
+	local pain = stats:get(CharacterStat.PAIN)
+	
+	if endurance >= 25 then
+	    local extraDamage = (damage * 5.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if fatigue >= 0.6 then
+	    local extraDamage = (damage * 5.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if pain >= 20 then
+	    local extraDamage = (damage * 5.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if endurance >= 50 then
+	    local extraDamage = (damage * 10.0) * 0.1;  
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if fatigue >= 0.7 then
+	    local extraDamage = (damage * 10.0) * 0.1;  
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if pain >= 50 then
+	    local extraDamage = (damage * 10.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if endurance >= 75 then
+	    local extraDamage = (damage * 20.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if fatigue >= 0.8 then
+	    local extraDamage = (damage * 20.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
+    end
+	
+	if pain >= 75 then
+	    local extraDamage = (damage * 20.0) * 0.1; 
+        target:setHealth(target:getHealth() - extraDamage);
+        if target:getHealth() <= 0 then target:Kill(player) end
     end
 end
 
@@ -2091,7 +2161,7 @@ function tavernbrawler(actor, target, weapon, damage)
     end
 
     local isImprovisedWeapon = false;
-    local whitelist = { "ToolWeapon", "WeaponCrafted", "CookingWeapon", "Household", "FirstAidWeapon", "GardeningWeapon", "SportsWeapon", "MaterialWeapon", "JunkWeapon", "InstrumentWeapon" };
+    local whitelist = { "ToolWeapon", "WeaponCrafted", "CookingWeapon", "HouseholdWeapon", "FirstAidWeapon", "GardeningWeapon", "SportsWeapon", "MaterialWeapon", "JunkWeapon", "InstrumentWeapon", "BrokenWeapon", "VehicleMaintenanceWeapon" };
     local displayCategory = weapon:getDisplayCategory() or "";
     if tableContains(whitelist, displayCategory) then
         isImprovisedWeapon = true;
@@ -4792,6 +4862,7 @@ Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);
 Events.OnWeaponHitCharacter.Add(tavernbrawler);
+Events.OnWeaponHitCharacter.Add(unwavering);
 Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
 Events.AddXP.Add(Specialization);
