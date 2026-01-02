@@ -297,6 +297,44 @@ local function ProcessEvasive(player, args)
     end
 end
 
+local function ProcessApplyGordanite(player, args)
+    local item = player:getInventory():getItemById(args.itemID)
+    if item and args.stats then
+        local s = args.stats
+        item:setMinDamage(s.minDmg)
+        item:setMaxDamage(s.maxDmg)
+        item:setPushBackMod(s.pushBack)
+        item:setDoorDamage(s.doorDmg)
+        item:setTreeDamage(s.treeDmg)
+        item:setCriticalChance(s.crit)
+        item:setSwingTime(s.swing)
+        item:setBaseSpeed(s.speed)
+        item:setWeaponLength(s.length)
+        item:setMinimumSwingTime(s.minSwing)
+        item:getModData().MTHasBeenModified = true
+    end
+end
+
+local function ProcessRevertGordanite(player, args)
+    local item = player:getInventory():getItemById(args.itemID)
+    if item then
+        local moddata = item:getModData()
+        if moddata.MTHasBeenModified then
+            item:setMinDamage(moddata.MinDamage)
+            item:setMaxDamage(moddata.MaxDamage)
+            item:setPushBackMod(moddata.PushBack)
+            item:setDoorDamage(moddata.DoorDamage)
+            item:setTreeDamage(moddata.TreeDamage)
+            item:setCriticalChance(moddata.CriticalChance)
+            item:setSwingTime(moddata.SwingTime)
+            item:setBaseSpeed(moddata.BaseSpeed)
+            item:setWeaponLength(0.4)
+            item:setMinimumSwingTime(moddata.MinimumSwing)
+            moddata.MTHasBeenModified = false
+        end
+    end
+end
+
 -- local function UpdateXP(player, args, command)
 --     local xp = player:getXp()
 --     local perk = Perks[args.perk] -- Cannot pass a string value to this function so we convert it back to PerkFactory
@@ -377,6 +415,14 @@ local function onClientCommands(module, command, player, args)
 
     if command == 'EvasiveDodge' then
         ProcessEvasive(player, args)
+    end
+
+    if command == 'ApplyGordanite' then
+        ProcessApplyGordanite(player, args)
+    end
+
+    if command == 'RevertGordanite' then
+        ProcessRevertGordanite(player, args)
     end
 end
 

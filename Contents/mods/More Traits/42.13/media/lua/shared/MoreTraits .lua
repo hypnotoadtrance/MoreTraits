@@ -2229,17 +2229,6 @@ local function AlbinoTimer(player, playerdata)
     end
 end
 
-local function OnEquipPrimary(player, item)
-    if item == nil then return end
-
-    if player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation") then
-        if item and item ~= nil and (item:isTwoHandWeapon() or item:isRequiresEquippedBothHands()) then
-            player:setPrimaryHandItem(nil);
-            HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), HaloTextHelper.getColorRed());
-        end
-    end
-end
-
 local function OnEquipSecondary(player, item)
     if item == nil then return end
 
@@ -4352,55 +4341,44 @@ local function BurnWardPatient(player, playerdata)
     end
 end
 
-local function MTOnEquip(player)
-    if not player then
-        return
-    end
+local function OnEquipPrimary(player, item)
+    if not player or not item then return end
 
-    local item = player:getPrimaryHandItem()
-    if not item then
-        return
-    end
-
-    local playerdata = player:getModData()
-    if not playerdata then
+    local isAmputee = player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation")
+    if isAmputee and (item:isTwoHandWeapon() or item:isRequiresEquippedBothHands()) then
+        player:setPrimaryHandItem(nil)
+        HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), "",  HaloTextHelper.getColorRed())
         return
     end
 
     local itemType = item:getType()
-    local isCrowbar = (itemType == "Crowbar" or itemType == "BloodyCrowbar")
-
-    if player:hasTrait(ToadTraitsRegistries.gordanite) and isCrowbar then
-        local longBluntLvl = player:getPerkLevel(Perks.Blunt)
-        local strengthlvl = player:getPerkLevel(Perks.Strength)
-        local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1
-
-        if SandboxVars.MoreTraits.GordaniteEffectiveness then
-            local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01
-            floatmod = floatmod * modifier
-            longBluntLvl = longBluntLvl * modifier
-            strengthlvl = strengthlvl * modifier
+    if player:hasTrait(ToadTraitsRegistries.burned) then
+        local fireItems = { FlameTrap=1, FlameTrapTriggered=1, FlameTrapSensorV1=1, FlameTrapSensorV2=1, FlameTrapSensorV3=1, FlameTrapRemote=1, Molotov=1 }
+        if fireItems[itemType] then
+            player:setPrimaryHandItem(nil)
+            HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed())
+            return
         end
+    end
 
-        local moddata = item:getModData()
+    local crowbars = {
+        ["Crowbar"] = true,
+        ["CrowbarForged"] = true,
+        ["BloodyCrowbar"] = true
+    }
 
-        if moddata.MTHasBeenModified == nil then
-            if item:getTreeDamage() > 0 and item:getTreeDamage() ~= 100 then
-                item:setMinDamage(0.6);
-                item:setMaxDamage(1.15);
-                item:setPushBackMod(0.5);
-                item:setDoorDamage(8);
-                item:setCriticalChance(35);
-                item:setSwingTime(3);
-                item:setWeaponLength(0.4);
-                item:setMinimumSwingTime(3);
-                item:setTreeDamage(0);
-                item:setBaseSpeed(1);
-                if getActivatedMods():contains("VorpalWeapons") == false then
-                    item:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
-                end
-            end
-            moddata.MTHasBeenModified = true
+    local isCrowbar = crowbars[itemType]
+    if isCrowbar then
+        handleGordanite(player, item, itemType)
+    end
+end
+
+function handleGordanite(player, item, itemType)
+    local moddata = item:getModData()
+    if not moddata then return end
+
+    if player:hasTrait(ToadTraitsRegistries.gordanite) then
+        if not moddata.MTHasBeenModified then
             moddata.MinDamage = item:getMinDamage()
             moddata.MaxDamage = item:getMaxDamage()
             moddata.PushBack = item:getPushBackMod()
@@ -4410,66 +4388,78 @@ local function MTOnEquip(player)
             moddata.SwingTime = item:getSwingTime()
             moddata.BaseSpeed = item:getBaseSpeed()
             moddata.MinimumSwing = item:getMinimumSwingTime()
-            moddata.NameChanged = false
-        end
-
-        item:setMinDamage(moddata.MinDamage + 0.1 + floatmod / 2);
-        item:setMaxDamage(moddata.MaxDamage + 0.1 + floatmod / 2);
-        item:setPushBackMod(moddata.PushBack + 0.1 + floatmod);
-        item:setDoorDamage(moddata.DoorDamage + 7 + strengthlvl + longBluntLvl);
-        item:setTreeDamage(moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2);
-        item:setCriticalChance(moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2);
-        item:setSwingTime(moddata.SwingTime - 0.2 - floatmod);
-        item:setBaseSpeed(moddata.BaseSpeed + 0.1 + floatmod);
-        item:setWeaponLength(0.4 + floatmod / 2);
-        item:setMinimumSwingTime(moddata.MinimumSwing - 0.2 - floatmod);
-
-        if not moddata.NameChanged then
-            if getActivatedMods():contains("VorpalWeapons") == false then
-                item:setName(item:getName() .. "+");
+            moddata.MTHasBeenModified = true
+            
+            if not getActivatedMods():contains("VorpalWeapons") then
+                item:setName(item:getName() .. "+")
             end
-            moddata.NameChanged = true
         end
 
+        local longBluntLvl = player:getPerkLevel(Perks.Blunt)
+        local strengthlvl = player:getPerkLevel(Perks.Strength)
+        local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1
+
+        local modifier = (SandboxVars.MoreTraits.GordaniteEffectiveness or 100) * 0.01
+        floatmod = floatmod * modifier
+        longBluntLvl = longBluntLvl * modifier
+        strengthlvl = strengthlvl * modifier
+
+        local stats = {
+            minDmg = moddata.MinDamage + 0.1 + floatmod / 2,
+            maxDmg = moddata.MaxDamage + 0.1 + floatmod / 2,
+            pushBack = moddata.PushBack + 0.1 + floatmod,
+            doorDmg = moddata.DoorDamage + 7 + strengthlvl + longBluntLvl,
+            treeDmg = moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2,
+            crit = moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2,
+            swing = moddata.SwingTime - 0.2 - floatmod,
+            speed = moddata.BaseSpeed + 0.1 + floatmod,
+            length = 0.4 + floatmod / 2,
+            minSwing = moddata.MinimumSwing - 0.2 - floatmod
+        }
+        item:setMinDamage(stats.minDmg)
+        item:setMaxDamage(stats.maxDmg)
+        item:setPushBackMod(stats.pushBack)
+        item:setDoorDamage(stats.doorDmg)
+        item:setTreeDamage(stats.treeDmg)
+        item:setCriticalChance(stats.crit)
+        item:setSwingTime(stats.swing)
+        item:setBaseSpeed(stats.speed)
+        item:setWeaponLength(stats.length)
+        item:setMinimumSwingTime(stats.minSwing)
+        
         local tooltipKey = (itemType == "Crowbar") and "Tooltip_MoreTraits_ItemBoost" or "Tooltip_MoreTraits_BloodyItemBoost"
         item:setTooltip(getText(tooltipKey))
-    elseif isCrowbar then
-        local moddata = item:getModData()
 
-        if moddata.MTHasBeenModified then
-            item:setMinDamage(moddata.MinDamage);
-            item:setMaxDamage(moddata.MaxDamage);
-            item:setPushBackMod(moddata.PushBack);
-            item:setDoorDamage(moddata.DoorDamage);
-            item:setCriticalChance(moddata.CriticalChance);
-            item:setSwingTime(moddata.SwingTime);
-            item:setWeaponLength(0.4);
-            item:setMinimumSwingTime(moddata.MinimumSwing);
-            item:setTreeDamage(moddata.TreeDamage);
-            item:setBaseSpeed(moddata.BaseSpeed);
-
-            if not getActivatedMods():contains("VorpalWeapons") and moddata.NameChanged then
-                item:setName(string.sub(item:getName(), 1, -2))
-            end
-
-            local tooltip = (itemType == "BloodyCrowbar") and getText("Tooltip_MoreTraits_BloodyCrowbar") or nil
-            item:setTooltip(tooltip)
-
-            moddata.NameChanged = false
-            moddata.MTHasBeenModified = false
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'ApplyGordanite', { itemID = item:getID(), stats = stats })
         end
-    end
 
-    if player:hasTrait(ToadTraitsRegistries.burned) then
-        local fireItems = {
-            FlameTrap = true, FlameTrapTriggered = true, FlameTrapSensorV1 = true,
-            FlameTrapSensorV2 = true, FlameTrapSensorV3 = true, FlameTrapRemote = true,
-            Molotov = true
-        }
+    elseif moddata.MTHasBeenModified then
+        item:setMinDamage(moddata.MinDamage)
+        item:setMaxDamage(moddata.MaxDamage)
+        item:setPushBackMod(moddata.PushBack)
+        item:setDoorDamage(moddata.DoorDamage)
+        item:setTreeDamage(moddata.TreeDamage)
+        item:setCriticalChance(moddata.CriticalChance)
+        item:setSwingTime(moddata.SwingTime)
+        item:setBaseSpeed(moddata.BaseSpeed)
+        item:setWeaponLength(0.4)
+        item:setMinimumSwingTime(moddata.MinimumSwing)
 
-        if fireItems[itemType] then
-            player:setPrimaryHandItem(nil)
-            HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed())
+        if not getActivatedMods():contains("VorpalWeapons") then
+            local name = item:getName()
+            if string.sub(name, -1) == "+" then
+                item:setName(string.sub(name, 1, -2))
+            end
+        end
+
+        local tooltip = (itemType == "BloodyCrowbar") and getText("Tooltip_MoreTraits_BloodyCrowbar") or nil
+        item:setTooltip(tooltip)
+        
+        moddata.MTHasBeenModified = false
+
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'RevertGordanite', { itemID = item:getID() })
         end
     end
 end
@@ -4796,8 +4786,7 @@ function onNewGame(player)
     initToadTraitsPerks(player, playerdata);
 end
 
--- Amputee at current
-Events.OnEquipPrimary.Add(OnEquipPrimary); 
+Events.OnEquipPrimary.Add(OnEquipPrimary)
 Events.OnEquipSecondary.Add(OnEquipSecondary); 
 Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
@@ -4816,6 +4805,5 @@ Events.OnInitWorld.Add(OnInitWorld);
 Events.OnNewGame.Add(onNewGame);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
-Events.OnEquipPrimary.Add(MTOnEquip)
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.LevelPerk.Add(FixSpecialization);
