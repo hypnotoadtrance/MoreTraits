@@ -204,6 +204,13 @@ local function ProcessBodyPartMechanics(player, args)
             if args.partReduce ~= nil then
                 bodyPart:ReduceHealth(args.partHealthReduce)
             end
+            if args.unwaveringStats ~= nil then
+                local stats = args.unwaveringStats
+                bodyPart:setScratchSpeedModifier(stats.scratch)
+                bodyPart:setCutSpeedModifier(stats.cut)
+                bodyPart:setDeepWoundSpeedModifier(stats.deep)
+                bodyPart:setBurnSpeedModifier(stats.burn)
+            end
         end
     end
 end

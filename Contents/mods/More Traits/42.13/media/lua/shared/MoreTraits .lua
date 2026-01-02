@@ -4604,6 +4604,41 @@ local function MTAlcoholismMoodleTracker(player, playerdata)
     MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
 end
 
+local function updateUnwavering(player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
+    if playerdata.UnwaveringInjurySpeedChanged then return end
+
+    local bodyDamage = player:getBodyDamage()
+    local parts = bodyDamage:getBodyParts()
+    local partIndexes = {}
+    
+    local stats = {
+        scratch = 30,
+        cut = 30,
+        deep = 60,
+        burn = 60
+    }
+
+    for i = 0, parts:size() - 1 do
+        table.insert(partIndexes, i)
+        
+        local part = parts:get(i)
+        -- Apply locally (Client and Singleplayer)
+        part:setScratchSpeedModifier(part:getScratchSpeedModifier() + stats.scratch)
+        part:setCutSpeedModifier(part:getCutSpeedModifier() + stats.cut)
+        part:setDeepWoundSpeedModifier(part:getDeepWoundSpeedModifier() + stats.deep)
+        part:setBurnSpeedModifier(part:getBurnSpeedModifier() + stats.burn)
+    end
+
+    if isClient() then
+        -- Send the list of IDs and the stat table to the server
+        local args = { bodyParts = partIndexes, unwaveringStats = stats }
+        sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
+    end
+
+    playerdata.UnwaveringInjurySpeedChanged = true
+end
+
 local function OnPlayerUpdate(player)
     if not player then
         return
@@ -4723,19 +4758,7 @@ local function EveryHours()
     indefatigablecounter(player, playerdata);
     RestfulSleeper(player, playerdata);
     ToadTraitDepressive(player, playerdata);
-
-    -- TODO MP Support
-    if player:hasTrait(ToadTraitsRegistries.unwavering) and not playerdata.UnwaveringInjurySpeedChanged then
-        playerdata.UnwaveringInjurySpeedChanged = true;
-        local bodyParts = player:getBodyDamage():getBodyParts()
-        for n = 0, bodyParts:size() - 1 do
-            local part = bodyParts:get(n);
-            part:setScratchSpeedModifier(part:getScratchSpeedModifier() + 30);
-            part:setCutSpeedModifier(part:getCutSpeedModifier() + 30);
-            part:setDeepWoundSpeedModifier(part:getDeepWoundSpeedModifier() + 60);
-            part:setBurnSpeedModifier(part:getBurnSpeedModifier() + 60);
-        end
-    end
+    updateUnwavering(player, playerdata);
 
     if player:hasTrait(ToadTraitsRegistries.ingenuitive) and not playerdata.IngenuitiveActivated then
         MT_LearnAllRecipes(player)
