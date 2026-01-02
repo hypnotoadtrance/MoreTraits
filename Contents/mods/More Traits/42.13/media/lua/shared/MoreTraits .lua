@@ -4232,7 +4232,7 @@ local function TerminatorGun(player)
             updateStats = true
         elseif hasAntigun then
             args.unhappiness = math.min(100, unhappiness + 0.6)
-            updateqStats = true
+            updateStats = true
         end
 
         if updateStats then
