@@ -906,7 +906,7 @@ module ToadTraits {
         Cost = 12,
         UIName = UI_trait_speccrafting,
         UIDescription = UI_trait_speccraftingdesc,
-        XPBoosts = Woodwork=2;Electricity=2;MetalWelding=2;Mechanics=2;Tailoring=2;Carving=2;FlintKnapping=2;Blacksmith=2;Masonry=2;Pottery=2;Glassmaking=2,
+        XPBoosts = Woodwork=4;Electricity=4;MetalWelding=4;Mechanics=4;Tailoring=4;Carving=4;FlintKnapping=4;Blacksmith=4;Masonry=4;Pottery=4;Glassmaking=4,
         MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specweapons,
     }
 
@@ -918,7 +918,7 @@ module ToadTraits {
         Cost = 12,
         UIName = UI_trait_specfood,
         UIDescription = UI_trait_specfooddesc,
-        XPBoosts = Cooking=2;Trapping=2;PlantScavenging=2;Farming=2;Fishing=2;Butchering=2;Tracking=2;Husbandry=2,
+        XPBoosts = Cooking=4;Trapping=4;PlantScavenging=4;Farming=4;Fishing=4;Butchering=4;Tracking=4;Husbandry=4,
         MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specguns;ToadTraits:specmove;ToadTraits:specweapons,
     }
 
@@ -942,7 +942,7 @@ module ToadTraits {
         Cost = 12,
         UIName = UI_trait_specmove,
         UIDescription = UI_trait_specmovedesc,
-        XPBoosts = Lightfoot=4;Sprinting=4;Sneak=4;Nimble=4,
+        XPBoosts = Lightfoot=4;Sprinting=4;Sneak=4;Nimble=4;Fitness=4;Strength=4,
         MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specweapons,
     }
 
@@ -954,7 +954,7 @@ module ToadTraits {
         Cost = 12,
         UIName = UI_trait_specweapons,
         UIDescription = UI_trait_specweaponsdesc,
-        XPBoosts = Axe=2;Spear=2;SmallBlunt=2;Blunt=2;LongBlade=2;SmallBlade=2;Maintenance=2,
+        XPBoosts = Axe=4;Spear=4;SmallBlunt=4;Blunt=4;LongBlade=4;SmallBlade=4;Maintenance=4,
         MutuallyExclusiveTraits = ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specguns;ToadTraits:specmove,
     }
 
