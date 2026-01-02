@@ -1976,12 +1976,10 @@ local function martial(actor, target, weapon, damage)
     end
 end
 
---- Traits for ProBlade, ProBlunt and ProSpear --- 
-function promelee(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return
-    end
+--- Traits for ProBlade, ProBlunt and ProSpear
+local function promelee(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
     local hasBladeTrait = player:hasTrait(ToadTraitsRegistries.problade)
     local hasBluntTrait = player:hasTrait(ToadTraitsRegistries.problunt)
     local hasSpearTrait = player:hasTrait(ToadTraitsRegistries.prospear)
