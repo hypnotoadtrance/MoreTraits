@@ -1443,6 +1443,7 @@ function Specialization(player, perk, amount)
     skipxpadd = false
 end
 
+-- TODO MP Support
 function indefatigable(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.indefatigable) then
         return
@@ -4697,6 +4698,7 @@ function EveryHours()
     RestfulSleeper(player, playerdata);
     ToadTraitDepressive(player, playerdata);
 
+    -- TODO MP Support
     if player:hasTrait(ToadTraitsRegistries.unwavering) and not playerdata.UnwaveringInjurySpeedChanged then
         playerdata.UnwaveringInjurySpeedChanged = true;
         local bodyParts = player:getBodyDamage():getBodyParts()
