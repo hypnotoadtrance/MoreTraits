@@ -1940,11 +1940,9 @@ function bouncerupdate(player, playerdata)
     end
 end
 
-function martial(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return
-    end
+local function martial(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
     if not player:hasTrait(ToadTraitsRegistries.martial) then
         return
     end
