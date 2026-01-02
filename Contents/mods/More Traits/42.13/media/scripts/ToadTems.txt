@@ -30,7 +30,7 @@ module MoreTraits
 	{
 		DisplayCategory = WeaponCrafted,
 		ItemType = base:weapon,
-		Weight = 4,
+		Weight = 3,
 		Icon = AxeStone,
 		AttachmentType = BigWeapon,
 		BaseSpeed = 1.2,
@@ -71,7 +71,7 @@ module MoreTraits
 		Tooltip = Tooltip_MoreTraits_AntiqueAxe,
 		TwoHandWeapon = true,
 		WeaponSprite = StoneAxe,
-		Tags = base:cutplant;base:choptree;base:cutplant;base:killanimal,
+		Tags = base:cutplant;base:choptree;base:cutplant;base:killanimal;base:sharpenable,
         Sharpness = 1.0,
 		HeadCondition = 100,
 		OnBreak = OnBreak.AxeStone,
