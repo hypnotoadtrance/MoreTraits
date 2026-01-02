@@ -2044,11 +2044,9 @@ local function promelee(actor, target, weapon, damage)
     weapondata.iLastWeaponCond = weapon:getCondition();
 end
 
-function progun(actor, weapon)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return ;
-    end
+local function progun(actor, weapon)
+    if not actor or not weapon then return end
+    local player = actor
     if not player:hasTrait(ToadTraitsRegistries.progun) then
         return
     end
@@ -2106,11 +2104,9 @@ function progun(actor, weapon)
     end
 end
 
-function tavernbrawler(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return ;
-    end
+local function tavernbrawler(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
     if not player:hasTrait(ToadTraitsRegistries.tavernbrawler) then
         return
     end
