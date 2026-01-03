@@ -4367,39 +4367,7 @@ local function BurnWardPatient(player, playerdata)
     end
 end
 
-local function OnEquipPrimary(player, item)
-    if not player or not item then return end
-
-    local isAmputee = player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation")
-    if isAmputee and (item:isTwoHandWeapon() or item:isRequiresEquippedBothHands()) then
-        player:setPrimaryHandItem(nil)
-        HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), "",  HaloTextHelper.getColorRed())
-        return
-    end
-
-    local itemType = item:getType()
-    if player:hasTrait(ToadTraitsRegistries.burned) then
-        local fireItems = { FlameTrap=1, FlameTrapTriggered=1, FlameTrapSensorV1=1, FlameTrapSensorV2=1, FlameTrapSensorV3=1, FlameTrapRemote=1, Molotov=1 }
-        if fireItems[itemType] then
-            player:setPrimaryHandItem(nil)
-            HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed())
-            return
-        end
-    end
-
-    local crowbars = {
-        ["Crowbar"] = true,
-        ["CrowbarForged"] = true,
-        ["BloodyCrowbar"] = true
-    }
-
-    local isCrowbar = crowbars[itemType]
-    if isCrowbar then
-        handleGordanite(player, item, itemType)
-    end
-end
-
-function handleGordanite(player, item, itemType)
+local function handleGordanite(player, item, itemType)
     local moddata = item:getModData()
     if not moddata then return end
 
@@ -4453,7 +4421,7 @@ function handleGordanite(player, item, itemType)
         item:setWeaponLength(stats.length)
         item:setMinimumSwingTime(stats.minSwing)
         
-        local tooltipKey = (itemType == "Crowbar") and "Tooltip_MoreTraits_ItemBoost" or "Tooltip_MoreTraits_BloodyItemBoost"
+        local tooltipKey = (itemType == "Crowbar" or itemType == "CrowbarForged") and "Tooltip_MoreTraits_ItemBoost" or "Tooltip_MoreTraits_BloodyItemBoost"
         item:setTooltip(getText(tooltipKey))
 
         if isClient() then
@@ -4487,6 +4455,41 @@ function handleGordanite(player, item, itemType)
         if isClient() then
             sendClientCommand(player, 'ToadTraits', 'RevertGordanite', { itemID = item:getID() })
         end
+    end
+end
+
+local function OnEquipPrimary(player, item)
+    if not player or not item then return end
+
+    local isAmputee = player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation")
+    if isAmputee and (item:isTwoHandWeapon() or item:isRequiresEquippedBothHands()) then
+        player:setPrimaryHandItem(nil)
+        HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), "",  HaloTextHelper.getColorRed())
+        return
+    end
+
+    local itemType = item:getType()
+    if player:hasTrait(ToadTraitsRegistries.burned) then
+        local fireItems = {
+            FlameTrap = true, FlameTrapTriggered = true, FlameTrapSensorV1 = true, FlameTrapSensorV2 = true,
+            FlameTrapSensorV3 = true, FlameTrapRemote = true, Molotov = true
+        }
+        if fireItems[itemType] then
+            player:setPrimaryHandItem(nil)
+            HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed())
+            return
+        end
+    end
+
+    local crowbars = {
+        ["Crowbar"] = true,
+        ["CrowbarForged"] = true,
+        ["BloodyCrowbar"] = true
+    }
+
+    local isCrowbar = crowbars[itemType]
+    if isCrowbar then
+        handleGordanite(player, item, itemType)
     end
 end
 
