@@ -1562,77 +1562,113 @@ local function Specialization(player, perk, amount)
     skipxpadd = false
 end
 
--- TODO MP Support
 local function indefatigable(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.indefatigable) then
         return
     end
-    if SandboxVars.MoreTraits.IndefatigableOneUse and playerdata.indefatigabledisabled then
+
+    if playerdata.bindefatigable or (SandboxVars.MoreTraits.IndefatigableOneUse and playerdata.indefatigabledisabled) then
         return
     end
 
-    local triggerHealth = 15
-    local bodyDamage = player:getBodyDamage();
-    if (bodyDamage:getHealth() < triggerHealth or player:isDeathDragDown()) and not playerdata.bindefatigable then
+    local bodyDamage = player:getBodyDamage()
+    local zombies = getCell():getZombieList()
+    local triggerHealth = isClient() and 25 or 15
+    local shouldTrigger = false
 
-        if player:isDeathDragDown() then
-            print("Player dragged down, indefatigable activated");
-            playerdata.IndefatigableHasBeenDraggedDown = true;
-            player:setPlayingDeathSound(false);
-            player:setDeathDragDown(false);
-            player:setHitReaction("EvasiveBlocked");
-        end
-
-        if getActivatedMods():contains("MTAddonIndefatigableLol") == true then
-            getSoundManager():PlaySound("indefatigabletheme", false, 0):setVolume(0.5);
-        end
-
-        print("Healed to full.");
-        for i = 0, bodyDamage:getBodyParts():size() - 1 do
-            local b = bodyDamage:getBodyParts():get(i);
-            if tableContains(playerdata.TraitInjuredBodyList, i) == false then
-                b:RestoreToFullHealth();
-            else
-                b:SetHealth(100);
+    -- It's difficult to restore the player during a dragdown in MP.
+    -- Instead it's easier to knockdown the zombies before that happens
+    -- This should give them time to escape
+    if isClient() then
+        local nearbyZombies = 0
+        if zombies then
+            for i = 0, zombies:size() - 1 do
+                local z = zombies:get(i)
+                if z:DistTo(player) <= 1.5 then
+                    nearbyZombies = nearbyZombies + 1
+                end
             end
         end
-        bodyDamage:setOverallBodyHealth(100);
+        if nearbyZombies >= 4 then
+            shouldTrigger = true
+        end
+    end
 
-        if bodyDamage:IsInfected() then
-            if not playerdata.indefatigablecuredinfection or SandboxVars.MoreTraits.IndefatigableOneUse then
+    if not shouldTrigger then
+        if bodyDamage:getHealth() < triggerHealth or (not isClient() and player:isDeathDragDown()) then
+            shouldTrigger = true
+        end
+    end
+
+    if not shouldTrigger then return end
+
+    if getActivatedMods():contains("MTAddonIndefatigableLol") then
+        getSoundManager():PlaySound("indefatigabletheme", false, 0):setVolume(0.5);
+    end
+
+    if zombies and zombies:size() >= 3 then
+        for i = 0, zombies:size() - 1 do
+            local zombie = zombies:get(i)
+            if zombie:DistTo(player) <= 3.0 then
+                zombie:setStaggerBack(true)
+                zombie:setKnockedDown(true)
+            end
+        end
+    end
+
+    if not isClient() and player:isDeathDragDown() then
+        print("Player dragged down, indefatigable activated");
+        playerdata.IndefatigableHasBeenDraggedDown = true;
+        player:setPlayingDeathSound(false);
+        player:setDeathDragDown(false);
+        player:setHitReaction("EvasiveBlocked");
+    end
+
+    print("Healed to full.");
+    local partIndexes = {}
+    local bodyParts = bodyDamage:getBodyParts()
+    for i = 0, bodyParts:size() - 1 do
+        table.insert(partIndexes, i)
+        local b = bodyParts:get(i);
+        if tableContains(playerdata.TraitInjuredBodyList, i) == false then
+            b:RestoreToFullHealth();
+        else
+            b:SetHealth(100);
+        end
+    end
+    bodyDamage:setOverallBodyHealth(100);
+
+    if isClient() then
+        local args = { bodyParts = partIndexes, indefatigable = true, skipRestoreList = playerdata.TraitInjuredBodyList }
+        sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
+    end
+    
+    if bodyDamage:IsInfected() then
+        if not playerdata.indefatigablecuredinfection or SandboxVars.MoreTraits.IndefatigableOneUse then
+            if isClient() then
+                local args = { zombie_fever = 0, zombie_infection = 0, panic = 0, clear_wounds = true }
+                print(args)
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+            else
                 local stats = player:getStats();
                 bodyDamage:setInfected(false);
                 bodyDamage:setInfectionMortalityDuration(-1);
                 bodyDamage:setInfectionTime(-1);
-
-                if isClient() then
-                    local args = { zombie_fever = 0, zombie_infection = 0 }
-                    sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
-                else
-                    stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-                    stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
-                end
-                playerdata.indefatigablecuredinfection = true;
+                stats:set(CharacterStat.PANIC, 0)
+                stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+                stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
             end
+            playerdata.indefatigablecuredinfection = true;
         end
+    end
 
-        playerdata.bindefatigable = true;
-        playerdata.indefatigablecooldown = 0;
+    playerdata.bindefatigable = true;
+    playerdata.indefatigablecooldown = 0;
 
-        local enemies = player:getSpottedList();
-        if enemies:size() > 2 then
-            for i = 0, enemies:size() - 1 do
-                if enemies:get(i):isZombie() and enemies:get(i):DistTo(player) <= 2.5 then
-                    enemies:get(i):setStaggerBack(true);
-                    enemies:get(i):setKnockedDown(true);
-                end
-            end
-        end
-        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
+    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
 
-        if SandboxVars.MoreTraits.IndefatigableOneUse then
-            playerdata.indefatigabledisabled = true
-        end
+    if SandboxVars.MoreTraits.IndefatigableOneUse then
+        playerdata.indefatigabledisabled = true
     end
 end
 
@@ -4043,7 +4079,7 @@ local function RestfulSleeper(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.restfulsleeper) or not player:isAsleep() then
         return
     end
-    
+
     local stats = player:getStats()
     local fatigue = stats:get(CharacterStat.FATIGUE)
     local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)

@@ -1,3 +1,14 @@
+--- Useful Functions
+local function tableContains(t, e)
+    for _, value in pairs(t) do
+        if value == e then
+            return true
+        end
+    end
+    return false
+end
+
+
 -- Function covers Vagabond, Scrounger, Antique
 local function ProcessTraitLoot(player, args, modData, specificContainer)
     local gridSquare = getCell():getGridSquare(args.x, args.y, args.z)
@@ -186,7 +197,8 @@ local function ProcessBodyPartMechanics(player, args)
     end
 
     for _, index in ipairs(PartIndexes) do
-        local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(index))
+        local bodyDamage = player:getBodyDamage()
+        local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(index))
 
         if bodyPart then
             if args.partPain ~= nil then
@@ -210,6 +222,14 @@ local function ProcessBodyPartMechanics(player, args)
                 bodyPart:setCutSpeedModifier(stats.cut)
                 bodyPart:setDeepWoundSpeedModifier(stats.deep)
                 bodyPart:setBurnSpeedModifier(stats.burn)
+            end
+            if args.indefatigable then
+                if args.skipRestoreList and tableContains(args.skipRestoreList, index) then
+                    bodyPart:SetHealth(100)
+                else
+                    bodyPart:RestoreToFullHealth()
+                end
+                bodyDamage:setOverallBodyHealth(100)
             end
         end
     end
