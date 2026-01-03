@@ -1612,7 +1612,6 @@ local function indefatigable(player, playerdata)
                     stats:set(CharacterStat.ZOMBIE_FEVER, 0);
                     stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
                 end
-
                 playerdata.indefatigablecuredinfection = true;
             end
         end
@@ -2006,11 +2005,11 @@ local function unwavering(actor, target, weapon, damage)
     local extraDamageMult = 0
     
     if endurance <= 0.25 or fatigue >= 0.8 or pain >= 75 then
-        extraDamageMult = 20.0
+        extraDamageMult = 2.0
     elseif endurance <= 0.50 or fatigue >= 0.7 or pain >= 50 then
-        extraDamageMult = 10.0
+        extraDamageMult = 1.5
     elseif endurance <= 0.75 or fatigue >= 0.6 or pain >= 20 then
-        extraDamageMult = 5.0
+        extraDamageMult = 1.25
     end
 
     if extraDamageMult <= 0 then return end
