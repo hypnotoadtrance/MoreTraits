@@ -4040,10 +4040,10 @@ end
 -- end
 
 local function RestfulSleeper(player, playerdata)
-    if not (player:hasTrait(ToadTraitsRegistries.restfulsleeper) and not player:isAsleep()) then
+    if not player:hasTrait(ToadTraitsRegistries.restfulsleeper) or not player:isAsleep() then
         return
     end
-
+    
     local stats = player:getStats()
     local fatigue = stats:get(CharacterStat.FATIGUE)
     local neck = player:getBodyDamage():getBodyPart(BodyPartType.Neck)
