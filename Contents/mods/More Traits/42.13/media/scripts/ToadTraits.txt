@@ -799,7 +799,7 @@ module ToadTraits {
     character_trait_definition ToadTraits:quickworker
     {
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
+        DisabledInMultiplayer = true,
         CharacterTrait = ToadTraits:quickworker,
         Cost = 9,
         UIName = UI_trait_quickworker,
@@ -877,7 +877,7 @@ module ToadTraits {
     character_trait_definition ToadTraits:slowworker
     {
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
+        DisabledInMultiplayer = true,
         CharacterTrait = ToadTraits:slowworker,
         Cost = -9,
         UIName = UI_trait_slowworker,
