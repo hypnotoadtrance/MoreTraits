@@ -3497,23 +3497,25 @@ local function GymGoer(player, perk, amount)
         return
     end
 
-    local isFitnessState = (FitnessState and player:getCurrentState() == FitnessState.instance())
-    if perk ~= Perks.Fitness and perk ~= Perks.Strength and not isFitnessState then
+    local playerdata = player:getModData()
+    if not playerdata or playerdata.GymGoerProcessing then
         return
     end
 
-    local playerdata = player:getModData()
-    if not playerdata then return end
-    if playerdata.GymGoerProcessing then return end
+    local isFitnessState = (FitnessState and player:getCurrentState() == FitnessState.instance())
+    local isPerks = (perk == Perks.Fitness or perk == Perks.Strength)
+    
+    if not (isPerks and isFitnessState) then
+        return
+    end
 
     playerdata.GymGoerProcessing = true
 
     local modifier = (SandboxVars.MoreTraits.GymGoerPercent or 200)
-    local bonusMultiplier = (modifier * 0.01) - 1 
+    local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1 
     
     if bonusMultiplier > 0 then
-        local bonusAmount = amount * bonusMultiplier
-        AddXP(player, perk, bonusAmount)
+        AddXP(player, perk, amount * bonusMultiplier)
     end
 
     playerdata.GymGoerProcessing = false
@@ -3527,7 +3529,13 @@ local function GymGoerUpdate(player, playerdata)
     end
 
     if not playerdata.GymGoerStiffnessList then
-        playerdata.GymGoerStiffnessList = { 0, 0, 0, 0 }
+        local fitness = player:getFitness()
+        playerdata.GymGoerStiffnessList = {
+            fitness:getCurrentExeStiffnessInc("arms"),
+            fitness:getCurrentExeStiffnessInc("legs"),
+            fitness:getCurrentExeStiffnessInc("chest"),
+            fitness:getCurrentExeStiffnessInc("abs")
+        }
     end
 
     local fitness = player:getFitness();
