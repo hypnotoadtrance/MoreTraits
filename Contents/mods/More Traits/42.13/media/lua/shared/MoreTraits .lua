@@ -3596,8 +3596,15 @@ local function ContainerEvents (iSInventoryPage, state)
     end
 end
 
+-- Currently doesn't behave properly in MP (Disabled in MP)
 local function UpdateWorkerSpeed(player)
     if not player:hasTimedActions() then
+        return
+    end
+
+    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
+    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
+    if not (isQuick or isSlow) then
         return
     end
 
@@ -3612,12 +3619,6 @@ local function UpdateWorkerSpeed(player)
 
     local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
     if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then
-        return
-    end
-
-    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
-    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
-    if not (isQuick or isSlow) then
         return
     end
 
