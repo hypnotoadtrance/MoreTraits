@@ -799,7 +799,7 @@ module ToadTraits {
     character_trait_definition ToadTraits:quickworker
     {
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
+        DisabledInMultiplayer = true,
         CharacterTrait = ToadTraits:quickworker,
         Cost = 9,
         UIName = UI_trait_quickworker,
@@ -877,7 +877,7 @@ module ToadTraits {
     character_trait_definition ToadTraits:slowworker
     {
         IsProfessionTrait = false,
-        DisabledInMultiplayer = false,
+        DisabledInMultiplayer = true,
         CharacterTrait = ToadTraits:slowworker,
         Cost = -9,
         UIName = UI_trait_slowworker,
@@ -930,7 +930,7 @@ module ToadTraits {
         Cost = 12,
         UIName = UI_trait_specguns,
         UIDescription = UI_trait_specgunsdesc,
-        XPBoosts = Aiming=4;Reloading=4;Tracking=4,
+        XPBoosts = Aiming=4;Reloading=4,
         MutuallyExclusiveTraits = ToadTraits:antigun;ToadTraits:specaid;ToadTraits:speccrafting;ToadTraits:specfood;ToadTraits:specmove;ToadTraits:specweapons,
     }
 

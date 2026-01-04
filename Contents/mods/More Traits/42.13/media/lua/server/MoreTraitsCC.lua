@@ -1,3 +1,14 @@
+--- Useful Functions
+local function tableContains(t, e)
+    for _, value in pairs(t) do
+        if value == e then
+            return true
+        end
+    end
+    return false
+end
+
+
 -- Function covers Vagabond, Scrounger, Antique
 local function ProcessTraitLoot(player, args, modData, specificContainer)
     local gridSquare = getCell():getGridSquare(args.x, args.y, args.z)
@@ -116,56 +127,111 @@ end
 local function UpdateStats(player, args, command)
     local stats = player:getStats()
 
-    if args.panic then
+    if args.panic ~= nil then
         stats:set(CharacterStat.PANIC, args.panic)
     end
-    if args.stress then
+    if args.stress ~= nil then
         stats:set(CharacterStat.STRESS, args.stress)
     end
-    if args.fatigue then
+    if args.fatigue ~= nil then
         stats:set(CharacterStat.FATIGUE, args.fatigue)
     end
-    if args.pain then
+    if args.pain ~= nil then
         stats:set(CharacterStat.PAIN, args.pain)
     end
-    if args.boredom then
+    if args.boredom ~= nil then
         stats:set(CharacterStat.BOREDOM, args.boredom)
     end
-    if args.unhappiness then
+    if args.unhappiness ~= nil then
         stats:set(CharacterStat.UNHAPPINESS, args.unhappiness)
     end
-    if args.zombie_fever then
+    if args.zombie_fever ~= nil then
         stats:set(CharacterStat.ZOMBIE_FEVER, args.zombie_fever)
     end
-    if args.zombie_infection then
+    if args.zombie_infection ~= nil then
         stats:set(CharacterStat.ZOMBIE_INFECTION, args.zombie_infection)
+        if args.zombie_infection == 0 and args.clear_wounds then
+            local bodyDamage = player:getBodyDamage()
+            bodyDamage:setInfected(false)
+            bodyDamage:setInfectionMortalityDuration(-1)
+            bodyDamage:setInfectionTime(-1)
+
+            local parts = bodyDamage:getBodyParts()
+            for i = 0, parts:size() - 1 do
+                local b = parts:get(i);
+                if b:HasInjury() and b:isInfectedWound() then
+                    b:SetInfected(false);
+                    b:setInfectedWound(false);
+                end
+                if args.amputee then
+                    b:RestoreToFullHealth();
+                end
+            end 
+        end
     end
-    if args.sickness then
+    if args.sickness ~= nil then
         stats:set(CharacterStat.SICKNESS, args.sickness)
     end
-    if args.anger then
+    if args.anger ~= nil then
         stats:set(CharacterStat.ANGER, args.anger)
     end
-    if args.idleness then
+    if args.idleness ~= nil then
         stats:set(CharacterStat.IDLENESS, args.idleness)
     end
-    if args.poison then
+    if args.poison ~= nil then
         stats:set(CharacterStat.POISON, args.poison)
     end
-    if args.endurance then
+    if args.endurance ~= nil then
         stats:set(CharacterStat.ENDURANCE, args.endurance)
     end
 
     -- print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
 end
 
-local function ProcessBodyPartPain(player, args)
-    if not args.bodyPart then
-        return
+local function ProcessBodyPartMechanics(player, args)
+    local PartIndexes = {}
+    if type(args.bodyParts) == "table" then
+        PartIndexes = args.bodyParts
+    elseif args.bodyPart ~= nil then
+        table.insert(PartIndexes, args.bodyPart)
     end
-    local bodyPart = player:getBodyDamage():getBodyPart(BodyPartType.FromIndex(args.bodyPart))
-    if bodyPart then
-        bodyPart:setAdditionalPain(args.pain)
+
+    for _, index in ipairs(PartIndexes) do
+        local bodyDamage = player:getBodyDamage()
+        local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(index))
+
+        if bodyPart then
+            if args.partPain ~= nil then
+                bodyPart:setAdditionalPain(args.partPain)
+            end
+            if args.partDamage ~= nil then
+                bodyPart:AddDamage(args.partDamage)
+            end
+            if args.partStiffness ~= nil then
+                bodyPart:setStiffness(args.partStiffness)
+            end
+            if args.partAdd ~= nil then
+                bodyPart:AddHealth(args.partHealthAdd)
+            end
+            if args.partReduce ~= nil then
+                bodyPart:ReduceHealth(args.partHealthReduce)
+            end
+            if args.unwaveringStats ~= nil then
+                local stats = args.unwaveringStats
+                bodyPart:setScratchSpeedModifier(stats.scratch)
+                bodyPart:setCutSpeedModifier(stats.cut)
+                bodyPart:setDeepWoundSpeedModifier(stats.deep)
+                bodyPart:setBurnSpeedModifier(stats.burn)
+            end
+            if args.indefatigable then
+                if args.skipRestoreList and tableContains(args.skipRestoreList, index) then
+                    bodyPart:SetHealth(100)
+                else
+                    bodyPart:RestoreToFullHealth()
+                end
+                bodyDamage:setOverallBodyHealth(100)
+            end
+        end
     end
 end
 
@@ -182,6 +248,118 @@ local function ProcessFastGimp(player, args)
     FastGimpVector:setX(args.xSpeed)
     FastGimpVector:setY(args.ySpeed)
     player:Move(FastGimpVector)
+end
+
+local function ProcessImmunocompromised(player, args)
+    if not args.infectionIncrease then
+        return
+    end
+    local parts = player:getBodyDamage():getBodyParts();
+    for i = 0, parts:size() - 1 do
+        local b = parts:get(i);
+        local infectionValue = b:getWoundInfectionLevel()
+        if infectionValue >= 10.0 then return end
+        if b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
+            b:setWoundInfectionLevel(infectionValue + args.infectionIncrease);
+        end
+    end
+end
+
+local function ProcessGlassBody(player, args)
+    local bodyDamage = player:getBodyDamage()
+
+    if args.extraDamage ~= nil then
+        bodyDamage:ReduceGeneralHealth(args.extraDamage)
+    end
+
+    local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(args.partIndex))
+    if bodyPart then
+        if args.fractureTime > 0 then
+            if bodyPart:getFractureTime() <= 0 then
+                bodyPart:setFractureTime(args.fractureTime)
+            end
+        elseif args.doScratch then
+            bodyPart:setScratched(true, true)
+        end
+    end
+end
+
+local function ProcessInfectPlayer(player)
+    local bodyDamage = player:getBodyDamage()
+    bodyDamage:setInfected(true)
+end
+
+local function ProcessEvasive(player, args)
+    local bodyDamage = player:getBodyDamage()
+    local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(args.partIndex))
+    
+    if not bodyPart then return end;
+
+    if bodyPart:IsInfected() and not args.wasInfectedBefore and args.isInfected then
+        bodyPart:SetInfected(false)
+        bodyDamage:setInfected(false)
+        bodyDamage:setInfectionMortalityDuration(-1)
+        bodyDamage:setInfectionTime(-1)
+        bodyDamage:setInfectionGrowthRate(0)
+    end
+    
+    if bodyPart:bleeding() then
+        bodyPart:setBleedingTime(0)
+        bodyPart:setBleeding(false)
+    end
+
+    if bodyPart:scratched() then
+        bodyPart:setScratchTime(0)
+        bodyPart:setScratched(false, false)
+    end
+
+    if bodyPart:isCut() then
+        bodyPart:setCutTime(0)
+        bodyPart:setCut(false, false)
+    end
+
+    if bodyPart:bitten() then
+        bodyPart:setBitten(false, false)
+        bodyPart:setHealth(100.0)
+    end
+end
+
+local function ProcessApplyGordanite(player, args)
+    local item = player:getInventory():getItemById(args.itemID)
+    if item and args.stats then
+        local s = args.stats
+        item:setMinDamage(s.minDmg)
+        item:setMaxDamage(s.maxDmg)
+        item:setPushBackMod(s.pushBack)
+        item:setDoorDamage(s.doorDmg)
+        item:setTreeDamage(s.treeDmg)
+        item:setCriticalChance(s.crit)
+        item:setSwingTime(s.swing)
+        item:setBaseSpeed(s.speed)
+        item:setWeaponLength(s.length)
+        item:setMinimumSwingTime(s.minSwing)
+        item:getModData().MTHasBeenModified = true
+    end
+end
+
+local function ProcessRevertGordanite(player, args)
+    local item = player:getInventory():getItemById(args.itemID)
+    if item then
+        local moddata = item:getModData()
+        if moddata.MTHasBeenModified then
+            item:setMinDamage(moddata.MinDamage)
+            item:setMaxDamage(moddata.MaxDamage)
+            item:setPushBackMod(moddata.PushBack)
+            item:setDoorDamage(moddata.DoorDamage)
+            item:setTreeDamage(moddata.TreeDamage)
+            item:setCriticalChance(moddata.CriticalChance)
+            item:setSwingTime(moddata.SwingTime)
+            item:setBaseSpeed(moddata.BaseSpeed)
+            item:setWeaponLength(0.4)
+            item:setMinimumSwingTime(moddata.MinimumSwing)
+            moddata.MTHasBeenModified = false
+        end
+    end
 end
 
 -- local function UpdateXP(player, args, command)
@@ -238,8 +416,8 @@ local function onClientCommands(module, command, player, args)
         UpdateStats(player, args, command)
     end
 
-    if command == 'BodyPartPain' then
-        ProcessBodyPartPain(player, args)
+    if command == 'BodyPartMechanics' then
+        ProcessBodyPartMechanics(player, args)
     end
 
     if command == 'MT_updateWeight' then
@@ -250,12 +428,29 @@ local function onClientCommands(module, command, player, args)
         ProcessFastGimp(player, args)
     end
 
-    -- if command == 'UpdateXP' then
-    --     UpdateXP(player, args, command)
-    -- end
-    -- if command == 'UpdateXPToLevel' then
-    --     UpdateXPToLevel(player, args, command)
-    -- end
+    if command == 'Immunocompromised' then
+        ProcessImmunocompromised(player, args)
+    end
+
+    if command == 'GlassBody' then
+        ProcessGlassBody(player, args)
+    end
+
+    if command == 'InfectPlayer' then
+        ProcessInfectPlayer(player)
+    end
+
+    if command == 'EvasiveDodge' then
+        ProcessEvasive(player, args)
+    end
+
+    if command == 'ApplyGordanite' then
+        ProcessApplyGordanite(player, args)
+    end
+
+    if command == 'RevertGordanite' then
+        ProcessRevertGordanite(player, args)
+    end
 end
 
 Events.OnClientCommand.Add(onClientCommands)

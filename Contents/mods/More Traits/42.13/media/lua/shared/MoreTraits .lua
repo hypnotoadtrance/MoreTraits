@@ -106,15 +106,9 @@ end
 --     return 1.0
 -- end
 
--- Fonction AddXP
-local function AddXP(player, perk, amount)
+local function AddXP(player, perk, amount, noMultiplier)
     -- Arguments: player, perkObject, amount, noMultiplier
-    sendAddXp(player, perk, amount, false);  -- Covers both SP and MP
-end
-
-local function addXPNoMultiplier(player, perk, amount)
-    -- Arguments: player, perkObject, amount, noMultiplier
-    sendAddXp(player, perk, amount, true);   -- Covers both SP and MP
+    sendAddXp(player, perk, amount, noMultiplier or false);  -- Covers both SP and MP
 end
 
 -- Helper function to level up perks safely and grant XP to the next level
@@ -228,7 +222,7 @@ function ZombPatty_OnCreate(items, result, player)
     player:getModData().iTimesCannibal = times + 1;
 end
 
-function initToadTraitsItems(player)
+local function initToadTraitsItems(player)
     if isClient() then
         return
     end
@@ -411,7 +405,45 @@ function initToadTraitsItems(player)
     end
 end
 
-function initToadTraitsPerks(player, playerdata)
+local function MT_LearnAllRecipes(player)
+    local recipes = getScriptManager():getAllCraftRecipes()
+    local ingenuitveLimit = SandboxVars.MoreTraits.IngenuitiveLimit
+
+    if ingenuitveLimit then
+        local unknownRecipes = {}
+        local percentToLearn = (SandboxVars.MoreTraits.IngenuitiveLimitAmount or 50) * 0.01
+
+        for i = 0, recipes:size() - 1 do
+            local recipe = recipes:get(i)
+            if recipe:needToBeLearn() then
+                table.insert(unknownRecipes, recipe:getName())
+            end
+        end
+
+        local totalUnknown = #unknownRecipes
+        if totalUnknown > 0 then
+            local targetAmount = math.floor(totalUnknown * percentToLearn)
+            local learnedCount = 0
+
+            while learnedCount < targetAmount and #unknownRecipes > 0 do
+                local randomIndex = ZombRand(1, #unknownRecipes + 1)
+                local recipeName = table.remove(unknownRecipes, randomIndex)
+
+                player:learnRecipe(recipeName)
+                learnedCount = learnedCount + 1
+            end
+        end
+    else
+        for i = 0, recipes:size() - 1 do
+            local recipe = recipes:get(i)
+            if recipe:needToBeLearn() then
+                player:learnRecipe(recipe:getName())
+            end
+        end
+    end
+end
+
+local function initToadTraitsPerks(player, playerdata)
     local bodyDamage = player:getBodyDamage()
     local damage = 20
     local bandagestrength = 5
@@ -547,7 +579,88 @@ function initToadTraitsPerks(player, playerdata)
     end
 end
 
-function MTPlayerHit(player, _, __)
+local function GlassBody(player, playerData)
+    local bodyDamage = player:getBodyDamage();
+    local currenthp = bodyDamage:getOverallBodyHealth();
+    local multiplier = getGameTime():getMultiplier();
+
+    if playerData.glassBodyLastHP == nil then
+        playerData.glassBodyLastHP = currenthp;
+        playerData.glassBodyInitialized = true;
+        return ;
+    end
+
+    if playerData.glassBodyInitialized == true then
+        playerData.glassBodyInitialized = false;
+        playerData.glassBodyLastHP = currenthp; -- Update to current HP
+        return ;
+    end
+
+    if player:isAsleep() or multiplier > 4.0 then
+        playerData.glassBodyLastHP = currenthp;
+        return ;
+    end
+
+    local lasthp = playerData.glassBodyLastHP;
+
+    if currenthp < lasthp then
+        local difference = lasthp - currenthp;
+        if difference > 50 then
+            playerData.glassBodyLastHP = currenthp;
+            return ;
+        end
+
+        local chance = 33;
+        local woundstrength = 10;
+
+        if player:hasTrait(ToadTraitsRegistries.lucky) then
+            chance = chance - (5 * luckimpact);
+            woundstrength = woundstrength - (5 * luckimpact);
+        elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
+            chance = chance + (5 * luckimpact);
+            woundstrength = woundstrength + (5 * luckimpact);
+        end
+
+        chance = math.max(5, math.min(95, chance));
+        woundstrength = math.max(5, math.min(25, woundstrength));
+
+        local damage = difference * 2;
+        local fractureTime = 0;
+        local scratched = false;
+        local targetBodyPart = -1;
+
+        if ZombRand(100) <= chance then
+            targetBodyPart = ZombRand(0, 17);
+            if difference > 0.33 then
+                fractureTime = ZombRand(20) + woundstrength;
+            elseif difference > 0.1 then
+                scratched = true;
+            end
+        end
+
+        if targetBodyPart == -1 then return end
+
+        if isClient() then
+            local args = {
+                damage = damage, partIndex = targetBodyPart,
+                fractureTime = fractureTime, scratched = scratched
+            }
+            sendClientCommand(player, 'ToadTraits', 'GlassBody', args)
+        else
+            bodyDamage:ReduceGeneralHealth(damage);
+            local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(targetBodyPart));
+            if fractureTime > 0 then
+                if bodyPart:getFractureTime() <= 0 then
+                    bodyPart:setFractureTime(fractureTime)
+                end
+            end
+            if scratched then bodyPart:setScratched(true, true) end
+        end
+    end
+    playerData.glassBodyLastHP = bodyDamage:getOverallBodyHealth();
+end
+
+local function MTPlayerHit(player, _, __)
     if not player or player:isDead() or player:isZombie() then
         return
     end
@@ -587,30 +700,40 @@ function MTPlayerHit(player, _, __)
 
                         HaloTextHelper.addTextWithArrow(player, getText("UI_trait_dodgesay"), true, HaloTextHelper.getColorGreen())
 
-                        if bodyPart:IsInfected() and not wasInfectedBefore and isInfected then
-                            bodyPart:SetInfected(false)
-                            bodyDamage:setInfected(false)
-                            bodyDamage:setInfectionMortalityDuration(-1)
-                            bodyDamage:setInfectionTime(-1)
-                            bodyDamage:setInfectionGrowthRate(0)
-                        end
+                        if isClient() then
+                            local args = {
+                                bodyPart = bodyPart, wasInfectedBefore = wasInfectedBefore,
+                                isInfected = isInfected
+                            }
+                            sendClientCommand(player, 'ToadTraits', 'EvasiveDodge', args)
+                        else
+                            if bodyPart:IsInfected() and not wasInfectedBefore and isInfected then
+                                bodyPart:SetInfected(false)
+                                bodyDamage:setInfected(false)
+                                bodyDamage:setInfectionMortalityDuration(-1)
+                                bodyDamage:setInfectionTime(-1)
+                                bodyDamage:setInfectionGrowthRate(0)
+                            end
 
-                        -- Heal the injury immediately
-                        bodyPart:setBleedingTime(0)
-                        bodyPart:setBleeding(false)
+                            if bodyPart:bleeding() then
+                                bodyPart:setBleedingTime(0)
+                                bodyPart:setBleeding(false)
+                            end
 
-                        if bodyPart:scratched() then
-                            bodyPart:setScratchTime(0)
-                            bodyPart:setScratched(false, false)
-                        end
+                            if bodyPart:scratched() then
+                                bodyPart:setScratchTime(0)
+                                bodyPart:setScratched(false, false)
+                            end
 
-                        if bodyPart:isCut() then
-                            bodyPart:setCutTime(0)
-                            bodyPart:setCut(false, false)
-                        end
+                            if bodyPart:isCut() then
+                                bodyPart:setCutTime(0)
+                                bodyPart:setCut(false, false)
+                            end
 
-                        if bodyPart:bitten() then
-                            bodyPart:RestoreToFullHealth()
+                            if bodyPart:bitten() then
+                                bodyPart:setBitten(false, false)
+                                bodyPart:setHealth(100.0)
+                            end
                         end
                     else
                         table.insert(list, i)
@@ -629,13 +752,19 @@ function MTPlayerHit(player, _, __)
                 local bodyPart = bodyParts:get(i)
                 if bodyPart:HasInjury() and not tableContains(list, i) then
                     table.insert(list, i)
-                    local immunoChance = SandboxVars.MoreTraits.ImmunoChance or 0
-                    triedImmuno = true
+                    
+                    local immunoChance = SandboxVars.MoreTraits.ImmunoChance or 25
+                    if bodyDamage:isInfected() then return end
 
                     if ZombRand(1, 101) <= immunoChance then
-                        bodyDamage:setInfected(true)
+                        if isClient() then
+                            sendClientCommand(player, 'ToadTraits', 'InfectPlayer', {})
+                        else
+                            bodyDamage:setInfected(true)
+                        end
+                        triedImmuno = true
                     end
-                    break
+                    break 
                 end
             end
         end
@@ -656,7 +785,7 @@ function MTPlayerHit(player, _, __)
     end
 end
 
-function ToadTraitButter(player)
+local function ToadTraitButter(player)
     if player:hasTrait(ToadTraitsRegistries.butterfingers) and player:isPlayerMoving() then
         local basechance = 3;
         local chanceinx = SandboxVars.MoreTraits.ButterfingersChance or 2000;
@@ -701,7 +830,7 @@ function ToadTraitButter(player)
     end
 end
 
-function ToadTraitParanoia(player, playerdata)
+local function ToadTraitParanoia(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.paranoia) then
         return
     end
@@ -750,7 +879,7 @@ function ToadTraitParanoia(player, playerdata)
     end
 end
 
-function ToadTraitScrounger(page, player, playerdata)
+local function ToadTraitScrounger(page, player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.scrounger) then
         return
     end
@@ -847,7 +976,7 @@ function ToadTraitScrounger(page, player, playerdata)
     end
 end
 
-function UnHighlightScrounger(player, playerdata)
+local function UnHighlightScrounger(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.scrounger) then
         return
     end
@@ -879,7 +1008,7 @@ function UnHighlightScrounger(player, playerdata)
     end
 end
 
-function ToadTraitIncomprehensive(page, player)
+local function ToadTraitIncomprehensive(page, player)
     if not player:hasTrait(ToadTraitsRegistries.incomprehensive) then
         return
     end
@@ -1150,7 +1279,7 @@ local function ToadTraitVagabond(page, player)
     end
 end
 
-function ToadTraitDepressive(player, playerdata)
+local function ToadTraitDepressive(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.depressive) then
         return
     end
@@ -1187,7 +1316,7 @@ function ToadTraitDepressive(player, playerdata)
     end
 end
 
-function CheckDepress(player, playerdata)
+local function CheckDepress(player, playerdata)
     local depressed = playerdata.bToadTraitDepressed;
     if depressed then
         local stats = player:getStats()
@@ -1206,28 +1335,38 @@ function CheckDepress(player, playerdata)
     end
 end
 
-function CheckSelfHarm(player)
+local function CheckSelfHarm(player)
     if not player:hasTrait(ToadTraitsRegistries.selfdestructive) then
         return
     end
 
-    local modifier = 3 - (player:hasTrait(ToadTraitsRegistries.depressive) and 1 or 0)
     local stats = player:getStats()
     local unhappiness = stats:get(CharacterStat.UNHAPPINESS);
-    local bodyDamage = player:getBodyDamage();
-    local bodyParts = bodyDamage:getBodyParts();
+    local bodyDamage = player:getBodyDamage()
+    local modifier = 3 - (player:hasTrait(ToadTraitsRegistries.depressive) and 1 or 0)
+    local healthCap = 100 - (unhappiness / modifier)
 
-    if unhappiness >= 25 then
-        if bodyDamage:getOverallBodyHealth() >= (100 - unhappiness / modifier) then
-            for i = 0, bodyParts:size() - 1 do
-                local b = bodyParts:get(i);
-                b:AddDamage(0.001 * GameSpeedMultiplier());
+    if unhappiness >= 25 and bodyDamage:getOverallBodyHealth() > healthCap then
+        local damageAmount = 0.15
+        local partIndexes = {}
+        local parts = bodyDamage:getBodyParts()
+        local partsSize = parts:size()
+
+        for i = 0, partsSize - 1 do
+            table.insert(partIndexes, i)
+            if not isClient() then
+                parts:get(i):AddDamage(damageAmount)
             end
+        end
+
+        if isClient() then
+            local args = { bodyParts = partIndexes, partDamage = damageAmount }
+            sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
         end
     end
 end
 
-function Blissful(player)
+local function Blissful(player)
     if not player:hasTrait(ToadTraitsRegistries.blissful) then
         return
     end
@@ -1263,188 +1402,133 @@ function Blissful(player)
     end
 end
 
-function unwavering(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then return end
-    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
-	
-	if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then return end
-	
-    local weapondata = weapon:getModData();
-    if not weapondata then return end
-    
-    local stats = player:getStats()
-	local endurance = stats:get(CharacterStat.ENDURANCE)
-	local fatigue = stats:get(CharacterStat.FATIGUE)
-	local pain = stats:get(CharacterStat.PAIN)
-	
-	if endurance >= 25 then
-	    local extraDamage = (damage * 5.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if fatigue >= 0.6 then
-	    local extraDamage = (damage * 5.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if pain >= 20 then
-	    local extraDamage = (damage * 5.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if endurance >= 50 then
-	    local extraDamage = (damage * 10.0) * 0.1;  
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if fatigue >= 0.7 then
-	    local extraDamage = (damage * 10.0) * 0.1;  
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if pain >= 50 then
-	    local extraDamage = (damage * 10.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if endurance >= 75 then
-	    local extraDamage = (damage * 20.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if fatigue >= 0.8 then
-	    local extraDamage = (damage * 20.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-	
-	if pain >= 75 then
-	    local extraDamage = (damage * 20.0) * 0.1; 
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then target:Kill(player) end
-    end
-end
+-- function Specialization(_player, _perk, _amount)
+--     local player = _player;
+--     local perk = _perk;
+--     local amount = _amount;
+--     local newamount = 0;
+--     local skip = false;
+--     local modifier = 75;
+--     local perklvl = player:getPerkLevel(_perk);
+--     local perkxpmod = 1;
+--     if SandboxVars.MoreTraits.SpecializationXPPercent then
+--         modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
+--     end
+--     --shift decimal over two places for calculation purposes.
+--     modifier = modifier * 0.01;
+--     if perk == Perks.Fitness or perk == Perks.Strength then
+--         skipxpadd = true;
+--     end
+--     if skipxpadd == false then
+--         if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
+--             if player:hasTrait(ToadTraitsRegistries.specweapons) then
+--                 if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specfood) then
+--                 if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specguns) then
+--                 if perk == Perks.Aiming or perk == Perks.Reloading then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specmove) then
+--                 if perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sprinting or perk == Perks.Sneak then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.speccrafting) then
+--                 if perk == Perks.Woodwork or perk == Perks.Electricity or perk == Perks.MetalWelding or perk == Perks.Mechanics or perk == Perks.Tailoring then
+--                     skip = true;
+--                 end
+--             end
+--             if player:hasTrait(ToadTraitsRegistries.specaid) then
+--                 if perk == Perks.Doctor then
+--                     skip = true;
+--                 end
+--             end
+--             newamount = amount * modifier;
+--             local currentxp = player:getXp():getXP(perk);
+--             local correctamount = currentxp - newamount
+--             local testxp = currentxp - amount;
+--             --Check if the newxp amount would give the player a negative level.
+--             --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
+--             if skip == false then
+--                 if perklvl == 0 and testxp <= 0 then
+--                     skip = true;
+--                 elseif perklvl == 1 and testxp <= 75 then
+--                     skip = true;
+--                 elseif perklvl == 2 and testxp <= 150 then
+--                     skip = true;
+--                 elseif perklvl == 3 and testxp <= 300 then
+--                     skip = true;
+--                 elseif perklvl == 4 and testxp <= 750 then
+--                     skip = true;
+--                 elseif perklvl == 5 and testxp <= 1500 then
+--                     skip = true;
+--                 elseif perklvl == 6 and testxp <= 3000 then
+--                     skip = true;
+--                 elseif perklvl == 7 and testxp <= 4500 then
+--                     skip = true;
+--                 elseif perklvl == 8 and testxp <= 6000 then
+--                     skip = true;
+--                 elseif perklvl == 9 and testxp <= 7500 then
+--                     skip = true;
+--                 elseif perklvl == 10 and testxp <= 9000 then
+--                     skip = true;
+--                 end
+--             end
+--             if skip == false then
+--                 local xpforlevel = perk:getXpForLevel(perklvl) + 50;
+--                 while player:getXp():getXP(perk) > correctamount do
+--                     local curxp = player:getXp():getXP(perk);
+--                     if xpforlevel >= curxp then
+--                         break ;
+--                     else
+--                         AddXP(player, perk, -1 * 0.1);
+--                     end
+--                 end
+--             end
+--         end
+--     else
+--         skipxpadd = false;
+--     end
+-- end
 
-function Specialization(_player, _perk, _amount)
-    local player = _player;
-    local perk = _perk;
-    local amount = _amount;
-    local newamount = 0;
-    local skip = false;
-    local modifier = 75;
-    local perklvl = player:getPerkLevel(_perk);
-    local perkxpmod = 1;
-    if SandboxVars.MoreTraits.SpecializationXPPercent then
-        modifier = SandboxVars.MoreTraits.SpecializationXPPercent;
-    end
-    --shift decimal over two places for calculation purposes.
-    modifier = modifier * 0.01;
-    if perk == Perks.Fitness or perk == Perks.Strength then
-        skipxpadd = true;
-    end
-    if skipxpadd == false then
-        if player:hasTrait(ToadTraitsRegistries.specweapons) or player:hasTrait(ToadTraitsRegistries.specfood) or player:hasTrait(ToadTraitsRegistries.specguns) or player:hasTrait(ToadTraitsRegistries.specmove) or player:hasTrait(ToadTraitsRegistries.speccrafting) or player:hasTrait(ToadTraitsRegistries.specaid) then
-            if player:hasTrait(ToadTraitsRegistries.specweapons) then
-                if perk == Perks.Axe or perk == Perks.Blunt or perk == Perks.LongBlade or perk == Perks.SmallBlade or perk == Perks.Maintenance or perk == Perks.SmallBlunt or perk == Perks.Spear then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specfood) then
-                if perk == Perks.Cooking or perk == Perks.Farming or perk == Perks.PlantScavenging or perk == Perks.Trapping or perk == Perks.Fishing then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specguns) then
-                if perk == Perks.Aiming or perk == Perks.Reloading then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specmove) then
-                if perk == Perks.Lightfoot or perk == Perks.Nimble or perk == Perks.Sprinting or perk == Perks.Sneak then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.speccrafting) then
-                if perk == Perks.Woodwork or perk == Perks.Electricity or perk == Perks.MetalWelding or perk == Perks.Mechanics or perk == Perks.Tailoring then
-                    skip = true;
-                end
-            end
-            if player:hasTrait(ToadTraitsRegistries.specaid) then
-                if perk == Perks.Doctor then
-                    skip = true;
-                end
-            end
-            newamount = amount * modifier;
-            local currentxp = player:getXp():getXP(perk);
-            local correctamount = currentxp - newamount
-            local testxp = currentxp - amount;
-            --Check if the newxp amount would give the player a negative level.
-            --Lua doesn't support Switch Case statements so here's a massive If/then list. -_-
-            if skip == false then
-                if perklvl == 0 and testxp <= 0 then
-                    skip = true;
-                elseif perklvl == 1 and testxp <= 75 then
-                    skip = true;
-                elseif perklvl == 2 and testxp <= 150 then
-                    skip = true;
-                elseif perklvl == 3 and testxp <= 300 then
-                    skip = true;
-                elseif perklvl == 4 and testxp <= 750 then
-                    skip = true;
-                elseif perklvl == 5 and testxp <= 1500 then
-                    skip = true;
-                elseif perklvl == 6 and testxp <= 3000 then
-                    skip = true;
-                elseif perklvl == 7 and testxp <= 4500 then
-                    skip = true;
-                elseif perklvl == 8 and testxp <= 6000 then
-                    skip = true;
-                elseif perklvl == 9 and testxp <= 7500 then
-                    skip = true;
-                elseif perklvl == 10 and testxp <= 9000 then
-                    skip = true;
-                end
-            end
-            if skip == false then
-                local xpforlevel = perk:getXpForLevel(perklvl) + 50;
-                while player:getXp():getXP(perk) > correctamount do
-                    local curxp = player:getXp():getXP(perk);
-                    if xpforlevel >= curxp then
-                        break ;
-                    else
-                        AddXP(player, perk, -1 * 0.1);
-                    end
-                end
-            end
-        end
-    else
-        skipxpadd = false;
-    end
-end
---[[
-function Specialization(player, perk, amount)
-    -- Ignorer Fitness et Strength (gérés par GymGoer)
+local function Specialization(player, perk, amount)
+    if skipxpadd or amount <= 0 then return end
     if perk == Perks.Fitness or perk == Perks.Strength then return end
+    if player:getPerkLevel(perk) >= 10 then return end
 
-    -- Table des traits de spécialisation et des perks concernés
     local specs = {
-        specweapons = {Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade, Perks.Maintenance, Perks.SmallBlunt, Perks.Spear},
-        specfood = {Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping, Perks.Fishing},
-        specguns = {Perks.Aiming, Perks.Reloading},
-        specmove = {Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak},
-        speccrafting = {Perks.Woodwork, Perks.Electricity, Perks.MetalWelding, Perks.Mechanics, Perks.Tailoring},
-        specaid = {Perks.Doctor}
+        [ToadTraitsRegistries.specweapons] = {
+            Perks.Axe, Perks.Blunt, Perks.LongBlade, Perks.SmallBlade,
+            Perks.Maintenance, Perks.SmallBlunt, Perks.Spear
+        },
+        [ToadTraitsRegistries.specfood] = {
+            Perks.Cooking, Perks.Farming, Perks.PlantScavenging, Perks.Trapping,
+            Perks.Fishing, Perks.Foraging, Perks.Tracking, Perks.Husbandry, Perks.Butchering
+        },
+        [ToadTraitsRegistries.specguns] = {
+            Perks.Aiming, Perks.Reloading
+        },
+        [ToadTraitsRegistries.specmove] = {
+            Perks.Lightfoot, Perks.Nimble, Perks.Sprinting, Perks.Sneak
+        },
+        [ToadTraitsRegistries.speccrafting] = {
+            Perks.Blacksmith, Perks.Woodwork, Perks.Carving, Perks.Electricity, Perks.MetalWelding,
+            Perks.Mechanics, Perks.Tailoring, Perks.Glassmaking, Perks.Masonry, Perks.Pottery,
+            Perks.FlintKnapping
+        },
+        [ToadTraitsRegistries.specaid] = {
+            Perks.Doctor
+        }
     }
 
-    -- Vérifier si le joueur possède au moins un trait "spec*"
     local hasSpec = false
     for trait in pairs(specs) do
         if player:hasTrait(trait) then
@@ -1454,7 +1538,7 @@ function Specialization(player, perk, amount)
     end
     if not hasSpec then return end
 
-    -- Si le perk correspond à une spécialisation du joueur, on ne fait rien
+    -- Exit if they are specialized in this perk (granting full XP)
     for trait, perks in pairs(specs) do
         if player:hasTrait(trait) then
             for _, p in ipairs(perks) do
@@ -1463,88 +1547,132 @@ function Specialization(player, perk, amount)
         end
     end
 
-    -- Appliquer la pénalité d'XP
+    -- Otherwise they should only be getting 25% of the actual XP earned.
     local modifier = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01
     local xpToRemove = amount - (amount * modifier)
-    AddXP(player, perk, -xpToRemove)
-end
---]]
+    local currentXP = player:getXp():getXP(perk)
 
-function indefatigable(player, playerdata)
+    -- Ensure we don't remove more XP than the player currently has
+    if xpToRemove > currentXP then
+        xpToRemove = currentXP 
+    end
+
+    skipxpadd = true
+    AddXP(player, perk, -xpToRemove, false)
+    skipxpadd = false
+end
+
+local function indefatigable(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.indefatigable) then
         return
     end
-    if SandboxVars.MoreTraits.IndefatigableOneUse and playerdata.indefatigabledisabled then
+
+    if playerdata.bindefatigable or (SandboxVars.MoreTraits.IndefatigableOneUse and playerdata.indefatigabledisabled) then
         return
     end
 
-    local triggerHealth = 15
-    local bodyDamage = player:getBodyDamage();
-    if (bodyDamage:getHealth() < triggerHealth or player:isDeathDragDown()) and not playerdata.bindefatigable then
+    local bodyDamage = player:getBodyDamage()
+    local zombies = getCell():getZombieList()
+    local triggerHealth = isClient() and 25 or 15
+    local shouldTrigger = false
 
-        if player:isDeathDragDown() then
-            print("Player dragged down, indefatigable activated");
-            playerdata.IndefatigableHasBeenDraggedDown = true;
-            player:setPlayingDeathSound(false);
-            player:setDeathDragDown(false);
-            player:setHitReaction("EvasiveBlocked");
-        end
-
-        if getActivatedMods():contains("MTAddonIndefatigableLol") == true then
-            getSoundManager():PlaySound("indefatigabletheme", false, 0):setVolume(0.5);
-        end
-
-        print("Healed to full.");
-        for i = 0, bodyDamage:getBodyParts():size() - 1 do
-            local b = bodyDamage:getBodyParts():get(i);
-            if tableContains(playerdata.TraitInjuredBodyList, i) == false then
-                b:RestoreToFullHealth();
-            else
-                b:SetHealth(100);
+    -- It's difficult to restore the player during a dragdown in MP.
+    -- Instead it's easier to knockdown the zombies before that happens
+    -- This should give them time to escape
+    if isClient() then
+        local nearbyZombies = 0
+        if zombies then
+            for i = 0, zombies:size() - 1 do
+                local z = zombies:get(i)
+                if z:DistTo(player) <= 1.5 then
+                    nearbyZombies = nearbyZombies + 1
+                end
             end
         end
-        bodyDamage:setOverallBodyHealth(100);
+        if nearbyZombies >= 4 then
+            shouldTrigger = true
+        end
+    end
 
-        if bodyDamage:IsInfected() then
-            if not playerdata.indefatigablecuredinfection or SandboxVars.MoreTraits.IndefatigableOneUse then
+    if not shouldTrigger then
+        if bodyDamage:getHealth() < triggerHealth or (not isClient() and player:isDeathDragDown()) then
+            shouldTrigger = true
+        end
+    end
+
+    if not shouldTrigger then return end
+
+    if getActivatedMods():contains("MTAddonIndefatigableLol") then
+        getSoundManager():PlaySound("indefatigabletheme", false, 0):setVolume(0.5);
+    end
+
+    if zombies and zombies:size() >= 3 then
+        for i = 0, zombies:size() - 1 do
+            local zombie = zombies:get(i)
+            if zombie:DistTo(player) <= 3.0 then
+                zombie:setStaggerBack(true)
+                zombie:setKnockedDown(true)
+            end
+        end
+    end
+
+    if not isClient() and player:isDeathDragDown() then
+        print("Player dragged down, indefatigable activated");
+        playerdata.IndefatigableHasBeenDraggedDown = true;
+        player:setPlayingDeathSound(false);
+        player:setDeathDragDown(false);
+        player:setHitReaction("EvasiveBlocked");
+    end
+
+    print("Healed to full.");
+    local partIndexes = {}
+    local bodyParts = bodyDamage:getBodyParts()
+    for i = 0, bodyParts:size() - 1 do
+        table.insert(partIndexes, i)
+        local b = bodyParts:get(i);
+        if tableContains(playerdata.TraitInjuredBodyList, i) == false then
+            b:RestoreToFullHealth();
+        else
+            b:SetHealth(100);
+        end
+    end
+    bodyDamage:setOverallBodyHealth(100);
+
+    if isClient() then
+        local args = { bodyParts = partIndexes, indefatigable = true, skipRestoreList = playerdata.TraitInjuredBodyList }
+        sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
+    end
+    
+    if bodyDamage:IsInfected() then
+        if not playerdata.indefatigablecuredinfection or SandboxVars.MoreTraits.IndefatigableOneUse then
+            if isClient() then
+                local args = { zombie_fever = 0, zombie_infection = 0, panic = 0, clear_wounds = true }
+                print(args)
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+            else
                 local stats = player:getStats();
                 bodyDamage:setInfected(false);
                 bodyDamage:setInfectionMortalityDuration(-1);
                 bodyDamage:setInfectionTime(-1);
-
-                if isClient() then
-                    local args = { zombie_fever = 0, zombie_infection = 0 }
-                    sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
-                else
-                    stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-                    stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
-                end
-
-                playerdata.indefatigablecuredinfection = true;
+                stats:set(CharacterStat.PANIC, 0)
+                stats:set(CharacterStat.ZOMBIE_FEVER, 0);
+                stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
             end
+            playerdata.indefatigablecuredinfection = true;
         end
+    end
 
-        playerdata.bindefatigable = true;
-        playerdata.indefatigablecooldown = 0;
+    playerdata.bindefatigable = true;
+    playerdata.indefatigablecooldown = 0;
 
-        local enemies = player:getSpottedList();
-        if enemies:size() > 2 then
-            for i = 0, enemies:size() - 1 do
-                if enemies:get(i):isZombie() and enemies:get(i):DistTo(player) <= 2.5 then
-                    enemies:get(i):setStaggerBack(true);
-                    enemies:get(i):setKnockedDown(true);
-                end
-            end
-        end
-        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
+    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen());
 
-        if SandboxVars.MoreTraits.IndefatigableOneUse then
-            playerdata.indefatigabledisabled = true
-        end
+    if SandboxVars.MoreTraits.IndefatigableOneUse then
+        playerdata.indefatigabledisabled = true
     end
 end
 
-function indefatigablecounter(player, playerdata)
+local function indefatigablecounter(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.indefatigable) or not playerdata.bindefatigable then
         return
     end
@@ -1572,8 +1700,8 @@ function indefatigablecounter(player, playerdata)
     end
 end
 
-function badteethtrait(player, playerdata)
-    -- if not player:hasTrait(ToadTraitsRegistries.badteeth) then return end
+local function badteethtrait(player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.badteeth) then return end
     local bodyDamage = player:getBodyDamage()
     local healthTimer = bodyDamage:getHealthFromFoodTimer()
 
@@ -1599,7 +1727,7 @@ function badteethtrait(player, playerdata)
         if isClient() then
             if math.abs(newPain - playerdata.fBadTeethLastSentPain) >= 1 then
                 local headPart = BodyPartType.ToIndex(BodyPartType.Head)
-                sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = newPain })
+                sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = headPart, partPain = newPain })
                 playerdata.fBadTeethLastSentPain = newPain
             end
         else
@@ -1609,7 +1737,7 @@ function badteethtrait(player, playerdata)
     playerdata.fPreviousHealthFromFoodTimer = healthTimer
 end
 
-function hardytrait(player, playerdata)
+local function hardytrait(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.hardy) then
         return
     end
@@ -1660,7 +1788,7 @@ function hardytrait(player, playerdata)
     end
 end
 
-function drinkerupdate(player, playerdata)
+local function drinkerupdate(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.drinker) then
         return
     end
@@ -1747,7 +1875,7 @@ function drinkerupdate(player, playerdata)
     end
 end
 
-function drinkertick(player, playerdata)
+local function drinkertick(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.drinker) then
         return
     end
@@ -1792,7 +1920,7 @@ function drinkertick(player, playerdata)
     end
 end
 
-function drinkerpoison(player, playerdata)
+local function drinkerpoison(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.drinker) then
         return
     end
@@ -1853,7 +1981,7 @@ function drinkerpoison(player, playerdata)
     end
 end
 
-function bouncerupdate(player, playerdata)
+local function bouncerupdate(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.bouncer) then
         return
     end
@@ -1896,11 +2024,43 @@ function bouncerupdate(player, playerdata)
     end
 end
 
-function martial(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return
+local function unwavering(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
+    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
+    
+    if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then 
+        return 
     end
+
+    local stats = player:getStats()
+    local endurance = stats:get(CharacterStat.ENDURANCE)
+    local fatigue = stats:get(CharacterStat.FATIGUE)
+    local pain = stats:get(CharacterStat.PAIN)
+
+    local extraDamageMult = 0
+    
+    if endurance <= 0.25 or fatigue >= 0.8 or pain >= 75 then
+        extraDamageMult = 2.0
+    elseif endurance <= 0.50 or fatigue >= 0.7 or pain >= 50 then
+        extraDamageMult = 1.5
+    elseif endurance <= 0.75 or fatigue >= 0.6 or pain >= 20 then
+        extraDamageMult = 1.25
+    end
+
+    if extraDamageMult <= 0 then return end
+
+    local extraDamage = damage * extraDamageMult
+    
+    target:setHealth(target:getHealth() - extraDamage)
+    if target:getHealth() <= 0 then 
+        target:Kill(player) 
+    end
+end
+
+local function martial(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
     if not player:hasTrait(ToadTraitsRegistries.martial) then
         return
     end
@@ -1970,12 +2130,10 @@ function martial(actor, target, weapon, damage)
     end
 end
 
---- Traits for ProBlade, ProBlunt and ProSpear --- 
-function promelee(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return
-    end
+--- Traits for ProBlade, ProBlunt and ProSpear
+local function promelee(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
     local hasBladeTrait = player:hasTrait(ToadTraitsRegistries.problade)
     local hasBluntTrait = player:hasTrait(ToadTraitsRegistries.problunt)
     local hasSpearTrait = player:hasTrait(ToadTraitsRegistries.prospear)
@@ -2040,11 +2198,9 @@ function promelee(actor, target, weapon, damage)
     weapondata.iLastWeaponCond = weapon:getCondition();
 end
 
-function progun(actor, weapon)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return ;
-    end
+local function progun(actor, weapon)
+    if not actor or not weapon then return end
+    local player = actor
     if not player:hasTrait(ToadTraitsRegistries.progun) then
         return
     end
@@ -2102,11 +2258,9 @@ function progun(actor, weapon)
     end
 end
 
-function tavernbrawler(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return ;
-    end
+local function tavernbrawler(actor, target, weapon, damage)
+    if not actor or not target or not weapon then return end
+    local player = actor
     if not player:hasTrait(ToadTraitsRegistries.tavernbrawler) then
         return
     end
@@ -2176,7 +2330,7 @@ local UMBRELLA_TYPES = {
     ["UmbrellaWhite"] = true, ["UmbrellaBlack"] = true
 }
 
-function albino(player, playerdata)
+local function albino(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.albino) then
         return
     end
@@ -2221,7 +2375,7 @@ function albino(player, playerdata)
         playerdata.fAlbinoLastSentPain = playerdata.fAlbinoLastSentPain or 0
         if math.abs(finalPain - playerdata.fAlbinoLastSentPain) >= 1 then
             local headPart = BodyPartType.ToIndex(BodyPartType.Head)
-            sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = headPart, pain = finalPain })
+            sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = headPart, partPain = finalPain })
             playerdata.fAlbinoLastSentPain = finalPain
         end
     else
@@ -2256,49 +2410,64 @@ local function AlbinoTimer(player, playerdata)
     end
 end
 
-function amputee(player, justGotInfected)
-    if not player:hasTrait(ToadTraitsRegistries.amputee) then
+local function OnEquipSecondary(player, item)
+    if item == nil then return end
+
+    if player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation") then
+        if item and item ~= nil then
+            player:setSecondaryHandItem(nil);
+            HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), HaloTextHelper.getColorRed());
+        end
+    end
+end
+
+local function amputee(player, justGotInfected)
+    if not player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation") then
         return
     end
-    if getActivatedMods():contains("Amputation") then
-        return
-    end ;
 
-    local handitem = player:getSecondaryHandItem();
-    if handitem ~= nil and handitem:getType() ~= "BareHands" then
-        player:setSecondaryHandItem(nil);
-        -- player:dropHandItems();
+    local bodyDamage = player:getBodyDamage()
+    if not justGotInfected and bodyDamage:getOverallBodyHealth() >= 100 then
+        return
     end
 
-    local bodyDamage = player:getBodyDamage();
     local parts = {
-        bodyDamage:getBodyPart(BodyPartType.UpperArm_L),
-        bodyDamage:getBodyPart(BodyPartType.ForeArm_L),
-        bodyDamage:getBodyPart(BodyPartType.Hand_L)
+        BodyPartType.UpperArm_L,
+        BodyPartType.ForeArm_L,
+        BodyPartType.Hand_L
     }
 
-    for _, part in ipairs(parts) do
+    local needToHeal = false
+    for _, partType in ipairs(parts) do
+        local part = bodyDamage:getBodyPart(partType)
         if part:HasInjury() then
-            part:RestoreToFullHealth();
+            needToHeal = true
+            if not isClient() then
+                part:RestoreToFullHealth()
+            end
+        end
+    end
 
+    if needToHeal or justGotInfected then
+        if isClient() then
+            local args = { zombie_fever = 0, zombie_infection = 0,
+                clear_wounds = true, amputee = true
+            }
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+        else
             if justGotInfected then
-                local stats = player:getStats();
-                bodyDamage:setInfected(false);
-                bodyDamage:setInfectionMortalityDuration(-1);
-                bodyDamage:setInfectionTime(-1);
-                if isClient() then
-                    local args = { zombie_fever = 0, zombie_infection = 0 }
-                    sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
-                else
-                    stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-                    stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
-                end
+                local stats = player:getStats()
+                bodyDamage:setInfected(false)
+                bodyDamage:setInfectionMortalityDuration(-1)
+                bodyDamage:setInfectionTime(-1)
+                stats:set(CharacterStat.ZOMBIE_FEVER, 0)
+                stats:set(CharacterStat.ZOMBIE_INFECTION, 0)
             end
         end
     end
 end
 
-function actionhero(actor, target, weapon, damage)
+local function actionhero(actor, target, weapon, damage)
     local player = getPlayer();
     if not player or actor ~= player then
         return ;
@@ -2360,10 +2529,11 @@ end
 -- As well as if this is actually updating for other MP clients
 -- OnPlayerMove doesn't seem to work for this in MP so we're moving this to OnPlayerUpdate (Build 42.13.1). This may change in the future
 local FastGimpVector = Vector2.new(0, 0)
-local function MT_FastGimpTraits(player, tickCounter)
-    if not player or not player:isPlayerMoving() then return end
-    -- Early cut off to avoid calls for those without the traits
-    if not player:hasTrait(ToadTraitsRegistries.fast) and not player:hasTrait(ToadTraitsRegistries.gimp) then return end
+local function MT_FastGimpTraits(player)
+    if not player:hasTrait(ToadTraitsRegistries.fast) and not player:hasTrait(ToadTraitsRegistries.gimp) then 
+        return 
+    end
+    if not player:isPlayerMoving() then return end  
 
     local modifier  = 0
 
@@ -2389,17 +2559,20 @@ local function MT_FastGimpTraits(player, tickCounter)
 
     player:getDeferredMovement(FastGimpVector)
 
-    FastGimpVector:setX(FastGimpVector:getX() * modifier)
-    FastGimpVector:setY(FastGimpVector:getY() * modifier)
+    local x = FastGimpVector:getX()
+    local y = FastGimpVector:getY()
 
-    if isClient() and tickCounter % 10 == 0 then
-        sendClientCommand(player, 'ToadTraits', 'FastGimp', { xSpeed = FastGimpVector:getX(), ySpeed = FastGimpVector:getY() })
+    FastGimpVector:setX(x * modifier)
+    FastGimpVector:setY(y * modifier)
+
+    if isClient() and internalTick % 10 == 0 then
+        sendClientCommand(player, 'ToadTraits', 'FastGimp', { xSpeed = x, ySpeed = y })
     end
     
     player:Move(FastGimpVector)
 end
 
-function checkBloodTraits(player)
+local function checkBloodTraits(player)
     local isAnemic = player:hasTrait(ToadTraitsRegistries.anemic)
     local isThick = player:hasTrait(ToadTraitsRegistries.thickblood)
     if not isAnemic and not isThick then
@@ -2407,30 +2580,57 @@ function checkBloodTraits(player)
     end
 
     local bodyDamage = player:getBodyDamage()
-    if bodyDamage:getNumPartsBleeding() > 0 then
-        local parts = bodyDamage:getBodyParts()
-        for i = 0, parts:size() - 1 do
-            local b = parts:get(i)
-            if b:bleeding() and not b:IsBleedingStemmed() then
-                local isNeck = (b:getType() == BodyPartType.Neck)
-                local isHead = (b:getType() == BodyPartType.Head)
-                if isAnemic then
-                    local adjust = 0.02
-                    if isNeck or isHead then adjust = adjust * 2 end
-                    b:ReduceHealth(adjust)
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
-                elseif isThick then
-                    local adjust = 0.008
-                    if isNeck or isHead then adjust = adjust * 2 end
-                    b:AddHealth(adjust)
-                    HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
-                end
+    if bodyDamage:getNumPartsBleeding() <= 0 then return end
+
+    local parts = bodyDamage:getBodyParts()
+    local anemicParts = {}
+    local thickParts = {}
+
+    for i = 0, parts:size() - 1 do
+        local b = parts:get(i)
+        if b:bleeding() and not b:IsBleedingStemmed() then
+            local isNeck = (b:getType() == BodyPartType.Neck)
+            local isHead = (b:getType() == BodyPartType.Head)
+
+            if isAnemic then
+                local adjust = 0.4
+                if isNeck or isHead then adjust = adjust * 2 end
+                table.insert(anemicParts, {part = i, amount = adjust})
+            elseif isThick then
+                local adjust = 0.15
+                if isNeck or isHead then adjust = adjust * 2 end
+                table.insert(thickParts, {part = i, amount = adjust})
             end
         end
     end
+
+    if #anemicParts > 0 then
+        if isClient() then
+            for _, data in ipairs(anemicParts) do
+                sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = data.part, partHealthReduce = data.amount })
+            end
+        else
+            for _, data in ipairs(anemicParts) do
+                parts:get(data.part):ReduceHealth(data.amount)
+            end
+        end
+        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_anemic"), false, HaloTextHelper.getColorRed())
+    end
+    if #thickParts > 0 then
+        if isClient() then
+            for _, data in ipairs(thickParts) do
+                sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = data.part, partHealthAdd = data.amount })
+            end
+        else
+            for _, data in ipairs(thickParts) do
+                parts:get(data.part):AddHealth(data.amount)
+            end
+        end
+        HaloTextHelper.addTextWithArrow(player, getText("UI_trait_thickblood"), true, HaloTextHelper.getColorGreen())
+    end
 end
 
-function vehicleCheck(player)
+local function vehicleCheck(player)
     if getActivatedMods():contains("DrivingSkill") then
         return
     end
@@ -2497,29 +2697,104 @@ function vehicleCheck(player)
     end
 end
 
-local function SuperImmuneRecoveryProcess(player, playerdata)
+local function SuperImmune(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.superimmune) then
-        return
-    end
-    if not playerdata.SuperImmuneActive then
         return
     end
 
     local stats = player:getStats();
-    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
-    local recoveryDays = math.min(playerdata.SuperImmuneRecovery or 10, SandboxVars.MoreTraits.SuperImmuneMaxDays or 30);
-    local minutesPerDay = 1440;
+    local zombieInfection = stats:get(CharacterStat.ZOMBIE_INFECTION);
+    local bodyDamage = player:getBodyDamage();
+
+    if zombieInfection <= 0 then
+        return
+    end
+
+    if isClient() then
+        local args = { zombie_fever = 100, zombie_infection = 0, clear_wounds = true }
+        sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+    else
+        -- We set the Fever here to 100 for the Health Loss and simulate fighting the infection
+        stats:set(CharacterStat.ZOMBIE_FEVER, 100);
+        stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+        bodyDamage:setInfected(false);
+        bodyDamage:setInfectionMortalityDuration(-1);
+        bodyDamage:setInfectionTime(-1);
+
+        local parts = bodyDamage:getBodyParts()
+        for i = 0, parts:size() - 1 do
+            local b = parts:get(i);
+            if b:HasInjury() and b:isInfectedWound() then
+                b:SetInfected(false);
+                b:setInfectedWound(false);
+            end
+        end
+    end
+
+    local minimum = SandboxVars.MoreTraits.SuperImmuneMinDays or 10;
+    local maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays or 30;
+    if minimum > maximum then
+        minimum, maximum = maximum, minimum
+    end
+
+    local timeOfRecovery = 0;
+    if minimum == maximum + 1 then
+        timeOfRecovery = minimum;
+    else
+        timeOfRecovery = ZombRand(minimum, maximum + 1);
+    end
+
+    if player:hasTrait(CharacterTrait.FAST_HEALER) then
+        timeOfRecovery = timeOfRecovery - 5;
+    end
+    if player:hasTrait(CharacterTrait.SLOW_HEALER) then
+        timeOfRecovery = timeOfRecovery + 5;
+    end
+    if player:hasTrait(ToadTraitsRegistries.lucky) then
+        timeOfRecovery = timeOfRecovery - 2 * luckimpact;
+    end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then
+        timeOfRecovery = timeOfRecovery + 2 * luckimpact;
+    end
+
+    timeOfRecovery = math.max(minimum, math.min(maximum, timeOfRecovery))
+
+    if playerdata.SuperImmuneHealedOnce and playerdata.SuperImmuneFirstInfectionBonus then
+        --Halve the time needed once it beat the virus once, since immune system
+        timeOfRecovery = timeOfRecovery / 2; --will know how to beat it.
+    end
+
+    playerdata.SuperImmuneActive = true
+    playerdata.SuperImmuneRecovery = (playerdata.SuperImmuneRecovery or 0) + timeOfRecovery
+
+    if SandboxVars.MoreTraits.SuperImmuneWeakness then
+        playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
+    end
+end
+
+local function SuperImmuneRecoveryProcess(player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.superimmune) or not playerdata.SuperImmuneActive then
+        return
+    end
+
+    local recoveryDays = math.min(playerdata.SuperImmuneRecovery or 10, SandboxVars.MoreTraits.SuperImmuneMaxDays or 30)
+    local minutesPerDay = 1440
+    local maxRecoveryMinutes = recoveryDays * minutesPerDay
     local timeElapsed = playerdata.SuperImmuneMinutesPassed or 0
     local speedRun = playerdata.QuickSuperImmune and 6 or 1
 
-    if (recoveryDays * minutesPerDay) >= timeElapsed then
+    local stats = player:getStats()
+    local illness = stats:get(CharacterStat.ZOMBIE_FEVER)
+    local startIllness = illness -- Store to check if we need to sync later
+
+    if timeElapsed < maxRecoveryMinutes then
         playerdata.SuperImmuneTextSaid = false
 
         local illnessChange = 0
         if timeElapsed <= 360 then
             illnessChange = ZombRand(100, 501) / 6000
         else
-            local isLateStage = timeElapsed >= (recoveryDays * minutesPerDay) / 2
+            local isLateStage = timeElapsed >= (maxRecoveryMinutes / 2)
             local low = isLateStage and 5 or 10
             local high = isLateStage and 36 or 46
             illnessChange = (25 - ZombRand(low, high)) / 600
@@ -2527,58 +2802,64 @@ local function SuperImmuneRecoveryProcess(player, playerdata)
 
         illness = illness - (illnessChange * speedRun)
 
-        local healerValue = 0
-        if player:hasTrait(CharacterTrait.FAST_HEALER) then
-            healerValue = -0.25 / 60
-        elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then
-            healerValue = 0.25 / 60
-        end
-        illness = illness + (healerValue * speedRun)
+        local healValue = 0
+        if player:hasTrait(CharacterTrait.FAST_HEALER) then healValue = -0.25 / 60
+        elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then healValue = 0.25 / 60 end
 
-        if illness < 26 then
-            illness = illness + (0.166 * speedRun)
-        end
-        if illness > 89 and not playerdata.SuperImmuneLethal then
-            illness = illness - (0.333 * speedRun)
+        illness = illness + (healValue * speedRun)
+
+        if illness < 26 then illness = illness + (0.166 * speedRun) end
+
+        if illness > 89 and not playerdata.SuperImmuneLethal then 
+            illness = illness - (0.333 * speedRun) 
         end
 
         illness = illness - (playerdata.SuperImmuneMinutesWellFed / 50)
         playerdata.SuperImmuneAbsoluteWellFedAmount = (playerdata.SuperImmuneAbsoluteWellFedAmount or 0) + playerdata.SuperImmuneMinutesWellFed
         playerdata.SuperImmuneMinutesWellFed = 0
-        playerdata.SuperImmuneMinutesPassed = timeElapsed + speedRun
-
+        
+        local totalTime = speedRun
         if playerdata.SuperImmuneAbsoluteWellFedAmount > 60 then
-            playerdata.SuperImmuneMinutesPassed = playerdata.SuperImmuneMinutesPassed + speedRun
+            totalTime = totalTime + speedRun
             playerdata.SuperImmuneAbsoluteWellFedAmount = playerdata.SuperImmuneAbsoluteWellFedAmount - 60
         end
+        playerdata.SuperImmuneMinutesPassed = timeElapsed + totalTime
 
-        stats:set(CharacterStat.ZOMBIE_FEVER, illness)
+        -- Lets make sure their infection doesn't drop too far down whilst recovering
+        if illness < 15 then
+            illness = 50
+            if isClient() then
+                local args = { zombie_fever = illness }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+            else
+                stats:set(CharacterStat.ZOMBIE_FEVER, illness);
+            end
+        end
 
-        if isDebugEnabled() then
-            player:Say("Time to recovery: " .. (recoveryDays * 1440 - timeElapsed) .. " mins");
+        if isDebugEnabled() and not isServer() then
+            player:Say("Mins to recovery: " .. (maxRecoveryMinutes - playerdata.SuperImmuneMinutesPassed))
         end
     else
         if illness > 0 then
-            local breakRate = 1.0
+            if not playerdata.SuperImmuneFeverNotified and not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmune_feverbreak"), true, HaloTextHelper.getColorGreen())
+                playerdata.SuperImmuneFeverNotified = true
+            end
+
+            -- Once they've beaten the infection, we want to clear the ZOMBIE_FEVER
+            local breakInfectionMultiplier = 1.0
             if player:hasTrait(CharacterTrait.FAST_HEALER) then
-                breakRate = 1.5
+                breakInfectionMultiplier = 1.5
             elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then
-                breakRate = 0.75
+                breakInfectionMultiplier = 0.5
             end
-
-            illness = math.max(0, illness - (breakRate / 60))
-
-            if isClient() then
-                local args = { zombie_fever = illness }
-                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
-            else
-                stats:set(CharacterStat.ZOMBIE_FEVER, illness)
-            end
+            
+            illness = math.max(0, illness - (breakInfectionMultiplier * speedRun))
 
             playerdata.SuperImmuneInfections = 0
         else
-            if not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
-                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fullheal"), true, HaloTextHelper.getColorGreen())
+            if not isServer() and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
+                HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmune_fullheal"), true, HaloTextHelper.getColorGreen())
             end
 
             playerdata.SuperImmuneActive = false
@@ -2589,83 +2870,22 @@ local function SuperImmuneRecoveryProcess(player, playerdata)
             playerdata.SuperImmuneInfections = 0
             playerdata.SuperImmuneLethal = false
             playerdata.SuperImmuneTextSaid = false
+            playerdata.SuperImmuneFeverNotified = false
         end
 
-        if not playerdata.SuperImmuneTextSaid and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
+        if illness == 0 and not playerdata.SuperImmuneTextSaid and not isServer() and MT_Config and MT_Config:getOption("SuperImmuneAnnounce"):getValue() then
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmunewon"), true, HaloTextHelper.getColorGreen())
             playerdata.SuperImmuneTextSaid = true
         end
     end
-end
 
-function SuperImmune(player, playerdata)
-    if not player:hasTrait(ToadTraitsRegistries.superimmune) then
-        return
-    end
-
-    local bodyDamage = player:getBodyDamage();
-
-    if bodyDamage:isInfected() then
-        local stats = player:getStats();
-        bodyDamage:setInfected(false);
-        bodyDamage:setInfectionMortalityDuration(-1);
-        bodyDamage:setInfectionTime(-1);
+    if illness ~= startIllness then
         if isClient() then
-            local args = { zombie_fever = 0, zombie_infection = 0 }
-            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', { zombie_fever = illness })
         else
-            stats:set(CharacterStat.ZOMBIE_FEVER, 0);
-            stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+            stats:set(CharacterStat.ZOMBIE_FEVER, illness)
         end
-
-        local minimum = SandboxVars.MoreTraits.SuperImmuneMinDays or 10;
-        local maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays or 30;
-        if minimum > maximum then
-            minimum, maximum = maximum, minimum
-        end
-
-        local timeOfRecovery = 0;
-        if minimum == maximum + 1 then
-            timeOfRecovery = minimum;
-        else
-            timeOfRecovery = ZombRand(minimum, maximum + 1);
-        end
-
-        if player:hasTrait(CharacterTrait.FAST_HEALER) then
-            timeOfRecovery = timeOfRecovery - 5;
-        end
-        if player:hasTrait(CharacterTrait.SLOW_HEALER) then
-            timeOfRecovery = timeOfRecovery + 5;
-        end
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            timeOfRecovery = timeOfRecovery - 2 * luckimpact;
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            timeOfRecovery = timeOfRecovery + 2 * luckimpact;
-        end
-
-        timeOfRecovery = math.max(minimum, math.min(maximum, timeOfRecovery))
-
-        if playerdata.SuperImmuneHealedOnce and playerdata.SuperImmuneFirstInfectionBonus then
-            --Halve the time needed once it beat the virus once, since immune system
-            timeOfRecovery = timeOfRecovery / 2; --will know how to beat it.
-        end
-
-        playerdata.SuperImmuneActive = true
-        playerdata.SuperImmuneRecovery = (playerdata.SuperImmuneRecovery or 0) + timeOfRecovery
-
-        if SandboxVars.MoreTraits.SuperImmuneWeakness then
-            playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
-        end
-    end
-
-    local parts = bodyDamage:getBodyParts()
-    for i = 0, parts:size() - 1 do
-        local b = parts:get(i);
-        if b:HasInjury() and b:isInfectedWound() then
-            b:SetInfected(false);
-            b:setInfectedWound(false);
-        end
+        
     end
 end
 
@@ -2677,16 +2897,13 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
         return
     end
 
-    local bodyDamage = player:getBodyDamage();
-    local stats = player:getStats();
-    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
-    local currentHealth = bodyDamage:getOverallBodyHealth();
-
-    local maxHealth = 10;
+    local maxHealth = isClient() and 20 or 15;
     if player:hasTrait(ToadTraitsRegistries.indefatigable) then
-        maxHealth = 22;
+        maxHealth = isClient() and 30 or 25;
     end
 
+    local stats = player:getStats();
+    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
     if SandboxVars.MoreTraits.SuperImmuneWeakness then
         local limit = 4;
 
@@ -2696,49 +2913,59 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
 
         if player:hasTrait(CharacterTrait.FAST_HEALER) then
             limit = limit + 1;
-        elseif player:hasTrait(CharacterTrait.SLOW_SLOWER) then
+        elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then
             limit = limit - 1;
         end
 
-        if (playerdata.SuperImmuneInfections or 0) >= limit then
+        if playerdata.SuperImmuneInfections >= limit then
             maxHealth = 0;
+            illness = 100; -- Force them to die
             playerdata.SuperImmuneLethal = true;
         else
             playerdata.SuperImmuneLethal = false;
         end
     end
 
-    local targetHealth = 100 - illness
-    local multiplier = GameSpeedMultiplier()
+    local bodyDamage = player:getBodyDamage();
+    local currentHealth = bodyDamage:getOverallBodyHealth();
+    local targetHealth = math.max(maxHealth, 100 - illness) -- Prevent it dropping below maxHealth unless Lethal
 
-    if currentHealth > targetHealth and currentHealth > maxHealth then
+    if currentHealth >= targetHealth or currentHealth > maxHealth then
         local parts = bodyDamage:getBodyParts()
-        local damageAmount = 0.002;
+        -- Increased damage amounts because this only fires once per in-game minute
+        local damageAmount = 1.0;
 
         if illness >= 50 then
-            damageAmount = 0.01
+            damageAmount = 3.0
         elseif illness >= 25 then
-            damageAmount = 0.005
+            damageAmount = 1.5
+        end
+
+        -- If the infection is lethal, they should take more damage and die
+        if playerdata.SuperImmuneLethal then
+            damageAmount = damageAmount + 10.0
         end
 
         --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
-        if illness >= 50 and currentHealth > 60 then
-            damageAmount = damageAmount + 0.05
-        end
-
-        --Simulate Max Health Loss
-        if currentHealth >= targetHealth * 1.5 then
-            damageAmount = damageAmount + 0.1
+        if illness >= 50 and currentHealth > maxHealth + 5 then
+            damageAmount = damageAmount + 5.0
         end
 
         local randomBodyPart = parts:get(ZombRand(0, parts:size() - 1))
-        randomBodyPart:AddDamage(damageAmount * multiplier)
+
+        if isClient() then
+            local bodyPartIndex = BodyPartType.ToIndex(randomBodyPart:getType())
+            local args = { bodyPart = bodyPartIndex, partDamage = damageAmount }
+            sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
+        else
+            randomBodyPart:AddDamage(damageAmount)
+        end
     end
 
-    if illness > 10 then
+    if illness >= 10 then
         local stress = stats:get(CharacterStat.STRESS);
-        if internalTick >= 25 and stress <= (illness / 100) then
-            local newStress = math.min(1.0, stress + (0.0001 * multiplier))
+        if stress <= (illness / 100) then
+            local newStress = math.min(1.0, stress + 0.01)
             if isClient() then
                 local args = { stress = newStress }
                 sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
@@ -2749,18 +2976,27 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
     end
 end
 
-function Immunocompromised(player)
+local function Immunocompromised(player)
     if not player:hasTrait(ToadTraitsRegistries.immunocompromised) then
         return
     end
 
     local bodyDamage = player:getBodyDamage();
-    local parts = bodyDamage:getBodyParts();
+    if not bodyDamage:HasInjury() then return end -- Early exit if there is no actual injuries
 
-    for i = 0, parts:size() - 1 do
-        local b = parts:get(i);
-        if b:HasInjury() and b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
-            b:setWoundInfectionLevel(b:getWoundInfectionLevel() + 0.001);
+    local infectionIncrease = 0.05
+
+    if isClient() then
+        sendClientCommand(player, 'ToadTraits', 'Immunocompromised', { infectionIncrease = infectionIncrease })
+    else
+        local parts = bodyDamage:getBodyParts();
+        for i = 0, parts:size() - 1 do
+            local b = parts:get(i);
+            local infectionValue = b:getWoundInfectionLevel()
+            if infectionValue >= 10.0 then return end
+            if b:isInfectedWound() and b:getAlcoholLevel() <= 0 then
+                b:setWoundInfectionLevel(infectionValue + infectionIncrease);
+            end
         end
     end
 end
@@ -2778,11 +3014,7 @@ for i = 1, activeModIDs:size() do
     end
 end
 
-function MT_checkWeight(player)
-    if not player then
-        return
-    end ;
-
+local function MT_checkWeight(player)
     local targetWeight = 0;
     targetWeight = targetWeight + (SandboxVars.MoreTraits.WeightGlobalMod or 0);
 
@@ -2904,7 +3136,7 @@ local function graveRobber(page, player)
     end
 end
 
-function Gourmand(page, player)
+local function Gourmand(page, player)
     if not player:hasTrait(ToadTraitsRegistries.gourmand) then
         return
     end
@@ -2965,7 +3197,7 @@ function Gourmand(page, player)
     end
 end
 
-function setFoodState(food, state, player)
+local function setFoodState(food, state, player)
     --States: "Gourmand", "Normal", "Ascetic"
     local itemdata = food:getModData();
     local curUnhappyChange = food:getUnhappyChange();
@@ -3191,7 +3423,7 @@ function setFoodState(food, state, player)
 
 end
 
-function FoodUpdate(player)
+local function FoodUpdate(player)
     local plyinv = player:getInventory()
     local items = plyinv:getItems()
     local itemCount = items:size()
@@ -3211,7 +3443,7 @@ function FoodUpdate(player)
     end
 end
 
-function FearfulUpdate(player, playerdata)
+local function FearfulUpdate(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.fearful) then
         return
     end
@@ -3260,43 +3492,45 @@ function FearfulUpdate(player, playerdata)
     end
 end
 
-function GymGoer(player, perk, amount)
+local function GymGoer(player, perk, amount)
+    if amount <= 0 or not player:hasTrait(ToadTraitsRegistries.gymgoer) then
+        return
+    end
+
+    local isFitnessState = (FitnessState and player:getCurrentState() == FitnessState.instance())
+    if perk ~= Perks.Fitness and perk ~= Perks.Strength and not isFitnessState then
+        return
+    end
+
     local playerdata = player:getModData()
-    if not playerdata then
-        return
-    end ;
-    if playerdata.GymGoerProcessing then
-        return
-    end
+    if not playerdata then return end
+    if playerdata.GymGoerProcessing then return end
 
-    if player:hasTrait(ToadTraitsRegistries.gymgoer) and (perk == Perks.Fitness or perk == Perks.Strength) and player:getCurrentState() == FitnessState.instance() then
-        playerdata.GymGoerProcessing = true
+    playerdata.GymGoerProcessing = true
 
-        local modifier = SandboxVars.MoreTraits.GymGoerPercent or 200
-        local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1
+    local modifier = (SandboxVars.MoreTraits.GymGoerPercent or 200)
+    local bonusMultiplier = (modifier * 0.01) - 1 
+    
+    if bonusMultiplier > 0 then
         local bonusAmount = amount * bonusMultiplier
-
         AddXP(player, perk, bonusAmount)
-
-        playerdata.GymGoerProcessing = false
     end
+
+    playerdata.GymGoerProcessing = false
 end
 
-function GymGoerUpdate(player, playerdata)
+local function GymGoerUpdate(player, playerdata)
     local trait = player:hasTrait(ToadTraitsRegistries.gymgoer)
     local noExerciseFatigue = SandboxVars.MoreTraits.GymGoerNoExerciseFatigue
     if not (trait and noExerciseFatigue) then
         return
-    end ;
-
-    local bodyDamage = player:getBodyDamage();
-    local fitness = player:getFitness();
+    end
 
     if not playerdata.GymGoerStiffnessList then
         playerdata.GymGoerStiffnessList = { 0, 0, 0, 0 }
     end
 
-    local stiffnessList = playerdata.GymGoerStiffnessList
+    local fitness = player:getFitness();
     local muscleGroups = {
         [1] = {
             val = fitness:getCurrentExeStiffnessInc("arms"),
@@ -3316,6 +3550,7 @@ function GymGoerUpdate(player, playerdata)
         }
     }
 
+    local stiffnessList = playerdata.GymGoerStiffnessList
     for i, group in ipairs(muscleGroups) do
         local currentStiffness = group.val
         local recordedStiffness = stiffnessList[i]
@@ -3323,14 +3558,24 @@ function GymGoerUpdate(player, playerdata)
         if currentStiffness > recordedStiffness or currentStiffness == 0 then
             stiffnessList[i] = currentStiffness
         elseif currentStiffness < (recordedStiffness / 2) then
-            for _, partType in ipairs(group.parts) do
-                bodyDamage:getBodyPart(partType):setStiffness(0)
+            if isClient() then
+                local bodyParts = {}
+                for _, partType in ipairs(group.parts) do
+                    table.insert(bodyParts, partType:getIndex())
+                end
+                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0 })
+            else
+                for _, partType in ipairs(group.parts) do
+                    local part = player:getBodyDamage():getBodyPart(partType)
+                    part:setStiffness(0)
+                end
             end
+            stiffnessList[i] = 0
         end
     end
 end
 
-function ContainerEvents (iSInventoryPage, state)
+local function ContainerEvents (iSInventoryPage, state)
     local page = iSInventoryPage
     if state == "end" then
         local player = getPlayer();
@@ -3351,46 +3596,15 @@ function ContainerEvents (iSInventoryPage, state)
     end
 end
 
-function MT_LearnAllRecipes(player)
-    local recipes = getScriptManager():getAllCraftRecipes()
-    local ingenuitveLimit = SandboxVars.MoreTraits.IngenuitiveLimit
-
-    if ingenuitveLimit then
-        local unknownRecipes = {}
-        local percentToLearn = (SandboxVars.MoreTraits.IngenuitiveLimitAmount or 50) * 0.01
-
-        for i = 0, recipes:size() - 1 do
-            local recipe = recipes:get(i)
-            if recipe:needToBeLearn() then
-                table.insert(unknownRecipes, recipe:getName())
-            end
-        end
-
-        local totalUnknown = #unknownRecipes
-        if totalUnknown > 0 then
-            local targetAmount = math.floor(totalUnknown * percentToLearn)
-            local learnedCount = 0
-
-            while learnedCount < targetAmount and #unknownRecipes > 0 do
-                local randomIndex = ZombRand(1, #unknownRecipes + 1)
-                local recipeName = table.remove(unknownRecipes, randomIndex)
-
-                player:learnRecipe(recipeName)
-                learnedCount = learnedCount + 1
-            end
-        end
-    else
-        for i = 0, recipes:size() - 1 do
-            local recipe = recipes:get(i)
-            if recipe:needToBeLearn() then
-                player:learnRecipe(recipe:getName())
-            end
-        end
-    end
-end
-
-function UpdateWorkerSpeed(player)
+-- Currently doesn't behave properly in MP (Disabled in MP)
+local function UpdateWorkerSpeed(player)
     if not player:hasTimedActions() then
+        return
+    end
+
+    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
+    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
+    if not (isQuick or isSlow) then
         return
     end
 
@@ -3405,12 +3619,6 @@ function UpdateWorkerSpeed(player)
 
     local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
     if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then
-        return
-    end
-
-    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
-    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
-    if not (isQuick or isSlow) then
         return
     end
 
@@ -3465,7 +3673,7 @@ function UpdateWorkerSpeed(player)
     end
 end
 
-function LeadFoot(player)
+local function LeadFoot(player)
     if not player:hasTrait(ToadTraitsRegistries.leadfoot) then
         return
     end
@@ -3492,73 +3700,7 @@ function LeadFoot(player)
     end
 end
 
-function GlassBody(player, playerData)
-    local bodyDamage = player:getBodyDamage();
-    local currenthp = bodyDamage:getOverallBodyHealth();
-    local multiplier = getGameTime():getMultiplier();
-
-    if playerData.glassBodyLastHP == nil then
-        playerData.glassBodyLastHP = currenthp;
-        playerData.glassBodyInitialized = true;
-        return ;
-    end
-
-    if playerData.glassBodyInitialized == true then
-        playerData.glassBodyInitialized = false;
-        playerData.glassBodyLastHP = currenthp; -- Update to current HP
-        return ;
-    end
-
-    if player:isAsleep() or multiplier > 4.0 then
-        playerData.glassBodyLastHP = currenthp;
-        return ;
-    end
-
-    local lasthp = playerData.glassBodyLastHP;
-
-    if currenthp < lasthp then
-        local difference = lasthp - currenthp;
-        if difference > 50 then
-            playerData.glassBodyLastHP = currenthp;
-            return ;
-        end
-
-        local chance = 33;
-        local woundstrength = 10;
-
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            chance = chance - (5 * luckimpact);
-            woundstrength = woundstrength - (5 * luckimpact);
-        elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
-            chance = chance + (5 * luckimpact);
-            woundstrength = woundstrength + (5 * luckimpact);
-        end
-
-        chance = math.max(5, math.min(95, chance));
-        woundstrength = math.max(5, math.min(25, woundstrength));
-
-        local extraDamageMultiplier = 2;
-        bodyDamage:ReduceGeneralHealth(difference * extraDamageMultiplier);
-
-        if ZombRand(100) <= chance then
-            local partIndex = ZombRand(0, 17);
-            local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(partIndex));
-            if bodyPart then
-                if difference > 0.33 then
-                    local fracture = bodyPart:getFractureTime();
-                    if not fracture or fracture <= 0 then
-                        bodyPart:setFractureTime(ZombRand(20) + woundstrength);
-                    end
-                elseif difference > 0.1 then
-                    bodyPart:setScratched(true, true);
-                end
-            end
-        end
-    end
-    playerData.glassBodyLastHP = bodyDamage:getOverallBodyHealth();
-end
-
-function BatteringRam(player, playerData)
+local function BatteringRam(player, playerData)
     if not player or not player:hasTrait(ToadTraitsRegistries.batteringram) then
         return
     end
@@ -3684,7 +3826,8 @@ local function mundane(actor, target, weapon, damage)
     end
 end
 
-function clothingUpdate(_player)
+-- TODO Check MP
+local function clothingUpdate(_player)
     local player = _player;
     local state = "Normal";
     local wornItems = player:getWornItems();
@@ -3941,7 +4084,7 @@ end
 -- end
 
 local function RestfulSleeper(player, playerdata)
-    if not (player:hasTrait(ToadTraitsRegistries.restfulsleeper) and not player:isAsleep()) then
+    if not player:hasTrait(ToadTraitsRegistries.restfulsleeper) or not player:isAsleep() then
         return
     end
 
@@ -4008,7 +4151,7 @@ local function RestfulSleeperWakeUp(player, playerdata)
             if neck:getAdditionalPain() > 0 then
                 if isClient() then
                     local neckPart = BodyPartType.ToIndex(BodyPartType.Neck)
-                    sendClientCommand(player, 'ToadTraits', 'BodyPartPain', { bodyPart = neckPart, pain = 0 })
+                    sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', { bodyPart = neckPart, partPain = 0 })
                 else
                     neck:setAdditionalPain(0)
                 end
@@ -4034,10 +4177,9 @@ local function HungerCheck(player, playerdata)
         playerdata.SuperImmuneInfections = 0
         playerdata.SuperImmuneLethal = false
         if isClient() then
-            local args = { sickness = 0, zombie_fever = 0, zombie_infection = 0 }
+            local args = { zombie_fever = 0, zombie_infection = 0 }
             sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
         else
-            stats:set(CharacterStat.SICKNESS, 0);
             stats:set(CharacterStat.ZOMBIE_FEVER, 0);
             stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
         end
@@ -4089,7 +4231,7 @@ local function TerminatorGun(player)
             updateStats = true
         elseif hasAntigun then
             args.unhappiness = math.min(100, unhappiness + 0.6)
-            updateqStats = true
+            updateStats = true
         end
 
         if updateStats then
@@ -4148,9 +4290,11 @@ local function CheckForPlayerBuiltContainer(player, playerdata)
 end
 
 local function antigunxpdecrease(player, perk, amount)
-    if player:hasTrait(ToadTraitsRegistries.antigun) and perk == Perks.Aiming then
-        AddXP(player, perk, 0 - (amount * 0.25));
+    if not player:hasTrait(ToadTraitsRegistries.antigun) and perk ~= Perks.Aiming then
+        return
     end
+
+    AddXP(player, perk, 0 - (amount * 0.25));
 end
 
 local function IdealWeight(player, playerdata)
@@ -4267,55 +4411,12 @@ local function BurnWardPatient(player, playerdata)
     end
 end
 
-local function MTOnEquip(player)
-    if not player then
-        return
-    end
+local function handleGordanite(player, item, itemType)
+    local moddata = item:getModData()
+    if not moddata then return end
 
-    local item = player:getPrimaryHandItem()
-    if not item then
-        return
-    end
-
-    local playerdata = player:getModData()
-    if not playerdata then
-        return
-    end
-
-    local itemType = item:getType()
-    local isCrowbar = (itemType == "Crowbar" or itemType == "BloodyCrowbar")
-
-    if player:hasTrait(ToadTraitsRegistries.gordanite) and isCrowbar then
-        local longBluntLvl = player:getPerkLevel(Perks.Blunt)
-        local strengthlvl = player:getPerkLevel(Perks.Strength)
-        local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1
-
-        if SandboxVars.MoreTraits.GordaniteEffectiveness then
-            local modifier = SandboxVars.MoreTraits.GordaniteEffectiveness * 0.01
-            floatmod = floatmod * modifier
-            longBluntLvl = longBluntLvl * modifier
-            strengthlvl = strengthlvl * modifier
-        end
-
-        local moddata = item:getModData()
-
-        if moddata.MTHasBeenModified == nil then
-            if item:getTreeDamage() > 0 and item:getTreeDamage() ~= 100 then
-                item:setMinDamage(0.6);
-                item:setMaxDamage(1.15);
-                item:setPushBackMod(0.5);
-                item:setDoorDamage(8);
-                item:setCriticalChance(35);
-                item:setSwingTime(3);
-                item:setWeaponLength(0.4);
-                item:setMinimumSwingTime(3);
-                item:setTreeDamage(0);
-                item:setBaseSpeed(1);
-                if getActivatedMods():contains("VorpalWeapons") == false then
-                    item:setName(getText("Tooltip_MoreTraits_GordaniteDefault"));
-                end
-            end
-            moddata.MTHasBeenModified = true
+    if player:hasTrait(ToadTraitsRegistries.gordanite) then
+        if not moddata.MTHasBeenModified then
             moddata.MinDamage = item:getMinDamage()
             moddata.MaxDamage = item:getMaxDamage()
             moddata.PushBack = item:getPushBackMod()
@@ -4325,71 +4426,118 @@ local function MTOnEquip(player)
             moddata.SwingTime = item:getSwingTime()
             moddata.BaseSpeed = item:getBaseSpeed()
             moddata.MinimumSwing = item:getMinimumSwingTime()
-            moddata.NameChanged = false
-        end
-
-        item:setMinDamage(moddata.MinDamage + 0.1 + floatmod / 2);
-        item:setMaxDamage(moddata.MaxDamage + 0.1 + floatmod / 2);
-        item:setPushBackMod(moddata.PushBack + 0.1 + floatmod);
-        item:setDoorDamage(moddata.DoorDamage + 7 + strengthlvl + longBluntLvl);
-        item:setTreeDamage(moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2);
-        item:setCriticalChance(moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2);
-        item:setSwingTime(moddata.SwingTime - 0.2 - floatmod);
-        item:setBaseSpeed(moddata.BaseSpeed + 0.1 + floatmod);
-        item:setWeaponLength(0.4 + floatmod / 2);
-        item:setMinimumSwingTime(moddata.MinimumSwing - 0.2 - floatmod);
-
-        if not moddata.NameChanged then
-            if getActivatedMods():contains("VorpalWeapons") == false then
-                item:setName(item:getName() .. "+");
+            moddata.MTHasBeenModified = true
+            
+            if not getActivatedMods():contains("VorpalWeapons") then
+                item:setName(item:getName() .. "+")
             end
-            moddata.NameChanged = true
         end
 
-        local tooltipKey = (itemType == "Crowbar") and "Tooltip_MoreTraits_ItemBoost" or "Tooltip_MoreTraits_BloodyItemBoost"
-        item:setTooltip(getText(tooltipKey))
-    elseif isCrowbar then
-        local moddata = item:getModData()
+        local longBluntLvl = player:getPerkLevel(Perks.Blunt)
+        local strengthlvl = player:getPerkLevel(Perks.Strength)
+        local floatmod = (longBluntLvl + strengthlvl) / 2 * 0.1
 
-        if moddata.MTHasBeenModified then
-            item:setMinDamage(moddata.MinDamage);
-            item:setMaxDamage(moddata.MaxDamage);
-            item:setPushBackMod(moddata.PushBack);
-            item:setDoorDamage(moddata.DoorDamage);
-            item:setCriticalChance(moddata.CriticalChance);
-            item:setSwingTime(moddata.SwingTime);
-            item:setWeaponLength(0.4);
-            item:setMinimumSwingTime(moddata.MinimumSwing);
-            item:setTreeDamage(moddata.TreeDamage);
-            item:setBaseSpeed(moddata.BaseSpeed);
+        local modifier = (SandboxVars.MoreTraits.GordaniteEffectiveness or 100) * 0.01
+        floatmod = floatmod * modifier
+        longBluntLvl = longBluntLvl * modifier
+        strengthlvl = strengthlvl * modifier
 
-            if not getActivatedMods():contains("VorpalWeapons") and moddata.NameChanged then
-                item:setName(string.sub(item:getName(), 1, -2))
-            end
-
-            local tooltip = (itemType == "BloodyCrowbar") and getText("Tooltip_MoreTraits_BloodyCrowbar") or nil
-            item:setTooltip(tooltip)
-
-            moddata.NameChanged = false
-            moddata.MTHasBeenModified = false
-        end
-    end
-
-    if player:hasTrait(ToadTraitsRegistries.burned) then
-        local fireItems = {
-            FlameTrap = true, FlameTrapTriggered = true, FlameTrapSensorV1 = true,
-            FlameTrapSensorV2 = true, FlameTrapSensorV3 = true, FlameTrapRemote = true,
-            Molotov = true
+        local stats = {
+            minDmg = moddata.MinDamage + 0.1 + floatmod / 2,
+            maxDmg = moddata.MaxDamage + 0.1 + floatmod / 2,
+            pushBack = moddata.PushBack + 0.1 + floatmod,
+            doorDmg = moddata.DoorDamage + 7 + strengthlvl + longBluntLvl,
+            treeDmg = moddata.TreeDamage + 15 + strengthlvl + longBluntLvl * 2,
+            crit = moddata.CriticalChance + (strengthlvl + longBluntLvl) / 2,
+            swing = moddata.SwingTime - 0.2 - floatmod,
+            speed = moddata.BaseSpeed + 0.1 + floatmod,
+            length = 0.4 + floatmod / 2,
+            minSwing = moddata.MinimumSwing - 0.2 - floatmod
         }
+        item:setMinDamage(stats.minDmg)
+        item:setMaxDamage(stats.maxDmg)
+        item:setPushBackMod(stats.pushBack)
+        item:setDoorDamage(stats.doorDmg)
+        item:setTreeDamage(stats.treeDmg)
+        item:setCriticalChance(stats.crit)
+        item:setSwingTime(stats.swing)
+        item:setBaseSpeed(stats.speed)
+        item:setWeaponLength(stats.length)
+        item:setMinimumSwingTime(stats.minSwing)
+        
+        local tooltipKey = (itemType == "Crowbar" or itemType == "CrowbarForged") and "Tooltip_MoreTraits_ItemBoost" or "Tooltip_MoreTraits_BloodyItemBoost"
+        item:setTooltip(getText(tooltipKey))
 
-        if fireItems[itemType] then
-            player:setPrimaryHandItem(nil)
-            HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed())
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'ApplyGordanite', { itemID = item:getID(), stats = stats })
+        end
+
+    elseif moddata.MTHasBeenModified then
+        item:setMinDamage(moddata.MinDamage)
+        item:setMaxDamage(moddata.MaxDamage)
+        item:setPushBackMod(moddata.PushBack)
+        item:setDoorDamage(moddata.DoorDamage)
+        item:setTreeDamage(moddata.TreeDamage)
+        item:setCriticalChance(moddata.CriticalChance)
+        item:setSwingTime(moddata.SwingTime)
+        item:setBaseSpeed(moddata.BaseSpeed)
+        item:setWeaponLength(0.4)
+        item:setMinimumSwingTime(moddata.MinimumSwing)
+
+        if not getActivatedMods():contains("VorpalWeapons") then
+            local name = item:getName()
+            if string.sub(name, -1) == "+" then
+                item:setName(string.sub(name, 1, -2))
+            end
+        end
+
+        local tooltip = (itemType == "BloodyCrowbar") and getText("Tooltip_MoreTraits_BloodyCrowbar") or nil
+        item:setTooltip(tooltip)
+        
+        moddata.MTHasBeenModified = false
+
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'RevertGordanite', { itemID = item:getID() })
         end
     end
 end
 
-function MTAlcoholismMoodle(player, playerdata)
+local function OnEquipPrimary(player, item)
+    if not player or not item then return end
+
+    local isAmputee = player:hasTrait(ToadTraitsRegistries.amputee) or getActivatedMods():contains("Amputation")
+    if isAmputee and (item:isTwoHandWeapon() or item:isRequiresEquippedBothHands()) then
+        player:setPrimaryHandItem(nil)
+        HaloTextHelper.addText(player, getText("UI_trait_amputee_missingarm"), "",  HaloTextHelper.getColorRed())
+        return
+    end
+
+    local itemType = item:getType()
+    if player:hasTrait(ToadTraitsRegistries.burned) then
+        local fireItems = {
+            FlameTrap = true, FlameTrapTriggered = true, FlameTrapSensorV1 = true, FlameTrapSensorV2 = true,
+            FlameTrapSensorV3 = true, FlameTrapRemote = true, Molotov = true
+        }
+        if fireItems[itemType] then
+            player:setPrimaryHandItem(nil)
+            HaloTextHelper.addText(player, getText("UI_burnedcannotequip"), "", HaloTextHelper.getColorRed())
+            return
+        end
+    end
+
+    local crowbars = {
+        ["Crowbar"] = true,
+        ["CrowbarForged"] = true,
+        ["BloodyCrowbar"] = true
+    }
+
+    local isCrowbar = crowbars[itemType]
+    if isCrowbar then
+        handleGordanite(player, item, itemType)
+    end
+end
+
+local function MTAlcoholismMoodle(player, playerdata)
     --Experimental MoodleFramework Support
     if not player:hasTrait(ToadTraitsRegistries.drinker) then
         return
@@ -4486,7 +4634,7 @@ function MTAlcoholismMoodle(player, playerdata)
     end
 end
 
-function MTAlcoholismMoodleTracker(player, playerdata)
+local function MTAlcoholismMoodleTracker(player, playerdata)
     --Experimental MoodleFramework Support
     if not player:hasTrait(ToadTraitsRegistries.drinker) then
         return
@@ -4502,7 +4650,42 @@ function MTAlcoholismMoodleTracker(player, playerdata)
     MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
 end
 
-function MainPlayerUpdate(player)
+local function updateUnwavering(player, playerdata)
+    if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
+    if playerdata.UnwaveringInjurySpeedChanged then return end
+
+    local bodyDamage = player:getBodyDamage()
+    local parts = bodyDamage:getBodyParts()
+    local partIndexes = {}
+    
+    local stats = {
+        scratch = 30,
+        cut = 30,
+        deep = 60,
+        burn = 60
+    }
+
+    for i = 0, parts:size() - 1 do
+        table.insert(partIndexes, i)
+        
+        local part = parts:get(i)
+        -- Apply locally (Client and Singleplayer)
+        part:setScratchSpeedModifier(part:getScratchSpeedModifier() + stats.scratch)
+        part:setCutSpeedModifier(part:getCutSpeedModifier() + stats.cut)
+        part:setDeepWoundSpeedModifier(part:getDeepWoundSpeedModifier() + stats.deep)
+        part:setBurnSpeedModifier(part:getBurnSpeedModifier() + stats.burn)
+    end
+
+    if isClient() then
+        -- Send the list of IDs and the stat table to the server
+        local args = { bodyParts = partIndexes, unwaveringStats = stats }
+        sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
+    end
+
+    playerdata.UnwaveringInjurySpeedChanged = true
+end
+
+local function OnPlayerUpdate(player)
     if not player then
         return
     end ;
@@ -4525,15 +4708,12 @@ function MainPlayerUpdate(player)
         FearfulUpdate(player, playerdata);
     elseif internalTick == 10 then
         SuperImmune(player, playerdata);
-        Immunocompromised(player);
     end
     -- MotionSickness(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     -- MotionSicknessHealthLoss(player); -- Unsure if needed now due to Motion Sensitive trait in Vanilla?
     SecondWind(player, playerdata);
     indefatigable(player, playerdata);
-    checkBloodTraits(player);
     CheckDepress(player, playerdata);
-    CheckSelfHarm(player);
     Blissful(player);
     hardytrait(player, playerdata);
     if isMoodleFrameWorkEnabled == false then
@@ -4546,11 +4726,10 @@ function MainPlayerUpdate(player)
     badteethtrait(player, playerdata);
     albino(player, playerdata);
     UpdateWorkerSpeed(player)
-    SuperImmuneFakeInfectionHealthLoss(player, playerdata);
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
-    MT_FastGimpTraits(player, internalTick)
+    MT_FastGimpTraits(player)
     NoodleLegs(player)
     internalTick = internalTick + 1;
     if internalTick > 30 then
@@ -4559,7 +4738,7 @@ function MainPlayerUpdate(player)
     end
 end
 
-function EveryOneMinute()
+local function EveryOneMinute()
     local player = getPlayer();
     if not player then
         return
@@ -4580,6 +4759,10 @@ function EveryOneMinute()
     TerminatorGun(player);
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess(player, playerdata);
+    SuperImmuneFakeInfectionHealthLoss(player, playerdata);
+    Immunocompromised(player);
+    CheckSelfHarm(player);
+    checkBloodTraits(player);
     
     if getActivatedMods():contains("DracoExpandedTraits") then
         MT_checkWeight(player)
@@ -4590,7 +4773,7 @@ function EveryOneMinute()
     end
 end
 
-function EveryTenMinutes()
+local function EveryTenMinutes()
     local player = getPlayer();
     if not player then
         return
@@ -4600,7 +4783,7 @@ function EveryTenMinutes()
     end
 end
 
-function EveryHours()
+local function EveryHours()
     local player = getPlayer();
     if not player then
         return
@@ -4621,18 +4804,7 @@ function EveryHours()
     indefatigablecounter(player, playerdata);
     RestfulSleeper(player, playerdata);
     ToadTraitDepressive(player, playerdata);
-
-    if player:hasTrait(ToadTraitsRegistries.unwavering) and not playerdata.UnwaveringInjurySpeedChanged then
-        playerdata.UnwaveringInjurySpeedChanged = true;
-        local bodyParts = player:getBodyDamage():getBodyParts()
-        for n = 0, bodyParts:size() - 1 do
-            local part = bodyParts:get(n);
-            part:setScratchSpeedModifier(part:getScratchSpeedModifier() + 30);
-            part:setCutSpeedModifier(part:getCutSpeedModifier() + 30);
-            part:setDeepWoundSpeedModifier(part:getDeepWoundSpeedModifier() + 60);
-            part:setBurnSpeedModifier(part:getBurnSpeedModifier() + 60);
-        end
-    end
+    updateUnwavering(player, playerdata);
 
     if player:hasTrait(ToadTraitsRegistries.ingenuitive) and not playerdata.IngenuitiveActivated then
         MT_LearnAllRecipes(player)
@@ -4660,7 +4832,7 @@ function EveryHours()
     end
 end
 
-function OnCreatePlayer(playerindex, player)
+local function OnCreatePlayer(playerindex, player)
     if not player then
         return
     end
@@ -4690,13 +4862,13 @@ function OnCreatePlayer(playerindex, player)
     print("More Traits - Current Mod Version: " .. MTModVersion)
 end
 
-function OnInitWorld()
+local function OnInitWorld()
     if getGameTime():getModData().MTModVersion == nil then
         getGameTime():getModData().MTModVersion = MTModVersion;
     end
 end
 
-function onNewGame(player)
+local function onNewGame(player)
     if not player then
         return
     end
@@ -4709,17 +4881,19 @@ function onNewGame(player)
     initToadTraitsPerks(player, playerdata);
 end
 
-Events.OnWeaponHitCharacter.Add(unwavering);
+Events.OnEquipPrimary.Add(OnEquipPrimary)
+Events.OnEquipSecondary.Add(OnEquipSecondary); 
 Events.OnWeaponHitCharacter.Add(promelee);
 Events.OnWeaponHitCharacter.Add(actionhero);
 Events.OnWeaponHitCharacter.Add(mundane);
 Events.OnWeaponHitCharacter.Add(tavernbrawler);
+Events.OnWeaponHitCharacter.Add(unwavering);
 Events.OnWeaponSwing.Add(progun);
 Events.OnWeaponHitCharacter.Add(martial);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.AddXP.Add(antigunxpdecrease);
-Events.OnPlayerUpdate.Add(MainPlayerUpdate);
+Events.OnPlayerUpdate.Add(OnPlayerUpdate);
 Events.EveryOneMinute.Add(EveryOneMinute);
 Events.EveryTenMinutes.Add(EveryTenMinutes);
 Events.EveryHours.Add(EveryHours);
@@ -4727,6 +4901,5 @@ Events.OnInitWorld.Add(OnInitWorld);
 Events.OnNewGame.Add(onNewGame);
 Events.OnCreatePlayer.Add(OnCreatePlayer);
 Events.OnPlayerGetDamage.Add(MTPlayerHit)
-Events.OnEquipPrimary.Add(MTOnEquip)
 Events.OnRefreshInventoryWindowContainers.Add(ContainerEvents);
 Events.LevelPerk.Add(FixSpecialization);
