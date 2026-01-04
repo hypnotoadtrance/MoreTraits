@@ -6,23 +6,19 @@ local function isBurnedActions()
     }
 
     local function isBurnedAverse(character)
-        if not character then return false end
-        -- Ensure ToadTraitsRegistries is loaded; if not, use the string "burned"
-        local trait = (ToadTraitsRegistries and ToadTraitsRegistries.burned) or "burned"
-        if character:hasTrait(trait) and SandboxVars.MoreTraits.BurnedFireAversion then
+        if character:hasTrait(ToadTraitsRegistries.burned) and SandboxVars.MoreTraits.BurnedFireAversion then
             return true
         end
         return false
     end
 
     for _, action in ipairs(fireActions) do
-        -- Only patch if the action table actually exists
         if action and action.new then
             local original_new = action.new
             
             action.new = function(self, character, ...)
                 local o = original_new(self, character, ...)
-                if not o then return nil end -- Safety for failed constructors
+                if not o then return nil end
                 
                 o.sound = 0
                 
