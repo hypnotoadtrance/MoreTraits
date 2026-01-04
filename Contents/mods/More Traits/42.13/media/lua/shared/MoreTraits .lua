@@ -2706,68 +2706,69 @@ local function SuperImmune(player, playerdata)
     local zombieInfection = stats:get(CharacterStat.ZOMBIE_INFECTION);
     local bodyDamage = player:getBodyDamage();
 
-    if zombieInfection > 0 then
-        -- Determine whether this is for SP or MP
-        if isClient() then
-            local args = { zombie_fever = 100, zombie_infection = 0, clear_wounds = true }
-            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
-        else
-            -- We set the Fever here to 100 for the Health Loss and simulate fighting the infection
-            stats:set(CharacterStat.ZOMBIE_FEVER, 100);
-            stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
-            bodyDamage:setInfected(false);
-            bodyDamage:setInfectionMortalityDuration(-1);
-            bodyDamage:setInfectionTime(-1);
+    if zombieInfection <= 0 then
+        return
+    end
 
-            local parts = bodyDamage:getBodyParts()
-            for i = 0, parts:size() - 1 do
-                local b = parts:get(i);
-                if b:HasInjury() and b:isInfectedWound() then
-                    b:SetInfected(false);
-                    b:setInfectedWound(false);
-                end
+    if isClient() then
+        local args = { zombie_fever = 100, zombie_infection = 0, clear_wounds = true }
+        sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+    else
+        -- We set the Fever here to 100 for the Health Loss and simulate fighting the infection
+        stats:set(CharacterStat.ZOMBIE_FEVER, 100);
+        stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
+        bodyDamage:setInfected(false);
+        bodyDamage:setInfectionMortalityDuration(-1);
+        bodyDamage:setInfectionTime(-1);
+
+        local parts = bodyDamage:getBodyParts()
+        for i = 0, parts:size() - 1 do
+            local b = parts:get(i);
+            if b:HasInjury() and b:isInfectedWound() then
+                b:SetInfected(false);
+                b:setInfectedWound(false);
             end
         end
+    end
 
-        local minimum = SandboxVars.MoreTraits.SuperImmuneMinDays or 10;
-        local maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays or 30;
-        if minimum > maximum then
-            minimum, maximum = maximum, minimum
-        end
+    local minimum = SandboxVars.MoreTraits.SuperImmuneMinDays or 10;
+    local maximum = SandboxVars.MoreTraits.SuperImmuneMaxDays or 30;
+    if minimum > maximum then
+        minimum, maximum = maximum, minimum
+    end
 
-        local timeOfRecovery = 0;
-        if minimum == maximum + 1 then
-            timeOfRecovery = minimum;
-        else
-            timeOfRecovery = ZombRand(minimum, maximum + 1);
-        end
+    local timeOfRecovery = 0;
+    if minimum == maximum + 1 then
+        timeOfRecovery = minimum;
+    else
+        timeOfRecovery = ZombRand(minimum, maximum + 1);
+    end
 
-        if player:hasTrait(CharacterTrait.FAST_HEALER) then
-            timeOfRecovery = timeOfRecovery - 5;
-        end
-        if player:hasTrait(CharacterTrait.SLOW_HEALER) then
-            timeOfRecovery = timeOfRecovery + 5;
-        end
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            timeOfRecovery = timeOfRecovery - 2 * luckimpact;
-        end
-        if player:hasTrait(ToadTraitsRegistries.unlucky) then
-            timeOfRecovery = timeOfRecovery + 2 * luckimpact;
-        end
+    if player:hasTrait(CharacterTrait.FAST_HEALER) then
+        timeOfRecovery = timeOfRecovery - 5;
+    end
+    if player:hasTrait(CharacterTrait.SLOW_HEALER) then
+        timeOfRecovery = timeOfRecovery + 5;
+    end
+    if player:hasTrait(ToadTraitsRegistries.lucky) then
+        timeOfRecovery = timeOfRecovery - 2 * luckimpact;
+    end
+    if player:hasTrait(ToadTraitsRegistries.unlucky) then
+        timeOfRecovery = timeOfRecovery + 2 * luckimpact;
+    end
 
-        timeOfRecovery = math.max(minimum, math.min(maximum, timeOfRecovery))
+    timeOfRecovery = math.max(minimum, math.min(maximum, timeOfRecovery))
 
-        if playerdata.SuperImmuneHealedOnce and playerdata.SuperImmuneFirstInfectionBonus then
-            --Halve the time needed once it beat the virus once, since immune system
-            timeOfRecovery = timeOfRecovery / 2; --will know how to beat it.
-        end
+    if playerdata.SuperImmuneHealedOnce and playerdata.SuperImmuneFirstInfectionBonus then
+        --Halve the time needed once it beat the virus once, since immune system
+        timeOfRecovery = timeOfRecovery / 2; --will know how to beat it.
+    end
 
-        playerdata.SuperImmuneActive = true
-        playerdata.SuperImmuneRecovery = (playerdata.SuperImmuneRecovery or 0) + timeOfRecovery
+    playerdata.SuperImmuneActive = true
+    playerdata.SuperImmuneRecovery = (playerdata.SuperImmuneRecovery or 0) + timeOfRecovery
 
-        if SandboxVars.MoreTraits.SuperImmuneWeakness then
-            playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
-        end
+    if SandboxVars.MoreTraits.SuperImmuneWeakness then
+        playerdata.SuperImmuneInfections = playerdata.SuperImmuneInfections + 1;
     end
 end
 
@@ -2824,9 +2825,15 @@ local function SuperImmuneRecoveryProcess(player, playerdata)
         end
         playerdata.SuperImmuneMinutesPassed = timeElapsed + totalTime
 
-        -- A check to make sure their illness doesn't go below whilst still recovering
-        if illness < 50 then
+        -- Lets make sure their infection doesn't drop too far down whilst recovering
+        if illness < 15 then
             illness = 50
+            if isClient() then
+                local args = { zombie_fever = illness }
+                sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
+            else
+                stats:set(CharacterStat.ZOMBIE_FEVER, illness);
+            end
         end
 
         if isDebugEnabled() and not isServer() then
@@ -4752,6 +4759,7 @@ local function EveryOneMinute()
     TerminatorGun(player);
     BurnWardPatient(player, playerdata)
     SuperImmuneRecoveryProcess(player, playerdata);
+    SuperImmuneFakeInfectionHealthLoss(player, playerdata);
     Immunocompromised(player);
     CheckSelfHarm(player);
     checkBloodTraits(player);
