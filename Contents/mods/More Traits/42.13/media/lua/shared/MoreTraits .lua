@@ -2897,11 +2897,13 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
         return
     end
 
-    local maxHealth = 20;
+    local maxHealth = isClient() and 20 or 15;
     if player:hasTrait(ToadTraitsRegistries.indefatigable) then
-        maxHealth = 30;
+        maxHealth = isClient() and 30 or 25;
     end
 
+    local stats = player:getStats();
+    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
     if SandboxVars.MoreTraits.SuperImmuneWeakness then
         local limit = 4;
 
@@ -2911,12 +2913,13 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
 
         if player:hasTrait(CharacterTrait.FAST_HEALER) then
             limit = limit + 1;
-        elseif player:hasTrait(CharacterTrait.SLOW_SLOWER) then
+        elseif player:hasTrait(CharacterTrait.SLOW_HEALER) then
             limit = limit - 1;
         end
 
-        if (playerdata.SuperImmuneInfections or 0) >= limit then
+        if playerdata.SuperImmuneInfections >= limit then
             maxHealth = 0;
+            illness = 100; -- Force them to die
             playerdata.SuperImmuneLethal = true;
         else
             playerdata.SuperImmuneLethal = false;
@@ -2925,47 +2928,44 @@ local function SuperImmuneFakeInfectionHealthLoss(player, playerdata)
 
     local bodyDamage = player:getBodyDamage();
     local currentHealth = bodyDamage:getOverallBodyHealth();
-    local stats = player:getStats();
-    local illness = stats:get(CharacterStat.ZOMBIE_FEVER);
-    local targetHealth = 100 - illness
-    local multiplier = GameSpeedMultiplier()
+    local targetHealth = math.max(maxHealth, 100 - illness) -- Prevent it dropping below maxHealth unless Lethal
 
-    if currentHealth > targetHealth and currentHealth > maxHealth then
+    if currentHealth >= targetHealth or currentHealth > maxHealth then
         local parts = bodyDamage:getBodyParts()
-        local damageAmount = 0.002;
+        -- Increased damage amounts because this only fires once per in-game minute
+        local damageAmount = 1.0;
 
         if illness >= 50 then
-            damageAmount = 0.01
+            damageAmount = 3.0
         elseif illness >= 25 then
-            damageAmount = 0.005
+            damageAmount = 1.5
+        end
+
+        -- If the infection is lethal, they should take more damage and die
+        if playerdata.SuperImmuneLethal then
+            damageAmount = damageAmount + 10.0
         end
 
         --Rapidly lose health if it is too high, to prevent sleep abuse in order to stay healthy
-        if illness >= 50 and currentHealth > 60 then
-            damageAmount = damageAmount + 0.05
-        end
-
-        --Simulate Max Health Loss
-        if currentHealth >= targetHealth * 1.5 then
-            damageAmount = damageAmount + 0.1
+        if illness >= 50 and currentHealth > maxHealth + 5 then
+            damageAmount = damageAmount + 5.0
         end
 
         local randomBodyPart = parts:get(ZombRand(0, parts:size() - 1))
-        local overallDamage = damageAmount * multiplier
 
         if isClient() then
             local bodyPartIndex = BodyPartType.ToIndex(randomBodyPart:getType())
-            local args = { bodyPart = bodyPartIndex, partDamage = overallDamage }
+            local args = { bodyPart = bodyPartIndex, partDamage = damageAmount }
             sendClientCommand(player, 'ToadTraits', 'BodyPartMechanics', args)
         else
-            randomBodyPart:AddDamage(overallDamage)
+            randomBodyPart:AddDamage(damageAmount)
         end
     end
 
-    if illness > 10 then
+    if illness >= 10 then
         local stress = stats:get(CharacterStat.STRESS);
-        if internalTick >= 25 and stress <= (illness / 100) then
-            local newStress = math.min(1.0, stress + (0.0001 * multiplier))
+        if stress <= (illness / 100) then
+            local newStress = math.min(1.0, stress + 0.01)
             if isClient() then
                 local args = { stress = newStress }
                 sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
