@@ -4726,7 +4726,6 @@ local function OnPlayerUpdate(player)
     badteethtrait(player, playerdata);
     albino(player, playerdata);
     UpdateWorkerSpeed(player)
-    SuperImmuneFakeInfectionHealthLoss(player, playerdata);
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
