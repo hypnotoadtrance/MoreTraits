@@ -660,7 +660,7 @@ local function GlassBody(player, playerData)
     playerData.glassBodyLastHP = bodyDamage:getOverallBodyHealth();
 end
 
-function MTPlayerHit(player, _, __)
+local function MTPlayerHit(player, _, __)
     if not player or player:isDead() or player:isZombie() then
         return
     end
@@ -785,7 +785,7 @@ function MTPlayerHit(player, _, __)
     end
 end
 
-function ToadTraitButter(player)
+local function ToadTraitButter(player)
     if player:hasTrait(ToadTraitsRegistries.butterfingers) and player:isPlayerMoving() then
         local basechance = 3;
         local chanceinx = SandboxVars.MoreTraits.ButterfingersChance or 2000;
@@ -830,7 +830,7 @@ function ToadTraitButter(player)
     end
 end
 
-function ToadTraitParanoia(player, playerdata)
+local function ToadTraitParanoia(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.paranoia) then
         return
     end
@@ -879,7 +879,7 @@ function ToadTraitParanoia(player, playerdata)
     end
 end
 
-function ToadTraitScrounger(page, player, playerdata)
+local function ToadTraitScrounger(page, player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.scrounger) then
         return
     end
@@ -976,7 +976,7 @@ function ToadTraitScrounger(page, player, playerdata)
     end
 end
 
-function UnHighlightScrounger(player, playerdata)
+local function UnHighlightScrounger(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.scrounger) then
         return
     end
@@ -1008,7 +1008,7 @@ function UnHighlightScrounger(player, playerdata)
     end
 end
 
-function ToadTraitIncomprehensive(page, player)
+local function ToadTraitIncomprehensive(page, player)
     if not player:hasTrait(ToadTraitsRegistries.incomprehensive) then
         return
     end
