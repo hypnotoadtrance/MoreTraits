@@ -4313,26 +4313,8 @@ local function antigunxpdecrease(player, perk, amount)
     if not player:hasTrait(ToadTraitsRegistries.antigun) then return end
 
     playerdata.AntiGunProcessing = true
-
     local penaltyAmount = amount * 0.25
-    local currentXP = player:getXp():getXP(perk)
-    local currentLevel = player:getPerkLevel(perk) or 0
-    
-    local perkDef = PerkFactory.getPerk(perk)
-    local levelValue = 0
-    if perkDef then
-        levelValue = perkDef:getXpForLevel(currentLevel)
-    end
-
-    if (currentXP - penaltyAmount) < levelValue then
-        penaltyAmount = currentXP - levelValue
-    end
-
-    print(penaltyAmount)
-    if penaltyAmount > 0 then
-        AddXP(player, perk, -penaltyAmount)
-    end
-
+    AddXP(player, perk, -penaltyAmount)
     playerdata.AntiGunProcessing = false
 end
 
