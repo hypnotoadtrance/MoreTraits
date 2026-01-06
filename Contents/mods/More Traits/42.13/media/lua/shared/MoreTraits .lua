@@ -2535,19 +2535,19 @@ local function MT_FastGimpTraits(player)
 
     if player:hasTrait(ToadTraitsRegistries.fast) then
         if player:isSprinting() then
-            modifier = 0.75
+            modifier = SandboxVars.MoreTraits.FastSprint or 0.75
         elseif player:isRunning() then
-            modifier = 0.5
+            modifier = SandboxVars.MoreTraits.FastRunning or 0.5
         elseif player:isWalking() then
-            modifier = 0.25
+            modifier = SandboxVars.MoreTraits.FastWalking or 0.25
         end
     elseif player:hasTrait(ToadTraitsRegistries.gimp) then
         if player:isSprinting() then
-            modifier = -0.25
+            modifier = SandboxVars.MoreTraits.GimpSprint or -0.25
         elseif player:isRunning() then
-            modifier = -0.5
+            modifier = SandboxVars.MoreTraits.GimpRunning or -0.5
         elseif player:isWalking() then
-            modifier = -0.75
+            modifier = SandboxVars.MoreTraits.GimpWalking or -0.75
         end
     end
 
