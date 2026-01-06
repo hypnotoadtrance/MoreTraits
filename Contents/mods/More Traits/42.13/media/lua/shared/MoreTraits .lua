@@ -4325,18 +4325,13 @@ local function CheckForPlayerBuiltContainer(player, playerdata)
 end
 
 local function antigunxpdecrease(player, perk, amount)
-    local playerdata = player:getModData()
-    if not playerdata then return end
-
-    if playerdata.AntiGunProcessing and amount > 0 then
-        playerdata.AntiGunProcessing = false
-    end
-
-    if playerdata.AntiGunProcessing then return end
-
     if amount <= 0 then return end
     if perk ~= Perks.Aiming then return end
     if not player:hasTrait(ToadTraitsRegistries.antigun) then return end
+
+    local playerdata = player:getModData()
+    if not playerdata then return end
+    if playerdata.AntiGunProcessing then return end
 
     playerdata.AntiGunProcessing = true
     local penaltyAmount = amount * 0.25
