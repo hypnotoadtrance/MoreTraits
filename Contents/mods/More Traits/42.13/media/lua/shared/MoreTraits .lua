@@ -3549,14 +3549,12 @@ local function GymGoer(player, perk, amount)
 end
 
 local function GymGoerUpdate(player, playerdata)
-    local trait = player:hasTrait(ToadTraitsRegistries.gymgoer)
-    local noExerciseFatigue = SandboxVars.MoreTraits.GymGoerNoExerciseFatigue
-    if not (trait and noExerciseFatigue) then
+    if not (player:hasTrait(ToadTraitsRegistries.gymgoer) and SandboxVars.MoreTraits.GymGoerNoExerciseFatigue) then
         return
     end
 
+    local fitness = player:getFitness()
     if not playerdata.GymGoerStiffnessList then
-        local fitness = player:getFitness()
         playerdata.GymGoerStiffnessList = {
             fitness:getCurrentExeStiffnessInc("arms"),
             fitness:getCurrentExeStiffnessInc("legs"),
@@ -3565,47 +3563,35 @@ local function GymGoerUpdate(player, playerdata)
         }
     end
 
-    local fitness = player:getFitness();
     local muscleGroups = {
-        [1] = {
-            val = fitness:getCurrentExeStiffnessInc("arms"),
-            parts = { BodyPartType.UpperArm_L, BodyPartType.UpperArm_R, BodyPartType.ForeArm_L, BodyPartType.ForeArm_R, BodyPartType.Hand_L, BodyPartType.Hand_R }
-        },
-        [2] = {
-            val = fitness:getCurrentExeStiffnessInc("legs"),
-            parts = { BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R, BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R }
-        },
-        [3] = {
-            val = fitness:getCurrentExeStiffnessInc("chest"),
-            parts = { BodyPartType.Torso_Upper }
-        },
-        [4] = {
-            val = fitness:getCurrentExeStiffnessInc("abs"),
-            parts = { BodyPartType.Torso_Lower }
-        }
+        { name = "arms", parts = { BodyPartType.UpperArm_L, BodyPartType.UpperArm_R, BodyPartType.ForeArm_L, BodyPartType.ForeArm_R, BodyPartType.Hand_L, BodyPartType.Hand_R } },
+        { name = "legs", parts = { BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R, BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R } },
+        { name = "chest", parts = { BodyPartType.Torso_Upper } },
+        { name = "abs", parts = { BodyPartType.Torso_Lower } }
     }
 
     local stiffnessList = playerdata.GymGoerStiffnessList
     for i, group in ipairs(muscleGroups) do
-        local currentStiffness = group.val
-        local recordedStiffness = stiffnessList[i]
+        local currentStiffness = fitness:getCurrentExeStiffnessInc(group.name)
+        local recordedPeak = stiffnessList[i]
 
-        if currentStiffness > recordedStiffness or currentStiffness == 0 then
-            stiffnessList[i] = currentStiffness
-        elseif currentStiffness < (recordedStiffness / 2) then
+        if recordedPeak > 0 and (currentStiffness == 0 or currentStiffness < (recordedPeak / 2)) then
             if isClient() then
                 local bodyParts = {}
                 for _, partType in ipairs(group.parts) do
                     table.insert(bodyParts, partType:getIndex())
                 end
-                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0 })
+                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0, muscleGroup = group.name })
             else
                 for _, partType in ipairs(group.parts) do
                     local part = player:getBodyDamage():getBodyPart(partType)
                     part:setStiffness(0)
                 end
+                fitness:removeStiffnessValue(group.name)
             end
             stiffnessList[i] = 0
+        elseif currentStiffness > recordedPeak then
+            stiffnessList[i] = currentStiffness
         end
     end
 end

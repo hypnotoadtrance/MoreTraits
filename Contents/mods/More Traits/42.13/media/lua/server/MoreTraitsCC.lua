@@ -209,6 +209,9 @@ local function ProcessBodyPartMechanics(player, args)
             end
             if args.partStiffness ~= nil then
                 bodyPart:setStiffness(args.partStiffness)
+                if args.muscleGroup then
+                    player:getFitness():removeStiffnessValue(args.muscleGroup)
+                end
             end
             if args.partAdd ~= nil then
                 bodyPart:AddHealth(args.partHealthAdd)
