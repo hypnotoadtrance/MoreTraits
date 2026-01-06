@@ -3016,16 +3016,47 @@ for i = 1, activeModIDs:size() do
 end
 
 local function MT_checkWeight(player)
+    --[[
+        VANILLA WEIGHT CALCULATION REFERENCE
+        Source Logic: UpdateStrength() / getWeightMod() / getMaxWeightDelta()
+
+        FORMULA:
+        ((Base 8 * StrengthMod) - MoodlePenalties) * TraitMod = Final Capacity
+
+        STRENGTH (getWeightMod):
+        Lvl 0: 0.8
+        Lvl 1: 0.9  | Lvl 2: 1.07 | Lvl 3: 1.24 | Lvl 4: 1.41 | Lvl 5: 1.58
+        Lvl 6: 1.75 | Lvl 7: 1.92 | Lvl 8: 2.09 | Lvl 9: 2.26 | Lvl 10: 2.5
+
+        TRAIT (getMaxWeightDelta):
+        Weak: 0.75 | Feeble: 0.90 | Normal: 1.00 | Stout: 1.25 | Strong: 1.50
+
+        VANILLA VALUES
+        -------------------------------------------------------
+        Level 0  : (8 * 0.8)  * 1.0 = 6.4  -> [ 6 ]
+        Level 1  : (8 * 0.9)  * 1.0 = 7.2  -> [ 7 ]
+        Level 2  : (8 * 1.07) * 1.0 = 8.5  -> [ 8 ]
+        Level 3  : (8 * 1.24) * 1.0 = 9.9  -> [ 9 ]
+        Level 4  : (8 * 1.41) * 1.0 = 11.2 -> [ 11 ]
+        Level 5  : (8 * 1.58) * 1.0 = 12.6 -> [ 12 ]
+        Level 6  : (8 * 1.75) * 1.0 = 14.0 -> [ 14 ]
+        Level 7  : (8 * 1.92) * 1.0 = 15.3 -> [ 15 ]
+        Level 8  : (8 * 2.09) * 1.0 = 16.7 -> [ 16 ]
+        Level 9  : (8 * 2.26) * 1.0 = 18.0 -> [ 18 ]
+        Level 10 : (8 * 2.5)  * 1.0 = 20.0 -> [ 20 ]
+        -------------------------------------------------------
+    ]]
+
     local targetWeight = 0;
     targetWeight = targetWeight + (SandboxVars.MoreTraits.WeightGlobalMod or 0);
 
     if player:hasTrait(ToadTraitsRegistries.packmule) then
         local strength = player:getPerkLevel(Perks.Strength);
-        targetWeight = (SandboxVars.MoreTraits.WeightPackMule or 14) + math.floor(strength / 5)
+        targetWeight = (SandboxVars.MoreTraits.WeightPackMule or 10) + math.floor(strength / 5)
     elseif player:hasTrait(ToadTraitsRegistries.packmouse) then
-        targetWeight = SandboxVars.MoreTraits.WeightPackMouse or 10
+        targetWeight = SandboxVars.MoreTraits.WeightPackMouse or 6
     else
-        targetWeight = SandboxVars.MoreTraits.WeightDefault or 12
+        targetWeight = SandboxVars.MoreTraits.WeightDefault or 8
     end
 
     if targetWeight > 50 then targetWeight = 50; end
