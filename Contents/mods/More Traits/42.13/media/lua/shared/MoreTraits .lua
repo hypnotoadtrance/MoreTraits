@@ -107,9 +107,9 @@ end
 --     return 1.0
 -- end
 
-local function AddXP(player, perk, amount, noMultiplier)
-    -- Arguments: player, perkObject, amount, noMultiplier
-    sendAddXp(player, perk, amount, noMultiplier or false);  -- Covers both SP and MP
+local function MT_AddXP(player, perk, amount, xpBoost)
+    -- Arguments: perk, amount, xpBoost
+    player:getXp():AddXP(perk, amount, xpBoost or false, false, false)
 end
 
 -- Helper function to level up perks safely and grant XP to the next level
@@ -1541,7 +1541,7 @@ local function Specialization(player, perk, amount)
 
     -- Exit if they are specialized in this perk (granting full XP)
     for trait, perks in pairs(specs) do
-        if player:hasTrait(trait) then
+        if player:hasTrait(trait) then 
             for _, p in ipairs(perks) do
                 if perk == p then return end
             end
@@ -1549,17 +1549,12 @@ local function Specialization(player, perk, amount)
     end
 
     -- Otherwise they should only be getting 25% of the actual XP earned.
-    local modifier = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01
-    local xpToRemove = amount - (amount * modifier)
-    local currentXP = player:getXp():getXP(perk)
-
-    -- Ensure we don't remove more XP than the player currently has
-    if xpToRemove > currentXP then
-        xpToRemove = currentXP 
-    end
+    local modifier = math.max(0, (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01)
+    -- local xpToRemove = amount - (amount * modifier) -- This grants them 75% of the XP they would normally get
+    local xpToRemove = amount * modifier -- This actually grants them 25% of the XP they would normally get
 
     skipxpadd = true
-    AddXP(player, perk, -xpToRemove, false)
+    MT_AddXP(player, perk, -xpToRemove)
     skipxpadd = false
 end
 
@@ -2127,7 +2122,7 @@ local function martial(actor, target, weapon, damage)
         else
             stats:set(CharacterStat.ENDURANCE, newEndurance)
         end
-        AddXP(player, Perks.SmallBlunt, damage * 2 * blunt)
+        MT_AddXP(player, Perks.SmallBlunt, damage * 2 * blunt)
     end
 end
 
@@ -3547,7 +3542,7 @@ local function GymGoer(player, perk, amount)
     local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1 
     
     if bonusMultiplier > 0 then
-        AddXP(player, perk, amount * bonusMultiplier)
+        MT_AddXP(player, perk, amount * bonusMultiplier)
     end
 
     playerdata.GymGoerProcessing = false
@@ -4345,7 +4340,7 @@ local function antigunxpdecrease(player, perk, amount)
 
     playerdata.AntiGunProcessing = true
     local penaltyAmount = amount * 0.25
-    AddXP(player, perk, -penaltyAmount)
+    MT_AddXP(player, perk, -penaltyAmount)
     playerdata.AntiGunProcessing = false
 end
 
