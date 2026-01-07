@@ -3618,81 +3618,82 @@ local function ContainerEvents (iSInventoryPage, state)
 end
 
 -- Currently doesn't behave properly in MP (Disabled in MP)
-local function UpdateWorkerSpeed(player)
-    if not player:hasTimedActions() then
-        return
-    end
+-- Moved to TimedActions instead (Keeping existing code in case Build 42 allows it to work in MP)
+-- local function UpdateWorkerSpeed(player)
+    -- if not player:hasTimedActions() then
+    --     return
+    -- end
 
-    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
-    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
-    if not (isQuick or isSlow) then
-        return
-    end
+    -- local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
+    -- local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
+    -- if not (isQuick or isSlow) then
+    --     return
+    -- end
 
-    local actions = player:getCharacterActions()
-    local action = actions:get(0)
-    if not action then
-        return
-    end
+    -- local actions = player:getCharacterActions()
+    -- local action = actions:get(0)
+    -- if not action then
+    --     return
+    -- end
 
-    local type = action:getMetaType()
-    local delta = action:getJobDelta()
+    -- local type = action:getMetaType()
+    -- local delta = action:getJobDelta()
 
-    local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
-    if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then
-        return
-    end
+    -- local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
+    -- if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then
+    --     return
+    -- end
 
-    local modifier = 0.5
-    local multiplier = getGameTime():getMultiplier()
+    -- local modifier = 0.5
+    -- local multiplier = getGameTime():getMultiplier()
 
-    if isQuick and SandboxVars.MoreTraits.QuickWorkerScaler then
-        modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01)
-    elseif isSlow and SandboxVars.MoreTraits.SlowWorkerScaler then
-        modifier = modifier
-    end
+    -- if isQuick and SandboxVars.MoreTraits.QuickWorkerScaler then
+    --     modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01)
+    -- elseif isSlow and SandboxVars.MoreTraits.SlowWorkerScaler then
+    --     modifier = modifier
+    -- end
 
-    local traitModiifer = 0
+    -- local traitModiifer = 0
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then
-        traitModiifer = 0.25 * luckimpact
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then
-        traitModiifer = -0.25 * luckimpact
-    end
+    -- if player:hasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then
+    --     traitModiifer = 0.25 * luckimpact
+    -- elseif player:hasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then
+    --     traitModiifer = -0.25 * luckimpact
+    -- end
 
-    if player:hasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then
-        traitModiifer = traitModiifer + 0.25
-    elseif player:hasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then
-        traitModiifer = traitModiifer - 0.25
-    end
+    -- if player:hasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then
+    --     traitModiifer = traitModiifer + 0.25
+    -- elseif player:hasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then
+    --     traitModiifer = traitModiifer - 0.25
+    -- end
 
-    if isQuick then
-        modifier = modifier + traitModiifer
-    else
-        modifier = modifier + (traitModiifer * -1)
-    end
+    -- if isQuick then
+    --     modifier = modifier + traitModiifer
+    -- else
+    --     modifier = modifier + (traitModiifer * -1)
+    -- end
 
-    if type == "ISReadABook" then
-        if player:hasTrait(CharacterTrait.FAST_READER) then
-            modifier = modifier * (isQuick and 5 or 0.1)
-        elseif player:hasTrait(CharacterTrait.SLOW_READER) then
-            modifier = modifier * (isQuick and 1.5 or 0.5)
-        else
-            modifier = modifier * (isQuick and 3 or 0.25)
-        end
-    end
+    -- if type == "ISReadABook" then
+    --     if player:hasTrait(CharacterTrait.FAST_READER) then
+    --         modifier = modifier * (isQuick and 5 or 0.1)
+    --     elseif player:hasTrait(CharacterTrait.SLOW_READER) then
+    --         modifier = modifier * (isQuick and 1.5 or 0.5)
+    --     else
+    --         modifier = modifier * (isQuick and 3 or 0.25)
+    --     end
+    -- end
 
-    modifier = math.max(0, modifier)
+    -- modifier = math.max(0, modifier)
 
-    if isQuick then
-        action:setCurrentTime(action:getCurrentTime() + (modifier * multiplier))
-    elseif isSlow then
-        local chance = SandboxVars.MoreTraits.SlowWorkerScaler or 15
-        if ZombRand(100) <= chance then
-            action:setCurrentTime(action:getCurrentTime() - modifier)
-        end
-    end
-end
+    -- if isQuick then
+    --     action:setCurrentTime(action:getCurrentTime() + (modifier * multiplier))
+    -- elseif isSlow then
+    --     local chance = SandboxVars.MoreTraits.SlowWorkerScaler or 15
+    --     if ZombRand(100) <= chance then
+    --         action:setCurrentTime(action:getCurrentTime() - modifier)
+    --     end
+    -- end
+-- end
 
 local function LeadFoot(player)
     if not player:hasTrait(ToadTraitsRegistries.leadfoot) then
@@ -4753,7 +4754,7 @@ local function OnPlayerUpdate(player)
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
     albino(player, playerdata);
-    UpdateWorkerSpeed(player)
+    -- UpdateWorkerSpeed(player)
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
