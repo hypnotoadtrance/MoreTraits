@@ -107,9 +107,9 @@ end
 --     return 1.0
 -- end
 
-local function AddXP(player, perk, amount, noMultiplier)
-    -- Arguments: player, perkObject, amount, noMultiplier
-    sendAddXp(player, perk, amount, noMultiplier or false);  -- Covers both SP and MP
+local function MT_AddXP(player, perk, amount, xpBoost)
+    -- Arguments: perk, amount, xpBoost
+    player:getXp():AddXP(perk, amount, xpBoost or false, false, false)
 end
 
 -- Helper function to level up perks safely and grant XP to the next level
@@ -1541,7 +1541,7 @@ local function Specialization(player, perk, amount)
 
     -- Exit if they are specialized in this perk (granting full XP)
     for trait, perks in pairs(specs) do
-        if player:hasTrait(trait) then
+        if player:hasTrait(trait) then 
             for _, p in ipairs(perks) do
                 if perk == p then return end
             end
@@ -1549,17 +1549,12 @@ local function Specialization(player, perk, amount)
     end
 
     -- Otherwise they should only be getting 25% of the actual XP earned.
-    local modifier = (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01
-    local xpToRemove = amount - (amount * modifier)
-    local currentXP = player:getXp():getXP(perk)
-
-    -- Ensure we don't remove more XP than the player currently has
-    if xpToRemove > currentXP then
-        xpToRemove = currentXP 
-    end
+    local modifier = math.max(0, (SandboxVars.MoreTraits.SpecializationXPPercent or 75) * 0.01)
+    -- local xpToRemove = amount - (amount * modifier) -- This grants them 75% of the XP they would normally get
+    local xpToRemove = amount * modifier -- This actually grants them 25% of the XP they would normally get
 
     skipxpadd = true
-    AddXP(player, perk, -xpToRemove, false)
+    MT_AddXP(player, perk, -xpToRemove)
     skipxpadd = false
 end
 
@@ -2127,7 +2122,7 @@ local function martial(actor, target, weapon, damage)
         else
             stats:set(CharacterStat.ENDURANCE, newEndurance)
         end
-        AddXP(player, Perks.SmallBlunt, damage * 2 * blunt)
+        MT_AddXP(player, Perks.SmallBlunt, damage * 2 * blunt)
     end
 end
 
@@ -2540,19 +2535,19 @@ local function MT_FastGimpTraits(player)
 
     if player:hasTrait(ToadTraitsRegistries.fast) then
         if player:isSprinting() then
-            modifier = 0.75
+            modifier = SandboxVars.MoreTraits.FastSprint or 0.75
         elseif player:isRunning() then
-            modifier = 0.5
+            modifier = SandboxVars.MoreTraits.FastRunning or 0.5
         elseif player:isWalking() then
-            modifier = 0.25
+            modifier = SandboxVars.MoreTraits.FastWalking or 0.25
         end
     elseif player:hasTrait(ToadTraitsRegistries.gimp) then
         if player:isSprinting() then
-            modifier = -0.25
+            modifier = SandboxVars.MoreTraits.GimpSprint or -0.25
         elseif player:isRunning() then
-            modifier = -0.5
+            modifier = SandboxVars.MoreTraits.GimpRunning or -0.5
         elseif player:isWalking() then
-            modifier = -0.75
+            modifier = SandboxVars.MoreTraits.GimpWalking or -0.75
         end
     end
 
@@ -3016,16 +3011,47 @@ for i = 1, activeModIDs:size() do
 end
 
 local function MT_checkWeight(player)
+    --[[
+        VANILLA WEIGHT CALCULATION REFERENCE
+        Source Logic: UpdateStrength() / getWeightMod() / getMaxWeightDelta()
+
+        FORMULA:
+        ((Base 8 * StrengthMod) - MoodlePenalties) * TraitMod = Final Capacity
+
+        STRENGTH (getWeightMod):
+        Lvl 0: 0.8
+        Lvl 1: 0.9  | Lvl 2: 1.07 | Lvl 3: 1.24 | Lvl 4: 1.41 | Lvl 5: 1.58
+        Lvl 6: 1.75 | Lvl 7: 1.92 | Lvl 8: 2.09 | Lvl 9: 2.26 | Lvl 10: 2.5
+
+        TRAIT (getMaxWeightDelta):
+        Weak: 0.75 | Feeble: 0.90 | Normal: 1.00 | Stout: 1.25 | Strong: 1.50
+
+        VANILLA VALUES
+        -------------------------------------------------------
+        Level 0  : (8 * 0.8)  * 1.0 = 6.4  -> [ 6 ]
+        Level 1  : (8 * 0.9)  * 1.0 = 7.2  -> [ 7 ]
+        Level 2  : (8 * 1.07) * 1.0 = 8.5  -> [ 8 ]
+        Level 3  : (8 * 1.24) * 1.0 = 9.9  -> [ 9 ]
+        Level 4  : (8 * 1.41) * 1.0 = 11.2 -> [ 11 ]
+        Level 5  : (8 * 1.58) * 1.0 = 12.6 -> [ 12 ]
+        Level 6  : (8 * 1.75) * 1.0 = 14.0 -> [ 14 ]
+        Level 7  : (8 * 1.92) * 1.0 = 15.3 -> [ 15 ]
+        Level 8  : (8 * 2.09) * 1.0 = 16.7 -> [ 16 ]
+        Level 9  : (8 * 2.26) * 1.0 = 18.0 -> [ 18 ]
+        Level 10 : (8 * 2.5)  * 1.0 = 20.0 -> [ 20 ]
+        -------------------------------------------------------
+    ]]
+
     local targetWeight = 0;
     targetWeight = targetWeight + (SandboxVars.MoreTraits.WeightGlobalMod or 0);
 
     if player:hasTrait(ToadTraitsRegistries.packmule) then
         local strength = player:getPerkLevel(Perks.Strength);
-        targetWeight = (SandboxVars.MoreTraits.WeightPackMule or 14) + math.floor(strength / 5)
+        targetWeight = (SandboxVars.MoreTraits.WeightPackMule or 10) + math.floor(strength / 5)
     elseif player:hasTrait(ToadTraitsRegistries.packmouse) then
-        targetWeight = SandboxVars.MoreTraits.WeightPackMouse or 10
+        targetWeight = SandboxVars.MoreTraits.WeightPackMouse or 6
     else
-        targetWeight = SandboxVars.MoreTraits.WeightDefault or 12
+        targetWeight = SandboxVars.MoreTraits.WeightDefault or 8
     end
 
     if targetWeight > 50 then targetWeight = 50; end
@@ -3516,21 +3542,19 @@ local function GymGoer(player, perk, amount)
     local bonusMultiplier = ((modifier * 0.01) - 1) * 0.1 
     
     if bonusMultiplier > 0 then
-        AddXP(player, perk, amount * bonusMultiplier)
+        MT_AddXP(player, perk, amount * bonusMultiplier)
     end
 
     playerdata.GymGoerProcessing = false
 end
 
 local function GymGoerUpdate(player, playerdata)
-    local trait = player:hasTrait(ToadTraitsRegistries.gymgoer)
-    local noExerciseFatigue = SandboxVars.MoreTraits.GymGoerNoExerciseFatigue
-    if not (trait and noExerciseFatigue) then
+    if not (player:hasTrait(ToadTraitsRegistries.gymgoer) and SandboxVars.MoreTraits.GymGoerNoExerciseFatigue) then
         return
     end
 
+    local fitness = player:getFitness()
     if not playerdata.GymGoerStiffnessList then
-        local fitness = player:getFitness()
         playerdata.GymGoerStiffnessList = {
             fitness:getCurrentExeStiffnessInc("arms"),
             fitness:getCurrentExeStiffnessInc("legs"),
@@ -3539,47 +3563,35 @@ local function GymGoerUpdate(player, playerdata)
         }
     end
 
-    local fitness = player:getFitness();
     local muscleGroups = {
-        [1] = {
-            val = fitness:getCurrentExeStiffnessInc("arms"),
-            parts = { BodyPartType.UpperArm_L, BodyPartType.UpperArm_R, BodyPartType.ForeArm_L, BodyPartType.ForeArm_R, BodyPartType.Hand_L, BodyPartType.Hand_R }
-        },
-        [2] = {
-            val = fitness:getCurrentExeStiffnessInc("legs"),
-            parts = { BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R, BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R }
-        },
-        [3] = {
-            val = fitness:getCurrentExeStiffnessInc("chest"),
-            parts = { BodyPartType.Torso_Upper }
-        },
-        [4] = {
-            val = fitness:getCurrentExeStiffnessInc("abs"),
-            parts = { BodyPartType.Torso_Lower }
-        }
+        { name = "arms", parts = { BodyPartType.UpperArm_L, BodyPartType.UpperArm_R, BodyPartType.ForeArm_L, BodyPartType.ForeArm_R, BodyPartType.Hand_L, BodyPartType.Hand_R } },
+        { name = "legs", parts = { BodyPartType.UpperLeg_L, BodyPartType.UpperLeg_R, BodyPartType.LowerLeg_L, BodyPartType.LowerLeg_R } },
+        { name = "chest", parts = { BodyPartType.Torso_Upper } },
+        { name = "abs", parts = { BodyPartType.Torso_Lower } }
     }
 
     local stiffnessList = playerdata.GymGoerStiffnessList
     for i, group in ipairs(muscleGroups) do
-        local currentStiffness = group.val
-        local recordedStiffness = stiffnessList[i]
+        local currentStiffness = fitness:getCurrentExeStiffnessInc(group.name)
+        local recordedPeak = stiffnessList[i]
 
-        if currentStiffness > recordedStiffness or currentStiffness == 0 then
-            stiffnessList[i] = currentStiffness
-        elseif currentStiffness < (recordedStiffness / 2) then
+        if recordedPeak > 0 and (currentStiffness == 0 or currentStiffness < (recordedPeak / 2)) then
             if isClient() then
                 local bodyParts = {}
                 for _, partType in ipairs(group.parts) do
                     table.insert(bodyParts, partType:getIndex())
                 end
-                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0 })
+                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0, muscleGroup = group.name })
             else
                 for _, partType in ipairs(group.parts) do
                     local part = player:getBodyDamage():getBodyPart(partType)
                     part:setStiffness(0)
                 end
+                fitness:removeStiffnessValue(group.name)
             end
             stiffnessList[i] = 0
+        elseif currentStiffness > recordedPeak then
+            stiffnessList[i] = currentStiffness
         end
     end
 end
@@ -3606,81 +3618,82 @@ local function ContainerEvents (iSInventoryPage, state)
 end
 
 -- Currently doesn't behave properly in MP (Disabled in MP)
-local function UpdateWorkerSpeed(player)
-    if not player:hasTimedActions() then
-        return
-    end
+-- Moved to TimedActions instead (Keeping existing code in case Build 42 allows it to work in MP)
+-- local function UpdateWorkerSpeed(player)
+    -- if not player:hasTimedActions() then
+    --     return
+    -- end
 
-    local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
-    local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
-    if not (isQuick or isSlow) then
-        return
-    end
+    -- local isQuick = player:hasTrait(ToadTraitsRegistries.quickworker)
+    -- local isSlow = player:hasTrait(ToadTraitsRegistries.slowworker)
+    -- if not (isQuick or isSlow) then
+    --     return
+    -- end
 
-    local actions = player:getCharacterActions()
-    local action = actions:get(0)
-    if not action then
-        return
-    end
+    -- local actions = player:getCharacterActions()
+    -- local action = actions:get(0)
+    -- if not action then
+    --     return
+    -- end
 
-    local type = action:getMetaType()
-    local delta = action:getJobDelta()
+    -- local type = action:getMetaType()
+    -- local delta = action:getJobDelta()
 
-    local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
-    if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then
-        return
-    end
+    -- local blacklist = { "ISWalkToTimedAction", "ISPathFindAction", "PlayInstrumentAction", "" }
+    -- if tableContains(blacklist, type) or delta <= 0 or delta >= 0.99 then
+    --     return
+    -- end
 
-    local modifier = 0.5
-    local multiplier = getGameTime():getMultiplier()
+    -- local modifier = 0.5
+    -- local multiplier = getGameTime():getMultiplier()
 
-    if isQuick and SandboxVars.MoreTraits.QuickWorkerScaler then
-        modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01)
-    elseif isSlow and SandboxVars.MoreTraits.SlowWorkerScaler then
-        modifier = modifier
-    end
+    -- if isQuick and SandboxVars.MoreTraits.QuickWorkerScaler then
+    --     modifier = modifier * (SandboxVars.MoreTraits.QuickWorkerScaler * 0.01)
+    -- elseif isSlow and SandboxVars.MoreTraits.SlowWorkerScaler then
+    --     modifier = modifier
+    -- end
 
-    local traitModiifer = 0
+    -- local traitModiifer = 0
 
-    if player:hasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then
-        traitModiifer = 0.25 * luckimpact
-    elseif player:hasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then
-        traitModiifer = -0.25 * luckimpact
-    end
+    -- if player:hasTrait(ToadTraitsRegistries.lucky) and ZombRand(100) <= 10 then
+    --     traitModiifer = 0.25 * luckimpact
+    -- elseif player:hasTrait(ToadTraitsRegistries.unlucky) and ZombRand(100) <= 10 then
+    --     traitModiifer = -0.25 * luckimpact
+    -- end
 
-    if player:hasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then
-        traitModiifer = traitModiifer + 0.25
-    elseif player:hasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then
-        traitModiifer = traitModiifer - 0.25
-    end
+    -- if player:hasTrait(CharacterTrait.DEXTROUS) and ZombRand(100) <= 10 then
+    --     traitModiifer = traitModiifer + 0.25
+    -- elseif player:hasTrait(CharacterTrait.ALL_THUMBS) and ZombRand(100) <= 10 then
+    --     traitModiifer = traitModiifer - 0.25
+    -- end
 
-    if isQuick then
-        modifier = modifier + traitModiifer
-    else
-        modifier = modifier + (traitModiifer * -1)
-    end
+    -- if isQuick then
+    --     modifier = modifier + traitModiifer
+    -- else
+    --     modifier = modifier + (traitModiifer * -1)
+    -- end
 
-    if type == "ISReadABook" then
-        if player:hasTrait(CharacterTrait.FAST_READER) then
-            modifier = modifier * (isQuick and 5 or 0.1)
-        elseif player:hasTrait(CharacterTrait.SLOW_READER) then
-            modifier = modifier * (isQuick and 1.5 or 0.5)
-        else
-            modifier = modifier * (isQuick and 3 or 0.25)
-        end
-    end
+    -- if type == "ISReadABook" then
+    --     if player:hasTrait(CharacterTrait.FAST_READER) then
+    --         modifier = modifier * (isQuick and 5 or 0.1)
+    --     elseif player:hasTrait(CharacterTrait.SLOW_READER) then
+    --         modifier = modifier * (isQuick and 1.5 or 0.5)
+    --     else
+    --         modifier = modifier * (isQuick and 3 or 0.25)
+    --     end
+    -- end
 
-    modifier = math.max(0, modifier)
+    -- modifier = math.max(0, modifier)
 
-    if isQuick then
-        action:setCurrentTime(action:getCurrentTime() + (modifier * multiplier))
-    elseif isSlow then
-        local chance = SandboxVars.MoreTraits.SlowWorkerScaler or 15
-        if ZombRand(100) <= chance then
-            action:setCurrentTime(action:getCurrentTime() - modifier)
-        end
-    end
-end
+    -- if isQuick then
+    --     action:setCurrentTime(action:getCurrentTime() + (modifier * multiplier))
+    -- elseif isSlow then
+    --     local chance = SandboxVars.MoreTraits.SlowWorkerScaler or 15
+    --     if ZombRand(100) <= chance then
+    --         action:setCurrentTime(action:getCurrentTime() - modifier)
+    --     end
+    -- end
+-- end
 
 local function LeadFoot(player)
     if not player:hasTrait(ToadTraitsRegistries.leadfoot) then
@@ -4299,22 +4312,17 @@ local function CheckForPlayerBuiltContainer(player, playerdata)
 end
 
 local function antigunxpdecrease(player, perk, amount)
-    local playerdata = player:getModData()
-    if not playerdata then return end
-
-    if playerdata.AntiGunProcessing and amount > 0 then
-        playerdata.AntiGunProcessing = false
-    end
-
-    if playerdata.AntiGunProcessing then return end
-
     if amount <= 0 then return end
     if perk ~= Perks.Aiming then return end
     if not player:hasTrait(ToadTraitsRegistries.antigun) then return end
 
+    local playerdata = player:getModData()
+    if not playerdata then return end
+    if playerdata.AntiGunProcessing then return end
+
     playerdata.AntiGunProcessing = true
     local penaltyAmount = amount * 0.25
-    AddXP(player, perk, -penaltyAmount)
+    MT_AddXP(player, perk, -penaltyAmount)
     playerdata.AntiGunProcessing = false
 end
 
@@ -4746,7 +4754,7 @@ local function OnPlayerUpdate(player)
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
     albino(player, playerdata);
-    UpdateWorkerSpeed(player)
+    -- UpdateWorkerSpeed(player)
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
     QuickRest(player, playerdata);
