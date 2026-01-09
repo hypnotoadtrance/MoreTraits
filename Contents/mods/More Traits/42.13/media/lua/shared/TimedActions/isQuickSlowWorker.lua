@@ -1,7 +1,10 @@
 local function MT_QuickSlowTraitCheck(self, baseTime, timedAction)
     if not self.character then return baseTime end
+    if baseTime == nil then return end
     if baseTime <= 1 then return baseTime end
     if self.character:isTimedActionInstant() then return 1 end
+
+    print(baseTime)
 
     local isQuick = self.character:hasTrait(ToadTraitsRegistries.quickworker)
     local isSlow = self.character:hasTrait(ToadTraitsRegistries.slowworker)
@@ -51,6 +54,8 @@ local function MT_QuickSlowTraitCheck(self, baseTime, timedAction)
         local finalPenalty = math.max(0, modifier - bonus)
         baseTime = baseTime + (baseTime * finalPenalty)
     end
+    
+    print(baseTime)
 
     -- Never want to drop below 1 frame, unlikely to happen but better to guard.
     return math.max(1, baseTime)
@@ -458,34 +463,42 @@ end
 local function isBuildAction()
     require "BuildingObjects/TimedActions/ISBuildAction"
     if not _G["ISBuildAction"] then return end
+    
     local o_ISBuildAction_new = ISBuildAction.new
-    ISBuildAction.new = function(self, character, item, x, y, z, north, spriteName, time)
-        local o = o_ISBuildAction_new(self, character, item, x, y, z, north, spriteName, time)
-        o.maxTime = o:getDuration()
-        return o
-    end
-
-    ISBuildAction.getDuration = function(self)
-        local baseTime = self.time;
-        if self.character:hasTrait(CharacterTrait.HANDY) then
-            baseTime = self.time - 50;
+    ISBuildAction.getDuration = function(self, baseTime)
+        if self.character and self.character:hasTrait(CharacterTrait.HANDY) then
+            baseTime = baseTime - 50
         end
         return MT_QuickSlowTraitCheck(self, baseTime)
     end
+
+    ISBuildAction.new = function(self, character, item, x, y, z, north, spriteName, time)
+        local o = o_ISBuildAction_new(self, character, item, x, y, z, north, spriteName, time)
+        if o.maxTime > 1 then
+            o.maxTime = o:getDuration(o.maxTime)
+        end
+        return o
+    end
 end
+
 local function isInventoryTransferAction()
     require "TimedActions/ISInventoryTransferAction"
     if not _G["ISInventoryTransferAction"] then return end
     local o_ISInventoryTransferAction_new = ISInventoryTransferAction.new
     function ISInventoryTransferAction:new(character, item, srcContainer, destContainer, time)
         local o = o_ISInventoryTransferAction_new(self, character, item, srcContainer, destContainer, time)
-        if o.maxTime == -1 and o.queueList and o.queueList[1] then
+        if o.maxTime < 1 then return o end
+
+        if o.queueList and o.queueList[1] then
             o.maxTime = o.queueList[1].time
         end
+
         o.maxTime = MT_QuickSlowTraitCheck(o, o.maxTime)
+
         if o.queueList and o.queueList[1] then
             o.queueList[1].time = o.maxTime
         end
+
         return o
     end
 end
