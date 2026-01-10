@@ -280,6 +280,7 @@ end
 
 local function isWaterPlantAction()
     require "Farming/TimedActions/ISWaterPlantAction"
+    if not _G["ISWaterPlantAction"] then return end
 
     local o_ISWaterPlantAction_new = ISWaterPlantAction.new
     ISWaterPlantAction.new = function(self, character, item, uses, sq, maxTime)
@@ -512,8 +513,8 @@ local function isWorker()
             
             timedAction.getDuration = function(self)
                 local duration = original_getDuration(self)
-
-                if not duration or duration <= 1 then return duration end
+                if not duration then return end
+                if duration <= 1 then return duration end
                 
                 return MT_QuickSlowTraitCheck(self, duration)
             end
