@@ -2035,22 +2035,31 @@ local function unwavering(actor, target, weapon, damage)
     local pain = stats:get(CharacterStat.PAIN)
 
     local extraDamageMult = 0
-    
+    local maxBoost = SandboxVars.MoreTraits.UnwaveringDamageBoost or 2.0
+    local bonus = maxBoost - 1.0
+
     if endurance <= 0.25 or fatigue >= 0.8 or pain >= 75 then
-        extraDamageMult = 2.0
+        extraDamageMult = maxBoost -- Default 2.0
     elseif endurance <= 0.50 or fatigue >= 0.7 or pain >= 50 then
-        extraDamageMult = 1.5
+        extraDamageMult = 1.0 + (bonus * 0.5) -- Default 1.5
     elseif endurance <= 0.75 or fatigue >= 0.6 or pain >= 20 then
-        extraDamageMult = 1.25
+        extraDamageMult = 1.0 + (bonus * 0.25) -- Default 1.25
     end
 
     if extraDamageMult <= 0 then return end
 
     local extraDamage = damage * extraDamageMult
-    
+    local targetData = target:getModData()
+    if not targetData then
+        return
+    end
     target:setHealth(target:getHealth() - extraDamage)
-    if target:getHealth() <= 0 then 
-        target:Kill(player) 
+    if target:getHealth() <= 0 then
+        if not targetData.TraitKillProcessed then
+            targetData.TraitKillProcessed = true
+            target:Kill(player)
+            player:setZombieKills(player:getZombieKills() + 1)
+        end
     end
 end
 
@@ -2077,10 +2086,7 @@ local function martial(actor, target, weapon, damage)
 
     if isBareHands and allow then
         local scaling = (SandboxVars.MoreTraits.MartialScaling or 100) * 0.01
-        local strength = player:getPerkLevel(Perks.Strength)
-        local fitness = player:getPerkLevel(Perks.Fitness)
         local blunt = player:getPerkLevel(Perks.SmallBlunt)
-        local average = (strength + fitness) * 0.25
         local critchance = (5 + blunt) * scaling
 
         if player:hasTrait(ToadTraitsRegistries.lucky) then
@@ -2099,99 +2105,216 @@ local function martial(actor, target, weapon, damage)
             damageAdj = 0.75
         end
 
+        local martialDamage = damage
         if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
-            damage = damage * 4
+            martialDamage = martialDamage * 4
         end
 
-        damage = damage * 0.1 * damageAdj * scaling
+        martialDamage = martialDamage * 0.1 * damageAdj * scaling
 
         if not isServer() and MT_Config and MT_Config:getOption("MartialDamage"):getValue() then
-            HaloTextHelper.addText(player, "Damage: " .. tostring(round(damage, 3)), " ", HaloTextHelper.getColorGreen())
+            HaloTextHelper.addText(player, "Damage: " .. tostring(round(martialDamage, 3)), " ", HaloTextHelper.getColorGreen())
         end
 
-        target:setHealth(target:getHealth() - damage)
+        local targetData = target:getModData();
+        if not targetData then
+            return
+        end
+
+        target:setHealth(target:getHealth() - martialDamage)
         if target:getHealth() <= 0 then
-            target:Kill(player)
+            if not targetData.TraitKillProcessed then
+                targetData.TraitKillProcessed = true
+                target:Kill(player)
+                player:setZombieKills(player:getZombieKills() + 1)
+            end
         end
 
         local newEndurance = math.max(0, endurance - 0.002)
-
         if isClient() then
             local args = { endurance = newEndurance }
-            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args)
         else
             stats:set(CharacterStat.ENDURANCE, newEndurance)
         end
-        MT_AddXP(player, Perks.SmallBlunt, damage * 2 * blunt)
+        MT_AddXP(player, Perks.SmallBlunt, martialDamage * 2 * blunt)
     end
 end
 
---- Traits for ProBlade, ProBlunt and ProSpear
-local function promelee(actor, target, weapon, damage)
-    if not actor or not target or not weapon then return end
+local function actionhero(actor, target, weapon, damage)
+    if not weapon then
+        return
+    end
+    if not actor then
+        return 
+    end
     local player = actor
-    local hasBladeTrait = player:hasTrait(ToadTraitsRegistries.problade)
-    local hasBluntTrait = player:hasTrait(ToadTraitsRegistries.problunt)
-    local hasSpearTrait = player:hasTrait(ToadTraitsRegistries.prospear)
-    if not hasBladeTrait and not hasBluntTrait and not hasSpearTrait then
+    if not player:hasTrait(ToadTraitsRegistries.actionhero) then
+        return ;
+    end
+
+    if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then
         return
     end
 
-    local weapondata = weapon:getModData();
-    if not weapondata then
-        return
-    end
+    local enemies = player:getSpottedList();
+    local critchance = 10;
+    local multiplier = 0.1;
+    local damage = damage * 0.5;
 
-    local critchance = 5
-    local matched = false
-    if hasBladeTrait and (weapon:isOfWeaponCategory(WeaponCategory.AXE) or weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLADE) or weapon:isOfWeaponCategory(WeaponCategory.LONG_BLADE)) then
-        local axe = player:getPerkLevel(Perks.Axe);
-        local blade = player:getPerkLevel(Perks.LongBlade);
-        local smallBlade = player:getPerkLevel(Perks.SmallBlade);
-        critchance = critchance + axe + blade + smallBlade
-        matched = true
-    elseif hasBluntTrait and (weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLUNT) or weapon:isOfWeaponCategory(WeaponCategory.BLUNT)) then
-        local blunt = player:getPerkLevel(Perks.Blunt);
-        local smallBlunt = player:getPerkLevel(Perks.SmallBlunt);
-        critchance = critchance + blunt + smallBlunt
-        matched = true
-    elseif hasSpearTrait and (weapon:isOfWeaponCategory(WeaponCategory.SPEAR)) then
-        local spear = player:getPerkLevel(Perks.Spear);
-        critchance = critchance + spear
-        matched = true
-    end
-
-    if not matched then
-        return
+    if enemies and enemies:size() > 0 then
+        for i = 0, enemies:size() - 1 do
+            local enemy = enemies:get(i);
+            if enemy:isZombie() then
+                local distance = enemy:DistTo(player)
+                if distance < 2 then
+                    critchance = critchance + 10;
+                    multiplier = multiplier + 1.0;
+                elseif distance < 5 then
+                    critchance = critchance + 5;
+                    multiplier = multiplier + 0.4;
+                elseif distance < 10 then
+                    critchance = critchance + 2;
+                    multiplier = multiplier + 0.2;
+                end
+            end
+        end
     end
 
     if player:hasTrait(ToadTraitsRegistries.lucky) then
-        critchance = critchance + 1 * luckimpact
+        critchance = critchance + 5 * luckimpact;
     end
     if player:hasTrait(ToadTraitsRegistries.unlucky) then
-        critchance = critchance - 1 * luckimpact
+        critchance = critchance - 5 * luckimpact;
     end
 
     if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
-        damage = damage * 2;
+        damage = damage * 5
     end
 
-    local extraDamage = (damage * 1.2) * 0.1;
-    target:setHealth(target:getHealth() - extraDamage);
+    local extraDamage = (damage * multiplier) * 0.1;
+    local targetData = target:getModData();
+    if not targetData then
+        return
+    end
+    target:setHealth(target:getHealth() - extraDamage)
     if target:getHealth() <= 0 then
-        target:Kill(player)
-    end
-
-    if weapondata.iLastWeaponCond == nil then
-        weapondata.iLastWeaponCond = weapon:getCondition();
-    end
-
-    if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
-        if weapon:getCondition() < weapon:getConditionMax() then
-            weapon:setCondition(weapon:getCondition() + 1);
+        if not targetData.TraitKillProcessed then
+            targetData.TraitKillProcessed = true
+            target:Kill(player)
+            player:setZombieKills(player:getZombieKills() + 1)
         end
     end
-    weapondata.iLastWeaponCond = weapon:getCondition();
+end
+
+-- Melee Traits (ProBlade, ProBlunt, ProSpear, Tavern Brawler)
+local function MT_MeleeTraits(actor, target, weapon, damage)
+    if not actor or not target or not weapon or not target:isZombie() then return end
+    
+    local player = actor
+    local weaponData = weapon:getModData()
+    local totalDamage = 0
+    
+    if weaponData.iLastWeaponCond == nil then
+        weaponData.iLastWeaponCond = weapon:getCondition()
+    end
+
+    local hasBlade = player:hasTrait(ToadTraitsRegistries.problade)
+    local hasBlunt = player:hasTrait(ToadTraitsRegistries.problunt)
+    local hasSpear = player:hasTrait(ToadTraitsRegistries.prospear)
+
+    if (hasBlade or hasBlunt or hasSpear) and not player:hasTrait(ToadTraitsRegistries.mundane) then
+        local hasTrait = false
+        local critchance = 5
+        
+        -- Logic for category matching
+        if hasBlade and (weapon:isOfWeaponCategory(WeaponCategory.AXE) or weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLADE) or weapon:isOfWeaponCategory(WeaponCategory.LONG_BLADE)) then
+            critchance = critchance + player:getPerkLevel(Perks.Axe) + player:getPerkLevel(Perks.LongBlade) + player:getPerkLevel(Perks.SmallBlade)
+            hasTrait = true
+        elseif hasBlunt and (weapon:isOfWeaponCategory(WeaponCategory.SMALL_BLUNT) or weapon:isOfWeaponCategory(WeaponCategory.BLUNT)) then
+            critchance = critchance + player:getPerkLevel(Perks.Blunt) + player:getPerkLevel(Perks.SmallBlunt)
+            hasTrait = true
+        elseif hasSpear and weapon:isOfWeaponCategory(WeaponCategory.SPEAR) then
+            critchance = critchance + player:getPerkLevel(Perks.Spear)
+            hasTrait = true
+        end
+
+        if hasTrait then
+            if player:hasTrait(ToadTraitsRegistries.lucky) then critchance = critchance + (1 * (luckimpact or 1)) end
+            if player:hasTrait(ToadTraitsRegistries.unlucky) then critchance = critchance - (1 * (luckimpact or 1)) end
+
+            local currentDamage = damage
+            if ZombRand(0, 101) <= critchance then
+                currentDamage = currentDamage * 2
+            end
+            
+            totalDamage = totalDamage + ((currentDamage * 1.2) * 0.1)
+
+            if weaponData.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= 33 then
+                if weapon:getCondition() < weapon:getConditionMax() then
+                    weapon:setCondition(weapon:getCondition() + 1)
+                end
+            end
+        end
+    end
+
+    -- Tavern Brawler
+    if player:hasTrait(ToadTraitsRegistries.tavernbrawler) then
+        local isImprovised = false
+        local whitelist = { "ToolWeapon", "WeaponCrafted", "CookingWeapon", "HouseholdWeapon", "FirstAidWeapon", "GardeningWeapon", "SportsWeapon", "MaterialWeapon", "JunkWeapon", "InstrumentWeapon", "BrokenWeapon", "VehicleMaintenanceWeapon" }
+        
+        if weapon:isOfWeaponCategory(WeaponCategory.IMPROVISED) or tableContains(whitelist, weapon:getDisplayCategory() or "") then
+            isImprovised = true
+        end
+
+        if isImprovised then
+            local multiplier = 1
+            local repairChance = 50
+            
+            if weapon:isOfWeaponCategory(WeaponCategory.SPEAR) then
+                repairChance = 0
+                multiplier = 0.25
+            end
+
+            if player:hasTrait(ToadTraitsRegistries.lucky) then 
+                repairChance = repairChance + (5 * (luckimpact or 1))
+                multiplier = multiplier + 0.1
+            elseif player:hasTrait(ToadTraitsRegistries.unlucky) then 
+                repairChance = repairChance - (5 * (luckimpact or 1))
+                multiplier = multiplier - 0.1
+            end
+
+            if weapon:getConditionLowerChance() <= 2 then
+                repairChance = repairChance + 25
+                multiplier = multiplier + 0.5
+            end
+
+            totalDamage = totalDamage + ((damage * multiplier) * 0.1)
+
+            if weaponData.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= math.min(95, repairChance) then
+                if weapon:getCondition() < weapon:getConditionMax() then
+                    weapon:setCondition(weapon:getCondition() + 1)
+                end
+            end
+        end
+    end
+
+    if totalDamage > 0 then
+        local targetData = target:getModData();
+        if not targetData then
+            return
+        end
+        target:setHealth(target:getHealth() - totalDamage)
+        if target:getHealth() <= 0 then
+            if not targetData.TraitKillProcessed then
+                targetData.TraitKillProcessed = true
+                target:Kill(player)
+                player:setZombieKills(player:getZombieKills() + 1)
+            end
+        end
+    end
+
+    weaponData.iLastWeaponCond = weapon:getCondition()
 end
 
 local function progun(actor, weapon)
@@ -2251,73 +2374,6 @@ local function progun(actor, weapon)
                 end
             end
         end
-    end
-end
-
-local function tavernbrawler(actor, target, weapon, damage)
-    if not actor or not target or not weapon then return end
-    local player = actor
-    if not player:hasTrait(ToadTraitsRegistries.tavernbrawler) then
-        return
-    end
-
-    local weapondata = weapon:getModData();
-    if not weapondata then
-        return
-    end
-
-    local isImprovisedWeapon = false;
-    local whitelist = { "ToolWeapon", "WeaponCrafted", "CookingWeapon", "HouseholdWeapon", "FirstAidWeapon", "GardeningWeapon", "SportsWeapon", "MaterialWeapon", "JunkWeapon", "InstrumentWeapon", "BrokenWeapon", "VehicleMaintenanceWeapon" };
-    local displayCategory = weapon:getDisplayCategory() or "";
-    if tableContains(whitelist, displayCategory) then
-        isImprovisedWeapon = true;
-    elseif weapon:isOfWeaponCategory(WeaponCategory.IMPROVISED) then
-        isImprovisedWeapon = true;
-    end
-
-    local chance = 50;
-    local multiplier = 1;
-    if isImprovisedWeapon then
-        if weapon:isOfWeaponCategory(WeaponCategory.SPEAR) then
-            chance = 0;
-            multiplier = 0.25;
-        end
-
-        if player:hasTrait(ToadTraitsRegistries.lucky) then
-            chance = chance + (5 * luckimpact);
-            multiplier = multiplier + 0.1;
-        elseif player:hasTrait(ToadTraitsRegistries.unlucky) then
-            chance = chance - (5 * luckimpact);
-            multiplier = multiplier - 0.1;
-        end
-
-        if weapon:getConditionLowerChance() <= 2 then
-            chance = chance + 25;
-            multiplier = multiplier + 0.5;
-        end
-
-        if weapon:getConditionMax() <= 5 then
-            chance = chance + 25;
-            multiplier = multiplier + 0.5;
-        end
-
-        chance = math.min(95, chance)
-
-        local extraDamage = (damage * multiplier) * 0.1;
-        target:setHealth(target:getHealth() - extraDamage);
-        if target:getHealth() <= 0 then
-            target:Kill(player)
-        end
-
-        if weapondata.iLastWeaponCond == nil then
-            weapondata.iLastWeaponCond = weapon:getCondition();
-        end
-        if weapondata.iLastWeaponCond > weapon:getCondition() and ZombRand(0, 101) <= chance then
-            if weapon:getCondition() < weapon:getConditionMax() then
-                weapon:setCondition(weapon:getCondition() + 1);
-            end
-        end
-        weapondata.iLastWeaponCond = weapon:getCondition();
     end
 end
 
@@ -2460,64 +2516,6 @@ local function amputee(player, justGotInfected)
                 stats:set(CharacterStat.ZOMBIE_INFECTION, 0)
             end
         end
-    end
-end
-
-local function actionhero(actor, target, weapon, damage)
-    local player = getPlayer();
-    if not player or actor ~= player then
-        return ;
-    end
-    if not weapon then
-        return
-    end ;
-    if not player:hasTrait(ToadTraitsRegistries.actionhero) then
-        return ;
-    end
-
-    if weapon:getType() == "BareHands" and not player:hasTrait(ToadTraitsRegistries.martial) then
-        return
-    end
-
-    local enemies = player:getSpottedList();
-    local critchance = 10;
-    local multiplier = 0.1;
-    local damage = damage * 0.5;
-
-    if enemies and enemies:size() > 0 then
-        for i = 0, enemies:size() - 1 do
-            local enemy = enemies:get(i);
-            if enemy:isZombie() then
-                local distance = enemy:DistTo(player)
-                if distance < 2 then
-                    critchance = critchance + 10;
-                    multiplier = multiplier + 1.0;
-                elseif distance < 5 then
-                    critchance = critchance + 5;
-                    multiplier = multiplier + 0.4;
-                elseif distance < 10 then
-                    critchance = critchance + 2;
-                    multiplier = multiplier + 0.2;
-                end
-            end
-        end
-    end
-
-    if player:hasTrait(ToadTraitsRegistries.lucky) then
-        critchance = critchance + 5 * luckimpact;
-    end
-    if player:hasTrait(ToadTraitsRegistries.unlucky) then
-        critchance = critchance - 5 * luckimpact;
-    end
-
-    if target:isZombie() and ZombRand(0, 101) <= critchance and not player:hasTrait(ToadTraitsRegistries.mundane) then
-        damage = damage * 5
-    end
-
-    local extraDamage = (damage * multiplier) * 0.1;
-    target:setHealth(target:getHealth() - extraDamage);
-    if target:getHealth() <= 0 then
-        target:Kill(player)
     end
 end
 
@@ -3826,10 +3824,10 @@ local function mundane(actor, target, weapon, damage)
     if not weapon then
         return
     end
-    local player = getPlayer()
-    if not player or actor ~= player then
-        return ;
+    if not actor then
+        return
     end
+    local player = actor
     local weapondata = weapon:getModData()
     if not weapondata then
         return
@@ -4767,6 +4765,14 @@ local function OnPlayerUpdate(player)
     end
 end
 
+local function OnWeaponHitCharacter(actor, target, weapon, damage)
+    MT_MeleeTraits(actor, target, weapon, damage)
+    actionhero(actor, target, weapon, damage)
+    mundane(actor, target, weapon, damage)
+    unwavering(actor, target, weapon, damage)
+    martial(actor, target, weapon, damage)
+end
+
 local function EveryOneMinute()
     local player = getPlayer();
     if not player then
@@ -4912,13 +4918,8 @@ end
 
 Events.OnEquipPrimary.Add(OnEquipPrimary)
 Events.OnEquipSecondary.Add(OnEquipSecondary); 
-Events.OnWeaponHitCharacter.Add(promelee);
-Events.OnWeaponHitCharacter.Add(actionhero);
-Events.OnWeaponHitCharacter.Add(mundane);
-Events.OnWeaponHitCharacter.Add(tavernbrawler);
-Events.OnWeaponHitCharacter.Add(unwavering);
+Events.OnWeaponHitCharacter.Add(OnWeaponHitCharacter);
 Events.OnWeaponSwing.Add(progun);
-Events.OnWeaponHitCharacter.Add(martial);
 Events.AddXP.Add(Specialization);
 Events.AddXP.Add(GymGoer);
 Events.AddXP.Add(antigunxpdecrease);

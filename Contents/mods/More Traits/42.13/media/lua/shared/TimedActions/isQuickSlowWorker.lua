@@ -1,7 +1,6 @@
-local function MT_QuickSlowTraitCheck(self, baseTime, timedAction)
-    if not self.character then return baseTime end
-    if baseTime == nil then return end
+local function MT_QuickSlowTraitCheck(self, baseTime)
     if baseTime <= 1 then return baseTime end
+    if type(self) ~= "table" or not self.character then return baseTime end
     if self.character:isTimedActionInstant() then return 1 end
 
     print(baseTime)
@@ -21,13 +20,13 @@ local function MT_QuickSlowTraitCheck(self, baseTime, timedAction)
         modifier = (SandboxVars.MoreTraits.SlowWorkerScaler or 50) * 0.01
     end
 
-    if timedAction and timedAction == "ISReadABook" then
+    if self.Type == "ISReadABook" then
         if self.character:hasTrait(CharacterTrait.FAST_READER) then
-            modifier = modifier * (isQuick and 5 or 0.1)
+            modifier = modifier * (isQuick and 1.25 or 0.75)
         elseif self.character:hasTrait(CharacterTrait.SLOW_READER) then
-            modifier = modifier * (isQuick and 1.5 or 0.5)
+            modifier = modifier * (isQuick and 0.75 or 1.25)
         else
-            modifier = modifier * (isQuick and 3 or 0.25)
+            modifier = modifier * 1.0 -- Those without the reading traits don't get a modification to the time.
         end
     end
 
@@ -281,6 +280,7 @@ end
 
 local function isWaterPlantAction()
     require "Farming/TimedActions/ISWaterPlantAction"
+    if not _G["ISWaterPlantAction"] then return end
 
     local o_ISWaterPlantAction_new = ISWaterPlantAction.new
     ISWaterPlantAction.new = function(self, character, item, uses, sq, maxTime)
@@ -513,8 +513,10 @@ local function isWorker()
             
             timedAction.getDuration = function(self)
                 local duration = original_getDuration(self)
+                if not duration then return end
+                if duration <= 1 then return duration end
                 
-                return MT_QuickSlowTraitCheck(self, duration, timedAction)
+                return MT_QuickSlowTraitCheck(self, duration)
             end
         end
     end
