@@ -195,6 +195,11 @@ option MoreTraits.IngenuitiveLimitAmount
 	type = integer, min = 5, max = 95, default = 50,
 	page = MoreTraits, translation = MoreTraits_IngenuitiveLimitAmount,
 }
+option MoreTraits.UnwaveringDamageBoost
+{
+	type = double, min = 0, max = 10.0, default = 2.0,
+	page = MoreTraits, translation = MoreTraits_UnwaveringDamageBoost,
+}
 option MoreTraits.MartialWeapons
 {
 	type = boolean, default = false,
@@ -265,7 +270,6 @@ option MoreTraits.ProwessGunsAmmoRestore
 	type = boolean, default = true,
 	page = MoreTraits, translation = MoreTraits_ProwessGunsAmmoRestore,
 }
-
 option MoreTraits.HoarderCompatibility
 {
 	type = boolean,
@@ -273,7 +277,6 @@ option MoreTraits.HoarderCompatibility
 	page = MoreTraits, 
 	translation = MoreTraits_HoarderCompatibility,
 }
-
 option MoreTraits.BurnedFireAversion
 {
 	type = boolean,
@@ -281,55 +284,46 @@ option MoreTraits.BurnedFireAversion
 	page = MoreTraits,
 	translation = MoreTraits_BurnedFireAversion,
 }
-
 option MoreTraits.BurnedDistance
 {
 	type = integer, min = 5, max = 50, default = 20,
 	page = MoreTraits, translation = MoreTraits_BurnedDistance,
 }
-
 option MoreTraits.BurnedPanic
 {
 	type = integer, min = 1, max = 10, default = 1,
 	page = MoreTraits, translation = MoreTraits_BurnedPanic,
 }
-
 option MoreTraits.BurnedStress
 {
 	type = integer, min = 1, max = 10, default = 1,
 	page = MoreTraits, translation = MoreTraits_BurnedStress,
 }
-
 option MoreTraits.FastSprint
 {
 	type = double, min = 0, max = 5.0, default = 0.75,
 	page = MoreTraits, translation = MoreTraits_FastSprint,
 }
-
 option MoreTraits.FastRunning
 {
 	type = double, min = 0, max = 5.0, default = 0.50,
 	page = MoreTraits, translation = MoreTraits_FastRunning,
 }
-
 option MoreTraits.FastWalking
 {
 	type = double, min = 0, max = 5.0, default = 0.25,
 	page = MoreTraits, translation = MoreTraits_FastWalking,
 }
-
 option MoreTraits.GimpSprint
 {
 	type = double, min = -5.0, max = 0, default = -0.25,
 	page = MoreTraits, translation = MoreTraits_GimpSprint,
 }
-
 option MoreTraits.GimpRunning
 {
 	type = double, min = -5.0, max = 0, default = -0.50,
 	page = MoreTraits, translation = MoreTraits_GimpRunning,
 }
-
 option MoreTraits.GimpWalking
 {
 	type = double, min = -5.0, max = 0, default = -0.75,

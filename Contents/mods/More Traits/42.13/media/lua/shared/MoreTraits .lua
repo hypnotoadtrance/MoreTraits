@@ -2035,13 +2035,15 @@ local function unwavering(actor, target, weapon, damage)
     local pain = stats:get(CharacterStat.PAIN)
 
     local extraDamageMult = 0
-    
+    local maxBoost = SandboxVars.MoreTraits.UnwaveringDamageBoost or 2.0
+    local bonus = maxBoost - 1.0
+
     if endurance <= 0.25 or fatigue >= 0.8 or pain >= 75 then
-        extraDamageMult = 2.5
+        extraDamageMult = maxBoost -- Default 2.0
     elseif endurance <= 0.50 or fatigue >= 0.7 or pain >= 50 then
-        extraDamageMult = 1.5
+        extraDamageMult = 1.0 + (bonus * 0.5) -- Default 1.5
     elseif endurance <= 0.75 or fatigue >= 0.6 or pain >= 20 then
-        extraDamageMult = 1.25
+        extraDamageMult = 1.0 + (bonus * 0.25) -- Default 1.25
     end
 
     if extraDamageMult <= 0 then return end

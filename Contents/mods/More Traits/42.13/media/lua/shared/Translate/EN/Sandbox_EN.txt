@@ -127,4 +127,6 @@ Sandbox_EN = {
     Sandbox_MoreTraits_GimpRunning_tooltip = "Speed reduction applied when running with the 'Gimp' trait.",
     Sandbox_MoreTraits_GimpWalking = "Gimp: Walking Penalty",
     Sandbox_MoreTraits_GimpWalking_tooltip = "Speed reduction applied when walking with the 'Gimp' trait.",
+    Sandbox_MoreTraits_UnwaveringDamageBoost = "Unwavering Max Damage Multiplier",
+    Sandbox_MoreTraits_UnwaveringDamageBoost_tooltip = "Determines the damage boost received when certain conditions are met. Damage scales based on the following:<br><br>Tier 1 (Default 2.0x): Endurance < 25%, Fatigue > 80%, or Pain > 75.<br>Tier 2 (Default 1.5x): Endurance < 50%, Fatigue > 70%, or Pain > 50.<br>Tier 3 (Default 1.25x): Endurance < 75%, Fatigue > 60%, or Pain > 20.<br><br>If multiple conditions are met, only the highest tier applies.",
 }
