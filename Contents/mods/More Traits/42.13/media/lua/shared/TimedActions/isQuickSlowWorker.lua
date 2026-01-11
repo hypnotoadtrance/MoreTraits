@@ -317,8 +317,8 @@ local function isHarvestPlantAction()
     if not _G["ISHarvestPlantAction"] then return end
 
     local o_ISHarvestPlantAction_new = ISHarvestPlantAction.new
-    ISHarvestPlantAction.new = function(self, character, item, uses, plant, maxTime, cure)
-        local o = o_ISHarvestPlantAction_new(self, character, item, uses, plant, maxTime, cure)
+    ISHarvestPlantAction.new = function(self, character, plant, maxTime)
+        local o = o_ISHarvestPlantAction_new(self, character, plant, maxTime)
         o.maxTime = o:getDuration()
         return o
     end
