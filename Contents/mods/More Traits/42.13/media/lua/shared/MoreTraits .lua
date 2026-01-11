@@ -3062,9 +3062,8 @@ local function MT_checkWeight(player)
     if player:getMaxWeightBase() ~= targetWeight then
         if isClient() then
             sendClientCommand(player, 'ToadTraits', 'MT_updateWeight', { weight = targetWeight })
-        else
-            player:setMaxWeightBase(targetWeight)
         end
+        player:setMaxWeightBase(targetWeight)
     end
 end
 
