@@ -4354,39 +4354,40 @@ local function IdealWeight(player, playerdata)
 end
 
 local function QuickRest(player, playerdata)
-    if not player:hasTrait(ToadTraitsRegistries.quickrest) then
-        return
-    end
+    if not player:hasTrait(ToadTraitsRegistries.quickrest) then return end
 
     local stats = player:getStats()
     local endurance = stats:get(CharacterStat.ENDURANCE)
-    local isSitting = player:isSitOnGround()
+    local isSittingGround = player:isSitOnGround()
+    local isRestingFurniture = player:isResting() or player:isSittingOnFurniture()
 
-    if endurance < 1 and isSitting then
-        local newEndurance = math.min(1.0, endurance + 0.001)
-
-        if isClient() then
-            local args = { endurance = newEndurance }
-            sendClientCommand(player, 'ToadTraits', 'UpdateStats', args) -- Tell the Server to set our stats
-        else
-            stats:set(CharacterStat.ENDURANCE, newEndurance)
+    if endurance < 1 and (isSittingGround or isRestingFurniture) then
+        local enduranceGain = 0.055 
+        
+        if isRestingFurniture then
+            enduranceGain = 0.12
         end
 
-        playerdata.QuickRestEndurance = newEndurance
+        local fatigue = stats:get(CharacterStat.FATIGUE)
+        local multiplier = 1.0 - (fatigue * 0.8)
+        local finalGain = enduranceGain * multiplier
+        local newEndurance = math.min(1.0, endurance + finalGain)
+
+        if isClient() then
+            sendClientCommand(player, 'ToadTraits', 'UpdateStats', { endurance = newEndurance })
+        end
+        stats:set(CharacterStat.ENDURANCE, newEndurance)
+
         playerdata.QuickRestActive = true
         return
     end
 
-    if endurance >= 1 or not isSitting then
-        if playerdata.QuickRestActive then
+    if playerdata.QuickRestActive then
+        if endurance >= 1 or (not isSittingGround and not isRestingFurniture) then
+            if endurance >= 1 and (isSittingGround or isRestingFurniture) then
+                HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), "", HaloTextHelper.getColorGreen())
+            end
             playerdata.QuickRestActive = false
-            playerdata.QuickRestEndurance = -1
-            playerdata.QuickRestFinished = not isSitting
-        end
-
-        if not isSitting then
-            playerdata.QuickRestFinished = false
-            return
         end
     end
 end
@@ -4755,7 +4756,6 @@ local function OnPlayerUpdate(player)
     -- UpdateWorkerSpeed(player)
     CheckForPlayerBuiltContainer(player, playerdata);
     IdealWeight(player, playerdata);
-    QuickRest(player, playerdata);
     MT_FastGimpTraits(player)
     NoodleLegs(player)
     internalTick = internalTick + 1;
@@ -4798,13 +4798,10 @@ local function EveryOneMinute()
     Immunocompromised(player);
     CheckSelfHarm(player);
     checkBloodTraits(player);
+    QuickRest(player, playerdata);
     
     if getActivatedMods():contains("DracoExpandedTraits") then
         MT_checkWeight(player)
-    end
-
-    if playerdata.QuickRestFinished == true then
-        HaloTextHelper.addText(player, getText("UI_quickrestfullendurance"), "", HaloTextHelper.getColorGreen());
     end
 end
 
