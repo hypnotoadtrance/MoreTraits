@@ -2332,12 +2332,6 @@ local function progun(actor, weapon)
         return
     end
 
-    if not weapon.getMaxAmmo or not weapon.getCurrentAmmoCount then
-        return
-    end
-
-    local maxCapacity = weapon:getMaxAmmo();
-    local currentCapacity = weapon:getCurrentAmmoCount();
     local aiming = player:getPerkLevel(Perks.Aiming);
     local reloading = player:getPerkLevel(Perks.Reloading);
     local chance = aiming + reloading + 10;
@@ -2365,10 +2359,23 @@ local function progun(actor, weapon)
                 weapon:setCondition(weapon:getCondition() + 1);
             end
         end
+        
         weapondata.iLastWeaponCond = weapon:getCondition();
-        if SandboxVars.MoreTraits.ProwessGunsAmmoRestore == true and ZombRand(0, 101) <= chance then
+
+        if not weapon.getMaxAmmo or not weapon.getCurrentAmmoCount then
+            return
+        end
+
+        local currentCapacity = weapon:getCurrentAmmoCount();
+        local maxCapacity = weapon:getMaxAmmo();
+        if SandboxVars.MoreTraits.ProwessGunsAmmoRestore and ZombRand(0, 101) <= chance then
             if currentCapacity < maxCapacity and currentCapacity > 0 then
-                weapon:setCurrentAmmoCount(currentCapacity + 1);
+                if isClient() then
+                    sendClientCommand(player, 'ToadTraits', 'ProwessGuns', { weaponID = weapon:getID() })
+                else
+                    weapon:setCurrentAmmoCount(currentCapacity + 1);
+                end
+
                 if not isServer() and MT_Config and MT_Config:getOption("ProwessGunsAmmo"):getValue() then
                     HaloTextHelper.addText(player, getText("UI_progunammo"), "", HaloTextHelper.getColorGreen());
                 end
