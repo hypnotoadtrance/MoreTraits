@@ -365,26 +365,16 @@ local function ProcessRevertGordanite(player, args)
     end
 end
 
--- local function UpdateXP(player, args, command)
---     local xp = player:getXp()
---     local perk = Perks[args.perk] -- Cannot pass a string value to this function so we convert it back to PerkFactory
+local function ProcessProwessGuns(player, args)
+    if not args.weaponID then return end
 
---     if args.multiplier then
---         xp:AddXP(perk, args.amount, false, false, false)
---     else
---         xp:AddXPNoMultiplier(perk, args.amount)
---     end
---     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
--- end
+    local primaryWeapon = player:getPrimaryHandItem()
+    if not primaryWeapon or primaryWeapon:getID() ~= args.weaponID then return end
 
--- local function UpdateXPToLevel(player, args, command)
---     local xp = player:getXp()
---     for i = args.currentLevel + 1, args.targetLevel do
---         player:LevelPerk(args.perk)
---         xp:setXPToLevel(args.perk, i)
---     end
---     print("Server: " .. tostring(command) .. " (Update) applied to " .. player:getUsername())
--- end
+    local currentCapacity = primaryWeapon:getCurrentAmmoCount()
+    primaryWeapon:setCurrentAmmoCount(currentCapacity + 1);
+    sendAddItemToContainer(primaryWeapon:getContainer(), player)
+end
 
 local function onClientCommands(module, command, player, args)
     if module ~= 'ToadTraits' then
@@ -453,6 +443,10 @@ local function onClientCommands(module, command, player, args)
 
     if command == 'RevertGordanite' then
         ProcessRevertGordanite(player, args)
+    end
+    
+    if command == 'ProwessGuns' then
+        ProcessProwessGuns(player, args)
     end
 end
 

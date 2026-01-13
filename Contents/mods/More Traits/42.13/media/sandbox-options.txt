@@ -157,7 +157,7 @@ option MoreTraits.VagabondGuaranteedExtraLoot
 }
 option MoreTraits.WeightPackMule
 {
-	type = integer, min = 1, max = 100, default = 12,
+	type = integer, min = 1, max = 100, default = 10,
 	page = MoreTraits, translation = MoreTraits_WeightPackMule,
 }
 option MoreTraits.WeightPackMouse
