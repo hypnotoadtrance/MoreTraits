@@ -48,25 +48,25 @@ function MTDEveryHoursMain()
 end
 
 function MTDOnWeaponHitCharacterMain(wielder, target, weapon, damage)
-	if wielder and target:isZombie() then
-		-- Leadfoot
-		if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not wielder:hasTrait(ToadTraitsRegistries.leadfoot) then
-			MTDLeadFootToggle(wielder, target, weapon);
-		end
-		-- Mundane
-		if SandboxVars.MoreTraitsDynamic.MundaneDynamic and wielder:hasTrait(ToadTraitsRegistries.mundane) then
-			MTDMundane(wielder, damage);
-		end
-	end
+    if not wielder and not target:isZombie() then return end
+
+	-- Leadfoot
+    if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not wielder:hasTrait(ToadTraitsRegistries.leadfoot) then
+        MTDLeadFootToggle(wielder, target, weapon);
+    end
+    -- Mundane
+    if SandboxVars.MoreTraitsDynamic.MundaneDynamic and wielder:hasTrait(ToadTraitsRegistries.mundane) then
+        MTDMundane(wielder, damage);
+    end
 end
 
 function MTDKillsMainExtended(zombie)
-	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not getPlayer():HasTrait(ToadTraitsRegistries.leadfoot) then
+    local player = getPlayer()
+    if not player then return end
+
+	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not player:hasTrait(ToadTraitsRegistries.leadfoot) then
 		MTDLeadFoot(zombie);
 	end
-
-	local player = getPlayer();
-	if not player then return end
 
 	MTDTraitsGainsByLevel(player, "KillCount");
 end
@@ -76,8 +76,6 @@ function MTDKillsMain(zombie)
 end
 
 function MTDMundane(wielder, damage)
-    if not wielder:HasTrait(ToadTraitsRegistries.mundane) then return end
-
     local MTD = wielder:getModData().MoreTraitsDynamic
 	if not MTD then return end
     
