@@ -3523,6 +3523,7 @@ local function FearfulUpdate(player, playerdata)
     end
 end
 
+-- TODO Check MP
 local function GymGoer(player, perk, amount)
     if amount <= 0 or not player:hasTrait(ToadTraitsRegistries.gymgoer) then
         return
@@ -3552,6 +3553,7 @@ local function GymGoer(player, perk, amount)
     playerdata.GymGoerProcessing = false
 end
 
+-- TODO Check MP
 local function GymGoerUpdate(player, playerdata)
     if not (player:hasTrait(ToadTraitsRegistries.gymgoer) and SandboxVars.MoreTraits.GymGoerNoExerciseFatigue) then
         return
@@ -3589,9 +3591,10 @@ local function GymGoerUpdate(player, playerdata)
             else
                 for _, partType in ipairs(group.parts) do
                     local part = player:getBodyDamage():getBodyPart(partType)
+                    if not part then return end
                     part:setStiffness(0)
+                    fitness:removeStiffnessValue(BodyPartType.ToString(partType))
                 end
-                fitness:removeStiffnessValue(group.name)
             end
             stiffnessList[i] = 0
         elseif currentStiffness > recordedPeak then
