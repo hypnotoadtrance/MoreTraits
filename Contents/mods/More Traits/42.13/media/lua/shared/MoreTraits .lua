@@ -1561,6 +1561,9 @@ local function indefatigable(player, playerdata)
                 stats:set(CharacterStat.ZOMBIE_FEVER, 0);
                 stats:set(CharacterStat.ZOMBIE_INFECTION, 0);
             end
+            playerdata.SuperImmuneTextSaid = false
+            playerdata.SuperImmuneActive = false
+            playerdata.SuperImmuneMinutesPassed = 0
             playerdata.indefatigablecuredinfection = true;
         end
     end
