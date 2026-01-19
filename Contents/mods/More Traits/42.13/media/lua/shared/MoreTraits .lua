@@ -732,8 +732,8 @@ local function MTPlayerHit(player, _, __)
                             end
 
                             if bodyPart:bitten() then
-                                bodyPart:setBitten(false, false)
-                                bodyPart:setHealth(100.0)
+                                bodyPart:SetBitten(false, false)
+                                bodyPart:SetHealth(100.0)
                             end
                         end
                     else
