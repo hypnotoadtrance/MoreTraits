@@ -3494,7 +3494,7 @@ local function GymGoerUpdate(player, playerdata)
                 for _, partType in ipairs(group.parts) do
                     table.insert(bodyParts, partType:getIndex())
                 end
-                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0, muscleGroup = group.name })
+                sendClientCommand(player, 'ToadTraits', 'ProcessBodyPartMechanics', { bodyParts = bodyParts, partStiffness = 0, clearStrain = true })
             else
                 for _, partType in ipairs(group.parts) do
                     local part = player:getBodyDamage():getBodyPart(partType)
