@@ -2444,10 +2444,34 @@ local function MT_FastGimpTraits(player)
     if not player:hasTrait(ToadTraitsRegistries.fast) and not player:hasTrait(ToadTraitsRegistries.gimp) then 
         return 
     end
-    if not player:isPlayerMoving() then return end  
 
-    local modifier  = 0
+    if not player:isPlayerMoving() then return end 
 
+    local timeMult = getGameTime():getTrueMultiplier()
+    local pathfindingBehaviour = player:getPathFindBehavior2()
+    local isPathfinding = pathfindingBehaviour:isMovingUsingPathFind()
+
+    -- Disable movement adjustment if time multiplier is over 1.1
+    if isPathfinding and timeMult > 1.1 then return end
+
+    -- Checks for Gimp when attempting to climb over obstacles. Fast doesn't seem to have these issues.
+    -- This attempts to prevent the player from getting stuck when using Path Finding.
+    if isPathfinding and player:hasTrait(ToadTraitsRegistries.gimp) then
+        local square = player:getCurrentSquare()
+        local dir = player:getDir()
+        
+        if square then
+            local nextSquare = square:getAdjacentSquare(dir)
+            if nextSquare then
+                if square:isBlockedTo(nextSquare) or square:isWindowTo(nextSquare) then
+                    return
+                end
+            end
+        end
+    end
+
+    local modifier = 0
+    
     if player:hasTrait(ToadTraitsRegistries.fast) then
         if player:isSprinting() then
             modifier = SandboxVars.MoreTraits.FastSprint or 0.75
