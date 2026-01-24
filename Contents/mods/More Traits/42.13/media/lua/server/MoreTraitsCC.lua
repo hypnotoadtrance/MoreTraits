@@ -196,10 +196,13 @@ local function ProcessBodyPartMechanics(player, args)
         table.insert(PartIndexes, args.bodyPart)
     end
 
-    for _, index in ipairs(PartIndexes) do
-        local bodyDamage = player:getBodyDamage()
-        local bodyPart = bodyDamage:getBodyPart(BodyPartType.FromIndex(index))
+    local bodyDamage = player:getBodyDamage()
+    local fitness = player:getFitness()
 
+    for _, index in ipairs(PartIndexes) do
+        local bodyPartType = BodyPartType.FromIndex(index)
+        local bodyPart = bodyDamage:getBodyPart(bodyPartType)
+        
         if bodyPart then
             if args.partPain ~= nil then
                 bodyPart:setAdditionalPain(args.partPain)
@@ -209,8 +212,10 @@ local function ProcessBodyPartMechanics(player, args)
             end
             if args.partStiffness ~= nil then
                 bodyPart:setStiffness(args.partStiffness)
-                if args.muscleGroup then
-                    player:getFitness():removeStiffnessValue(args.muscleGroup)
+                if args.clearStrain then
+                    -- Convert index back to string to clear fitness UI/stats
+                    local bodyPartString = BodyPartType.ToString(bodyPartType)
+                    fitness:removeStiffnessValue(bodyPartString)
                 end
             end
             if args.partAdd ~= nil then

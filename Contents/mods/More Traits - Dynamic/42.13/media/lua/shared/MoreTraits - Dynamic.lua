@@ -25,14 +25,16 @@ function MTDLevelPerkMain(player, perk)
 	MTDTraitsGainsByLevel(player, perk);
 end
 
+-- TODO MP Support
 function MTDapplyXPBoost(player, perk, boostLevel)
-	local currentXPBoost = player:getXp():getPerkBoost(perk);
-	local newBoost = currentXPBoost + boostLevel;
-	if newBoost > 3 then
-		player:getXp():setPerkBoost(perk, 3);
-	else
-		player:getXp():setPerkBoost(perk, newBoost);
-	end
+    local currentXPBoost = player:getXp():getPerkBoost(perk)
+    local newBoost = math.min(currentXPBoost + boostLevel, 3)
+
+    if isClient() and (currentXPBoost + boostLevel > 3) then
+        sendClientCommand("MoreTraitsDynamic", "setXpBoosts", { perk = perk, boostAmount = newBoost })
+    else
+        player:getXp():setPerkBoost(perk, newBoost)
+    end
 end
 
 function MTDEveryOneMinuteMain()
@@ -48,25 +50,25 @@ function MTDEveryHoursMain()
 end
 
 function MTDOnWeaponHitCharacterMain(wielder, target, weapon, damage)
-	if wielder and target:isZombie() then
-		-- Leadfoot
-		if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not wielder:hasTrait(ToadTraitsRegistries.leadfoot) then
-			MTDLeadFootToggle(wielder, target, weapon);
-		end
-		-- Mundane
-		if SandboxVars.MoreTraitsDynamic.MundaneDynamic and wielder:hasTrait(ToadTraitsRegistries.mundane) then
-			MTDMundane(wielder, damage);
-		end
-	end
+    if not wielder and not target:isZombie() then return end
+
+	-- Leadfoot
+    if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not wielder:hasTrait(ToadTraitsRegistries.leadfoot) then
+        MTDLeadFootToggle(wielder, target, weapon);
+    end
+    -- Mundane
+    if SandboxVars.MoreTraitsDynamic.MundaneDynamic and wielder:hasTrait(ToadTraitsRegistries.mundane) then
+        MTDMundane(wielder, damage);
+    end
 end
 
 function MTDKillsMainExtended(zombie)
-	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not getPlayer():HasTrait(ToadTraitsRegistries.leadfoot) then
+    local player = getPlayer()
+    if not player then return end
+
+	if SandboxVars.MoreTraitsDynamic.LeadFootDynamic and not player:hasTrait(ToadTraitsRegistries.leadfoot) then
 		MTDLeadFoot(zombie);
 	end
-
-	local player = getPlayer();
-	if not player then return end
 
 	MTDTraitsGainsByLevel(player, "KillCount");
 end
@@ -76,8 +78,6 @@ function MTDKillsMain(zombie)
 end
 
 function MTDMundane(wielder, damage)
-    if not wielder:HasTrait(ToadTraitsRegistries.mundane) then return end
-
     local MTD = wielder:getModData().MoreTraitsDynamic
 	if not MTD then return end
     
@@ -89,7 +89,11 @@ function MTDMundane(wielder, damage)
     end
 
     if MTD.TotalDamageDone >= threshold then
-        wielder:getCharacterTraits():remove(ToadTraitsRegistries.mundane)
+        if isClient() then
+            sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "mundane" })
+        else
+            wielder:getCharacterTraits():remove(ToadTraitsRegistries.mundane)
+        end
         HaloTextHelper.addTextWithArrow(wielder, getText("UI_trait_mundane"), false, HaloTextHelper.getColorGreen())
     end
 end
@@ -165,27 +169,47 @@ function MTDTraitsGainsByLevel(player, perk)
     if isInit or perk == Perks.Strength or perk == Perks.Fitness then
         -- Pack Mouse (Remove)
         if vars.PackMouseDynamic and player:hasTrait(ToadTraitsRegistries.packmouse) and lvlStrength >= vars.PackMouseDynamicSkill then
-            traits:remove(ToadTraitsRegistries.packmouse)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "packmouse" })
+            else
+                traits:remove(ToadTraitsRegistries.packmouse)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_packmouse"), false, HaloTextHelper.getColorGreen())
         end
         -- Pack Mule (Add)
         if vars.PackMuleDynamic and not player:hasTrait(ToadTraitsRegistries.packmule) and lvlStrength >= vars.PackMuleDynamicSkill then
-            traits:add(ToadTraitsRegistries.packmule)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "packmule" })
+            else
+                traits:add(ToadTraitsRegistries.packmule)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_packmule"), true, HaloTextHelper.getColorGreen())
         end
         -- Gym-Goer
         if vars.GymGoerDynamic and not player:hasTrait(ToadTraitsRegistries.gymgoer) and physicalSum >= vars.GymGoerDynamicSkill then
-            traits:add(ToadTraitsRegistries.gymgoer)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "gymgoer" })
+            else
+                traits:add(ToadTraitsRegistries.gymgoer)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gymgoer"), true, HaloTextHelper.getColorGreen())
         end
         -- Second Wind
         if vars.SecondWindDynamic and not player:hasTrait(ToadTraitsRegistries.secondwind) and physicalSum >= vars.SecondWindDynamicSkill then
-            traits:add(ToadTraitsRegistries.secondwind)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "secondwind" })
+            else
+                traits:add(ToadTraitsRegistries.secondwind)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_secondwind"), true, HaloTextHelper.getColorGreen())
         end
         -- Hardy
         if vars.HardyDynamic and not player:hasTrait(ToadTraitsRegistries.hardy) and lvlFitness >= vars.HardyDynamicSkill then
-            traits:add(ToadTraitsRegistries.hardy)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "hardy" })
+            else
+                traits:add(ToadTraitsRegistries.hardy)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_hardy"), true, HaloTextHelper.getColorGreen())
         end
     end
@@ -210,7 +234,11 @@ function MTDTraitsGainsByLevel(player, perk)
             end
 
             if totalLevel >= vars.IndefatigableDynamicSkill then
-                traits:add(ToadTraitsRegistries.indefatigable)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "indefatigable" })
+                else
+                    traits:add(ToadTraitsRegistries.indefatigable)
+                end
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_indefatigable"), true, HaloTextHelper.getColorGreen())
             end
         end
@@ -223,50 +251,86 @@ function MTDTraitsGainsByLevel(player, perk)
         -- Noodle Legs
         local evasiveSum = lvlFitness + agilitySum
         if vars.NoodleLegsDynamic and player:hasTrait(ToadTraitsRegistries.noodlelegs) and evasiveSum >= vars.NoodleLegsDynamicSkill then
-            traits:remove(ToadTraitsRegistries.noodlelegs)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "noodlelegs" })
+            else
+                traits:remove(ToadTraitsRegistries.noodlelegs)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_noodlelegs"), false, HaloTextHelper.getColorGreen())
         end
         -- Evasive
         if vars.EvasiveDynamic and not player:hasTrait(ToadTraitsRegistries.evasive) and not player:hasTrait(ToadTraitsRegistries.noodlelegs) and evasiveSum >= vars.EvasiveDynamicSkill then
-            traits:add(ToadTraitsRegistries.evasive)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "evasive" })
+            else
+                traits:add(ToadTraitsRegistries.evasive)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_evasive"), true, HaloTextHelper.getColorGreen())
         end
         -- Slowpoke
         if vars.SlowpokeDynamic and player:hasTrait(ToadTraitsRegistries.gimp) and agilitySum >= vars.SlowpokeDynamicSkill then
-            traits:remove(ToadTraitsRegistries.gimp)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "gimp" })
+            else
+                traits:remove(ToadTraitsRegistries.gimp)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_slowpoke"), false, HaloTextHelper.getColorGreen())
         end
         -- Fast
         if vars.FastDynamic and not player:hasTrait(ToadTraitsRegistries.fast) and agilitySum >= vars.FastDynamicSkill then
-            traits:add(ToadTraitsRegistries.fast)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "fast" })
+            else
+                traits:add(ToadTraitsRegistries.fast)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fast"), true, HaloTextHelper.getColorGreen())
         end
         -- Olympian
         if vars.OlympianDynamic and not player:hasTrait(ToadTraitsRegistries.olympian) and lvlSprint >= vars.OlympianDynamicSkillSprinting and lvlFitness >= vars.OlympianDynamicSkillFitness then
-            traits:add(ToadTraitsRegistries.olympian);
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "olympian" })
+            else
+                traits:add(ToadTraitsRegistries.olympian)
+            end
 			MTDapplyXPBoost(player, Perks.Sprinting, 1);
 			HaloTextHelper.addTextWithArrow(player, getText("UI_trait_olympian"), true, HaloTextHelper.getColorGreen());
         end
         -- Swift
         if vars.SwiftDynamic and not player:hasTrait(ToadTraitsRegistries.swift) and lvlLightFoot >= vars.SwiftDynamicSkill then
-            traits:add(ToadTraitsRegistries.swift)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "swift" })
+            else
+                traits:add(ToadTraitsRegistries.swift)
+            end
             MTDapplyXPBoost(player, Perks.Lightfoot, 1);
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_swift"), true, HaloTextHelper.getColorGreen())
         end
         -- Flexible
         if vars.FlexibleDynamic and not player:hasTrait(ToadTraitsRegistries.flexible) and lvlNimble >= vars.FlexibleDynamicSkill then
-            traits:add(ToadTraitsRegistries.flexible)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "flexible" })
+            else
+                traits:add(ToadTraitsRegistries.flexible)
+            end
             MTDapplyXPBoost(player, Perks.Nimble, 1);
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_flexible"), true, HaloTextHelper.getColorGreen())
         end
         -- Well-Fitted
         if vars.WellFittedDynamic and not player:hasTrait(ToadTraitsRegistries.fitted) and lvlNimble >= vars.WellFittedDynamicSkill then
-            traits:add(ToadTraitsRegistries.fitted)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "fitted" })
+            else
+                traits:add(ToadTraitsRegistries.fitted)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_fitted"), true, HaloTextHelper.getColorGreen())
         end
         -- Quiet
         if vars.QuietDynamic and not player:hasTrait(ToadTraitsRegistries.quiet) and lvlSneak >= vars.QuietDynamicSkill then
-            traits:add(ToadTraitsRegistries.quiet)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "quiet" })
+            else
+                traits:add(ToadTraitsRegistries.quiet)
+            end
             MTDapplyXPBoost(player, Perks.Sneak, 1);
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_quiet"), true, HaloTextHelper.getColorGreen())
         end
@@ -289,7 +353,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = bluntKills >= vars.ThuggishDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.blunttwirl)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "blunttwirl" })
+                else
+                    traits:add(ToadTraitsRegistries.blunttwirl)
+                end
                 MTDapplyXPBoost(player, Perks.Blunt, 1)
                 MTDapplyXPBoost(player, Perks.SmallBlunt, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_blunttwirl"), true, HaloTextHelper.getColorGreen())
@@ -302,7 +370,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = bluntKills >= vars.ProwessBluntDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.problunt)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "problunt" })
+                else
+                    traits:add(ToadTraitsRegistries.problunt)
+                end
                 MTDapplyXPBoost(player, Perks.Blunt, 1)
                 MTDapplyXPBoost(player, Perks.SmallBlunt, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_problunt"), true, HaloTextHelper.getColorGreen())
@@ -315,7 +387,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = getKills("Blunt") >= vars.GordaniteDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.gordanite)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "gordanite" })
+                else
+                    traits:add(ToadTraitsRegistries.gordanite)
+                end
                 MTDapplyXPBoost(player, Perks.Blunt, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gordanite"), true, HaloTextHelper.getColorGreen())
             end
@@ -327,7 +403,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = getKills("SmallBlunt") >= vars.GruntWorkerDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.grunt)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "grunt" })
+                else
+                    traits:add(ToadTraitsRegistries.grunt)
+                end
                 MTDapplyXPBoost(player, Perks.SmallBlunt, 1)
                 MTDapplyXPBoost(player, Perks.Woodwork, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_grunt"), true, HaloTextHelper.getColorGreen())
@@ -335,13 +415,21 @@ function MTDTraitsGainsByLevel(player, perk)
         end
         -- Tavern Brawler
         if vars.TavernBrawlerDynamic and not player:hasTrait(ToadTraitsRegistries.tavernbrawler) and combatSum >= vars.TavernBrawlerDynamicSkill then
-            traits:add(ToadTraitsRegistries.tavernbrawler)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "tavernbrawler" })
+            else
+                traits:add(ToadTraitsRegistries.tavernbrawler)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_tavernbrawler"), true, HaloTextHelper.getColorGreen())
         end
         -- Martial Artist
         if vars.MartialArtistDynamic and not player:hasTrait(ToadTraitsRegistries.martial) then
             if lvlSmallBlunt >= vars.MartialArtistDynamicSmallBlunt and lvlFitness >= vars.MartialArtistDynamicFitness then
-                traits:add(ToadTraitsRegistries.martial)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "martial" })
+                else
+                    traits:add(ToadTraitsRegistries.martial)
+                end
                 MTDapplyXPBoost(player, Perks.SmallBlunt, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_martial"), true, HaloTextHelper.getColorGreen())
             end
@@ -349,7 +437,11 @@ function MTDTraitsGainsByLevel(player, perk)
         -- Bouncer
         if vars.BouncerDynamic and not player:hasTrait(ToadTraitsRegistries.bouncer) then
             if lvlSmallBlunt >= vars.BouncerDynamicSmallBlunt and lvlStrength >= vars.BouncerDynamicStrength then
-                traits:add(ToadTraitsRegistries.bouncer)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "bouncer" })
+                else
+                    traits:add(ToadTraitsRegistries.bouncer)
+                end
                 MTDapplyXPBoost(player, Perks.SmallBlunt, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_bouncer"), true, HaloTextHelper.getColorGreen())
             end
@@ -370,7 +462,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = bladeKills >= vars.PracticedSwordsmanDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.bladetwirl)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "bladetwirl" })
+                else
+                    traits:add(ToadTraitsRegistries.bladetwirl)
+                end
                 MTDapplyXPBoost(player, Perks.LongBlade, 1)
                 MTDapplyXPBoost(player, Perks.SmallBlade, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_bladetwirl"), true, HaloTextHelper.getColorGreen())
@@ -385,7 +481,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = totalBladeKills >= vars.ProwessBladeDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.problade)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "problade" })
+                else
+                    traits:add(ToadTraitsRegistries.problade)
+                end
                 MTDapplyXPBoost(player, Perks.Axe, 1)
                 MTDapplyXPBoost(player, Perks.LongBlade, 1)
                 MTDapplyXPBoost(player, Perks.SmallBlade, 1)
@@ -406,7 +506,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = getKills("Spear") >= vars.WildsmanDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.wildsman)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "wildsman" })
+                else
+                    traits:add(ToadTraitsRegistries.wildsman)
+                end
                 MTDapplyXPBoost(player, Perks.Spear, 1)
                 MTDapplyXPBoost(player, Perks.Fishing, 1)
                 MTDapplyXPBoost(player, Perks.Trapping, 1)
@@ -427,7 +531,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = getKills("Spear") >= vars.ProwessSpearDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.prospear)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "prospear" })
+                else
+                    traits:add(ToadTraitsRegistries.prospear)
+                end
                 MTDapplyXPBoost(player, Perks.Spear, 2)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_prospear"), true, HaloTextHelper.getColorGreen())
             end
@@ -445,7 +553,11 @@ function MTDTraitsGainsByLevel(player, perk)
         -- Scrapper
         if vars.ScrapperDynamic and not player:hasTrait(ToadTraitsRegistries.scrapper) then
             if lvlMaintenance >= vars.ScrapperDynamicMaintenance and lvlMetal >= vars.ScrapperDynamicMetalWelding then
-                traits:add(ToadTraitsRegistries.scrapper)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "scrapper" })
+                else
+                    traits:add(ToadTraitsRegistries.scrapper)
+                end
                 MTDapplyXPBoost(player, Perks.Maintenance, 1)
                 MTDapplyXPBoost(player, Perks.MetalWelding, 1)
                 local recipes = player:getKnownRecipes()
@@ -456,18 +568,30 @@ function MTDTraitsGainsByLevel(player, perk)
         end
         -- Slow Worker
         if vars.SlowWorkerDynamic and player:hasTrait(ToadTraitsRegistries.slowworker) and craftingSum >= vars.SlowWorkerDynamicSkill then
-            traits:remove(ToadTraitsRegistries.slowworker)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "slowworker" })
+            else
+                traits:remove(ToadTraitsRegistries.slowworker)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_slowworker"), false, HaloTextHelper.getColorGreen())
         end
         -- Fast Worker
         if vars.FastWorkerDynamic and not player:hasTrait(ToadTraitsRegistries.quickworker) and craftingSum >= vars.FastWorkerDynamicSkill then
-            traits:add(ToadTraitsRegistries.quickworker)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "quickworker" })
+            else
+                traits:add(ToadTraitsRegistries.quickworker)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_quickworker"), true, HaloTextHelper.getColorGreen())
         end
         -- Natural Eater
         if vars.NaturalEaterDynamic and not player:hasTrait(ToadTraitsRegistries.natural) then
             if lvlCook >= vars.NaturalEaterDynamicCooking and lvlForage >= vars.NaturalEaterDynamicForaging then
-                traits:add(ToadTraitsRegistries.natural)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "natural" })
+                else
+                    traits:add(ToadTraitsRegistries.natural)
+                end
                 MTDapplyXPBoost(player, Perks.Cooking, 1)
                 MTDapplyXPBoost(player, Perks.PlantScavenging, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_natural"), true, HaloTextHelper.getColorGreen())
@@ -476,7 +600,11 @@ function MTDTraitsGainsByLevel(player, perk)
         -- Tinkerer
         if vars.TinkererDynamic and not player:hasTrait(ToadTraitsRegistries.tinkerer) then
             if (lvlElec + lvlMech + lvlTailor) >= vars.TinkererDynamicSkill then
-                traits:add(ToadTraitsRegistries.tinkerer)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "tinkerer" })
+                else
+                    traits:add(ToadTraitsRegistries.tinkerer)
+                end
                 MTDapplyXPBoost(player, Perks.Electricity, 1)
                 MTDapplyXPBoost(player, Perks.Mechanics, 1)
                 MTDapplyXPBoost(player, Perks.Tailoring, 1)
@@ -501,7 +629,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canRemove = gunKills >= vars.AntiGunActivistDynamicKill
             end
             if canRemove then
-                traits:remove(ToadTraitsRegistries.antigun)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "antigun" })
+                else
+                    traits:remove(ToadTraitsRegistries.antigun)
+                end
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_antigun"), false, HaloTextHelper.getColorGreen())
             end
         end
@@ -512,7 +644,11 @@ function MTDTraitsGainsByLevel(player, perk)
                 canGet = gunKills >= vars.ProwessGunsDynamicKill
             end
             if canGet then
-                traits:add(ToadTraitsRegistries.progun)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "progun" })
+                else
+                    traits:add(ToadTraitsRegistries.progun)
+                end
                 MTDapplyXPBoost(player, Perks.Aiming, 1)
                 MTDapplyXPBoost(player, Perks.Reloading, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_progun"), true, HaloTextHelper.getColorGreen())
@@ -527,7 +663,11 @@ function MTDTraitsGainsByLevel(player, perk)
             end
             
             if getTrait then
-                traits:add(ToadTraitsRegistries.terminator)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "terminator" })
+                else
+                    traits:add(ToadTraitsRegistries.terminator)
+                end
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_terminator"), true, HaloTextHelper.getColorGreen())
             end
         end
@@ -537,29 +677,45 @@ function MTDTraitsGainsByLevel(player, perk)
     -- SCAVENGING SKILL
     ---------------------------------------------------------------------------
     local hasScavMod = getActivatedMods():contains("ScavengingSkill") or getActivatedMods():contains("ScavengingSkillFixed")
-    if hasScavMod and (isInit or perk == Perks.Scavenging) then       
+    if hasScavMod and (isInit or perk == Perks.Scavenging) then
         -- 1. Incomprehensive
         if vars.IncomprehensiveDynamic and player:hasTrait(ToadTraitsRegistries.incomprehensive) and lvlScav >= vars.IncomprehensiveDynamicSkill then
-            traits:remove(ToadTraitsRegistries.incomprehensive)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "incomprehensive" })
+            else
+                traits:remove(ToadTraitsRegistries.incomprehensive)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_incomprehensive"), false, HaloTextHelper.getColorGreen())
         end
         -- 2. Vagabond
         if vars.VagabondDynamic and not player:hasTrait(ToadTraitsRegistries.vagabond) and lvlScav >= vars.VagabondDynamicSkill then
-            traits:add(ToadTraitsRegistries.vagabond)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "vagabond" })
+            else
+                traits:add(ToadTraitsRegistries.vagabond)
+            end
             MTDapplyXPBoost(player, Perks.Scavenging, 1)
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_vagabond"), true, HaloTextHelper.getColorGreen())
         end
         -- 3. Grave Robber
         if vars.GraverobberDynamic and not player:hasTrait(ToadTraitsRegistries.graverobber) then
             if lvlScav >= vars.GraverobberDynamicSkill and player:getZombieKills() >= vars.GraverobberDynamicKill then
-                traits:add(ToadTraitsRegistries.graverobber)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "graverobber" })
+                else
+                    traits:add(ToadTraitsRegistries.graverobber)
+                end
                 MTDapplyXPBoost(player, Perks.Scavenging, 1)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_graverobber"), true, HaloTextHelper.getColorGreen())
             end
         end
         -- 4. Antique Collector
         if vars.AntiqueCollectorDynamic and not player:hasTrait(ToadTraitsRegistries.antique) and lvlScav >= vars.AntiqueCollectorDynamicSkill then
-            traits:add(ToadTraitsRegistries.antique)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "antique" })
+            else
+                traits:add(ToadTraitsRegistries.antique)
+            end
             MTDapplyXPBoost(player, Perks.Scavenging, 1)
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_antique"), true, HaloTextHelper.getColorGreen())
         end
@@ -596,7 +752,11 @@ function MTDTraitGainsByWeight()
             end
         end
         if MTD.WeightMaintainedHours >= (vars.IdealWeightDynamicTargetDaysToObtain * 24) then
-            traits:add(ToadTraitsRegistries.idealweight)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "idealweight" })
+            else
+                traits:add(ToadTraitsRegistries.idealweight)
+            end
             MTD.WeightMaintainedHours = 0
             MTD.WeightNotMaintainedHours = 0
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), true, HaloTextHelper.getColorGreen())
@@ -612,7 +772,11 @@ function MTDTraitGainsByWeight()
                 MTD.WeightMaintainedHours = MTD.WeightMaintainedHours - 1
                 
                 if MTD.WeightMaintainedHours <= 0 then
-                    traits:remove(ToadTraitsRegistries.idealweight)
+                    if isClient() then
+                        sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "idealweight" })
+                    else
+                        traits:remove(ToadTraitsRegistries.idealweight)
+                    end
                     MTD.WeightMaintainedHours = 0
                     MTD.WeightNotMaintainedHours = 0
                     HaloTextHelper.addTextWithArrow(player, getText("UI_trait_idealweight"), false, HaloTextHelper.getColorRed())
@@ -643,7 +807,11 @@ function MTDTraitGainsByPanic()
         local targetMinutes = vars.ParanoiaDynamicHoursLose * 60
         
         if MTD.FiftyPlusStressAndPanicTime >= targetMinutes then
-            player:getCharacterTraits():remove(ToadTraitsRegistries.paranoia)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "paranoia" })
+            else
+                player:getCharacterTraits():remove(ToadTraitsRegistries.paranoia)
+            end
             MTD.FiftyPlusStressAndPanicTime = 0
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_paranoia"), false, HaloTextHelper.getColorGreen())
         end
@@ -703,13 +871,21 @@ function MTDTraitGainsByInjuries()
     local traits = player:getCharacterTraits()
     -- Add Unwavering
     if not hasUnwavering and MTD.InjuredTime >= vars.UnwaveringDynamicCounter then
-        traits:add(ToadTraitsRegistries.unwavering)
+        if isClient() then
+            sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "unwavering" })
+        else
+            traits:add(ToadTraitsRegistries.unwavering)
+        end
         HaloTextHelper.addTextWithArrow(player, getText("UI_trait_unwavering"), true, HaloTextHelper.getColorGreen())
     end
     -- Remove Immunocompromised
     if hasImmunocompromised and vars.ImmunocompromisedDynamic then
         if MTD.totalInfectionTime >= vars.ImmunocompromisedDynamicInfectionTime then
-            traits:remove(ToadTraitsRegistries.immunocompromised)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "immunocompromised" })
+            else
+                traits:remove(ToadTraitsRegistries.immunocompromised)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_immunocompromised"), false, HaloTextHelper.getColorGreen())
             -- Optional: Reset counter so Super-Immune starts from 0 after removal
             MTD.totalInfectionTime = 0 
@@ -717,7 +893,11 @@ function MTDTraitGainsByInjuries()
     -- Award Super-Immune (Only if not Immunocompromised)
     elseif not hasSuperImmune and vars.SuperImmuneDynamic then
         if MTD.totalInfectionTime >= vars.SuperImmuneDynamicInfectionTime then
-            traits:add(ToadTraitsRegistries.superimmune)
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "superimmune" })
+            else
+                traits:add(ToadTraitsRegistries.superimmune)
+            end
             HaloTextHelper.addTextWithArrow(player, getText("UI_trait_superimmune"), true, HaloTextHelper.getColorGreen())
         end
     end
@@ -734,7 +914,11 @@ function MTDLeadFoot(zombie)
         if player:DistTo(zombie) <= 1 then
             MTD.LeadFootCount = (MTD.LeadFootCount or 0) + 1
             if MTD.LeadFootCount >= SandboxVars.MoreTraitsDynamic.LeadFootDynamicKill then
-                player:getCharacterTraits():add(ToadTraitsRegistries.leadfoot)
+                if isClient() then
+                    sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "leadfoot" })
+                else
+                    player:getCharacterTraits():add(ToadTraitsRegistries.leadfoot)
+                end
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_leadfoot"), true, HaloTextHelper.getColorGreen())
             end
         end
