@@ -7,6 +7,7 @@ local dynamicDefaults = {
     WeightMaintainedHours = 0,
     WeightNotMaintainedHours = 0,
     FiftyPlusStressAndPanicTime = 0,
+    InitDelay = 0,
 }
 
 local function InitMoreTraitsDynamic(player, playerdata)
@@ -18,11 +19,6 @@ local function InitMoreTraitsDynamic(player, playerdata)
             MTD[key] = defaultValue
         end
     end
-end
-
-function MTDLevelPerkMain(player, perk)
-	if not player then return end
-	MTDTraitsGainsByLevel(player, perk);
 end
 
 -- TODO MP Support
@@ -116,6 +112,8 @@ local indefatigablePerks = {
 }
 
 function MTDTraitsGainsByLevel(player, perk)
+    if not player or not perk then return end
+
     local playerdata = player:getModData()
     if not playerdata then return end
 
@@ -927,12 +925,13 @@ function MTDLeadFoot(zombie)
     if not player or player:hasTrait(ToadTraitsRegistries.leadfoot) then return end
 
     local MTD = player:getModData().MoreTraitsDynamic
-    if not MTD or not SandboxVars.MoreTraitsDynamic.LeadFootDynamic then return end
+    local vars = SandboxVars.MoreTraitsDynamic
+    if not MTD or not vars.LeadFootDynamic then return end
 
     if MTD.AllowLeadFootCount then
         if player:DistTo(zombie) <= 1 then
             MTD.LeadFootCount = (MTD.LeadFootCount or 0) + 1
-            if MTD.LeadFootCount >= SandboxVars.MoreTraitsDynamic.LeadFootDynamicKill then
+            if MTD.LeadFootCount >= vars.LeadFootDynamicKill then
                 if isClient() then
                     sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "leadfoot" })
                 else
@@ -954,16 +953,11 @@ function MTDInitializeData(playerindex, player)
 end
 
 function MTDRegisterLogic(playerindex, player)
-    if not player then return end
-
     Events.EveryOneMinute.Add(MTDEveryOneMinuteMain)
     Events.EveryTenMinutes.Add(MTDEveryTenMinutesMain)
     Events.EveryHours.Add(MTDEveryHoursMain)
-
-    Events.LevelPerk.Add(MTDLevelPerkMain)
+    Events.LevelPerk.Add(MTDTraitsGainsByLevel)
     Events.OnWeaponHitCharacter.Add(MTDOnWeaponHitCharacterMain)
-
-    MTDTraitsGainsByLevel(player, "characterInitialization")
     
     if getActivatedMods():contains("KillCount") then
         Events.OnZombieDead.Add(MTDKillsMainExtended)
@@ -972,5 +966,27 @@ function MTDRegisterLogic(playerindex, player)
     end
 end
 
+function MTDPlayerCreation(player)
+    print("Checking this is still disabled")
+    local playerdata = player:getModData()
+    if not playerdata then return end
+
+    local MTD = playerdata.MoreTraitsDynamic
+    if not MTD or MTD.InitDelay == -1 then
+        Events.OnPlayerUpdate.Remove(MTDPlayerCreation)
+        return
+    end
+
+    MTD.InitDelay = MTD.InitDelay + 1
+
+    if MTD.InitDelay < 200 then return end
+
+    MTDTraitsGainsByLevel(player, "characterInitialization")
+    MTD.InitDelay = -1
+    player:transmitModData()
+    Events.OnPlayerUpdate.Remove(MTDPlayerCreation)
+end
+
 Events.OnCreatePlayer.Add(MTDInitializeData)
 Events.OnCreatePlayer.Add(MTDRegisterLogic)
+Events.OnPlayerUpdate.Add(MTDPlayerCreation)
