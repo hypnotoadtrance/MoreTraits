@@ -597,6 +597,25 @@ function MTDTraitsGainsByLevel(player, perk)
                 HaloTextHelper.addTextWithArrow(player, getText("UI_trait_natural"), true, HaloTextHelper.getColorGreen())
             end
         end
+        -- Ascetic
+        if vars.AsceticDynamic and player:hasTrait(ToadTraitsRegistries.ascetic) and player:getPerkLevel(Perks.Cooking) >= vars.AsceticDynamicSkill then
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "removeTrait", { trait = "ascetic" })
+            else
+                traits:remove(ToadTraitsRegistries.ascetic)
+            end
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_ascetic"), false, HaloTextHelper.getColorGreen());
+        end
+        -- Gourmand
+        if vars.GourmandDynamic and not player:hasTrait(ToadTraitsRegistries.gourmand) and player:getPerkLevel(Perks.Cooking) >= vars.GourmandDynamicSkill then
+            if isClient() then
+                sendClientCommand("MoreTraitsDynamic", "addTrait", { trait = "gourmand" })
+            else
+                traits:add(ToadTraitsRegistries.gourmand)
+            end
+            MTDapplyXPBoost(player, Perks.Cooking, 1);
+            HaloTextHelper.addTextWithArrow(player, getText("UI_trait_gourmand"), true, HaloTextHelper.getColorGreen());
+        end
         -- Tinkerer
         if vars.TinkererDynamic and not player:hasTrait(ToadTraitsRegistries.tinkerer) then
             if (lvlElec + lvlMech + lvlTailor) >= vars.TinkererDynamicSkill then
