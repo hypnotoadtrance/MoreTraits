@@ -1,0 +1,16 @@
+Tooltip_IT = {
+    Tooltip_MoreTraits_AntiqueAxe = "Un'ascia di pietra rara e temprata.<br>Molto forte e resistente, ma non riparabile.",
+    Tooltip_MoreTraits_Thumper = "Una rara mazza di pietra.<br>Capace di abbattere intere folle con un solo colpo.<br>Incredibilmente potente, ma anche estremamente pesante!",
+    Tooltip_MoreTraits_ObsidianBlade = "Un raro pugnale sacrificale antico. <br>Molto potente, ma fragile.",
+    Tooltip_MoreTraits_PackerBag = "Uno zaino raro.<br>Grande capacità ed elevata riduzione del peso.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Questo piede di porco è stato modellato e perfezionato per oscillare più velocemente, infliggere più danni ed essere completamente efficace con una sola mano.",
+    Tooltip_MoreTraits_Slugger = "Una rara mazza da baseball in alluminio firmata.<br>Pesa meno, oscilla più velocemente ed è più resistente di una mazza da baseball standard.",
+    Tooltip_MoreTraits_Cure = "Un potente intruglio in grado di invertire gli effetti della zombificazione.<br>Può essere creato solo dai ricercatori medici più talentuosi.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Una rivista in edizione limitata.<br>Questa edizione insegna l'arte tabù di convertire i cadaveri umani in utile fertilizzante.",
+    Tooltip_MoreTraits_AntiqueMag2 = "Una rivista in edizione limitata.<br>Questa edizione approfondisce le ricette di home crafting con la cartapesta.",
+    Tooltip_MoreTraits_AntiqueMag3 = "Una rivista in edizione limitata.<br>Questa edizione offre un commento sulle ricette cannibalistiche di alcune tribù della Papua Nuova Guniea.",
+    Tooltip_MoreTraits_PapierMacheSword = "Divertimento per tutta la famiglia! <br>Non adatto ai bambini di età inferiore ai quattro anni.",
+    Tooltip_MoreTraits_ItemBoost = "Le statistiche di questo oggetto sono potenziate da uno dei tuoi tratti.",
+    Tooltip_MoreTraits_GordaniteBoost = "Piede di porco+",
+    Tooltip_MoreTraits_GordaniteDefault = "Piede di porco",
+}

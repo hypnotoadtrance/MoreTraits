@@ -1,0 +1,16 @@
+Tooltip_DE = {
+    Tooltip_MoreTraits_AntiqueAxe = "Eine seltene, gehärtete Steinaxt.<br>Sehr stark und langlebig, aber nicht reparierbar.",
+    Tooltip_MoreTraits_Thumper = "Ein seltener Steinhammer.<br>In der Lage, ganze Menschenmengen mit einem Schwung niederzuschlagen.<br>Unglaublich kraftvoll, aber auch extrem schwer!",
+    Tooltip_MoreTraits_ObsidianBlade = "Ein seltener antiker Opferdolch.<br>Sehr mächtig, aber spröde.",
+    Tooltip_MoreTraits_PackerBag = "Eine seltene Packung.<br>Großes Fassungsvermögen und hohe Gewichtsreduzierung.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Ein seltenes Paket.<br>Große Kapazität und hohe Gewichtsreduzierung.Dieses Brecheisen wurde so geformt und verfeinert, dass es schneller schwingt und mehr Schaden verursacht.",
+    Tooltip_MoreTraits_Slugger = "Ein seltener, signierter Aluminium-Baseballschläger.<br>Wiegt weniger, schwingt schneller und ist haltbarer als ein Standard-Baseballschläger.",
+    Tooltip_MoreTraits_Cure = "Ein starkes Gebräu, das die Auswirkungen der Zombifizierung rückgängig machen kann.<br>Kann nur von den talentiertesten Medizinforschern hergestellt werden.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Ein Magazin in limitierter Auflage.<br>Diese Ausgabe lehrt die tabuisierte Kunst, menschliche Leichen in nützlichen Dünger zu verwandeln.",
+    Tooltip_MoreTraits_AntiqueMag2 = "Ein Magazin in limitierter Auflage.<br>Diese Ausgabe befasst sich mit Rezepten zum Basteln zu Hause mit PappmachÃ©.",
+    Tooltip_MoreTraits_AntiqueMag3 = "Eine Zeitschrift in limitierter Auflage.<br>Diese Ausgabe bietet Kommentare zu den kannibalistischen Rezepten bestimmter Stämme der Papua-Neu-Guniea.",
+    Tooltip_MoreTraits_PapierMacheSword = "Spaß für die ganze Familie!<br>Nicht für Kinder unter vier Jahren.",
+    Tooltip_MoreTraits_ItemBoost = "Die Werte dieses Gegenstands werden durch eine deiner Eigenschaften verbessert.",
+    Tooltip_MoreTraits_GordaniteBoost = "Brecheisen+",
+    Tooltip_MoreTraits_GordaniteDefault = "Brecheisen",
+}

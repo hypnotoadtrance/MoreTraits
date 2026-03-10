@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode>
+	<m_Name>Alt_BiteDefended</m_Name>
+	<m_AnimName>Bob_BiteDefend</m_AnimName>
+	<m_deferredBoneAxis>Y</m_deferredBoneAxis>
+	<m_Looped>false</m_Looped>
+	<m_SpeedScale>2.24</m_SpeedScale>
+	<m_BlendTime>0.10</m_BlendTime>
+	<m_Conditions>
+		<m_Name>hitreaction</m_Name>
+		<m_Type>STRING</m_Type>
+		<m_StringValue>UnwaveringBiteDefended</m_StringValue>
+	</m_Conditions>
+	<m_Events>
+		<m_EventName>Defend</m_EventName>
+		<m_Time>Start</m_Time>
+		<m_ParameterValue></m_ParameterValue>
+	</m_Events>
+</animNode>

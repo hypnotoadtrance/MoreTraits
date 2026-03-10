@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<fileGuidTable>
+	<files>
+		<path>media/clothing/clothingItems/Bag_PackerBag.xml</path>
+		<guid>90c8ada9-6425-404a-9f57-2779c2850b7e</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Bag_SmallHikingBag.xml</path>
+		<guid>60ad4e73-45ca-443b-bd63-4ab78a6eeb63</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Jacket_Antique.xml</path>
+		<guid>7f90754f-b7ab-4036-9971-637366e52211</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Shoes_AntiqueBoots.xml</path>
+		<guid>3dd92c4e-b6e9-4c33-a7b6-299aa7ece268</guid>
+	</files>
+	<files>
+		<path>media/clothing/clothingItems/Vest_BulletAntique.xml</path>
+		<guid>0a6e43f4-2c40-4218-b97b-119c4d8c4ed9</guid>
+	</files>
+</fileGuidTable>
