@@ -1,0 +1,16 @@
+Tooltip_PL = {
+    Tooltip_MoreTraits_AntiqueAxe = "Rzadka, utwardzona kamienna siekiera.<br>Bardzo silna i wytrzymała, lecz nie można jej naprawić.",
+    Tooltip_MoreTraits_Thumper = "Rzadka kamienna pałka.<br>Potrafi powalić całe tłumy za jednym zamachem.<br>Niezwykle potężna, ale i niezwykle ciężka!",
+    Tooltip_MoreTraits_ObsidianBlade = "Rzadki antyczny sztylet ofiarny.<br>Bardzo mocny, ale kruchy.",
+    Tooltip_MoreTraits_PackerBag = "Rzadki plecak.<br>Duża pojemność i wysoka redukcja masy.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Ten łom został ukształtowany i udoskonalony tak, aby uderzał szybciej, zadawał większe obrażenia i był w pełni skutecznym przy użyciu tylko jednej ręki.",
+    Tooltip_MoreTraits_Slugger = "Rzadki, sygnowany aluminiowy kij baseballowy.<br>Waży mniej, uderza szybciej i jest bardziej wytrzymały niż standardowy kij baseballowy.",
+    Tooltip_MoreTraits_Cure = "Potężna mikstura, która może odwrócić skutki zombifikacji.<br>Może zostać stworzona tylko przez najbardziej utalentowanych badaczy medycznych.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Magazyn z limitowanej edycji.<br>To wydanie uczy sztuki przetwarzania ludzkich zwłok w użyteczny nawóz.",
+    Tooltip_MoreTraits_AntiqueMag2 = "Magazyn z limitowanej edycji.<br>W tym wydaniu zagłębiamy się w przepisy na domowe rękodzieło z Papieru",
+    Tooltip_MoreTraits_AntiqueMag3 = "Magazyn z limitowanej edycji.<br>To wydanie zawiera komentarz do kanibalistycznych przepisów kulinarnych niektórych plemion Papui Nowej Gwinei.",
+    Tooltip_MoreTraits_PapierMacheSword = "Zabawa dla całej rodziny!<br>Nie dla dzieci poniżej czwartego roku życia.",
+    Tooltip_MoreTraits_ItemBoost = "Statystyki tego przedmiotu są zwiększane przez jedną z twoich cech.",
+    Tooltip_MoreTraits_GordaniteBoost = "Łom+",
+    Tooltip_MoreTraits_GordaniteDefault = "Łom",
+}
