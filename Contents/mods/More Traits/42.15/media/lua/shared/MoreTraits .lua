@@ -10,7 +10,7 @@ TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
 --]]
 
-if getActivatedMods():contains("MoodleFramework") == true then
+if not isServer() and getActivatedMods():contains("MoodleFramework") == true then
 	require("MF_ISMoodle")
 	MF.createMoodle("MTAlcoholism")
 end

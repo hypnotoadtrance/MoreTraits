@@ -1,3 +1,9 @@
+-- This should be ran only if it's SP or if it's a server process
+if isClient() then
+	print("MoreTraits_UCWF | Detected MP client environment, skipping the file")
+	return
+end
+
 require("UnifiedCarryWeightFramework")
 UnifiedCarryWeightFramework.registerMaxModifier({
 	id = "ToadTraits.Sandbox.WeightGlobalMod",
