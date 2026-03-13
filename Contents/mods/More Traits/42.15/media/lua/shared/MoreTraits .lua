@@ -10,9 +10,12 @@ TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
 --]]
 
-if not isServer() and getActivatedMods():contains("MoodleFramework") == true then
-	require("MF_ISMoodle")
-	MF.createMoodle("MTAlcoholism")
+if getActivatedMods():contains("MoodleFramework") == true then
+	-- dirty fix
+	local status, MFModule = pcall(require, "MF_ISMoodle")
+	if status and MFModule and MFModule.createMoodle then
+		MFModule.createMoodle("MTAlcoholism")
+	end
 end
 
 --Global Variables

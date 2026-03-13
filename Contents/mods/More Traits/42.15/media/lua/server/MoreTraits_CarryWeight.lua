@@ -1,7 +1,18 @@
+local function gameMode()
+	if not isClient() and not isServer() then
+		return "SP"
+	elseif isClient() then
+		return "MP_Client"
+	end
+	return "MP_Server"
+end
+
 -- This should be ran only if it's SP or if it's a server process
-if isClient() then
+if gameMode() == "MP_Client" then
 	print("MoreTraits_UCWF | Detected MP client environment, skipping the file")
 	return
+else
+	print("MoreTraits_UCWF | Detected " .. gameMode() .. " environment, loading the file")
 end
 
 require("UnifiedCarryWeightFramework")
