@@ -11,8 +11,11 @@ This is constantly ongoing. Whenever I see something that can be written more ef
 --]]
 
 if getActivatedMods():contains("MoodleFramework") == true then
-	require("MF_ISMoodle")
-	MF.createMoodle("MTAlcoholism")
+	-- dirty fix
+	local status, MFModule = pcall(require, "MF_ISMoodle")
+	if status and MFModule and MFModule.createMoodle then
+		MFModule.createMoodle("MTAlcoholism")
+	end
 end
 
 --Global Variables
