@@ -7,12 +7,14 @@ local function gameMode()
 	return "MP_Server"
 end
 
+local gameMode = gameMode()
+
 -- This should be ran only if it's SP or if it's a server process
-if gameMode() == "MP_Client" then
-	print("MoreTraits_UCWF | Detected MP client environment, skipping the file")
+if gameMode == "MP_Client" then
+	print("MoreTraits_UCWF | Detected " .. gameMode .. " environment, skipping the file")
 	return
 else
-	print("MoreTraits_UCWF | Detected " .. gameMode() .. " environment, loading the file")
+	print("MoreTraits_UCWF | Detected " .. gameMode .. " environment, loading the file")
 end
 
 require("UnifiedCarryWeightFramework")
