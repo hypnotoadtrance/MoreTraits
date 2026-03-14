@@ -1,2 +1,2 @@
 Main Changelog:
--Synchronize Experience Gains to Server
+- Disable MoodleFramework Requirements and Checks and use Alcoholism fallback behavior.

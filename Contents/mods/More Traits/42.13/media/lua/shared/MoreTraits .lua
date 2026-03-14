@@ -10,11 +10,11 @@ TODO Code optimization
 This is constantly ongoing. Whenever I see something that can be written more efficiently, I try to rewrite where i can.
 --]]
 
-if getActivatedMods():contains("MoodleFramework") == true then
+--[[if getActivatedMods():contains("MoodleFramework") == true then
     require("MF_ISMoodle");
     MF.createMoodle("MTAlcoholism");
 end
-
+--]]
 --Global Variables
 if not isServer() then
     if PZAPI and PZAPI.ModOptions then
@@ -24,8 +24,8 @@ end
 skipxpadd = false;
 internalTick = 0;
 luckimpact = 1.0;
-MTModVersion = 42.13; --REMEMBER TO MANUALLY INCREASE
-isMoodleFrameWorkEnabled = getActivatedMods():contains("MoodleFramework");
+MTModVersion = 42.15; --REMEMBER TO MANUALLY INCREASE
+isMoodleFrameWorkEnabled = false; --getActivatedMods():contains("MoodleFramework");
 
 local playerDefaultData = {
     MTModVersion = MTModVersion,
@@ -1834,16 +1834,16 @@ local function drinkerpoison(player, playerdata)
     playerdata.iWithdrawalCooldown = playerdata.iWithdrawalCooldown or 24
 
     local isSuffering = false
-    if isMoodleFrameWorkEnabled then
-        if MF.getMoodle("MTAlcoholism"):getValue() <= 0.05 then
-            isSuffering = true
-        end
-    else
+   -- if isMoodleFrameWorkEnabled then
+        --if MF.getMoodle("MTAlcoholism"):getValue() <= 0.05 then
+          --  isSuffering = true
+       -- end
+   -- else
         local hourThreshold = SandboxVars.MoreTraits.AlcoholicWithdrawal or 72
         if playerdata.iHoursSinceDrink > hourThreshold and not playerdata.bSatedDrink then
             isSuffering = true
         end
-    end
+    --end
 
     if isSuffering and playerdata.iWithdrawalCooldown <= 0 then
         print("Player is suffering from alcohol withdrawal.")
@@ -4492,7 +4492,7 @@ local function OnEquipPrimary(player, item)
         handleGordanite(player, item, itemType)
     end
 end
-
+--[[
 local function MTAlcoholismMoodle(player, playerdata)
     --Experimental MoodleFramework Support
     if not player:hasTrait(ToadTraitsRegistries.drinker) then
@@ -4605,7 +4605,7 @@ local function MTAlcoholismMoodleTracker(player, playerdata)
     local percent = (hours / hoursthreshold) * 0.05;
     MF.getMoodle("MTAlcoholism"):setValue(Alcoholism - percent);
 end
-
+--]]
 local function updateUnwavering(player, playerdata)
     if not player:hasTrait(ToadTraitsRegistries.unwavering) then return end
     if playerdata.UnwaveringInjurySpeedChanged then return end
@@ -4672,11 +4672,11 @@ local function OnPlayerUpdate(player)
     CheckDepress(player, playerdata);
     Blissful(player);
     hardytrait(player, playerdata);
-    if isMoodleFrameWorkEnabled == false then
+    --if isMoodleFrameWorkEnabled == false then
         drinkerupdate(player, playerdata);
-    else
-        MTAlcoholismMoodle(player, playerdata);
-    end
+    --else
+       -- MTAlcoholismMoodle(player, playerdata);
+    --end
     BatteringRam(player, playerdata)
     bouncerupdate(player, playerdata);
     badteethtrait(player, playerdata);
@@ -4753,11 +4753,11 @@ local function EveryHours()
         return
     end ;
 
-    if not isMoodleFrameWorkEnabled then
+   --if not isMoodleFrameWorkEnabled then
         drinkertick(player, playerdata);
-    else
-        MTAlcoholismMoodleTracker(player, playerdata);
-    end
+    --else
+        --MTAlcoholismMoodleTracker(player, playerdata);
+   --end
 
     drinkerpoison(player, playerdata);
     SecondWindRecharge(player, playerdata);
