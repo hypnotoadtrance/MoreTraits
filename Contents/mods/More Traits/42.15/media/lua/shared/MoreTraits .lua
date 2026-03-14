@@ -5340,11 +5340,12 @@ local function OnPlayerUpdate(player)
 	CheckDepress(player, playerdata)
 	Blissful(player)
 	hardytrait(player, playerdata)
-	if isMoodleFrameWorkEnabled == false then
-		drinkerupdate(player, playerdata)
-	else
-		MTAlcoholismMoodle(player, playerdata)
-	end
+	-- temporary disabled alcoholism
+	-- if isMoodleFrameWorkEnabled == false then
+	-- 	drinkerupdate(player, playerdata)
+	-- else
+	-- 	MTAlcoholismMoodle(player, playerdata)
+	-- end
 	BatteringRam(player, playerdata)
 	bouncerupdate(player, playerdata)
 	badteethtrait(player, playerdata)
@@ -5414,11 +5415,12 @@ local function EveryHours()
 		return
 	end
 
-	if not isMoodleFrameWorkEnabled then
-		drinkertick(player, playerdata)
-	else
-		MTAlcoholismMoodleTracker(player, playerdata)
-	end
+	-- temporary disabled alcoholism
+	-- if not isMoodleFrameWorkEnabled then
+	-- 	drinkertick(player, playerdata)
+	-- else
+	-- 	MTAlcoholismMoodleTracker(player, playerdata)
+	-- end
 
 	drinkerpoison(player, playerdata)
 	SecondWindRecharge(player, playerdata)
