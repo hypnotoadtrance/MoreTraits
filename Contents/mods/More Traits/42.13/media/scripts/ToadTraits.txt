@@ -356,6 +356,7 @@ module ToadTraits {
         UIName = UI_trait_gunspecialist,
         UIDescription = UI_trait_gunspecialistdesc,
         XPBoosts = Aiming=2;Reloading=2,
+        MutuallyExclusiveTraits = ToadTraits:antigun,
     }
 
     character_trait_definition ToadTraits:gymgoer
