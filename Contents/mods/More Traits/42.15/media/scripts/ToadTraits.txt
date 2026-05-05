@@ -50,7 +50,7 @@ module ToadTraits {
         Cost = -6,
         UIName = UI_trait_antigun,
         UIDescription = UI_trait_antigundesc,
-        MutuallyExclusiveTraits = ToadTraits:noxpshooter;ToadTraits:progun;ToadTraits:specguns;ToadTraits:terminator,
+        MutuallyExclusiveTraits = ToadTraits:noxpshooter;ToadTraits:progun;ToadTraits:specguns;ToadTraits:terminator,ToadTraits:gunspecialist,
     }
 
     character_trait_definition ToadTraits:antique
