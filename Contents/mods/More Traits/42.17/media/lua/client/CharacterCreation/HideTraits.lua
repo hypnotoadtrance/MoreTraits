@@ -21,16 +21,16 @@ local specializationTraits = {
 }
 
 local function removeTraits()
-    if isModActivated("\\1299328280/ToadTraitsDisablePrepared") == false and isModActivated("\\1299328280/ToadTraitsDisableSpec") == false then return end
+    if isModActivated("1299328280/ToadTraitsDisablePrepared") == false and isModActivated("1299328280/ToadTraitsDisableSpec") == false then return end
     
     local traitDefs = CharacterTraitDefinition.characterTraitDefinitions
     local traitsToRemove = {}
 
-    if isModActivated("\\1299328280/ToadTraitsDisablePrepared") then
+    if isModActivated("1299328280/ToadTraitsDisablePrepared") then
         for _, v in ipairs(preparedTraits) do table.insert(traitsToRemove, v) end
     end
 
-    if isModActivated("\\1299328280/ToadTraitsDisableSpec") then
+    if isModActivated("1299328280/ToadTraitsDisableSpec") then
         for _, v in ipairs(specializationTraits) do table.insert(traitsToRemove, v) end
     end
 
