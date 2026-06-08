@@ -45,11 +45,30 @@ local function removeTraits()
 
     if #traitsToRemove == 0 then return end
 
+    local removedEnums = {}
     for _, traitName in ipairs(traitsToRemove) do
         local traitEnum = ToadTraitsRegistries[traitName]
 
         if traitEnum and traitDefs:containsKey(traitEnum) then
             traitDefs:remove(traitEnum)
+            table.insert(removedEnums, traitEnum)
+        end
+    end
+
+    -- Removing a definition leaves any trait that lists it as mutually exclusive
+    -- pointing at a nil definition; vanilla character creation
+    -- (CharacterCreationProfession:doTestForMutuallyExclusiveTraits) then calls a
+    -- method on that nil and errors. Strip the removed traits from every remaining
+    -- definition's mutually-exclusive list to keep those references valid.
+    if #removedEnums == 0 then return end
+
+    local allDefs = CharacterTraitDefinition.getTraits()
+    for i = 0, allDefs:size() - 1 do
+        local mutuallyExclusive = allDefs:get(i):getMutuallyExclusiveTraits()
+        for _, removedEnum in ipairs(removedEnums) do
+            if mutuallyExclusive:contains(removedEnum) then
+                mutuallyExclusive:remove(removedEnum)
+            end
         end
     end
 end
