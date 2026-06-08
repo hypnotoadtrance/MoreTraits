@@ -19,9 +19,11 @@ ToadTraitsRegistries.preparedcoordination = CharacterTrait.register("ToadTraits:
 ToadTraitsRegistries.swift = CharacterTrait.register("ToadTraits:swift")
 ToadTraitsRegistries.ingenuitive = CharacterTrait.register("ToadTraits:ingenuitive")
 
-if getActivatedMods():contains("DynamicTraits") == false then
-    ToadTraitsRegistries.generator = CharacterTrait.register("ToadTraits:generator")
-end
+-- Always register. The old DynamicTraits check matches no B42 mod id, so this
+-- already always ran; the Dynamic add-on does not manage generator either.
+-- Skipping registration would leave the character_trait_definition script
+-- pointing at a missing CharacterTrait, aborting script loading (fatal under -debug).
+ToadTraitsRegistries.generator = CharacterTrait.register("ToadTraits:generator")
 
 ToadTraitsRegistries.olympian = CharacterTrait.register("ToadTraits:olympian")
 ToadTraitsRegistries.bouncer = CharacterTrait.register("ToadTraits:bouncer")
@@ -36,9 +38,11 @@ ToadTraitsRegistries.natural = CharacterTrait.register("ToadTraits:natural")
 ToadTraitsRegistries.bladetwirl = CharacterTrait.register("ToadTraits:bladetwirl")
 ToadTraitsRegistries.blunttwirl = CharacterTrait.register("ToadTraits:blunttwirl")
 
-if getActivatedMods():contains("ScavengingSkill") == false and getActivatedMods():contains("ScavengingSkillFixed") == false then
-    ToadTraitsRegistries.scrounger = CharacterTrait.register("ToadTraits:scrounger")
-end
+-- Always register; if ScavengingSkill(Fixed) is active the trait is hidden from
+-- character creation in HideTraits.lua. Skipping registration here leaves the
+-- character_trait_definition script pointing at a missing CharacterTrait, which
+-- aborts script loading (fatal under -debug).
+ToadTraitsRegistries.scrounger = CharacterTrait.register("ToadTraits:scrounger")
 
 ToadTraitsRegistries.antique = CharacterTrait.register("ToadTraits:antique")
 ToadTraitsRegistries.evasive = CharacterTrait.register("ToadTraits:evasive")
@@ -62,9 +66,11 @@ ToadTraitsRegistries.prospear = CharacterTrait.register("ToadTraits:prospear")
 ToadTraitsRegistries.actionhero = CharacterTrait.register("ToadTraits:actionhero")
 ToadTraitsRegistries.thickblood = CharacterTrait.register("ToadTraits:thickblood")
 
-if getActivatedMods():contains("DrivingSkill") == false then
-    ToadTraitsRegistries.expertdriver = CharacterTrait.register("ToadTraits:expertdriver")
-end
+-- Always register; if DrivingSkill is active the trait is hidden from character
+-- creation in HideTraits.lua. Skipping registration here leaves the
+-- character_trait_definition script pointing at a missing CharacterTrait, which
+-- aborts script loading (fatal under -debug).
+ToadTraitsRegistries.expertdriver = CharacterTrait.register("ToadTraits:expertdriver")
 
 ToadTraitsRegistries.superimmune = CharacterTrait.register("ToadTraits:superimmune")
 ToadTraitsRegistries.packmule = CharacterTrait.register("ToadTraits:packmule")
