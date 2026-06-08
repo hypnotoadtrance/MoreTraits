@@ -21,8 +21,6 @@ local specializationTraits = {
 }
 
 local function removeTraits()
-    if isModActivated("1299328280/ToadTraitsDisablePrepared") == false and isModActivated("1299328280/ToadTraitsDisableSpec") == false then return end
-    
     local traitDefs = CharacterTraitDefinition.characterTraitDefinitions
     local traitsToRemove = {}
 
@@ -34,9 +32,22 @@ local function removeTraits()
         for _, v in ipairs(specializationTraits) do table.insert(traitsToRemove, v) end
     end
 
+    -- Defer to dedicated skill mods when present: these traits are always
+    -- registered (see registries.lua) so script loading stays valid, but we hide
+    -- our overlapping versions from character creation here.
+    if isModActivated("DrivingSkill") then
+        table.insert(traitsToRemove, "expertdriver")
+    end
+
+    if isModActivated("ScavengingSkill") or isModActivated("ScavengingSkillFixed") then
+        table.insert(traitsToRemove, "scrounger")
+    end
+
+    if #traitsToRemove == 0 then return end
+
     for _, traitName in ipairs(traitsToRemove) do
         local traitEnum = ToadTraitsRegistries[traitName]
-    
+
         if traitEnum and traitDefs:containsKey(traitEnum) then
             traitDefs:remove(traitEnum)
         end
