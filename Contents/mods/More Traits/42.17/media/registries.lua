@@ -19,9 +19,11 @@ ToadTraitsRegistries.preparedcoordination = CharacterTrait.register("ToadTraits:
 ToadTraitsRegistries.swift = CharacterTrait.register("ToadTraits:swift")
 ToadTraitsRegistries.ingenuitive = CharacterTrait.register("ToadTraits:ingenuitive")
 
-if getActivatedMods():contains("DynamicTraits") == false then
-    ToadTraitsRegistries.generator = CharacterTrait.register("ToadTraits:generator")
-end
+-- Always register. The old DynamicTraits check matches no B42 mod id, so this
+-- already always ran; the Dynamic add-on does not manage generator either.
+-- Skipping registration would leave the character_trait_definition script
+-- pointing at a missing CharacterTrait, aborting script loading (fatal under -debug).
+ToadTraitsRegistries.generator = CharacterTrait.register("ToadTraits:generator")
 
 ToadTraitsRegistries.olympian = CharacterTrait.register("ToadTraits:olympian")
 ToadTraitsRegistries.bouncer = CharacterTrait.register("ToadTraits:bouncer")
