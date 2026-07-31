@@ -1,0 +1,16 @@
+Tooltip_CN = {
+    Tooltip_MoreTraits_AntiqueAxe = "一个稀有、加固的石斧，<br>非常强力且耐久，但是无法修复。",
+    Tooltip_MoreTraits_Thumper = "一个稀有的石锤，<br>可以一挥击倒一大片人。<br>十分强力，但是也很沉！",
+    Tooltip_MoreTraits_ObsidianBlade = "一个稀有的古代祭祀匕首，<br>十分强力，但是易碎。",
+    Tooltip_MoreTraits_PackerBag = "一个稀有的背包，<br>容量很大，并且减重率高。",
+    Tooltip_MoreTraits_BloodyCrowbar = "这个撬棍被塑型和精炼以更快的挥舞，并造成更多伤害，当单手握持时可发挥全部威力。",
+    Tooltip_MoreTraits_Slugger = "一个稀有、带签名的铝制棒球棒，<br>更轻、挥舞更快，并且比标准棒球棒更加耐久。",
+    Tooltip_MoreTraits_Cure = "一个可以逆转僵尸感染的强力药剂，<br>只有最尖端的医药研究者才能合成。.",
+    Tooltip_MoreTraits_AntiqueMag1 = "一本限制级杂志，<br>该版教你如何将人类尸体转变为肥料的禁忌知识。",
+    Tooltip_MoreTraits_AntiqueMag2 = "一本限制级杂志，<br>该版涉及了纸浆工艺的部分。",
+    Tooltip_MoreTraits_AntiqueMag3 = "一本限制级杂志，<br>该版介绍了一些巴布亚新几内亚部落的同类相食菜谱。",
+    Tooltip_MoreTraits_PapierMacheSword = "合家欢产品！<br>四岁以下儿童不建议使用。",
+    Tooltip_MoreTraits_ItemBoost = "该物品的属性被你的某项特质所加成了。",
+    Tooltip_MoreTraits_GordaniteBoost = "撬棍+",
+    Tooltip_MoreTraits_GordaniteDefault = "撬棍",
+}

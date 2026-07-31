@@ -1,0 +1,42 @@
+ItemName_RU = {
+
+
+ItemName_MoreTraits.PackerBag = "Расширенная походная сумка",
+ItemName_MoreTraits.Bag_SmallHikingBag = "Маленькая походная сумка",
+ItemName_MoreTraits.AntiqueAxe = "Редкий старинный топор",
+ItemName_MoreTraits.Thumper = "Тяжеленная античная кувалда", 
+ItemName_MoreTraits.ObsidianBlade = "Обсидиановый кинжал",
+
+ItemName_MoreTraits.AntiqueSpear = "Редкая крепкая пика",
+ItemName_MoreTraits.AntiqueHammer = "Редкий молот бронника",
+ItemName_MoreTraits.AntiqueKatana = "Редкий нодати",
+
+ItemName_MoreTraits.BloodyCrowbar = "Потёртая монтировка",
+ItemName_MoreTraits.Slugger = "Коллекционная бейсбольная бита",
+
+ItemName_MoreTraits.ZombificationCure = "Лекарство от зомби-вируса",
+
+ItemName_MoreTraits.MedicalMag1 = "Журнал «Античная агрономия»",
+ItemName_MoreTraits.MedicalMag2 = "Журнал «Папье-маше - это просто»",
+ItemName_MoreTraits.MedicalMag3 = "Журнал «Каннибализ для чайников»",
+ItemName_MoreTraits.MedicalMag4 = "Журнал «Редкий журнал, выпуск 4»",
+
+ItemName_MoreTraits.AntiqueMag1 = "Журнал «Коллекционер антиквариата, выпуск 1»",
+ItemName_MoreTraits.AntiqueMag2 = "Журнал «Коллекционер антиквариата, выпуск 2»",
+ItemName_MoreTraits.AntiqueMag3 = "Журнал «Коллекционер антиквариата, выпуск 3»",
+
+ItemName_MoreTraits.PapierMache = "Папье-маше",
+ItemName_MoreTraits.PapierMacheSword = "Меч из папье-маше",
+
+ItemName_MoreTraits.ZombPatty = "Человеческая плоть",
+ItemName_MoreTraits.BloodBox = "Человеческая кровь",
+
+
+ItemName_MoreTraits.AntiqueJacket = "Редкая антикварная кожанка",
+ItemName_MoreTraits.AntiqueVest = "Редкий бронированный жилет",
+ItemName_MoreTraits.AntiqueBoots = "Редкие облегченные сапоги",
+
+
+
+
+}

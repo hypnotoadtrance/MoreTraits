@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode x_extends="Alt_Bite.xml">
+	<m_Name>Alt_BiteHandgunFromBehind</m_Name>
+	<m_AnimName>Bob_BiteReactBehind_Handgun</m_AnimName>
+	<m_Conditions />
+	<m_Conditions />
+	<m_Conditions>
+		<m_Name>FromBehind</m_Name>
+		<m_Type>BOOL</m_Type>
+		<m_BoolValue>true</m_BoolValue>
+	</m_Conditions>
+	<m_Events>
+		<m_TimePc>0.5</m_TimePc>
+	</m_Events>
+</animNode>

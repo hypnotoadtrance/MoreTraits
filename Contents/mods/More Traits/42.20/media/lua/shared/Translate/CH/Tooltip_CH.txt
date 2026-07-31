@@ -1,0 +1,15 @@
+Tooltip_CH = {
+    Tooltip_MoreTraits_AntiqueAxe = "一把少見而堅硬的石錘<br>非常耐用且效果極佳。無法修理",
+    Tooltip_MoreTraits_Thumper = "一把少見的石製大槌<br>能在一擊內擊倒整個人群<br>攻擊力非常大也非常重",
+    Tooltip_MoreTraits_ObsidianBlade = "一把少見用於犧牲的祭祀用短刀<br>非常銳利但很脆弱",
+    Tooltip_MoreTraits_PackerBag = "少見的背包<br>有較大的容量和減重率",
+    Tooltip_MoreTraits_BloodyCrowbar = "這把鐵撬被打磨過，更好揮舞並且能造成更多傷害",
+    Tooltip_MoreTraits_Slugger = "一根帶有簽名的鋁製球棒<br>比起普通球棒而言，重量更輕、更容易揮舞，並且更加耐用",
+    Tooltip_MoreTraits_Cure = "能逆轉殭屍化過程的強力藥劑<br>只有最頂端的醫學人士能製作",
+    Tooltip_MoreTraits_AntiqueMag1 = "一本絕版的雜誌<br>這版雜誌有著禁忌的知識：將屍體轉為肥料",
+    Tooltip_MoreTraits_AntiqueMag2 = "一本絕版的雜誌<br>這版雜誌講述如何自製紙漿",
+    Tooltip_MoreTraits_AntiqueMag3 = "一本絕版的雜誌<br>這版雜誌介紹同類相食的食譜：如何屠宰屍體",
+    Tooltip_MoreTraits_PapierMacheSword = "闔家歡樂的玩具<br>適合四歲以上的孩童",
+    Tooltip_MoreTraits_ItemBoost = "這樣道具受到你的其中一樣特質加成。",
+    Tooltip_MoreTraits_BloodyItemBoost = "這支撬棍被改造並精煉，可以使其更快地揮舞，並造成更多傷害，且能在單手中完全發揮效力。<br>此物品的數值正在由您的一個特性增強。",
+}

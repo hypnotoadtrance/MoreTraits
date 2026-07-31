@@ -1,0 +1,32 @@
+ItemName_CN = {
+    ItemName_MoreTraits.PackerBag = "步行者包",
+    ItemName_MoreTraits.Bag_SmallHikingBag = "小登山包",
+    ItemName_MoreTraits.BloodyCrowbar = "血之撬棍",
+    ItemName_MoreTraits.Thumper = "大槌", 
+    ItemName_MoreTraits.ObsidianBlade = "黑曜石匕首",
+    ItemName_MoreTraits.Slugger = "重击手",
+    ItemName_MoreTraits.AntiqueSpear = "藏品长矛",
+    ItemName_MoreTraits.AntiqueHammer = "藏品锻造锤",
+    ItemName_MoreTraits.AntiqueKatana = "藏品武士刀",
+    ItemName_MoreTraits.AntiqueAxe = "藏品斧头",
+
+    ItemName_MoreTraits.AntiqueBoots = "藏品靴子",
+    ItemName_MoreTraits.AntiqueVest = "藏品防弹背心",
+    ItemName_MoreTraits.AntiqueJacket = "藏品皮夹克",
+
+    ItemName_MoreTraits.PapierMache = "纸浆",
+    ItemName_MoreTraits.PapierMacheSword = "纸浆剑",
+
+    ItemName_MoreTraits.AntiqueMag1 = "古董收藏家周志 Vol.1",
+    ItemName_MoreTraits.AntiqueMag2 = "古董收藏家周志 Vol.2",
+    ItemName_MoreTraits.AntiqueMag3 = "古董收藏家周志 Vol.3",
+    ItemName_MoreTraits.MedicalMag1 = "医学杂志 Vol.1",
+    ItemName_MoreTraits.MedicalMag2 = "医学杂志 Vol.2",
+    ItemName_MoreTraits.MedicalMag3 = "医学杂志 Vol.3",
+    ItemName_MoreTraits.MedicalMag4 = "医学杂志 Vol.4",
+
+    ItemName_MoreTraits.ZombificationCure = "僵尸化解药",
+
+    ItemName_MoreTraits.BloodBox = "人类血液",
+    ItemName_MoreTraits.ZombPatty = "人肉",
+}

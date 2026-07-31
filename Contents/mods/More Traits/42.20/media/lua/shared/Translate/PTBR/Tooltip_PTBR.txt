@@ -1,0 +1,16 @@
+Tooltip_PTBR = {
+    Tooltip_MoreTraits_AntiqueAxe = "Um machado raro de pedra endurecida.<br>Muito forte e duravel, mas nao pode ser reparado.",
+    Tooltip_MoreTraits_Thumper = "Uma marreta de pedra rara.<br>Capaz de derrubar multidoes inteiras em um unico golpe.<br>Incrivelmente poderoso, mas tambem extremamente pesado!",
+    Tooltip_MoreTraits_ObsidianBlade = "Um punhal de sacrificio antigo raro.<br>Muito poderoso, mas fragil.",
+    Tooltip_MoreTraits_PackerBag = "Uma mochila rara.<br>Grande capacidade e alta reducao de peso.",
+    Tooltip_MoreTraits_BloodyCrowbar = "Este pe de cabra foi moldado e refinado para balancar mais rapido e causar mais dano.",
+    Tooltip_MoreTraits_Slugger = "Um raro taco de beisebol de aluminio assinado.<br>Pesa menos, balanca mais rapido e e mais duravel do que um taco de beisebol padrao.",
+    Tooltip_MoreTraits_Cure = "Uma mistura poderosa capaz de reverter os efeitos da zumbificacao.<br>So pode ser criada pelos pesquisadores medicos mais talentosos.",
+    Tooltip_MoreTraits_AntiqueMag1 = "Uma revista de edicao limitada.<br>Esta edicao ensina a arte tabu de converter cadaveres humanos em fertilizante util.",
+    Tooltip_MoreTraits_AntiqueMag2 = "Uma revista de edicao limitada.<br>Esta edicao se aprofunda em receitas caseiras com papel mache.",
+    Tooltip_MoreTraits_AntiqueMag3 = "Uma revista de edicao limitada.<br>Esta edicao oferece comentarios sobre as receitas canibais de certas tribos de Papua-Nova Guine.",
+    Tooltip_MoreTraits_PapierMacheSword = "Diversao para a familia toda!<br>(Exceto para criancas menores de quatro anos).",
+    Tooltip_MoreTraits_ItemBoost = "Os status deste item estao sendo aumentados por um de seus tracos.",
+    Tooltip_MoreTraits_GordaniteBoost = "Pe de Cabra+",
+    Tooltip_MoreTraits_GordaniteDefault = "Pe de Cabra",
+}

@@ -1,0 +1,18 @@
+Moodles_EN {
+    Moodles_MTAlcoholism_Good_lvl1 = "Slaked",
+    Moodles_MTAlcoholism_Good_desc_lvl1 = "Quenched the need for booze.",
+    Moodles_MTAlcoholism_Good_lvl2 = "Sated",
+    Moodles_MTAlcoholism_Good_desc_lvl2 = "Feeling content.",
+    Moodles_MTAlcoholism_Good_lvl3 = "Indulged",
+    Moodles_MTAlcoholism_Good_desc_lvl3 = "Feeling really good!",
+    Moodles_MTAlcoholism_Good_lvl4 = "Engorged",
+    Moodles_MTAlcoholism_Good_desc_lvl4 = "Won't need booze for a long while!",
+    Moodles_MTAlcoholism_Bad_lvl1 = "Longing",
+    Moodles_MTAlcoholism_Bad_desc_lvl1 = "It's been a while without a drink.<br>No negative effects yet.",
+    Moodles_MTAlcoholism_Bad_lvl2 = "Itching",
+    Moodles_MTAlcoholism_Bad_desc_lvl2 = "The need is becoming difficult to ignore.<br>More irritable.",
+    Moodles_MTAlcoholism_Bad_lvl3 = "Craving",
+    Moodles_MTAlcoholism_Bad_desc_lvl3 = "Just one sip...<br>Increased stress.",
+    Moodles_MTAlcoholism_Bad_lvl4 = "Withdrawal",
+    Moodles_MTAlcoholism_Bad_desc_lvl4 = "Would do anything for a drink.<br>Will grow progressively more sick every day until satiated.",
+}

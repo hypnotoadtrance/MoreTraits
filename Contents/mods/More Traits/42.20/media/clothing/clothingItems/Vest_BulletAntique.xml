@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<clothingItem>
+	<m_MaleModel>skinned\clothes\bob_bulletvest</m_MaleModel>
+	<m_FemaleModel>media\models_X\Skinned\Clothes\Kate_BulletVest.X</m_FemaleModel>
+	<m_GUID>0a6e43f4-2c40-4218-b97b-119c4d8c4ed9</m_GUID>
+	<m_Static>false</m_Static>
+	<m_AllowRandomHue>false</m_AllowRandomHue>
+	<m_AllowRandomTint>false</m_AllowRandomTint>
+	<m_AttachBone></m_AttachBone>
+	<textureChoices>clothes\bulletvest\vest_bulletcivilian</textureChoices>
+</clothingItem>
